@@ -1,0 +1,5 @@
+listen			65535
+server_name		65535
+location		65535
+error_page		65535
+root			1
