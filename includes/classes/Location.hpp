@@ -1,9 +1,7 @@
 #ifndef LOCATION_HPP
 # define LOCATION_HPP
 
-# include <iostream>
-# include <string>
-# include <vector>
+# include "Webserv.hpp"
 
 class Location {
 
