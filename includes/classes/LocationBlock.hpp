@@ -3,7 +3,7 @@
 
 # include "Webserv.hpp"
 
-class Location {
+class LocationBlock : public ServerBlock {
 
 	private :
 		std::string _path;
@@ -11,8 +11,8 @@ class Location {
 		std::vector<std::string> _index;
 
 	public :
-		Location();
-		~Location();
+		LocationBlock();
+		~LocationBlock();
 };
 
 #endif

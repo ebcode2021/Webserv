@@ -6,8 +6,11 @@
 class	Config {
 	private :
 		// event block 추가
-		Http	_http;
+		HttpBlock	_httpBlock;
+	public :
+		Config(std::string);
 
+		static bool fileCheck(std::string);
 };
 
 #endif

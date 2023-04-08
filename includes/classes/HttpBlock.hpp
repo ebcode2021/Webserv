@@ -3,14 +3,14 @@
 
 # include "Webserv.hpp"
 
-class	Http {
+class	HttpBlock {
 	private :
-		std::vector<Server>	_server;
+		std::vector<ServerBlock>	_serverList;
 	protected :
 		
 	public :
-		Http();
-		~Http();
+		HttpBlock();
+		~HttpBlock();
 };
 
 #endif

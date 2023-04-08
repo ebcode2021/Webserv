@@ -6,18 +6,22 @@
 # include <string>
 # include <vector>
 # include <fstream>
+# include <sstream>
 
 /* class hpp*/
 # include "Config.hpp"
-# include "Http.hpp"
-# include "Location.hpp"
-# include "Server.hpp"
+# include "HttpBlock.hpp"
+# include "LocationBlock.hpp"
+# include "ServerBlock.hpp"
 
 /* common */
 # include "error.hpp"
 
 /* src */
-void	printErrorWithExit(std::string msg);
-int		validateArgument(int argc, char *argv[]);
+void		printErrorWithExit(std::string msg);
+bool		validateArgument(int argc, char *argv[]);
+
+/* src - [utils] */
+std::vector<std::string> split(std::string input, char delimiter);
 
 #endif

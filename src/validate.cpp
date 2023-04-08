@@ -10,17 +10,18 @@ void	printa()
 	std::cout << "hi?" << std::endl;
 }
 
-int	validateArgument(int argc, char *argv[])
+bool	validateArgument(int argc, char *argv[])
 {
 	if (argc == 1)
 		printa();
 	else if (argc == 2 || argc == 3 && strcmp(argv[2], "-t") == 0)
 	{
-		validateConfig(argv[1]);
+		if (Config::fileCheck(argv[1]) == false)
+			return false;
 		if (argc == 2)
-			return 1;
+			return true;
 	}
 	else
 		printErrorWithExit(INVALID_ARGC);
-	return 0;
+	return true;
 }
