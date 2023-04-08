@@ -1,0 +1,4 @@
+server				100
+sendfile			1
+keepalive_timeout	1
+root				1
