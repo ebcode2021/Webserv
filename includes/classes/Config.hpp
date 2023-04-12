@@ -5,8 +5,8 @@
 
 class	Config {
 	private :
-		// event block 추가
-		HttpBlock	_httpBlock;
+		ServerInfo _serverInfo;
+		
 	public :
 		Config(std::string);
 

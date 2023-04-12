@@ -3,24 +3,24 @@
 
 # include "Webserv.hpp"
 
-typedef struct errorPage
-{
-	std::vector<int>	statusCode;
-	std::string			path;
-}						errorPage;
 
-class ServerBlock : public HttpBlock {
-	private :
+
+class ServerBlock {
+	protected :
+		unsigned int					_clientMaxBodySize;
 		std::vector<std::string>		_serverNameList;
-		std::vector<LocationBlock>		_locationList;
 		std::vector<int>				_listenList;
 		std::vector<errorPage>			_errorPage;
-		bool							_tcpNodelay;
-		//bool							_sendfile;
+		bool							_autoindex;
+		std::vector<std::string>		_index;
+		std::string						_clientBodyTempPath;
+		std::string						_root;
+
 	public :
 		ServerBlock();
 		~ServerBlock();
 
+		static void blockCheck( std::ifstream );
 };
 
 #endif
