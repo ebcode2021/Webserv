@@ -20,7 +20,7 @@ class ServerBlock {
 		ServerBlock();
 		~ServerBlock();
 
-		static void blockCheck( std::ifstream );
+		static void blockCheck(std::ifstream&);
 };
 
 #endif

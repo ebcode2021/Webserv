@@ -5,30 +5,57 @@ Config::Config(std::string fileName)
 	
 }
 
-enum	blockType
-{
-	server = 2,
-	location = 3,
-	other = 4,
-};
-
-bool Config::fileCheck(std::string fileName)
+bool Config::fileCheck(int argc, char *argv[])
 {
 	std::ifstream				infile;
 	std::string					line;
 	std::vector<std::string>	splitted;
 
-	infile.open(fileName);
-	while (std::getline(infile, line))
+	if (Validate::argumentCheck(argc, argv))
 	{
-		splitted = split(line, ' ');
-
-		if (splitted[0].compare("http") == 0) {
-			ServerBlock::blockCheck(infile);
+		Validate dataset;
+		infile.open(std::string(argv[1]));
+		while (std::getline(infile, line))
+		{
+			splitted = split(line, ' ');
+			if (splitted[0].compare("server") == 0)
+			{
+				if (splitted.size() != 1)
+					printErrorWithExit(BLOCK_NAME);
+				ServerBlock::blockCheck(infile);
+			}
 		}
-		else {
-			// 지시어, 밸류 확인, 중복 확인
-		}
+		infile.close();
+		return (dataset.requiredDataCheck());
 	}
-	infile.close();
+	else
+		return false;
 }
+
+// bool Config::fileCheck(int argc, char *argv[])
+// {
+// 	std::ifstream				infile;
+// 	std::string					line;
+// 	std::vector<std::string>	splitted;
+// 	bool						result = false;
+
+
+// 	validate::argumentCheck(argc, argv);
+
+// 	infile.open(std::string(argv[1]));
+// 	while (std::getline(infile, line))
+// 	{
+// 		splitted = split(line, ' ');
+// 		if (splitted[0].compare("http") == 0)
+// 		{
+// 			if (splitted.size() != 1)
+// 				printErrorWithExit(BLOCK_NAME);
+// 			ServerBlock::blockCheck(infile);
+// 			return result;
+// 		}
+// 	}
+// 	infile.close();
+// 	if (result == false)
+// 		printErrorWithExit();
+// 	return result;
+// }

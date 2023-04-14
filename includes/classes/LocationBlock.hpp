@@ -22,7 +22,7 @@ class LocationBlock : public ServerBlock {
 		LocationBlock();
 		~LocationBlock();
 
-		static void blockCheck(std::ifstream);
+		static void blockCheck(std::ifstream&);
 };
 
 #endif

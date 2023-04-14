@@ -1,8 +1,8 @@
-#include "Webserv.hpp"
+#include "webserv.hpp"
 
 int main(int argc, char *argv[])
 {
-	if (validateArgument(argc, argv))
+	if (Config::fileCheck(argc, argv))
 	{
 		Config config(argv[1]);
 		// 통신 시작 함수

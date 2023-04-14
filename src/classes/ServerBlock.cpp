@@ -1,6 +1,6 @@
 #include "ServerBlock.hpp"
 
-void ServerBlock::blockCheck(std::ifstream infile)
+void ServerBlock::blockCheck(std::ifstream &infile)
 {
 	std::string					line;
 	std::vector<std::string>	splitted;
