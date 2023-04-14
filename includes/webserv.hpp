@@ -18,6 +18,7 @@
 
 /* common hpp*/
 # include "enum.hpp"
+# include "file.hpp"
 # include "message.hpp"
 # include "struct.hpp"
 

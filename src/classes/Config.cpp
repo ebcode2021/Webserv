@@ -31,31 +31,3 @@ bool Config::fileCheck(int argc, char *argv[])
 	else
 		return false;
 }
-
-// bool Config::fileCheck(int argc, char *argv[])
-// {
-// 	std::ifstream				infile;
-// 	std::string					line;
-// 	std::vector<std::string>	splitted;
-// 	bool						result = false;
-
-
-// 	validate::argumentCheck(argc, argv);
-
-// 	infile.open(std::string(argv[1]));
-// 	while (std::getline(infile, line))
-// 	{
-// 		splitted = split(line, ' ');
-// 		if (splitted[0].compare("http") == 0)
-// 		{
-// 			if (splitted.size() != 1)
-// 				printErrorWithExit(BLOCK_NAME);
-// 			ServerBlock::blockCheck(infile);
-// 			return result;
-// 		}
-// 	}
-// 	infile.close();
-// 	if (result == false)
-// 		printErrorWithExit();
-// 	return result;
-// }

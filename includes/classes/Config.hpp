@@ -10,7 +10,8 @@ class	Config {
 	public :
 		Config(std::string);
 
-		static bool fileCheck(int, char *[]);
+		static bool	fileCheck(int, char *[]);
+		static void	setEnv(std::string, std::string);
 };
 
 #endif

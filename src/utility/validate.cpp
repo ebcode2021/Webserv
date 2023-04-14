@@ -1,12 +1,41 @@
 #include "validate.hpp"
 
+std::map<std::string, unsigned short> fileDataToMap(std::ifstream &file)
+{
+	std::map<std::string, unsigned short>	newMap;
+	std::string								line;
+	std::vector<std::string>				splitted;
+
+	while (std::getline(file, line))
+	{
+		splitted = split(line, ' ');
+		if (splitted.size() != 2)
+			printErrorWithExit(CHECK_INDICATION_FILE);
+		newMap.insert(std::make_pair(splitted[0], std::stoi(splitted[1]))); 
+	}
+	// stoi는 직접 구현해야함. 11문법.
+
+	return (newMap);
+}
+
+/* constructor */
+Validate::Validate()
+{
+	std::ifstream	serverFile;
+	std::ifstream	locationFile;
+
+	serverFile.open(INDICATION_PATH + SERVER);
+	this->_originServerIndications = fileDataToMap(serverFile);
+	locationFile.open(INDICATION_PATH + LOCATION);
+	this->_originLocationIndications = fileDataToMap(locationFile);
+}
+
 void	Validate::extensionCheck(char *name)
 {
-	std::string	extension = ".conf";
 	std::string	fileName = std::string(name);
 	int			index = fileName.find('.');
 
-	if (index < 1 || extension.compare(std::string(fileName).substr(index)));
+	if (index < 1 || EXTENSION.compare(std::string(fileName).substr(index)));
 		printErrorWithExit(INVALID_ARGC);
 }
 
