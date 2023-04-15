@@ -1,13 +1,18 @@
 #include "webserv.hpp"
 
-// 다중 delim 가능하게
-std::vector<std::string> split(std::string input, char delimiter)
+// 다중 dilim으로 split
+std::vector<std::string> split(const std::string& str, const std::string& delims)
 {
-	std::vector<std::string>	answer;
-	std::stringstream 			ss(input);
-	std::string					line;
+	std::vector<std::string>	tokens;
+	size_t	start = 0, end = 0;
 
-	while (getline(ss, line, delimiter))
-		answer.push_back(line);
-	return (answer);
+	while ((end = str.find_first_of(delims, start)) != std::string::npos) {
+		if (end != start) {
+			tokens.push_back(str.substr(start, end - start));
+		}
+		start = end + 1;
+	}
+	if (start < str.length())
+		tokens.push_back(str.substr(start));
+	return (tokens);
 }

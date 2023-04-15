@@ -1,6 +1,7 @@
 #include "LocationBlock.hpp"
+#include "webserv.hpp"
 
-void LocationBlock::blockCheck(std::ifstream infile)
+void LocationBlock::blockCheck(std::ifstream& infile)
 {
 	std::string					line;
 	std::vector<std::string>	splitted;

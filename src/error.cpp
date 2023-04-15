@@ -1,4 +1,4 @@
-#include "Webserv.hpp"
+#include "webserv.hpp"
 
 void	printErrorWithExit(std::string msg)
 {

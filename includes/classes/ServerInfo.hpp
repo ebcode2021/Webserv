@@ -1,15 +1,15 @@
 #ifndef SERVERINFO_HPP
 # define SERVERINFO_HPP
 
-# include "Webserv.hpp"
+# include "LocationBlock.hpp"
+# include "ServerBlock.hpp"
+
 
 class ServerInfo {
     private :
         ServerBlock _serverBlock;
         std::vector<LocationBlock> locationList;
     public :
-        ServerInfo();
-        ~ServerInfo();
 };
 
 #endif
