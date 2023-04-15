@@ -1,12 +1,12 @@
 #ifndef CONFIG_HPP
 # define CONFIG_HPP
 
-# include "Webserv.hpp"
+# include "ServerList.hpp"
+
 
 class	Config {
 	private :
-		ServerInfo _serverInfo;
-		
+		ServerList	_serverList;
 	public :
 		Config(std::string);
 

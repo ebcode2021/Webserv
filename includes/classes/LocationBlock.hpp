@@ -1,7 +1,7 @@
 #ifndef LOCATION_HPP
 # define LOCATION_HPP
 
-# include "Webserv.hpp"
+# include "ServerBlock.hpp"
 
 class LimitExcept {
 	private :

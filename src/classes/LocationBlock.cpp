@@ -1,4 +1,5 @@
 #include "LocationBlock.hpp"
+#include "webserv.hpp"
 
 void LocationBlock::blockCheck(std::ifstream &infile)
 {
