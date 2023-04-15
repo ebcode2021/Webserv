@@ -9,7 +9,9 @@ class	Config {
 		ServerList	_serverList;
 	public :
 		Config(std::string);
-		static bool fileCheck(std::string);
+
+		static bool	fileCheck(int, char *[]);
+		static void	setEnv(std::string, std::string);
 };
 
 #endif

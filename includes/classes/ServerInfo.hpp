@@ -9,6 +9,7 @@ class ServerInfo {
     private :
         ServerBlock _serverBlock;
         std::vector<LocationBlock> locationList;
+
     public :
 };
 
