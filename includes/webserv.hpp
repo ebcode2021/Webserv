@@ -1,20 +1,14 @@
 #ifndef WEBSERV_HPP
 # define WEBSERV_HPP
 
+# define WHITESPACE " \t\n\v\f\r"
+
 /* extern library */
 # include <iostream>
 # include <string>
 # include <vector>
 # include <fstream>
 # include <sstream>
-
-/* class hpp*/
-# include "Config.hpp"
-# include "LocationBlock.hpp"
-# include "ServerBlock.hpp"
-# include "ServerInfo.hpp"
-# include "ServerList.hpp"
-# include "struct.hpp"
 
 /* common */
 # include "error.hpp"
@@ -24,6 +18,6 @@ void		printErrorWithExit(std::string msg);
 bool		validateArgument(int argc, char *argv[]);
 
 /* src - [utils] */
-std::vector<std::string> split(std::string input, char delimiter);
+std::vector<std::string> split(const std::string& str, const std::string& delims);
 
 #endif

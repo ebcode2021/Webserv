@@ -1,7 +1,7 @@
 #ifndef LOCATION_HPP
 # define LOCATION_HPP
 
-# include "Webserv.hpp"
+# include "ServerBlock.hpp"
 
 class LimitExcept {
 	private :
@@ -19,10 +19,7 @@ class LocationBlock : public ServerBlock {
 		
 
 	public :
-		LocationBlock();
-		~LocationBlock();
-
-		static void blockCheck(std::ifstream);
+		static void blockCheck(std::ifstream&);
 };
 
 #endif

@@ -1,13 +1,13 @@
 #ifndef SERVERLIST_HPP
 # define SERVERLIST_HPP
 
-# include "Webserv.hpp"
+# include "ServerInfo.hpp"
 
-class serverList {
+class ServerList {
     private :
         std::vector<ServerInfo> serverList;
     public :
-        // addServer();
+        void    addServer(std::ifstream &);
 };
 
 #endif
