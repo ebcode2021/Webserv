@@ -11,13 +11,6 @@
 # include <fstream>
 # include <sstream>
 
-/* class hpp */
-# include "Config.hpp"
-# include "LocationBlock.hpp"
-# include "ServerBlock.hpp"
-# include "ServerInfo.hpp"
-# include "ServerList.hpp"
-
 /* common hpp*/
 # include "enum.hpp"
 # include "file.hpp"
