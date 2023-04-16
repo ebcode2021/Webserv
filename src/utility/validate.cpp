@@ -6,13 +6,15 @@ std::map<std::string, unsigned short> fileDataToMap(std::ifstream &file)
 	std::string								line;
 	std::vector<std::string>				splitted;
 
-	while (std::getline(file, line))
-	{
-		splitted = split(line, ' ');
-		if (splitted.size() != 2)
-			printErrorWithExit(CHECK_INDICATION_FILE);
-		newMap.insert(std::make_pair(splitted[0], std::stoi(splitted[1]))); 
-	}
+	(void)file;
+	//return (newMap);
+	// while (std::getline(file, line))
+	// {
+	// 	splitted = split(line, ' ');
+	// 	if (splitted.size() != 2)
+	// 		printErrorWithExit(CHECK_INDICATION_FILE);
+	// 	newMap.insert(std::make_pair(splitted[0], std::stoi(splitted[1]))); 
+	// }
 	// stoi는 직접 구현해야함. 11문법.
 
 	return (newMap);
@@ -35,7 +37,7 @@ void	Validate::extensionCheck(char *name)
 	std::string	fileName = std::string(name);
 	int			index = fileName.find('.');
 
-	if (index < 1 || EXTENSION.compare(std::string(fileName).substr(index)));
+	if (index < 1 || EXTENSION.compare(std::string(fileName).substr(index)))
 		printErrorWithExit(INVALID_ARGC);
 }
 

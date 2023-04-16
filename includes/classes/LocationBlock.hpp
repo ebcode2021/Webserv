@@ -19,8 +19,8 @@ class LocationBlock : public ServerBlock {
 		
 
 	public :
-		LocationBlock();
-		~LocationBlock();
+		//LocationBlock();
+		//~LocationBlock();
 
 		static void blockCheck(std::ifstream&);
 };
