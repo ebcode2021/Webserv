@@ -8,5 +8,5 @@ int main(int argc, char *argv[])
 		Config config(argv[1]);
 		// 통신 시작 함수
 	}
-		return 0;
+	return 0;
 }

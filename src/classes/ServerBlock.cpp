@@ -84,23 +84,34 @@ void	ServerBlock::setRoot(std::vector<std::string>& value) {
 
 //
 
-void ServerBlock::blockCheck(std::ifstream& infile)
+void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 {
 	std::string					line;
 	std::vector<std::string>	splitted;
 
+	Validate::braceCheck(infile, OPEN_BRACE);
+	dataset.resetServerIndicationList();
 	while (std::getline(infile, line))
 	{
 		splitted = split(line, WHITESPACE);
-
-		if (splitted[0].compare("Location") == 0) {
-			LocationBlock::blockCheck(infile);
-		}
-		else {
-			// 지시어, 밸류 확인, 중복 확인
+		if (splitted.size() == 0)
+			continue ;
+		serverIndications indication = dataset.findServerIndication(splitted);
+		switch(indication)
+		{
+			case serverIndications::location :
+				LocationBlock::blockCheck(infile);
+				break;
+			case serverIndications::server_name :
+			case serverIndications::client_body_temp_path :
+			case serverIndications::client_max_body_size :
+				std::cout << "이런식으로 한 번에?" << std::endl;
+				break ;
+			default :
+				fileErrorWithExit(NO_INDICATION, infile);
 		}
 	}
-
+	Validate::braceCheck(infile, CLOSE_BRACE);
 }
 
 

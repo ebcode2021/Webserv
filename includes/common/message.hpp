@@ -7,10 +7,14 @@
 # define INVALID_ARGC "Invalid Argument :: Only \
 						support one parameter which ends \'.conf\' extension"
 
-/* error with line */
+/* config file error */
 # define BLOCK_NAME "Invalid Block Name :: line "
 
-# define NON_MATCH_BRACE "Brace doesn't match :: line"
+# define BRACE_ERROR "Brace Error :: line "
+
+# define NO_INDICATION "Not Found Indication :: line "
+
+/* indication file error */
 
 
 /* non-error */

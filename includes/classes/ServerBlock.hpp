@@ -18,7 +18,7 @@ class ServerBlock {
 	public :
 		ServerBlock();
 
-		static void blockCheck(std::ifstream&);
+		static void blockCheck(std::ifstream&, Validate&);
 		void		configsetting(std::vector<std::string>&);
 		void		setListenPort(std::vector<std::string>&);
 		void		setServerName(std::vector<std::string>&);
