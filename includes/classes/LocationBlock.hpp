@@ -19,7 +19,11 @@ class LocationBlock : public ServerBlock {
 		
 
 	public :
+		LocationBlock(const ServerBlock&, const std::string&);
+
 		static void blockCheck(std::ifstream&);
+		void	setLocationPath(const std::vector<std::string>&);
+		void	setLimitExcept(const std::vector<std::string> &, size_t *);
 };
 
 #endif

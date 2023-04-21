@@ -31,6 +31,7 @@ class ServerBlock {
 
 		//test
 		void		printInfo();
+
 };
 
 #endif
