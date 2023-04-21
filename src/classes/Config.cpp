@@ -25,10 +25,13 @@ bool Config::fileCheck(int argc, char *argv[])
 	std::string					line;
 	std::vector<std::string>	splitted;
 
-	if (Validate::argumentCheck(argc, argv))
+	fileMode mode = Validate::argumentCheck(argc, argv);
+	if (mode)
 	{
 		Validate dataset;
 		infile.open(std::string(argv[1]));
+		if (infile.fail())
+			printErrorWithExit(CHECK_CONFIG_FILE);
 		while (std::getline(infile, line))
 		{
 			splitted = split(line, WHITESPACE);
@@ -40,8 +43,13 @@ bool Config::fileCheck(int argc, char *argv[])
 			}
 		}
 		infile.close();
-		return (dataset.requiredDataCheck());
+		if (dataset.requiredDataCheck())
+		{
+			if (mode == fileMode::test)
+				notice::printMessage(TEST_SUCCESS);
+			else
+				return true;
+		}
 	}
-	else
-		return false;
+	return false;
 }

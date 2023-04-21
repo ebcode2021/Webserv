@@ -1,13 +1,13 @@
 #ifndef INDICATION_HPP
 # define INDICATION_HPP
 
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <enum.hpp>
 
 enum class	locationIndications
 {
-	none,
+	not_found,
 	limit_except,
 	autoindex,
 	client_max_body_size,
@@ -15,12 +15,12 @@ enum class	locationIndications
 	error_page,
 	index,
 	root,
-	not_found,
+	none,
 };
 
 enum class	serverIndications
 {
-	none,
+	not_found,
 	location,
 	listen,
 	server_name,
@@ -30,10 +30,10 @@ enum class	serverIndications
 	autoindex,
 	index,
 	root,
-	not_found,
+	none,
 };
 
-const std::unordered_map<std::string, locationIndications> LocationType =
+const std::map<std::string, locationIndications> LocationType =
 {
 	{"limit_except", locationIndications::limit_except},
 	{"autoindex", locationIndications::autoindex},
@@ -44,7 +44,7 @@ const std::unordered_map<std::string, locationIndications> LocationType =
 	{"root", locationIndications::root},
 };
 
-const std::unordered_map<std::string, serverIndications> ServerType =
+const std::map<std::string, serverIndications> ServerType =
 {
 	{"location", serverIndications::location},
 	{"listen", serverIndications::listen},

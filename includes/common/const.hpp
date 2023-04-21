@@ -7,6 +7,7 @@
 const std::string WHITESPACE = " \t\n\v\f\r";
 const std::string OPEN_BRACE = "{";
 const std::string CLOSE_BRACE = "}";
+const std::string SEMICOLON = ";";
 
 /* file name */
 const std::string LOCATION = ".location_indications";

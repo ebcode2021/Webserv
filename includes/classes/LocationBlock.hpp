@@ -2,27 +2,20 @@
 # define LOCATION_HPP
 
 # include "ServerBlock.hpp"
-
-class LimitExcept {
-	private :
-		std::vector<std::string>	_methodList;
-		std::string					_allow;
-		std::string					_deny;
-	public :
-};
+# include "LimitExcept.hpp"
 
 class LocationBlock : public ServerBlock {
 
 	private :
 		std::string		_path;
-		LimitExcept		_limittExcept;
+		LimitExcept		_limitExcept;
 		
 
 	public :
 		//LocationBlock();
 		//~LocationBlock();
 
-		static void blockCheck(std::ifstream&);
+		static void blockCheck(std::ifstream&, Validate&);
 };
 
 #endif
