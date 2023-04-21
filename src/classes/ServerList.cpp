@@ -29,21 +29,19 @@ void	ServerList::addServer(std::ifstream & confFile) {
 
 	while (std::getline(confFile, line))
 	{
-		splitedLine = split(line, WHITESPACE);
+		splitedLine = split(line, static_cast<std::string>(WHITESPACE) + ";");
 		if (splitedLine[0].compare("location") == 0)
 			LocationBlock.push_back(LocationBlockBackup(confFile, line));
-		if (splitedLine[0].compare("}") == true)
+		else if (splitedLine[0].compare("}") == 0)
 			break ;
 		else
 			serverBlock.configsetting(splitedLine);
 	}
-
-	// 생성된 서버 체크
-	serverBlock.printInfo();
-
+	//serverBlock.printInfo();
 	/// 로케이션 생성해야됨!
 	for(int i = 0; i < static_cast<int>(LocationBlock.size()); i++) {
 		std::cout << LocationBlock[i] << std::endl;
 	}
+	serverBlock.addLocation
 	///
 }

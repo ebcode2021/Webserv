@@ -11,7 +11,7 @@ ServerBlock::ServerBlock() {
 
 std::map<std::string, int> create_directivemap() {
 	std::map<std::string, int> ret;
-	std::ifstream server_keywords("keywords/.server_keyword");
+	std::ifstream server_keywords("/Users/minsu/Desktop/42seoul/webserv/keywords/.server_keywords");
 	std::string line;
 	std::vector<std::string> splitedLine;
 	size_t	i = 0;
