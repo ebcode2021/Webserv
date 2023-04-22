@@ -10,6 +10,9 @@ class	Config {
 	public :
 		Config(std::string);
 		static bool fileCheck(std::string);
+
+		//test
+		void	printServerList() const;
 };
 
 #endif

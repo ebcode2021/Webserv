@@ -15,7 +15,8 @@ SRCS =  main.cpp	\
 		classes/LocationBlock.cpp	\
 		classes/ServerBlock.cpp		\
 		classes/ServerList.cpp		\
-		classes/ErrorPage.cpp
+		classes/ErrorPage.cpp		\
+		classes/LimitExcept.cpp
 
 		
 

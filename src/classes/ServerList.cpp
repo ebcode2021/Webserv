@@ -1,26 +1,40 @@
 # include "ServerList.hpp"
 # include "webserv.hpp"
 
-static std::string LocationBlockBackup(std::ifstream& confFile, std::string line) {
-	std::string ret;
-	std::vector<std::string> splitedLine;
+static std::vector<std::string> LocationBlockBackup(std::ifstream& confFile, std::string line) {
+	std::vector<std::string>	locationBlock;
+	std::vector<std::string>	splittedLine;
+	std::string					backup;
 	
-	ret += line + '\n';
+	locationBlock.push_back(line);
 	while (std::getline(confFile, line))
 	{
-		splitedLine = split(line, WHITESPACE);
-		if (splitedLine[0].compare("}") == 0)
+		splittedLine = split(line, WHITESPACE);
+		if (splittedLine[0].compare("}") == 0)
 			break ;
-		else if (splitedLine[0].compare("{") != 0)
-			ret += line + '\n';
+		else if (splittedLine[0].compare("limit_except") == 0) {
+			backup += line + "\n";
+			while (std::getline(confFile, line))
+			{
+				splittedLine = split(line, WHITESPACE);
+				if (splittedLine[0] == "}")
+					break;
+				backup += line + "\n";
+			}
+			locationBlock.push_back(backup);
+			// std::cout << "백업 = " << backup << std::endl;
+			backup = "";
+		}
+		else if (splittedLine[0].compare("{") != 0)
+			locationBlock.push_back(line);
 	}
-	return (ret);
+	return (locationBlock);
 }
 
 void	ServerList::addServer(std::ifstream & confFile) {
 	std::string line;
-	std::vector<std::string> splitedLine;
-	std::vector<std::string> locationBlockInfo;
+	std::vector<std::string> splittedLine;
+	std::vector<std::vector<std::string> > locationBlockInfo;
 	std::vector<LocationBlock> locationBlock;
 	ServerBlock	serverBlock;
 	
@@ -30,13 +44,13 @@ void	ServerList::addServer(std::ifstream & confFile) {
 
 	while (std::getline(confFile, line))
 	{
-		splitedLine = split(line, static_cast<std::string>(WHITESPACE) + ";");
-		if (splitedLine[0].compare("location") == 0)
+		splittedLine = split(line, static_cast<std::string>(WHITESPACE) + ";");
+		if (splittedLine[0].compare("location") == 0)
 			locationBlockInfo.push_back(LocationBlockBackup(confFile, line));
-		else if (splitedLine[0].compare("}") == 0)
+		else if (splittedLine[0].compare("}") == 0)
 			break ;
 		else
-			serverBlock.configsetting(splitedLine);
+			serverBlock.configsetting(splittedLine);
 	}
 	//serverBlock.printInfo();
 	/// 로케이션 생성해야됨!
@@ -44,4 +58,13 @@ void	ServerList::addServer(std::ifstream & confFile) {
 		locationBlock.push_back(LocationBlock(serverBlock, locationBlockInfo[i]));
 	}	
 	///
+}
+
+
+void	ServerList::printserverList() {
+	for (size_t i = 0; i < this->_serverList.size(); i++)
+	{
+		this->_serverList[i].printServerInfo();
+	}
+	
 }

@@ -47,3 +47,9 @@ bool Config::fileCheck(std::string fileName)
 	infile.close();
 	return (true);
 }
+
+
+// test print
+void	Config::printServerList() {
+	this->_serverList.
+}

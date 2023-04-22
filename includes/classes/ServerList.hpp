@@ -5,9 +5,12 @@
 
 class ServerList {
     private :
-        std::vector<ServerInfo> serverList;
+        std::vector<ServerInfo> _serverList;
     public :
         void    addServer(std::ifstream &);
+
+        //test
+        void    printserverList();
 };
 
 #endif

@@ -10,6 +10,10 @@ class ServerInfo {
         ServerBlock _serverBlock;
         std::vector<LocationBlock> locationList;
     public :
+        
+
+        // test
+        void printServerInfo();
 };
 
 #endif

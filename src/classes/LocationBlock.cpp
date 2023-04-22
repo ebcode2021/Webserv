@@ -1,23 +1,21 @@
 #include "LocationBlock.hpp"
 #include "webserv.hpp"
 
-LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::string &locationBlock) : ServerBlock(serverBlock) {
-	std::vector<std::string> line = split(locationBlock, "\n");
-	std::vector<std::string> splitedLine;
+LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<std::string> &locationBlock) : ServerBlock(serverBlock) {
+	std::vector<std::string> splittedLine;
 
-	for (size_t i = 0; i < line.size(); i++)
+	for (size_t i = 0; i < locationBlock.size(); i++)
 	{
-		splitedLine = split(line[i], static_cast<std::string>(WHITESPACE) + ";");
-		if (splitedLine[0].compare("location") == 0) {
-			setLocationPath(splitedLine);
+		splittedLine = split(locationBlock[i], static_cast<std::string>(WHITESPACE) + ";");
+		if (splittedLine[0].compare("location") == 0) {
+			setLocationPath(splittedLine);
 		}
-		else if (splitedLine[0].compare("limit_except")) {
-			setLimitExcept(line, &i);
+		else if (splittedLine[0].compare("limit_except") == 0) {
+			setLimitExcept(locationBlock[i]);
 		}
 		else {
-			this->configsetting(splitedLine);
+			this->configsetting(splittedLine);
 		}
-
 	}
 		
 }
@@ -29,8 +27,8 @@ void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
 		this->_path = value[1];
 }
 
-void	LocationBlock::setLimitExcept(const std::vector<std::string> &line, size_t *idx) {
-	
+void	LocationBlock::setLimitExcept(const std::string &line) {
+	this->_limittExcept = LimitExcept(split(line, "\n"));
 }
 
 void LocationBlock::blockCheck(std::ifstream& infile)
@@ -42,4 +40,12 @@ void LocationBlock::blockCheck(std::ifstream& infile)
 	{
 			// 지시어, 밸류 확인
 	}
+}
+
+//test utils
+using namespace std;
+
+void	LocationBlock::printLocationBlock() {
+	std::cout << "path : " << this->_path << std::endl;
+	this->_limittExcept.printInfo();
 }
