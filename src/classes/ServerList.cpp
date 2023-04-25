@@ -39,7 +39,8 @@ void	ServerList::addServer(std::ifstream & confFile) {
 	ServerBlock	serverBlock;
 	
 	///
-	std::cout << "서버 블록 입장" << std::endl;
+	std::cout << "\n";
+	std::cout << "서버 클래스 저장 시작" << std::endl;
 	///
 
 	while (std::getline(confFile, line))
@@ -52,11 +53,23 @@ void	ServerList::addServer(std::ifstream & confFile) {
 		else
 			serverBlock.configsetting(splittedLine);
 	}
+
+	std::cout << "서버 클래스 저장 완료" << std::endl;
+
 	//serverBlock.printInfo();
 	/// 로케이션 생성해야됨!
+
+	std::cout << "\n";
+	std::cout << "로케이션 클래스 저장 시작" << std::endl;
+	
 	for (size_t i = 0; i < locationBlockInfo.size(); i++) {
 		locationBlock.push_back(LocationBlock(serverBlock, locationBlockInfo[i]));
 	}	
+
+	std::cout << "로케이션 클래스 저장 완료" << std::endl;
+	this->_serverList.push_back(ServerInfo(serverBlock, locationBlock));
+
+	
 	///
 }
 

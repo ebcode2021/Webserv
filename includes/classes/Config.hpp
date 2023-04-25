@@ -12,7 +12,7 @@ class	Config {
 		static bool fileCheck(std::string);
 
 		//test
-		void	printServerList() const;
+		void	printServerList();
 };
 
 #endif

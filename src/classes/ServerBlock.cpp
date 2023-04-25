@@ -32,7 +32,8 @@ void	ServerBlock::configsetting(std::vector<std::string>& config) {
 		&ServerBlock::setClientMaxBodySize,
 		&ServerBlock::setAutoIndex,
 		&ServerBlock::setIndex,
-		&ServerBlock::setClientBodyTempPath
+		&ServerBlock::setClientBodyTempPath,
+		&ServerBlock::setRoot
 	};
 	(this->*setFunc[directivemap[config[0]]])(config);
 }

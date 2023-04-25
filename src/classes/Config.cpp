@@ -51,5 +51,5 @@ bool Config::fileCheck(std::string fileName)
 
 // test print
 void	Config::printServerList() {
-	this->_serverList.
+	this->_serverList.printserverList();
 }
