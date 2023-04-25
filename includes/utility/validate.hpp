@@ -3,6 +3,9 @@
 
 #include "webserv.hpp"
 
+
+
+
 class	Validate
 {
 	private :
@@ -20,13 +23,14 @@ class	Validate
 		/* checker */
 		static fileMode	argumentCheck(int, char *[]);
 		static void		braceCheck(std::ifstream&, std::string);
+		static void		propertyCntCheck(std::ifstream&,std::vector<std::string>);
 		static void		endsWithSemicolon(std::ifstream&, std::string);
 		static void		extensionCheck(char *);
-		bool			requiredDataCheck();
+		//bool			requiredDataCheck();
 
 		/* decrement properites */
-		void			decrementCounter(std::ifstream&, std::string);
-
+		void			decrementServerCounter(std::ifstream&, std::string);
+		void			decrementLocationCounter(std::ifstream&, std::string);
 		/* file form check */
 		static void isNumeric(std::ifstream&, std::vector<std::string>); //listen, client_max_body_size
 		static void	isStringList(std::ifstream&, std::vector<std::string>); //server_name

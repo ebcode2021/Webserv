@@ -17,6 +17,6 @@ const std::string SERVER = ".server_indications";
 const std::string EXTENSION = ".conf";
 
 /* path */
-const std::string INDICATION_PATH = "../includes/indication/";
+const std::string INDICATION_PATH = "/Users/eunson/Desktop/webserv/indication/";
 
 #endif

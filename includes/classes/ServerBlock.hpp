@@ -2,6 +2,7 @@
 # define SERVER_HPP
 
 # include "ErrorPage.hpp"
+# include "validate.hpp"
 # include "webserv.hpp"
 
 class ServerBlock {

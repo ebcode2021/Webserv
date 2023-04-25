@@ -96,44 +96,43 @@ void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 		splitted = split(line, WHITESPACE);
 		if (splitted.size() == 0)
 			continue ;
-		if (splitted[0].compare("location") && splitted.size() == 1)
-			fileErrorWithExit(I_PROPERTIES, infile);
-		else if (splitted[0].compare("location") == 0 && splitted.size() != 2)
-			fileErrorWithExit(BLOCK_NAME, infile);
+		if (splitted.size() == 1 && splitted[0].compare(CLOSE_BRACE) == 0)
+			break ;
+		Validate::propertyCntCheck(infile, splitted);
 		serverIndications indication = dataset.findServerIndication(splitted);
 		switch(indication)
 		{
-			case serverIndications::location :
+			case s_location :
 				LocationBlock::blockCheck(infile, dataset);
 				break ;
-			case serverIndications::listen :
-			case serverIndications::client_max_body_size :
+			case s_listen :
+			case s_client_max_body_size :
 				Validate::isNumeric(infile, splitted);
 				break ;
-			case serverIndications::root :
-			case serverIndications::client_body_temp_path :
-				Validate::isPathList(infile, splitted, multiplicityOption::single);
+			case s_root :
+			case s_client_body_temp_path :
+				Validate::isPathList(infile, splitted, single);
 				break ;
-			case serverIndications::index :
-				Validate::isPathList(infile, splitted, multiplicityOption::multiple);
+			case s_index :
+				Validate::isPathList(infile, splitted, multiple);
 				break ;
-			case serverIndications::autoindex :
+			case s_autoindex :
 				Validate::isStatus(infile, splitted);
 				break ;
-			case serverIndications::server_name :
+			case s_server_name :
 				Validate::isStringList(infile, splitted);
 				break ;
-			case serverIndications::error_page :
+			case s_error_page :
 				Validate::isErrorPageForm(infile, splitted);
 				break ;
-			case serverIndications::none :
+			case s_none :
 				break ;
 			default :
 				fileErrorWithExit(NO_INDICATION, infile);
 		}
-		dataset.decrementCounter(infile, splitted[0]);
+		dataset.decrementServerCounter(infile, splitted[0]);
 	}
-	Validate::braceCheck(infile, CLOSE_BRACE);
+	//Validate::braceCheck(infile, CLOSE_BRACE);
 }
 
 

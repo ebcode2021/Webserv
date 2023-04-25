@@ -3,7 +3,7 @@ NAME = webserv
 
 # VARIABLE
 CC = c++
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -rf
 
 # PHILOSOPHERS_SRC
@@ -16,7 +16,7 @@ SRCS =  main.cpp	\
 		classes/LocationBlock.cpp	\
 		classes/ServerBlock.cpp		\
 		classes/ServerList.cpp		\
-		classes/ErrorPage.cpp
+		classes/ErrorPage.cpp		
 
 
 SRCS_DIR = src/
