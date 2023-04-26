@@ -85,23 +85,54 @@ void	ServerBlock::setRoot(std::vector<std::string>& value) {
 
 //
 
-void ServerBlock::blockCheck(std::ifstream& infile)
+void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 {
 	std::string					line;
 	std::vector<std::string>	splitted;
 
+	Validate::braceCheck(infile, OPEN_BRACE);
+	dataset.resetServerIndicationList();
 	while (std::getline(infile, line))
 	{
 		splitted = split(line, WHITESPACE);
-
-		if (splitted[0].compare("Location") == 0) {
-			LocationBlock::blockCheck(infile);
+		if (splitted.size() == 0)
+			continue ;
+		if (splitted.size() == 1 && splitted[0].compare(CLOSE_BRACE) == 0)
+			break ;
+		Validate::propertyCntCheck(infile, splitted);
+		serverIndications indication = dataset.findServerIndication(splitted);
+		switch(indication)
+		{
+			case s_location :
+				LocationBlock::blockCheck(infile, dataset);
+				break ;
+			case s_listen :
+			case s_client_max_body_size :
+				Validate::isNumeric(infile, splitted);
+				break ;
+			case s_root :
+			case s_client_body_temp_path :
+				Validate::isPathList(infile, splitted, single);
+				break ;
+			case s_index :
+				Validate::isPathList(infile, splitted, multiple);
+				break ;
+			case s_autoindex :
+				Validate::isStatus(infile, splitted);
+				break ;
+			case s_server_name :
+				Validate::isStringList(infile, splitted);
+				break ;
+			case s_error_page :
+				Validate::isErrorPageForm(infile, splitted);
+				break ;
+			case s_none :
+				break ;
+			default :
+				fileErrorWithExit(NO_INDICATION, infile);
 		}
-		else {
-			// 지시어, 밸류 확인, 중복 확인
-		}
+		dataset.decrementServerCounter(infile, splitted[0]);
 	}
-
 }
 
 

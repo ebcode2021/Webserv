@@ -14,4 +14,16 @@ enum	status
 	on,
 };
 
+enum	fileMode
+{
+	fail,
+	success,
+	test,
+};
+
+enum	multiplicityOption
+{
+	single,
+	multiple,
+};
 #endif

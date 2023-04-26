@@ -1,5 +1,7 @@
-
 #include "Config.hpp"
+#include "indication.hpp"
+#include "enum.hpp"
+#include "notice.hpp"
 
 Config::Config(std::string fileName)
 {
@@ -25,49 +27,30 @@ bool Config::fileCheck(int argc, char *argv[])
 	std::string					line;
 	std::vector<std::string>	splitted;
 
-	infile.open(fileName);
-	while (std::getline(infile, line))
+	fileMode mode = Validate::argumentCheck(argc, argv);
+	if (mode)
 	{
-		splitted = split(line, " ");
-
-		if (splitted[0].compare("http") == 0) {
-			ServerBlock::blockCheck(infile);
+		Validate dataset;
+		infile.open(std::string(argv[1]));
+		if (infile.fail())
+			printErrorWithExit(CHECK_CONFIG_FILE);
+		while (std::getline(infile, line))
+		{
+			splitted = split(line, WHITESPACE);
+			if (splitted[0].compare("server") == 0)
+			{
+				if (splitted.size() != 1)
+					fileErrorWithExit(BLOCK_NAME, infile);
+				ServerBlock::blockCheck(infile, dataset);
+			}
+			else
+				fileErrorWithExit(UNDEFINED_LINE, infile);
 		}
-		else {
-			// 지시어, 밸류 확인, 중복 확인
-		}
+		infile.close();
+		if (mode == test)
+			notice::printMessage(TEST_SUCCESS);
+		else
+			return true;
 	}
-	infile.close();
-	return (true);
-}
-
-
-// test print
-void	Config::printServerList() {
-	this->_serverList.
-}
-	(void)argc;
-	(void)argv;
-	return 0;
-	// if (Validate::argumentCheck(argc, argv))
-	// {
-	// 	Validate dataset;
-	// 	infile.open(std::string(argv[1]));
-	// 	while (std::getline(infile, line))
-	// 	{
-	// 		splitted = split(line, ' ');
-	// 		if (splitted[0].compare("server") == 0)
-	// 		{
-	// 			if (splitted.size() != 1)
-	// 				printErrorWithExit(BLOCK_NAME);
-	// 			ServerBlock::blockCheck(infile);
-	// 		}
-	// 	}
-	// 	infile.close();
-	// 	return (dataset.requiredDataCheck());
-	// }
-	// else
-	// 	return false;
-}
-	this->_serverList.printserverList();
+	return false;
 }

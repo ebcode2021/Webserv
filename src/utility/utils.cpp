@@ -1,6 +1,5 @@
 #include "webserv.hpp"
 
-// 다중 dilim으로 split
 std::vector<std::string> split(const std::string& str, const std::string& delims)
 {
 	std::vector<std::string>	tokens;

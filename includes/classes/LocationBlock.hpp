@@ -8,7 +8,7 @@ class LocationBlock : public ServerBlock {
 
 	private :
 		std::string		_path;
-		LimitExcept		_limittExcept;
+		LimitExcept		_limitExcept;
 		
 
 	public :
@@ -16,6 +16,7 @@ class LocationBlock : public ServerBlock {
 		//LocationBlock();
 		//~LocationBlock();
 
+		static void blockCheck(std::ifstream&, Validate&);
 		static void blockCheck(std::ifstream&);
 		void	setLocationPath(const std::vector<std::string>&);
 		void	setLimitExcept(const std::string &);
