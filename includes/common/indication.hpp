@@ -33,16 +33,4 @@ enum serverIndications
 	s_none,
 };
 
-// {
-// 	{"location", s_location},
-// 	{"listen", s_listen},
-// 	{"server_name", s_server_name},
-// 	{"error_page", s_error_page},
-// 	{"client_max_body_size", s_client_max_body_size},
-// 	{"client_body_temp_path", s_client_body_temp_path},
-// 	{"autoindex", s_autoindex},
-// 	{"index", s_index},
-// 	{"root", s_root},
-// };
-
 #endif

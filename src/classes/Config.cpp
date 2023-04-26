@@ -1,11 +1,7 @@
-
 #include "Config.hpp"
 #include "indication.hpp"
 #include "enum.hpp"
 #include "notice.hpp"
-
-
-
 
 Config::Config(std::string fileName)
 {
@@ -24,7 +20,6 @@ Config::Config(std::string fileName)
 			this->_serverList.addServer(confFile);
 	}
 }
-
 
 bool Config::fileCheck(int argc, char *argv[])
 {

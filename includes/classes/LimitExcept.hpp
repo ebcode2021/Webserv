@@ -1,7 +1,7 @@
 #ifndef LIMITEXCEPT_HPP
 # define LIMITEXCEPT_HPP
 
-#include "webserv.hpp"
+# include "webserv.hpp"
 
 class LimitExcept {
 	private :
@@ -10,7 +10,18 @@ class LimitExcept {
 		std::string					_deny;
 
 	public :
-		static void limitExceptCheck(std::ifstream&, Validate&);
+	//	static void limitExceptCheck(std::ifstream&, Validate&);
+
+		LimitExcept() {};;
+		LimitExcept(const std::vector<std::string> &);
+
+		void	setMethodList(const std::vector<std::string> &);
+		void	setAllow(const std::vector<std::string> &);
+		void	setDeny(const std::vector<std::string> &);
+
+		//test
+		void	printInfo();
+
 };
 
-#endif
+# endif

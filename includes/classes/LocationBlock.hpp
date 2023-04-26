@@ -12,10 +12,17 @@ class LocationBlock : public ServerBlock {
 		
 
 	public :
+		LocationBlock(const ServerBlock&, const std::vector<std::string>&);
 		//LocationBlock();
 		//~LocationBlock();
 
 		static void blockCheck(std::ifstream&, Validate&);
+		static void blockCheck(std::ifstream&);
+		void	setLocationPath(const std::vector<std::string>&);
+		void	setLimitExcept(const std::string &);
+		
+		//	test
+		void	printLocationBlock();
 };
 
 #endif
