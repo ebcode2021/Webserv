@@ -1,29 +1,25 @@
 #include "validate.hpp"
 #include "webserv.hpp"
-#include <unistd.h>
 
-std::map<std::string, serverIndications> ServerType;
-std::map<std::string, locationIndications> LocationType;
-
-void	init_type()
+void	Validate::initServerAndLocationType()
 {
-	LocationType.insert(std::make_pair("limit_except", l_limit_except));
-	LocationType.insert(std::make_pair("autoindex", l_autoindex));
-	LocationType.insert(std::make_pair("client_max_body_size", l_client_max_body_size));
-	LocationType.insert(std::make_pair("client_body_temp_path", l_client_body_temp_path));
-	LocationType.insert(std::make_pair("error_page", l_error_page));
-	LocationType.insert(std::make_pair("index", l_index));
-	LocationType.insert(std::make_pair("root", l_root));
+	this->_LocationType.insert(std::make_pair("limit_except", l_limit_except));
+	this->_LocationType.insert(std::make_pair("autoindex", l_autoindex));
+	this->_LocationType.insert(std::make_pair("client_max_body_size", l_client_max_body_size));
+	this->_LocationType.insert(std::make_pair("client_body_temp_path", l_client_body_temp_path));
+	this->_LocationType.insert(std::make_pair("error_page", l_error_page));
+	this->_LocationType.insert(std::make_pair("index", l_index));
+	this->_LocationType.insert(std::make_pair("root", l_root));
 
-	ServerType.insert(std::make_pair("location", s_location));
-	ServerType.insert(std::make_pair("listen", s_listen));
-	ServerType.insert(std::make_pair("server_name", s_server_name));
-	ServerType.insert(std::make_pair("error_page", s_error_page));
-	ServerType.insert(std::make_pair("client_max_body_size", s_client_max_body_size));
-	ServerType.insert(std::make_pair("client_body_temp_path", s_client_body_temp_path));
-	ServerType.insert(std::make_pair("autoindex", s_autoindex));
-	ServerType.insert(std::make_pair("index", s_index));
-	ServerType.insert(std::make_pair("root", s_root));
+	this->_ServerType.insert(std::make_pair("location", s_location));
+	this->_ServerType.insert(std::make_pair("listen", s_listen));
+	this->_ServerType.insert(std::make_pair("server_name", s_server_name));
+	this->_ServerType.insert(std::make_pair("error_page", s_error_page));
+	this->_ServerType.insert(std::make_pair("client_max_body_size", s_client_max_body_size));
+	this->_ServerType.insert(std::make_pair("client_body_temp_path", s_client_body_temp_path));
+	this->_ServerType.insert(std::make_pair("autoindex", s_autoindex));
+	this->_ServerType.insert(std::make_pair("index", s_index));
+	this->_ServerType.insert(std::make_pair("root", s_root));
 }
 
 std::map<std::string, unsigned short> fileDataToMap(std::ifstream &file)
@@ -44,21 +40,21 @@ std::map<std::string, unsigned short> fileDataToMap(std::ifstream &file)
 	return (newMap);
 }
 
-serverIndications	getServerType(const std::string& indication)
+serverIndications	Validate::getServerType(const std::string& indication)
 {
-	if (ServerType.count(indication) == 0)
-		return ServerType.at("s_none");
-	return ServerType.at(indication);
+	if (this->_ServerType.count(indication) == 0)
+		return this->_ServerType.at("s_none");
+	return this->_ServerType.at(indication);
 }
 
-locationIndications	getLocationType(const std::string& indication)
+locationIndications	Validate::getLocationType(const std::string& indication)
 {
-	if (LocationType.count(indication) == 0)
-		return LocationType.at("l_none");
-	return LocationType.at(indication);
+	if (this->_LocationType.count(indication) == 0)
+		return this->_LocationType.at("l_none");
+	return this->_LocationType.at(indication);
 }
 
-std::map<std::string, serverIndications>	mappingServerIndications(std::map<std::string, unsigned short>& myMap)
+std::map<std::string, serverIndications>	Validate::mappingServerIndications(std::map<std::string, unsigned short>& myMap)
 {
 	std::map<std::string, serverIndications> mappingMap;
 
@@ -67,7 +63,7 @@ std::map<std::string, serverIndications>	mappingServerIndications(std::map<std::
 	return mappingMap;
 }
 
-std::map<std::string, locationIndications>	mappingLocationIndications(std::map<std::string, unsigned short>& myMap)
+std::map<std::string, locationIndications>	Validate::mappingLocationIndications(std::map<std::string, unsigned short>& myMap)
 {
 	std::map<std::string, locationIndications> mappingMap;
 
@@ -76,13 +72,14 @@ std::map<std::string, locationIndications>	mappingLocationIndications(std::map<s
 	return mappingMap;
 }
 
+
 /* constructor */
 Validate::Validate()
 {
 	std::ifstream	serverFile;
 	std::ifstream	locationFile;
-	init_type();
-
+	
+	initServerAndLocationType();
 	serverFile.open(INDICATION_PATH + SERVER);
 	if (serverFile.fail())
 		printErrorWithExit(CHECK_INDICATION_FILE);
@@ -153,35 +150,7 @@ void		Validate::propertyCntCheck(std::ifstream& infile, std::vector<std::string>
 		fileErrorWithExit(I_PROPERTIES, infile);
 }
 
-/* decrement properties */
-void	Validate::decrementServerCounter(std::ifstream& infile, std::string key)
-{
-	unsigned short& remainingNumer = this->_serverMap[key];
-
-	if (remainingNumer == 0)
-		fileErrorWithExit(I_NO_SPACE, infile);
-	remainingNumer--;
-}
-
-void	Validate::decrementLocationCounter(std::ifstream& infile, std::string key)
-{
-	unsigned short& remainingNumer = this->_locationMap[key];
-
-	if (remainingNumer == 0)
-		fileErrorWithExit(I_NO_SPACE, infile);
-	remainingNumer--;
-}
-
-bool	isNumber(const std::string& str)
-{
-	for (std::string::const_iterator it = str.begin(); it != (str.end() - 1); ++it)
-	{
-		if (std::isdigit(*it) == 0)
-			return false;
-	}
-	return true;
-}
-
+/* checker */
 void	Validate::endsWithSemicolon(std::ifstream& infile, std::string str)
 {
 	char	lastChar = str.back();
@@ -230,6 +199,25 @@ void	Validate::isErrorPageForm(std::ifstream &infile, std::vector<std::string> d
 	endsWithSemicolon(infile, data.back());
 }
 
+/* decrement properties */
+void	Validate::decrementServerCounter(std::ifstream& infile, std::string key)
+{
+	unsigned short& remainingNumer = this->_serverMap[key];
+
+	if (remainingNumer == 0)
+		fileErrorWithExit(I_NO_SPACE, infile);
+	remainingNumer--;
+}
+
+void	Validate::decrementLocationCounter(std::ifstream& infile, std::string key)
+{
+	unsigned short& remainingNumer = this->_locationMap[key];
+
+	if (remainingNumer == 0)
+		fileErrorWithExit(I_NO_SPACE, infile);
+	remainingNumer--;
+}
+
 /* find */
 serverIndications	Validate::findServerIndication(std::vector<std::string> splitted)
 {
@@ -248,6 +236,7 @@ locationIndications	Validate::findLocationIndication(std::vector<std::string> sp
 		return it->second;
 	return l_not_found;
 }
+
 
 /* reset */
 void	Validate::resetServerIndicationList()

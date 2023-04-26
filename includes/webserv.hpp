@@ -8,6 +8,7 @@
 # include <map>
 # include <fstream>
 # include <sstream>
+# include <unistd.h>
 
 /* common hpp*/
 # include "const.hpp"
@@ -21,11 +22,11 @@
 /* src */
 void		printErrorWithExit(std::string msg);
 int			getErrorLine(std::ifstream& file);
-void		braceCheck(std::ifstream&, std::string);
 void		fileErrorWithExit(std::string msg, std::ifstream& file);
 void		endsWithSemicolon(std::ifstream&, std::string);
 
 /* src - [utils] */
 std::vector<std::string> split(const std::string& str, const std::string& delims);
+bool	isNumber(const std::string& str);
 
 #endif

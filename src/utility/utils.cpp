@@ -15,3 +15,13 @@ std::vector<std::string> split(const std::string& str, const std::string& delims
 		tokens.push_back(str.substr(start));
 	return (tokens);
 }
+
+bool	isNumber(const std::string& str)
+{
+	for (std::string::const_iterator it = str.begin(); it != (str.end() - 1); ++it)
+	{
+		if (std::isdigit(*it) == 0)
+			return false;
+	}
+	return true;
+}
