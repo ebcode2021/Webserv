@@ -16,7 +16,9 @@ SRCS =  main.cpp	\
 		classes/LocationBlock.cpp	\
 		classes/ServerBlock.cpp		\
 		classes/ServerList.cpp		\
-		classes/ErrorPage.cpp
+		classes/ErrorPage.cpp		\
+		classes/LimitExcept.cpp		\
+		classes/ServerInfo.cpp
 
 
 SRCS_DIR = src/
@@ -41,6 +43,7 @@ $(NAME) : $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 	@echo "$(GREEN) *** Compile Done!! *** $(DEFAULT)"
 
+
 all : $(NAME)
 	@echo "$(GREEN) *** Project Ready! *** $(DEFAULT)"
 
@@ -55,6 +58,7 @@ fclean : clean
 re :
 	make fclean
 	make all
+	make clean
 
 
 .PHONY : all clean fclean re
