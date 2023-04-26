@@ -54,3 +54,9 @@ bool Config::fileCheck(int argc, char *argv[])
 	}
 	return false;
 }
+
+void	Config::printServerList() {
+	this->_serverList.printserverList();
+}
+
+

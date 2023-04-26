@@ -6,7 +6,6 @@ ErrorPage::ErrorPage(std::vector<std::string>& value) {
 		this->statusCode.push_back(atoi(value[i].c_str()));
 	}
 	this->path = value[value.size() - 1];
-	std::cout << "testestes" << this->path << std::endl;
 }
 
 // testPrint

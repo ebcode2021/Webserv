@@ -10,6 +10,7 @@ static std::vector<std::string> LocationBlockBackup(std::ifstream& confFile, std
 	while (std::getline(confFile, line))
 	{
 		splittedLine = split(line, WHITESPACE);
+
 		if (splittedLine[0].compare("}") == 0)
 			break ;
 		else if (splittedLine[0].compare("limit_except") == 0) {
