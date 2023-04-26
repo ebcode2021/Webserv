@@ -11,7 +11,8 @@ class ServerInfo {
         std::vector<LocationBlock> locationList;
 
     public :
-        
+        ServerInfo() {};
+        ServerInfo(ServerBlock&, std::vector<LocationBlock>&);
 
         // test
         void printServerInfo();

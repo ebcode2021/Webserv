@@ -16,6 +16,7 @@ class	Config {
 
 		static bool	fileCheck(int, char *[]);
 		static void	setEnv(std::string, std::string);
+		void	printServerList();
 };
 
 #endif

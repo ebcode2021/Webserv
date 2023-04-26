@@ -69,3 +69,5 @@ void	Config::printServerList() {
 	// else
 	// 	return false;
 }
+	this->_serverList.printserverList();
+}
