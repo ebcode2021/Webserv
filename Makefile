@@ -8,9 +8,10 @@ RM = rm -rf
 
 # PHILOSOPHERS_SRC
 SRCS =  main.cpp	\
-		error.cpp	\
-		utils.cpp	\
-		validate.cpp	\
+		utility/error.cpp	\
+		utility/notice.cpp	\
+		utility/utils.cpp	\
+		utility/validate.cpp	\
 		classes/Config.cpp	\
 		classes/LocationBlock.cpp	\
 		classes/ServerBlock.cpp		\
@@ -18,7 +19,6 @@ SRCS =  main.cpp	\
 		classes/ErrorPage.cpp		\
 		classes/LimitExcept.cpp
 
-		
 
 SRCS_DIR = src/
 SRCS_PATH = $(addprefix $(SRCS_DIR), $(SRCS))
@@ -26,6 +26,8 @@ SRCS_PATH = $(addprefix $(SRCS_DIR), $(SRCS))
 INCS = includes/
 CLASS_INCS = includes/classes/
 COMMON_INCS = includes/common/
+UTILITY_INCS = includes/utility/
+
 OBJS = $(SRCS_PATH:.cpp=.o)
 
 
@@ -33,7 +35,7 @@ OBJS = $(SRCS_PATH:.cpp=.o)
 # COMMANDS
 %.o : %.cpp
 	@echo "$(YELLOW) *** Generating push_swap objects... *** $(DEFAULT)"
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCS) -I $(CLASS_INCS) -I $(COMMON_INCS)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCS) -I $(CLASS_INCS) -I $(COMMON_INCS) -I $(UTILITY_INCS)
 
 $(NAME) : $(OBJS)
 	@echo "$(GREEN) *** Compiling philo ... *** $(DEFAULT)"

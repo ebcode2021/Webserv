@@ -1,4 +1,4 @@
-#include "webserv.hpp"
+
 #include "Config.hpp"
 
 Config::Config(std::string fileName)
@@ -19,14 +19,7 @@ Config::Config(std::string fileName)
 	}
 }
 
-enum	blockType
-{
-	server = 0,
-	location = 1,
-	other = 2,
-};
-
-bool Config::fileCheck(std::string fileName)
+bool Config::fileCheck(int argc, char *argv[])
 {
 	std::ifstream				infile;
 	std::string					line;
@@ -52,4 +45,27 @@ bool Config::fileCheck(std::string fileName)
 // test print
 void	Config::printServerList() {
 	this->_serverList.
+}
+	(void)argc;
+	(void)argv;
+	return 0;
+	// if (Validate::argumentCheck(argc, argv))
+	// {
+	// 	Validate dataset;
+	// 	infile.open(std::string(argv[1]));
+	// 	while (std::getline(infile, line))
+	// 	{
+	// 		splitted = split(line, ' ');
+	// 		if (splitted[0].compare("server") == 0)
+	// 		{
+	// 			if (splitted.size() != 1)
+	// 				printErrorWithExit(BLOCK_NAME);
+	// 			ServerBlock::blockCheck(infile);
+	// 		}
+	// 	}
+	// 	infile.close();
+	// 	return (dataset.requiredDataCheck());
+	// }
+	// else
+	// 	return false;
 }

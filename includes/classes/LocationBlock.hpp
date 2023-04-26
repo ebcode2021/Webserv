@@ -13,6 +13,8 @@ class LocationBlock : public ServerBlock {
 
 	public :
 		LocationBlock(const ServerBlock&, const std::vector<std::string>&);
+		//LocationBlock();
+		//~LocationBlock();
 
 		static void blockCheck(std::ifstream&);
 		void	setLocationPath(const std::vector<std::string>&);
