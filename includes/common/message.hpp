@@ -27,6 +27,8 @@
 
 # define NO_INDICATION "Not Found Indication :: line "
 
+# define UNDEFINED_LINE "Undefined block Line :: line "
+
 /* indication file error */
 
 

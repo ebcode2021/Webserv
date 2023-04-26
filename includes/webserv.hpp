@@ -8,7 +8,6 @@
 # include <map>
 # include <fstream>
 # include <sstream>
-#include <map>
 
 /* common hpp*/
 # include "const.hpp"
@@ -16,9 +15,6 @@
 # include "indication.hpp"
 # include "message.hpp"
 # include "struct.hpp"
-
-// static std::map<std::string, locationIndications> LocationType;
-// static std::map<std::string, serverIndications> ServerType;
 
 /* utility hpp*/
 

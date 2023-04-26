@@ -158,7 +158,6 @@ void	Validate::decrementServerCounter(std::ifstream& infile, std::string key)
 {
 	unsigned short& remainingNumer = this->_serverMap[key];
 
-	std::cout << remainingNumer << std::endl;
 	if (remainingNumer == 0)
 		fileErrorWithExit(I_NO_SPACE, infile);
 	remainingNumer--;
@@ -168,7 +167,6 @@ void	Validate::decrementLocationCounter(std::ifstream& infile, std::string key)
 {
 	unsigned short& remainingNumer = this->_locationMap[key];
 
-	std::cout << remainingNumer << std::endl;
 	if (remainingNumer == 0)
 		fileErrorWithExit(I_NO_SPACE, infile);
 	remainingNumer--;

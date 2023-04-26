@@ -3,9 +3,6 @@
 
 #include "webserv.hpp"
 
-
-
-
 class	Validate
 {
 	private :
@@ -26,17 +23,17 @@ class	Validate
 		static void		propertyCntCheck(std::ifstream&,std::vector<std::string>);
 		static void		endsWithSemicolon(std::ifstream&, std::string);
 		static void		extensionCheck(char *);
-		//bool			requiredDataCheck();
 
 		/* decrement properites */
 		void			decrementServerCounter(std::ifstream&, std::string);
 		void			decrementLocationCounter(std::ifstream&, std::string);
+
 		/* file form check */
-		static void isNumeric(std::ifstream&, std::vector<std::string>); //listen, client_max_body_size
-		static void	isStringList(std::ifstream&, std::vector<std::string>); //server_name
-		static void isErrorPageForm(std::ifstream&, std::vector<std::string>); //error_page
-		static void	isPathList(std::ifstream&, std::vector<std::string>, multiplicityOption); // root, temp_path(1개만 가능), index(여러개가능)
-		static void	isStatus(std::ifstream&, std::vector<std::string>); //autoIndex
+		static void isNumeric(std::ifstream&, std::vector<std::string>);
+		static void	isStringList(std::ifstream&, std::vector<std::string>);
+		static void isErrorPageForm(std::ifstream&, std::vector<std::string>);
+		static void	isPathList(std::ifstream&, std::vector<std::string>, multiplicityOption);
+		static void	isStatus(std::ifstream&, std::vector<std::string>);
 
 		/* find */
 		serverIndications	findServerIndication(std::vector<std::string>);

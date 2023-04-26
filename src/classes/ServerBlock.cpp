@@ -132,7 +132,6 @@ void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 		}
 		dataset.decrementServerCounter(infile, splitted[0]);
 	}
-	//Validate::braceCheck(infile, CLOSE_BRACE);
 }
 
 

@@ -45,5 +45,4 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 		}
 		dataset.decrementLocationCounter(infile, splitted[0]);
 	}
-	//Validate::braceCheck(infile, CLOSE_BRACE);
 }

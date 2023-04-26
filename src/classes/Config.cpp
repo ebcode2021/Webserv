@@ -48,6 +48,8 @@ bool Config::fileCheck(int argc, char *argv[])
 					fileErrorWithExit(BLOCK_NAME, infile);
 				ServerBlock::blockCheck(infile, dataset);
 			}
+			else
+				fileErrorWithExit(UNDEFINED_LINE, infile);
 		}
 		infile.close();
 		if (mode == test)
