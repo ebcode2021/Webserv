@@ -11,6 +11,10 @@ int main(int argc, char *argv[])
 		//config.printServerList();
 		// 통신 시작
 		// 저장된거 이용해서 소켓 열기 ()
+		
+		//SocketData socketData;
+		//socketData.Connection(config);
+		
 	}
 	return 0;
 }
