@@ -58,5 +58,7 @@ class	Validate
 
 };
 
+std::map<std::string, unsigned short> fileDataToMap(std::ifstream &file);
+
 
 #endif

@@ -1,6 +1,29 @@
 #include "validate.hpp"
 #include "webserv.hpp"
 
+Validate::Validate()
+{
+	std::ifstream	serverFile;
+	std::ifstream	locationFile;
+	
+	initServerAndLocationType();
+	serverFile.open(INDICATION_PATH + SERVER);
+	if (serverFile.fail())
+		printErrorWithExit(CHECK_INDICATION_FILE);
+	this->_originServerMap = fileDataToMap(serverFile);
+	this->_serverMap = this->_originServerMap;
+	this->_serverIndications = mappingServerIndications(this->_originServerMap);
+	serverFile.close();
+
+	locationFile.open(INDICATION_PATH + LOCATION);
+	if (locationFile.fail())
+		printErrorWithExit(CHECK_INDICATION_FILE);
+	this->_originLocationMap = fileDataToMap(locationFile);
+	this->_locationMap = this->_originLocationMap;
+	this->_locationIndications = mappingLocationIndications(this->_originLocationMap);
+	locationFile.close();
+}
+
 void	Validate::initServerAndLocationType()
 {
 	this->_LocationType.insert(std::make_pair("limit_except", l_limit_except));
@@ -74,28 +97,28 @@ std::map<std::string, locationIndications>	Validate::mappingLocationIndications(
 
 
 /* constructor */
-Validate::Validate()
-{
-	std::ifstream	serverFile;
-	std::ifstream	locationFile;
+// Validate::Validate()
+// {
+// 	std::ifstream	serverFile;
+// 	std::ifstream	locationFile;
 	
-	initServerAndLocationType();
-	serverFile.open(INDICATION_PATH + SERVER);
-	if (serverFile.fail())
-		printErrorWithExit(CHECK_INDICATION_FILE);
-	this->_originServerMap = fileDataToMap(serverFile);
-	this->_serverMap = this->_originServerMap;
-	this->_serverIndications = mappingServerIndications(this->_originServerMap);
-	serverFile.close();
+// 	initServerAndLocationType();
+// 	serverFile.open(INDICATION_PATH + SERVER);
+// 	if (serverFile.fail())
+// 		printErrorWithExit(CHECK_INDICATION_FILE);
+// 	this->_originServerMap = fileDataToMap(serverFile);
+// 	this->_serverMap = this->_originServerMap;
+// 	this->_serverIndications = mappingServerIndications(this->_originServerMap);
+// 	serverFile.close();
 
-	locationFile.open(INDICATION_PATH + LOCATION);
-	if (locationFile.fail())
-		printErrorWithExit(CHECK_INDICATION_FILE);
-	this->_originLocationMap = fileDataToMap(locationFile);
-	this->_locationMap = this->_originLocationMap;
-	this->_locationIndications = mappingLocationIndications(this->_originLocationMap);
-	locationFile.close();
-}
+// 	locationFile.open(INDICATION_PATH + LOCATION);
+// 	if (locationFile.fail())
+// 		printErrorWithExit(CHECK_INDICATION_FILE);
+// 	this->_originLocationMap = fileDataToMap(locationFile);
+// 	this->_locationMap = this->_originLocationMap;
+// 	this->_locationIndications = mappingLocationIndications(this->_originLocationMap);
+// 	locationFile.close();
+// }
 
 /* checker */
 fileMode	Validate::argumentCheck(int argc, char *argv[])

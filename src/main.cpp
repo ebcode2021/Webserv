@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 		// 저장된거 이용해서 소켓 열기 ()
 		
 		//SocketData socketData;
-		//socketData.Connection(config);	
+		//socketData.Connection(config);
 	}
 	return 0;
 }

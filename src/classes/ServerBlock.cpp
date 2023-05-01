@@ -3,6 +3,10 @@
 #include "webserv.hpp"
 #include "map"
 
+/*
+	1) void 	isOOOO -> boolen isOOOO (switch-case 에서도 if(res ==kfalse))
+	2) cpp file 순서 다시
+*/
 ServerBlock::ServerBlock() {
 	this->_clientMaxBodySize = 1;
 	this->_listenList.push_back(8080);
