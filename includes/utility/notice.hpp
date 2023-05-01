@@ -8,4 +8,5 @@ namespace	notice
 	void	printMessage(std::string);
 };
 
+
 #endif

@@ -1,5 +1,9 @@
 #include "validate.hpp"
 #include "webserv.hpp"
+/*
+	1) void 	isOOOO -> boolen isOOOO (switch-case 에서도 if(res ==kfalse))
+	2) cpp file 순서 다시
+*/
 
 Validate::Validate()
 {
