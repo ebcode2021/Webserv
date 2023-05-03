@@ -3,6 +3,9 @@
 
 #include "webserv.hpp"
 
+#define SOCKET_ERROR   -1
+#define INVALID_SOCKET -1
+
 /* const string */
 const std::string WHITESPACE = " \t\n\v\f\r";
 const std::string OPEN_BRACE = "{";
@@ -20,5 +23,7 @@ const std::string EXTENSION = ".conf";
 const std::string INDICATION_PATH = "/Users/eunson/Desktop/webserv/indication/";
 
 const std::string KEYWORD_PATH = "/Users/eunson/Desktop/webserv/keywords/.server_keywords";
+
+# define BUFSIZE 512
 
 #endif
