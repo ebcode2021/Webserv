@@ -9,6 +9,12 @@
 # include <fstream>
 # include <sstream>
 # include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h> // basic type definitions
+# include <sys/event.h>
+# include <sys/socket.h> // socket(), AF_INET, ...
+# include <arpa/inet.h> // htons(), htonl(), ...
+# include <netdb.h> // gethostbyname(), ...
 
 /* common hpp*/
 # include "const.hpp"
@@ -16,6 +22,10 @@
 # include "indication.hpp"
 # include "message.hpp"
 # include "struct.hpp"
+
+//
+# include "TcpSocket.hpp"
+//
 
 /* utility hpp*/
 

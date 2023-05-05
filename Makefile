@@ -18,7 +18,8 @@ SRCS =  main.cpp	\
 		classes/ServerList.cpp		\
 		classes/ErrorPage.cpp		\
 		classes/LimitExcept.cpp		\
-		classes/ServerInfo.cpp
+		classes/ServerInfo.cpp		\
+		classes/TcpSocket.cpp
 
 
 SRCS_DIR = src/
