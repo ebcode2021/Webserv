@@ -29,7 +29,8 @@ int createSocket()
 
 int main(int argc, char *argv[])
 {
-	if (Config::fileCheck(argc, argv))
+	(void)argc;
+	if (1)//Config::fileCheck(argc, argv))
 	{
 		Config config(argv[1]);
 		std::cout << "컨피그 저장 완료" << std::endl;
@@ -46,18 +47,23 @@ int main(int argc, char *argv[])
 		// 이벤트에 대한 정보(Read, Write, Add, Delete)를 저장하는 vector
 		std::vector<struct kevent> changeList;
 		
+		std::set<int> listenSockList;
 		
 		// 사실상 여기 for문  openListenSockets(config, changeList);
+
 		int listenSock = createSocket();
 		TcpSocket listenSocket(listenSock);
 		listenSocket.socketBind(8080);
 		listenSocket.socketListen();
 		listenSocket.changeToNonblocking();
+		listenSockList.insert(listenSock);
+
 
 		// kqueue 초기화
 		int kq = kqueue(); // kqueue
 
 		// 이벤트 등록에 사용되는 kevent vector 배열
+
 
 		// kqueue에 이벤트 등록
 		struct kevent kev;
@@ -72,9 +78,14 @@ int main(int argc, char *argv[])
 			changeList.clear();
 			(void)eventCnt;
 			for (int i = 0; i < eventCnt; i++) {
-				//struct kevent curEvent = eventList[i];
+				struct kevent curEvent = eventList[i];
 
-				// if (curEvent.ident == listenSock && curEvent.flags == EVFILT_READ) // listen_sock의 read 이벤트일 경우
+				if (listenSockList.find(curEvent.ident) != listenSockList.end()) {
+					std::cout << "접속 수용 이벤트 발생" << std::endl;
+					sockaddr_in client_address;
+					socklen_t clientAddressSi;
+					int clientSock = 
+				} // listen_sock의 read 이벤트일 경우
 
 				// else if (curEvent.flags == EVFILT_READ) // read일 경우 데이터 읽어주세요
 					
