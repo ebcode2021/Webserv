@@ -15,6 +15,7 @@ const std::string SEMICOLON = ";";
 /* file name */
 const std::string LOCATION = ".location_indications";
 const std::string SERVER = ".server_indications";
+const std::string LIMIT_EXCEPT = ".limit_except_indications";
 
 /* extension */
 const std::string EXTENSION = ".conf";

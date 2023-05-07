@@ -12,6 +12,7 @@ SRCS =  main.cpp	\
 		utility/notice.cpp	\
 		utility/utils.cpp	\
 		utility/validate.cpp	\
+		utility/validateUtils.cpp\
 		classes/Config.cpp	\
 		classes/LocationBlock.cpp	\
 		classes/ServerBlock.cpp		\
