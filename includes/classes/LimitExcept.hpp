@@ -2,6 +2,7 @@
 # define LIMITEXCEPT_HPP
 
 # include "webserv.hpp"
+# include "validate.hpp"
 
 class LimitExcept {
 	private :
@@ -10,11 +11,13 @@ class LimitExcept {
 		std::string					_deny;
 
 	public :
-	//	static void limitExceptCheck(std::ifstream&, Validate&);
-
 		LimitExcept() {};;
 		LimitExcept(const std::vector<std::string> &);
 
+		// check
+		static void blockCheck(std::ifstream&, Validate&);
+		
+		// getter, setter
 		void	setMethodList(const std::vector<std::string> &);
 		void	setAllow(const std::vector<std::string> &);
 		void	setDeny(const std::vector<std::string> &);

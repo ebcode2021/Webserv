@@ -17,7 +17,6 @@ class LocationBlock : public ServerBlock {
 		//~LocationBlock();
 
 		static void blockCheck(std::ifstream&, Validate&);
-		static void blockCheck(std::ifstream&);
 		void	setLocationPath(const std::vector<std::string>&);
 		void	setLimitExcept(const std::string &);
 		

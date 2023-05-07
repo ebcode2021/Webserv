@@ -16,12 +16,11 @@ std::vector<std::string> split(const std::string& str, const std::string& delims
 	return (tokens);
 }
 
-bool	isNumber(const std::string& str)
+bool	endsWithSemicolon(std::string str)
 {
-	for (std::string::const_iterator it = str.begin(); it != (str.end() - 1); ++it)
-	{
-		if (std::isdigit(*it) == 0)
-			return false;
-	}
+	char	lastChar = str.back();
+
+	if (lastChar != ';')
+		return false;
 	return true;
 }

@@ -91,16 +91,24 @@ void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 	std::string					line;
 	std::vector<std::string>	splitted;
 
-	Validate::braceCheck(infile, OPEN_BRACE);
+	// check open Brace
+	std::getline(infile, line);
+	splitted = split(line, WHITESPACE);
+	if (Validate::braceCheck(splitted, OPEN_BRACE) == false)
+		fileErrorWithExit(BRACE_ERROR, infile);
 	dataset.resetServerIndicationList();
+
+	// Read Config file
 	while (std::getline(infile, line))
 	{
+		// Check splitted data
 		splitted = split(line, WHITESPACE);
 		if (splitted.size() == 0)
 			continue ;
-		if (splitted.size() == 1 && splitted[0].compare(CLOSE_BRACE) == 0)
+		else if (Validate::braceCheck(splitted, CLOSE_BRACE) == true)
 			break ;
 		Validate::propertyCntCheck(infile, splitted);
+		// Validate Keyword
 		serverIndications indication = dataset.findServerIndication(splitted);
 		switch(indication)
 		{
@@ -109,30 +117,37 @@ void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 				break ;
 			case s_listen :
 			case s_client_max_body_size :
-				Validate::isNumeric(infile, splitted);
+				if (isNumeric(splitted) == false)
+					fileErrorWithExit(I_NUMERIC_ERROR, infile);
 				break ;
 			case s_root :
 			case s_client_body_temp_path :
-				Validate::isPathList(infile, splitted, single);
+				if (isPathList(splitted, single) == false)
+					fileErrorWithExit(I_NOT_MULTIPLE, infile);
 				break ;
 			case s_index :
-				Validate::isPathList(infile, splitted, multiple);
+				if (isPathList(splitted, multiple) == false)
+					fileErrorWithExit(I_PROPERTIES, infile);
 				break ;
 			case s_autoindex :
-				Validate::isStatus(infile, splitted);
-				break ;
-			case s_server_name :
-				Validate::isStringList(infile, splitted);
+				if (isStatus(splitted) == false)
+					fileErrorWithExit(I_PROPERTIES, infile);
 				break ;
 			case s_error_page :
-				Validate::isErrorPageForm(infile, splitted);
+				if (isErrorPageForm(splitted) == false)
+					fileErrorWithExit(I_PROPERTIES, infile);
 				break ;
 			case s_none :
+			case s_server_name :
 				break ;
 			default :
 				fileErrorWithExit(NO_INDICATION, infile);
 		}
-		dataset.decrementServerCounter(infile, splitted[0]);
+		if (indication != s_location && endsWithSemicolon(splitted.back()) == false)
+			fileErrorWithExit(I_SEMICOLON, infile);
+
+		if (dataset.decrementServerCounter(splitted[0]) == false)
+			fileErrorWithExit(I_NO_SPACE, infile);
 	}
 }
 

@@ -33,4 +33,12 @@ enum serverIndications
 	s_none,
 };
 
+enum	limitExceptIndications
+{
+	e_not_found,
+	e_allow,
+	e_deny,
+	e_none,
+};
+
 #endif
