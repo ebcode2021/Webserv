@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
 		int listenSock = createSocket();
 		TcpSocket listenSocket(listenSock);
-		listenSocket.socketBind(8080);
+		listenSocket.socketBind(1234);
 		listenSocket.socketListen();
 		listenSocket.changeToNonblocking();
 		listenSockList.insert(listenSock);
@@ -79,13 +79,51 @@ int main(int argc, char *argv[])
 			(void)eventCnt;
 			for (int i = 0; i < eventCnt; i++) {
 				struct kevent curEvent = eventList[i];
+				TcpSocket *curSocketInfo = (TcpSocket *)curEvent.udata;
 
-				if (listenSockList.find(curEvent.ident) != listenSockList.end()) {
-					std::cout << "접속 수용 이벤트 발생" << std::endl;
-					sockaddr_in client_address;
-					socklen_t clientAddressSi;
-					int clientSock = 
-				} // listen_sock의 read 이벤트일 경우
+				if (curEvent.filter == EVFILT_READ)  // 현재 발생한 이벤트가 read일 경우
+				{
+					if (listenSockList.find(curEvent.ident) != listenSockList.end()) // listen port일 경우
+					{
+						std::cout << "접속 수용 이벤트 발생" << std::endl;
+						sockaddr_in clientAddress;
+						socklen_t clientAddressSize = sizeof(clientAddress);
+
+						std::cout << "accept 전" << std::endl;
+						int clientSock = accept(curEvent.ident, (struct sockaddr *)&clientAddress, &clientAddressSize);
+						if (clientSock == INVALID_SOCKET) {
+							printErrorWithExit("error : accept()");
+						}
+						std::cout << "accept 후" << std::endl;
+						// 클라이언트 정보 출력
+						
+						char addr[INET_ADDRSTRLEN];
+						inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr));
+						std::cout << "클라이언트 접속: IP = " << addr << "포트 = " << ntohs(clientAddress.sin_port) << std::endl;
+						TcpSocket clientSocket(clientSock);
+						clientSocket.changeToNonblocking();
+						EV_SET(&kev, clientSocket.getSockFd(), EVFILT_READ, EV_ADD, 0, 0, &clientSocket);
+						changeList.push_back(kev);
+						EV_SET(&kev, clientSocket.getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, &clientSocket);
+						changeList.push_back(kev);
+					}
+					else {
+						int readSize = read(curEvent.ident, curSocketInfo->getBuf(), sizeof(curSocketInfo->getBuf()));
+
+						if (readSize == -1) {
+							printErrorWithExit("error: read()");
+						}
+						else if (readSize == 0) {
+							close(curEvent.ident);
+						}
+						else {
+							char *curBuf = curSocketInfo->getBuf();
+							curBuf[readSize] = '\0';
+							std::cout << curSocketInfo->getBuf() << std::endl;
+							curSocketInfo->bufClear();
+						}
+					}
+				}
 
 				// else if (curEvent.flags == EVFILT_READ) // read일 경우 데이터 읽어주세요
 					

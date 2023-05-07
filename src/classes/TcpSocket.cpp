@@ -61,3 +61,7 @@ char*	TcpSocket::getBuf()
 {
 	return (this->_socketInfo.buf);
 }
+
+void	TcpSocket::bufClear() {
+	memset(this->_socketInfo.buf, 0, sizeof(BUFSIZE));
+}

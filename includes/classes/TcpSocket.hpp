@@ -26,6 +26,8 @@ class TcpSocket
 		int	 getSendByte();
 		int 	getRecvByte();
 		char	*getBuf();
+
+		void	bufClear();
 };
 
 #endif
