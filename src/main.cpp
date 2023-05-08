@@ -4,14 +4,17 @@
 /*
 	[남은거?]
 	1) fileCheck 공사 ->(get, post, delete ... limitExcept) -> 은비
+
 	2) HTTP parsing
+	
 	3) kqueue read, write -> 민수
-	4) 3) 한 후에 클래스 분리
+	4) 3) 한 후에 클래스 분리 (내일 끝내기)
+
 	5) CGI(py, php) -> 같이 공부하면 좋겠어
 	6) html 간단하게 사진 넣기 (은비 심심하면 요령껏...)
 	7) 쿠키, 세션
-*/
 
+*/
 
 // 요청 라인 분석해서 메서드와 url 확인
 // 요청이 url이 cgi 인지 확인
@@ -30,23 +33,18 @@ int createSocket()
 int main(int argc, char *argv[])
 {
 	(void)argc;
-	if (1)//Config::fileCheck(argc, argv))
+	if (Config::fileCheck(argc, argv))
 	{
 		Config config(argv[1]);
-		std::cout << "컨피그 저장 완료" << std::endl;
 		//config.printServerList();
 
 		// fd 늘리는 로직 추가
 
 		// create_listen_sock(); // linten sock read event 등록 
-		// 저장해놓은 포트 개수만큼 listen 소켓 열어야함
-		// 8080 하드코딩
-		//int kq = kqueue(); // kqueue
 		// openListenSockets(config, kq);
 
 		// 이벤트에 대한 정보(Read, Write, Add, Delete)를 저장하는 vector
 		std::vector<struct kevent> changeList;
-		
 		std::set<int> listenSockList;
 		
 		// 사실상 여기 for문  openListenSockets(config, changeList);
@@ -58,26 +56,22 @@ int main(int argc, char *argv[])
 		listenSocket.changeToNonblocking();
 		listenSockList.insert(listenSock);
 
-
 		// kqueue 초기화
 		int kq = kqueue(); // kqueue
-
-		// 이벤트 등록에 사용되는 kevent vector 배열
-
 
 		// kqueue에 이벤트 등록
 		struct kevent kev;
 		EV_SET(&kev, listenSocket.getSockFd(), EVFILT_READ, EV_ADD, 0, 0, &listenSocket);
-		kevent(kq, &changeList[0], changeList.size(), 0, 0, NULL);
 		changeList.push_back(kev);
 
 		while(1)
 		{
 			struct kevent eventList[FD_SETSIZE];
-			int eventCnt = kevent(kq, &changeList[0], changeList.size(), eventList, FD_SETSIZE, NULL);
+			int eventCnt = kevent(kq, &changeList[0], changeList.size(), eventList, FD_SETSIZE, NULL); // changeList 등록 후에 -> event 대기
 			changeList.clear();
-			(void)eventCnt;
-			for (int i = 0; i < eventCnt; i++) {
+
+			for (int i = 0; i < eventCnt; i++)
+			{
 				struct kevent curEvent = eventList[i];
 				TcpSocket *curSocketInfo = (TcpSocket *)curEvent.udata;
 
@@ -102,13 +96,14 @@ int main(int argc, char *argv[])
 						std::cout << "클라이언트 접속: IP = " << addr << "포트 = " << ntohs(clientAddress.sin_port) << std::endl;
 						TcpSocket clientSocket(clientSock);
 						clientSocket.changeToNonblocking();
+
 						EV_SET(&kev, clientSocket.getSockFd(), EVFILT_READ, EV_ADD, 0, 0, &clientSocket);
 						changeList.push_back(kev);
 						EV_SET(&kev, clientSocket.getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, &clientSocket);
 						changeList.push_back(kev);
 					}
 					else {
-						int readSize = read(curEvent.ident, curSocketInfo->getBuf(), sizeof(curSocketInfo->getBuf()));
+						int readSize = recv(curEvent.ident, curSocketInfo->getBuf(), BUFSIZE + 1, 0);
 
 						if (readSize == -1) {
 							printErrorWithExit("error: read()");
@@ -124,9 +119,6 @@ int main(int argc, char *argv[])
 						}
 					}
 				}
-
-				// else if (curEvent.flags == EVFILT_READ) // read일 경우 데이터 읽어주세요
-					
 				// else if (curEvent.flags == EVFILT_WRITE) // write 일 경우
 
 				// else
@@ -148,9 +140,6 @@ int main(int argc, char *argv[])
 			// 반복
 		}
 	}
-		// for문으로 감싼다고 생각하고
-			// createListenSocket();
-		// Kqueue_a kqueue_a(); // event 등록 할 수
 		
 	
 	return 0;
