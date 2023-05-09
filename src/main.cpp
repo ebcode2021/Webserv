@@ -6,8 +6,7 @@
 	1) fileCheck 공사 ->(get, post, delete ... limitExcept) -> 은비
 
 	2) HTTP parsing
-	
-	3) kqueue read, write -> 민수
+
 	4) 3) 한 후에 클래스 분리 (내일 끝내기)
 
 	5) CGI(py, php) -> 같이 공부하면 좋겠어
@@ -33,7 +32,7 @@ int createSocket()
 int main(int argc, char *argv[])
 {
 	(void)argc;
-	if (Config::fileCheck(argc, argv))
+	if (1) //Config::fileCheck(argc, argv))
 	{
 		Config config(argv[1]);
 		//config.printServerList();
@@ -47,7 +46,8 @@ int main(int argc, char *argv[])
 		std::vector<struct kevent> changeList;
 		std::set<int> listenSockList;
 		
-		// 사실상 여기 for문  openListenSockets(config, changeList);
+		int kq = kqueue(); // kqueue
+		// 여기 for문  openListenSockets(config, changeList);
 
 		int listenSock = createSocket();
 		TcpSocket listenSocket(listenSock);
@@ -55,15 +55,10 @@ int main(int argc, char *argv[])
 		listenSocket.socketListen();
 		listenSocket.changeToNonblocking();
 		listenSockList.insert(listenSock);
-
-		// kqueue 초기화
-		int kq = kqueue(); // kqueue
-
-		// kqueue에 이벤트 등록
 		struct kevent kev;
 		EV_SET(&kev, listenSocket.getSockFd(), EVFILT_READ, EV_ADD, 0, 0, &listenSocket);
 		changeList.push_back(kev);
-
+		
 		while(1)
 		{
 			struct kevent eventList[FD_SETSIZE];
@@ -77,6 +72,7 @@ int main(int argc, char *argv[])
 
 				if (curEvent.filter == EVFILT_READ)  // 현재 발생한 이벤트가 read일 경우
 				{
+					std::cout << "읽기 이벤트 발생" << std::endl;
 					if (listenSockList.find(curEvent.ident) != listenSockList.end()) // listen port일 경우
 					{
 						std::cout << "접속 수용 이벤트 발생" << std::endl;
@@ -99,8 +95,8 @@ int main(int argc, char *argv[])
 
 						EV_SET(&kev, clientSocket.getSockFd(), EVFILT_READ, EV_ADD, 0, 0, &clientSocket);
 						changeList.push_back(kev);
-						EV_SET(&kev, clientSocket.getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, &clientSocket);
-						changeList.push_back(kev);
+						// EV_SET(&kev, clientSocket.getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, &clientSocket);
+						// changeList.push_back(kev);
 					}
 					else {
 						int readSize = recv(curEvent.ident, curSocketInfo->getBuf(), BUFSIZE + 1, 0);
@@ -115,29 +111,25 @@ int main(int argc, char *argv[])
 							char *curBuf = curSocketInfo->getBuf();
 							curBuf[readSize] = '\0';
 							std::cout << curSocketInfo->getBuf() << std::endl;
-							curSocketInfo->bufClear();
+							EV_SET(&kev, curEvent.ident, EVFILT_WRITE, EV_ADD, 0, 0, curSocketInfo);
+							changeList.push_back(kev);
 						}
 					}
 				}
-				// else if (curEvent.flags == EVFILT_WRITE) // write 일 경우
-
-				// else
-				// {
-				// 	std::cerr << "뭔가 잘못됬음" << std::endl;
-				// 	exit(1);
-				// }
+				else if (curEvent.filter == EVFILT_WRITE) // write 일 경우
+				{
+					std::cout << "쓰기 이벤트 발생" << std::endl;
+					std::cout << "data check" << curSocketInfo->getBuf() << std::endl;
+					send(curEvent.ident, curSocketInfo->getBuf(), std::strlen(curSocketInfo->getBuf()), 0);
+					EV_SET(&kev, curEvent.ident, EVFILT_WRITE, EV_DISABLE, 0, 0, curSocketInfo);
+					changeList.push_back(kev);
+				}
+				else
+				{
+					std::cerr << "뭔가 많이 잘못됬음" << std::endl;
+					exit(1);
+				}
 			} 
-			// kevent 함수 호출
-			// 이벤트가 발생하면 kevent 배열에 이벤트가 발생한 kevent 구조체들을 담아서 반환
-			// kevent 소켓 번호와 이벤트 플래그 확인 후 처리
-				// listen_sock의 read 이벤트일 경우
-					// 접속 수용
-				// read일 경우
-					// 소켓송수신 버퍼에 있는 데이터를 가져와서 처리
-						// 아마 http 형식에 맞게 파싱해서 확인할듯
-				// write일 경우
-					// 클라이언트한테 데이터 전송
-			// 반복
 		}
 	}
 		
