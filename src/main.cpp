@@ -12,7 +12,6 @@
 	5) CGI(py, php) -> 같이 공부하면 좋겠어
 	6) html 간단하게 사진 넣기 (은비 심심하면 요령껏...)
 	7) 쿠키, 세션
-
 */
 
 // 요청 라인 분석해서 메서드와 url 확인
@@ -48,6 +47,7 @@ int main(int argc, char *argv[])
 		
 		int kq = kqueue(); // kqueue
 		// 여기 for문  openListenSockets(config, changeList);
+		
 
 		int listenSock = createSocket();
 		TcpSocket listenSocket(listenSock);
