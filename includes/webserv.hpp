@@ -38,6 +38,6 @@ void		endsWithSemicolon(std::ifstream&, std::string);
 
 /* src - [utils] */
 std::vector<std::string> split(const std::string& str, const std::string& delims);
-bool	isNumber(const std::string& str);
+bool		isNumber(const std::string& str);
 
 #endif

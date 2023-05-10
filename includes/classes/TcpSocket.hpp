@@ -12,14 +12,14 @@ class TcpSocket
 		TcpSocket();
 		TcpSocket(int);
 		
-		void socketSend();
-		void socketRecv();
+		void	socketSend();
+		void	socketRecv();
 
-		void socketAccept();
-		void socketBind(int);
-		void socketListen();
+		int		socketAccept();
+		void	socketBind(int);
+		void	socketListen();
 
-		void changeToNonblocking();
+		void	changeToNonblocking();
 
 		// getter, setter
 		int	 getSockFd();

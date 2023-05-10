@@ -65,3 +65,17 @@ char*	TcpSocket::getBuf()
 void	TcpSocket::bufClear() {
 	memset(this->_socketInfo.buf, 0, sizeof(BUFSIZE));
 }
+
+int		TcpSocket::socketAccept() {
+	std::cout << "접속 수용 이벤트 발생" << std::endl;
+	sockaddr_in clientAddress;
+	socklen_t clientAddressSize = sizeof(clientAddress);
+	std::cout << "accept 전" << std::endl;
+
+	char addr[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr));
+	std::cout << "클라이언트 접속: IP = " << addr << " 포트 = " << ntohs(clientAddress.sin_port) << std::endl;
+
+	return (accept(getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize));
+
+}

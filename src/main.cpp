@@ -1,5 +1,6 @@
 #include "webserv.hpp"
 #include "Config.hpp"
+#include "KqueueHandler.hpp"
 
 /*
 	[남은거?]
@@ -19,6 +20,7 @@
 // cgi이면 fork()후에 표준출력으로 데이터 전달 표준 입력으로 데이터 받기
 // cgi 프로그램에서는 표준입력으로 body데이터 받아서 html 생성 후 표준출력으로 데이터 전달
 // cgi 에서 받은 데이터를 클라이언트로 전달
+
 int createSocket()
 {
 	int	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -42,12 +44,12 @@ int main(int argc, char *argv[])
 		// openListenSockets(config, kq);
 
 		// 이벤트에 대한 정보(Read, Write, Add, Delete)를 저장하는 vector
-		std::vector<struct kevent> changeList;
-		std::set<int> listenSockList;
+		std::vector<struct kevent>	changeList;
+		std::set<int>				listenSockList;
+		KqueueHandler				kqHandler;
 		
 		int kq = kqueue(); // kqueue
 		// 여기 for문  openListenSockets(config, changeList);
-		
 
 		int listenSock = createSocket();
 		TcpSocket listenSocket(listenSock);
@@ -75,21 +77,10 @@ int main(int argc, char *argv[])
 					std::cout << "읽기 이벤트 발생" << std::endl;
 					if (listenSockList.find(curEvent.ident) != listenSockList.end()) // listen port일 경우
 					{
-						std::cout << "접속 수용 이벤트 발생" << std::endl;
-						sockaddr_in clientAddress;
-						socklen_t clientAddressSize = sizeof(clientAddress);
-
-						std::cout << "accept 전" << std::endl;
-						int clientSock = accept(curEvent.ident, (struct sockaddr *)&clientAddress, &clientAddressSize);
+						int clientSock = curSocketInfo->socketAccept();
 						if (clientSock == INVALID_SOCKET) {
 							printErrorWithExit("error : accept()");
 						}
-						std::cout << "accept 후" << std::endl;
-						// 클라이언트 정보 출력
-						
-						char addr[INET_ADDRSTRLEN];
-						inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr));
-						std::cout << "클라이언트 접속: IP = " << addr << "포트 = " << ntohs(clientAddress.sin_port) << std::endl;
 						TcpSocket clientSocket(clientSock);
 						clientSocket.changeToNonblocking();
 
@@ -111,7 +102,7 @@ int main(int argc, char *argv[])
 							char *curBuf = curSocketInfo->getBuf();
 							curBuf[readSize] = '\0';
 							std::cout << curSocketInfo->getBuf() << std::endl;
-							EV_SET(&kev, curEvent.ident, EVFILT_WRITE, EV_ADD, 0, 0, curSocketInfo);
+							EV_SET(&kev, curEvent.ident, EVFILT_WRITE, EV_ENABLE, 0, 0, curSocketInfo);
 							changeList.push_back(kev);
 						}
 					}
@@ -132,8 +123,6 @@ int main(int argc, char *argv[])
 			} 
 		}
 	}
-		
-	
 	return 0;
 }
 
