@@ -26,4 +26,13 @@ enum	multiplicityOption
 	single,
 	multiple,
 };
+
+enum	Method
+{
+	GET,
+	POST,
+	DELETE,
+};
+
+
 #endif

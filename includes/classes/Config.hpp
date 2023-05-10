@@ -7,6 +7,7 @@
 class	Config {
 	private :
 		ServerList	_serverList;
+		
 
 	public :
 		Config(std::string);

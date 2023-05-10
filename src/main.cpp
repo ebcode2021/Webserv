@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 		// 사실상 여기 for문  openListenSockets(config, changeList);
 		int listenSock = createSocket();
 		TcpSocket listenSocket(listenSock);
-		listenSocket.socketBind(8080);
+		listenSocket.socketBind(1234);
 		listenSocket.socketListen();
 		listenSocket.changeToNonblocking();
 
