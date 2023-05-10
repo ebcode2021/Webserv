@@ -27,7 +27,7 @@ const std::string KEYWORD_PATH = "/Users/eunson/Desktop/webserv/keywords/.server
 
 /* http */
 const std::string CRLF =  "\r\n";
-const std::string DOUBLE_CRLF = "\r\n";
+const std::string DOUBLE_CRLF = "\r\n\r\n";
 
 const std::size_t BUFSIZE = 512;
 
