@@ -16,7 +16,7 @@ void	KqueueHandler::changeEvent(uintptr_t ident, short filter, unsigned short fl
 
 int	KqueueHandler::waitEvent() {
 	int eventCnt = kevent(this->kq, &this->changeList[0], this->changeList.size(), this->eventList, FD_SETSIZE, NULL);
-	return eventCnt;
+	return (eventCnt);
 }
 
 struct kevent KqueueHandler::getCurEventByIndex(int i) {
@@ -25,4 +25,8 @@ struct kevent KqueueHandler::getCurEventByIndex(int i) {
 
 void	KqueueHandler::changeListClear() {
 	this->changeList.clear();
+}
+
+void	KqueueHandler::eventListReset() {
+	memset(this->eventList, 0, sizeof(struct kevent) * FD_SETSIZE);
 }

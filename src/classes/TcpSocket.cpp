@@ -95,3 +95,7 @@ const char	*TcpSocket::getStringToCStr() {
 size_t	TcpSocket::getStringSzie() {
 	return this->buf.size();
 }
+
+void	TcpSocket::setBufbyIndex(int idx, char a) {
+	this->buf[idx] = a;
+}

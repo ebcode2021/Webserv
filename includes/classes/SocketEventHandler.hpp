@@ -9,14 +9,16 @@ class SocketEventHandler
 	private :
 		TcpSocket *_socket;
 	public :
+		SocketEventHandler();
+
 		int socketAccept();
 		//socketConnect
 
 
 		// Event Processing
-		int dataRecv();
-		int dataSend();
-		int closeSocket();
+		int		dataRecv();
+		int		dataSend();
+		void closeSocket();
 
 		// setter
 		void	setSocket(TcpSocket *);

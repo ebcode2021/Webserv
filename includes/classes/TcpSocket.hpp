@@ -32,6 +32,8 @@ class TcpSocket
 		std::string getString();
 
 		void	bufClear();
+		
+		void	setBufbyIndex(int, char);
 
 		//test
 		const char *getStringToCStr();

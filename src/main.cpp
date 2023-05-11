@@ -1,6 +1,7 @@
 #include "webserv.hpp"
 #include "Config.hpp"
 #include "KqueueHandler.hpp"
+#include "SocketEventHandler.hpp"
 
 /*
 	[남은거?]
@@ -53,17 +54,16 @@ int main(int argc, char *argv[])
 		// 여기 for문  openListenSockets(config, changeList);
 
 		int listenSock = createSocket();
-		TcpSocket listenSocket(listenSock);
-		listenSocket.socketBind(1234);
-		listenSocket.socketListen();
-		listenSocket.changeToNonblocking();
+		TcpSocket *listenSocket = new TcpSocket(listenSock);
+		listenSocket->socketBind(1234);
+		listenSocket->socketListen();
+		listenSocket->changeToNonblocking();
 		listenSockList.insert(listenSock);
-		struct kevent kev;
-		EV_SET(&kev, listenSocket.getSockFd(), EVFILT_READ, EV_ADD, 0, 0, &listenSocket);
-		changeList.push_back(kev);
+		kqHandler.changeEvent(listenSocket->getSockFd(), EVFILT_READ, EV_ADD, 0, 0, listenSocket);
 	
 		while(1)
 		{
+			kqHandler.eventListReset();
 			int eventCnt = kqHandler.waitEvent();
 			kqHandler.changeListClear();
 

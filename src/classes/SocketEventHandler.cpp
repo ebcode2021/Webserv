@@ -15,26 +15,33 @@ int SocketEventHandler::socketAccept() {
 	return (clientSock);
 }
 
-int SocketEventHandler::closeSocket() {
+void SocketEventHandler::closeSocket() {
 	close(this->_socket->getSockFd());
 	delete (this->_socket);
 }
 
 int SocketEventHandler::dataRecv() {
-	int ret;
+
+	std::cout << "dataRecv" << std::endl;
+	int ret = 0;
 	int recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE + 1, 0);
-	while (recvByte)
+	if (recvByte == -1)
+		return -1;
+	while (recvByte == -1)
 	{
 		ret += recvByte;
+		std::cout << "ret = " << ret << std::endl;
 		this->_socket->bufJoin(this->_socket->getBuf());
 		recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE + 1, 0);
+		std::cout << recvByte << std::endl;;
 	}
-
+	this->_socket->setBufbyIndex(ret, '\0');
 	return (ret);
 }
 
 int SocketEventHandler::dataSend() {
-	send(this->_socket->getSockFd(), this->_socket->getStringToCStr(), this->_socket->getStringSzie(), 0);
+	int sendByte = send(this->_socket->getSockFd(), this->_socket->getStringToCStr(), this->_socket->getStringSzie(), 0);
+	return (sendByte);
 }
 
 void	SocketEventHandler::printSockBuf() {
