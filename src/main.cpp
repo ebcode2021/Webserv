@@ -86,22 +86,26 @@ int main(int argc, char *argv[])
 					}
 					else {
 						int readSize = sockEventHandler.dataRecv();
-						kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_ADD, 0, 0, curEvent.udata);
+						
 						if (readSize == -1) {
 							printErrorWithExit("error: recv()");
 						}
 						else if (readSize == 0) {
-							kqHandler.changeEvent(curEvent.ident, EVFILT_READ, EV_DELETE, 0, 0, NULL);
+							std::cout << "접속 종료" << std::endl;
+							kqHandler.changeEvent(curEvent.ident, EVFILT_READ, EV_DELETE, 0, 0, curEvent.udata);
+							kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);
 							sockEventHandler.closeSocket();
 						}
 						else {
 							sockEventHandler.printSockBuf();
+							kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_ADD, 0, 0, curEvent.udata);
 						}
 					}
 				}
 				else if (curEvent.filter == EVFILT_WRITE) // write 일 경우
 				{
-					sockEventHandler.dataSend();
+					int sendsize = sockEventHandler.dataSend();
+					std::cout << "sendSize = " << sendsize << std::endl;
 					kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);
 				}
 				else

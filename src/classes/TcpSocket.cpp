@@ -94,7 +94,6 @@ const char	*TcpSocket::getStringToCStr() {
 
 size_t	TcpSocket::getStringSzie() {
 	int size = this->buf.size();
-	std::cout << "sendSize = " << size << std::endl;
 	return size;
 }
 
