@@ -74,7 +74,6 @@ int main(int argc, char *argv[])
 
 				if (curEvent.filter == EVFILT_READ)  // 현재 발생한 이벤트가 read일 경우
 				{
-					std::cout << "읽기 이벤트 발생" << std::endl;
 					if (listenSockList.find(curEvent.ident) != listenSockList.end()) // listen port일 경우
 					{
 						int clientSock = sockEventHandler.socketAccept();
@@ -87,9 +86,9 @@ int main(int argc, char *argv[])
 					}
 					else {
 						int readSize = sockEventHandler.dataRecv();
-						kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_ENABLE, 0, 0, curEvent.udata);
+						kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_ADD, 0, 0, curEvent.udata);
 						if (readSize == -1) {
-							printErrorWithExit("error: read()");
+							printErrorWithExit("error: recv()");
 						}
 						else if (readSize == 0) {
 							kqHandler.changeEvent(curEvent.ident, EVFILT_READ, EV_DELETE, 0, 0, NULL);
@@ -103,7 +102,7 @@ int main(int argc, char *argv[])
 				else if (curEvent.filter == EVFILT_WRITE) // write 일 경우
 				{
 					sockEventHandler.dataSend();
-					kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DISABLE, 0, 0, curEvent.udata);
+					kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);
 				}
 				else
 				{

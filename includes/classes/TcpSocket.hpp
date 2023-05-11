@@ -38,6 +38,7 @@ class TcpSocket
 		//test
 		const char *getStringToCStr();
 		size_t	getStringSzie();
+		void stringClear();
 };
 
 #endif

@@ -24,6 +24,6 @@ const std::string INDICATION_PATH = "/Users/eunson/Desktop/webserv/indication/";
 
 const std::string KEYWORD_PATH = "/Users/eunson/Desktop/webserv/keywords/.server_keywords";
 
-# define BUFSIZE 512
+# define BUFSIZE 10
 
 #endif
