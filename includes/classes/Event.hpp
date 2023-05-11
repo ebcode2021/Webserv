@@ -2,13 +2,14 @@
 # define EVENT_HPP
 
 # include "webserv.hpp"
+# include "TCPSocket.hpp"
 
-class Event
+class EventHandler
 {
 	private :
-
+		TcpSocket *socket;
 	public :
-
+		EventHandler(TcpSocket &);
 };
 
 #endif

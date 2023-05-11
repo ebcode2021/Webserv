@@ -65,12 +65,12 @@ int main(int argc, char *argv[])
 		{
 			struct kevent eventList[FD_SETSIZE];
 			int eventCnt = kqHandler.waitEvent();
-			changeList.clear();
+			kqHandler.changeListClear();
 
 			for (int i = 0; i < eventCnt; i++)
 			{
-				struct kevent curEvent = eventList[i];
-				TcpSocket *curSocketInfo = (TcpSocket *)curEvent.udata;
+				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
+				TcpSocket *curSocket = (TcpSocket *)curEvent.udata;
 
 				if (curEvent.filter == EVFILT_READ)  // 현재 발생한 이벤트가 read일 경우
 				{

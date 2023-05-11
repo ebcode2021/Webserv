@@ -14,6 +14,7 @@ class KqueueHandler {
 		const struct kevent *getEventList();
 		void	changeEvent(uintptr_t ident, short filter, unsigned short flags, unsigned int fflags, intptr_t data, void *udata);
 		int		waitEvent();
+		void	changeListClear();
 
 		struct kevent getCurEventByIndex(int);
 };

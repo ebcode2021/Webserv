@@ -19,6 +19,7 @@ class TcpSocket
 		void	socketBind(int);
 		void	socketListen();
 
+
 		void	changeToNonblocking();
 
 		// getter, setter

@@ -22,3 +22,7 @@ int	KqueueHandler::waitEvent() {
 struct kevent KqueueHandler::getCurEventByIndex(int i) {
 	return this->eventList[i];
 }
+
+void	KqueueHandler::changeListClear() {
+	this->changeList.clear();
+}
