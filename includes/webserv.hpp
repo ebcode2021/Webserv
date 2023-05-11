@@ -39,6 +39,14 @@ void		endsWithSemicolon(std::ifstream&, std::string);
 
 /* src - [utils] */
 std::vector<std::string> split(const std::string& str, const std::string& delims);
-bool		isNumber(const std::string& str);
+bool	endsWithSemicolon(std::string str);
+
+/* validateUtils */
+std::map<std::string, unsigned short> fileDataToMap(std::ifstream &file);
+bool	isNumber(const std::string& str);
+bool	isNumeric(std::vector<std::string> data);
+bool	isPathList(std::vector<std::string> data, multiplicityOption option);
+bool	isStatus(std::vector<std::string> data);
+bool	isErrorPageForm(std::vector<std::string> data);
 
 #endif

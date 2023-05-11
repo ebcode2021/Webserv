@@ -1,16 +1,15 @@
 #include "validate.hpp"
 #include "webserv.hpp"
-/*
-	1) void 	isOOOO -> boolen isOOOO (switch-case 에서도 if(res ==kfalse))
-	2) cpp file 순서 다시
-*/
 
+/* constructor */
 Validate::Validate()
 {
 	std::ifstream	serverFile;
 	std::ifstream	locationFile;
-	
-	initServerAndLocationType();
+	std::ifstream	limitExceptFile;
+
+	initBlockType();
+
 	serverFile.open(INDICATION_PATH + SERVER);
 	if (serverFile.fail())
 		printErrorWithExit(CHECK_INDICATION_FILE);
@@ -26,47 +25,25 @@ Validate::Validate()
 	this->_locationMap = this->_originLocationMap;
 	this->_locationIndications = mappingLocationIndications(this->_originLocationMap);
 	locationFile.close();
+
+	limitExceptFile.open(INDICATION_PATH + LIMIT_EXCEPT);
+	if (limitExceptFile.fail())
+		printErrorWithExit(CHECK_INDICATION_FILE);
+	this->_originLimitExceptMap = fileDataToMap(limitExceptFile);
+	this->_limitExceptMap = this->_originLimitExceptMap;
+	this->_limitExceptIndications = mappingLimitExceptIndications(this->_limitExceptMap);
+	limitExceptFile.close();
 }
 
-void	Validate::initServerAndLocationType()
+/* initialize */
+void	Validate::initBlockType()
 {
-	this->_LocationType.insert(std::make_pair("limit_except", l_limit_except));
-	this->_LocationType.insert(std::make_pair("autoindex", l_autoindex));
-	this->_LocationType.insert(std::make_pair("client_max_body_size", l_client_max_body_size));
-	this->_LocationType.insert(std::make_pair("client_body_temp_path", l_client_body_temp_path));
-	this->_LocationType.insert(std::make_pair("error_page", l_error_page));
-	this->_LocationType.insert(std::make_pair("index", l_index));
-	this->_LocationType.insert(std::make_pair("root", l_root));
-
-	this->_ServerType.insert(std::make_pair("location", s_location));
-	this->_ServerType.insert(std::make_pair("listen", s_listen));
-	this->_ServerType.insert(std::make_pair("server_name", s_server_name));
-	this->_ServerType.insert(std::make_pair("error_page", s_error_page));
-	this->_ServerType.insert(std::make_pair("client_max_body_size", s_client_max_body_size));
-	this->_ServerType.insert(std::make_pair("client_body_temp_path", s_client_body_temp_path));
-	this->_ServerType.insert(std::make_pair("autoindex", s_autoindex));
-	this->_ServerType.insert(std::make_pair("index", s_index));
-	this->_ServerType.insert(std::make_pair("root", s_root));
+	setServerType();
+	setLocationType();
+	setLimitExceptType();
 }
 
-std::map<std::string, unsigned short> fileDataToMap(std::ifstream &file)
-{
-	std::map<std::string, unsigned short>	newMap;
-	std::string								line;
-	std::vector<std::string>				splitted;
-
-	while (std::getline(file, line))
-	{
-		splitted = split(line, WHITESPACE);
-		if (splitted.size() == 0)
-			continue ;
-		if (splitted.size() != 2)
-			printErrorWithExit(CHECK_INDICATION_FILE);
-		newMap.insert(std::make_pair(splitted[0], std::atoi(splitted[1].c_str())));
-	}
-	return (newMap);
-}
-
+/* getter */
 serverIndications	Validate::getServerType(const std::string& indication)
 {
 	if (this->_ServerType.count(indication) == 0)
@@ -81,48 +58,44 @@ locationIndications	Validate::getLocationType(const std::string& indication)
 	return this->_LocationType.at(indication);
 }
 
-std::map<std::string, serverIndications>	Validate::mappingServerIndications(std::map<std::string, unsigned short>& myMap)
+limitExceptIndications	Validate::getLimitExceptType(const std::string& indication)
 {
-	std::map<std::string, serverIndications> mappingMap;
-
-	for (std::map<std::string, unsigned short>::iterator it = myMap.begin(); it != myMap.end(); ++it)
-		mappingMap.insert(std::make_pair(it->first, getServerType(it->first)));
-	return mappingMap;
+	if (this->_LimitExceptType.find(indication) == this->_LimitExceptType.end())
+		return this->_LimitExceptType.at("e_none");
+	return this->_LimitExceptType.at(indication);
 }
 
-std::map<std::string, locationIndications>	Validate::mappingLocationIndications(std::map<std::string, unsigned short>& myMap)
+/* setter */
+void	Validate::setServerType()
 {
-	std::map<std::string, locationIndications> mappingMap;
-
-	for (std::map<std::string, unsigned short>::iterator it = myMap.begin(); it != myMap.end(); ++it)
-		mappingMap.insert(std::make_pair(it->first, getLocationType(it->first)));
-	return mappingMap;
+	this->_ServerType.insert(std::make_pair("location", s_location));
+	this->_ServerType.insert(std::make_pair("listen", s_listen));
+	this->_ServerType.insert(std::make_pair("server_name", s_server_name));
+	this->_ServerType.insert(std::make_pair("error_page", s_error_page));
+	this->_ServerType.insert(std::make_pair("client_max_body_size", s_client_max_body_size));
+	this->_ServerType.insert(std::make_pair("client_body_temp_path", s_client_body_temp_path));
+	this->_ServerType.insert(std::make_pair("autoindex", s_autoindex));
+	this->_ServerType.insert(std::make_pair("index", s_index));
+	this->_ServerType.insert(std::make_pair("root", s_root));
 }
 
+void	Validate::setLocationType()
+{
+	this->_LocationType.insert(std::make_pair("limit_except", l_limit_except));
+	this->_LocationType.insert(std::make_pair("autoindex", l_autoindex));
+	this->_LocationType.insert(std::make_pair("client_max_body_size", l_client_max_body_size));
+	this->_LocationType.insert(std::make_pair("client_body_temp_path", l_client_body_temp_path));
+	this->_LocationType.insert(std::make_pair("error_page", l_error_page));
+	this->_LocationType.insert(std::make_pair("index", l_index));
+	this->_LocationType.insert(std::make_pair("root", l_root));
+}
 
-/* constructor */
-// Validate::Validate()
-// {
-// 	std::ifstream	serverFile;
-// 	std::ifstream	locationFile;
-	
-// 	initServerAndLocationType();
-// 	serverFile.open(INDICATION_PATH + SERVER);
-// 	if (serverFile.fail())
-// 		printErrorWithExit(CHECK_INDICATION_FILE);
-// 	this->_originServerMap = fileDataToMap(serverFile);
-// 	this->_serverMap = this->_originServerMap;
-// 	this->_serverIndications = mappingServerIndications(this->_originServerMap);
-// 	serverFile.close();
+void	Validate::setLimitExceptType()
+{
+	this->_LimitExceptType.insert(std::make_pair("allow", e_allow));
+	this->_LimitExceptType.insert(std::make_pair("deny", e_deny));
+}
 
-// 	locationFile.open(INDICATION_PATH + LOCATION);
-// 	if (locationFile.fail())
-// 		printErrorWithExit(CHECK_INDICATION_FILE);
-// 	this->_originLocationMap = fileDataToMap(locationFile);
-// 	this->_locationMap = this->_originLocationMap;
-// 	this->_locationIndications = mappingLocationIndications(this->_originLocationMap);
-// 	locationFile.close();
-// }
 
 /* checker */
 fileMode	Validate::argumentCheck(int argc, char *argv[])
@@ -142,15 +115,11 @@ fileMode	Validate::argumentCheck(int argc, char *argv[])
 	return fail;
 }
 
-void	Validate::braceCheck(std::ifstream &infile, std::string braceType)
+bool	Validate::braceCheck(std::vector<std::string> data, std::string braceType)
 {
-	std::string					line;
-	std::vector<std::string>	splitted;
-
-	std::getline(infile, line);
-	splitted = split(line, WHITESPACE);
-	if (splitted.size() != 1 || splitted[0].compare(braceType))
-		fileErrorWithExit(BRACE_ERROR, infile);
+	if (data.size() == 1 && data[0].compare(braceType) == 0)
+		return true;
+	return false;
 }
 
 void	Validate::extensionCheck(char *name)
@@ -162,87 +131,36 @@ void	Validate::extensionCheck(char *name)
 		printErrorWithExit(INVALID_ARGC);
 }
 
-void		Validate::propertyCntCheck(std::ifstream& infile, std::vector<std::string> data)
-{
-	static std::vector<std::string> blocks;
-	blocks.push_back("location");
-    blocks.push_back("server");
-    blocks.push_back("limit_except");
-
-	bool	blockExist = (std::find(blocks.begin(), blocks.end(), data[0]) != blocks.end());
-	
-	if (blockExist && data.size() != 2)
-		fileErrorWithExit(BLOCK_NAME, infile);
-	else if (data.size() == 1)
-		fileErrorWithExit(I_PROPERTIES, infile);
-}
-
-/* checker */
-void	Validate::endsWithSemicolon(std::ifstream& infile, std::string str)
-{
-	char	lastChar = str.back();
-
-	if (lastChar != ';')
-		fileErrorWithExit(I_SEMICOLON, infile);
-}
-
-void	Validate::isNumeric(std::ifstream& infile, std::vector<std::string> data)
-{
-	if (data.size() != 2)
-		fileErrorWithExit(I_NOT_MULTIPLE, infile);
-	if (isNumber(data[1]) == false)
-		fileErrorWithExit(I_NUMERIC_ERROR, infile);
-	endsWithSemicolon(infile, data.back());
-}
-
-void	Validate::isPathList(std::ifstream& infile, std::vector<std::string> data, multiplicityOption option)
-{
-	if (option == single && data.size() != 2)
-		fileErrorWithExit(I_NOT_MULTIPLE, infile);
-	endsWithSemicolon(infile, data.back());
-}
-
-void	Validate::isStatus(std::ifstream &infile, std::vector<std::string> data)
-{
-	if (data.size() != 2)
-		fileErrorWithExit(I_NOT_MULTIPLE, infile);
-	if (!(data[1].compare("off") == 0  || data[1].compare("on") == 0))
-		fileErrorWithExit(I_PROPERTIES, infile);
-	endsWithSemicolon(infile, data.back());
-}
-
-void	Validate::isStringList(std::ifstream &infile, std::vector<std::string> data)
-{
-	endsWithSemicolon(infile, data.back());
-}
-
-void	Validate::isErrorPageForm(std::ifstream &infile, std::vector<std::string> data)
-{
-	for (std::vector<std::string>::iterator it = data.begin() + 1; it != (data.end() - 1); ++it)
-	{
-		if (isNumber(*it) == false)
-			fileErrorWithExit(I_PROPERTIES, infile);
-	}
-	endsWithSemicolon(infile, data.back());
-}
 
 /* decrement properties */
-void	Validate::decrementServerCounter(std::ifstream& infile, std::string key)
+bool	Validate::decrementServerCounter(std::string key)
 {
 	unsigned short& remainingNumer = this->_serverMap[key];
 
 	if (remainingNumer == 0)
-		fileErrorWithExit(I_NO_SPACE, infile);
+		return false;
 	remainingNumer--;
+	return true;
 }
 
-void	Validate::decrementLocationCounter(std::ifstream& infile, std::string key)
+bool	Validate::decrementLocationCounter(std::string key)
 {
 	unsigned short& remainingNumer = this->_locationMap[key];
 
 	if (remainingNumer == 0)
-		fileErrorWithExit(I_NO_SPACE, infile);
+		return false;
 	remainingNumer--;
+	return true;
+}
+
+bool	Validate::decrementLimitExceptCounter(std::string key)
+{
+	unsigned short& remainingNumer = this->_limitExceptMap[key];
+
+	if (remainingNumer == 0)
+		return false;
+	remainingNumer--;
+	return true;
 }
 
 /* find */
@@ -264,6 +182,15 @@ locationIndications	Validate::findLocationIndication(std::vector<std::string> sp
 	return l_not_found;
 }
 
+limitExceptIndications	Validate::findLimitExceptIndication(std::vector<std::string> splitted)
+{
+	std::map<std::string, limitExceptIndications>::iterator it = _limitExceptIndications.find(splitted[0]);
+
+	if (it != _limitExceptIndications.end())
+		return it->second;
+	return e_not_found;
+}
+
 
 /* reset */
 void	Validate::resetServerIndicationList()
@@ -274,4 +201,53 @@ void	Validate::resetServerIndicationList()
 void	Validate::resetLocationIndicationList()
 {
 	this->_locationMap = this->_originLocationMap;
+}
+
+void	Validate::resetLimitExceptIndicationList()
+{
+	this->_limitExceptMap = this->_originLimitExceptMap;
+}
+
+
+/* mapping */
+std::map<std::string, serverIndications>	Validate::mappingServerIndications(std::map<std::string, unsigned short>& myMap)
+{
+	std::map<std::string, serverIndications> mappingMap;
+
+	for (std::map<std::string, unsigned short>::iterator it = myMap.begin(); it != myMap.end(); ++it)
+		mappingMap.insert(std::make_pair(it->first, getServerType(it->first)));
+	return mappingMap;
+}
+
+std::map<std::string, locationIndications>	Validate::mappingLocationIndications(std::map<std::string, unsigned short>& myMap)
+{
+	std::map<std::string, locationIndications> mappingMap;
+
+	for (std::map<std::string, unsigned short>::iterator it = myMap.begin(); it != myMap.end(); ++it)
+		mappingMap.insert(std::make_pair(it->first, getLocationType(it->first)));
+	return mappingMap;
+}
+
+std::map<std::string, limitExceptIndications>	Validate::mappingLimitExceptIndications(std::map<std::string, unsigned short>& myMap)
+{
+	std::map<std::string, limitExceptIndications> mappingMap;
+
+	for (std::map<std::string, unsigned short>::iterator it = myMap.begin(); it != myMap.end(); ++it)
+		mappingMap.insert(std::make_pair(it->first, getLimitExceptType(it->first)));
+	return mappingMap;
+}
+
+void		Validate::propertyCntCheck(std::ifstream& infile, std::vector<std::string> data)
+{
+	static std::vector<std::string> blocks;
+	blocks.push_back("location");
+	blocks.push_back("server");
+	blocks.push_back("limit_except");
+
+	bool	blockExist = (std::find(blocks.begin(), blocks.end(), data[0]) != blocks.end());
+	
+	if (blockExist && data.size() != 2)
+		fileErrorWithExit(BLOCK_NAME, infile);
+	else if (data.size() == 1)
+		fileErrorWithExit(I_PROPERTIES, infile);
 }
