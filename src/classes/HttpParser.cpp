@@ -1,51 +1,43 @@
 #include "HttpParser.hpp"
+#include "webserv.hpp"
 
 char request[] = "GET /index.html HTTP/1.1\r\nHost: example.com\r\nConnection: keep-alive\r\n\r\nHello, world!";
 #define PARSE_ERROR -1
 
-std::vector<std::string>	HttpParser::getRequestLine(char *request)
+void	HttpParser::parseHeaderAndBody(std::string request, std::vector<std::string>& header, std::string& body)
 {
-	char*	location = strstr(request, CRLF.c_str());
+	size_t	doubleCRLFIndex = request.find(DOUBLE_CRLF);
+	std::vector<std::string>	data;
 
-	if (location == NULL)
-		return ;
+	// header, body
+	data.push_back(request.substr(0, doubleCRLFIndex));
+	data.push_back(request.substr(doubleCRLFIndex + DOUBLE_CRLF.size(), request.size()));
+
+	int start, end = 0;
+	while ((end = data[0].find(CRLF)) != -1)
+	{
+		header.push_back(data[0].substr(start, end));
+		start = end + CRLF.size();
+	}
+	body = data[1];
 }
 
-std::vector<std::string>	HttpParser::getHeader(char *request)
+void	HttpParser::parseHttpRequest(HttpRequest& httpRequest, char *request)
 {
-	char* location = strstr(request, DOUBLE_CRLF.c_str());
+	std::vector<std::string>	header;
+	std::string					body;
 
-	if (location == NULL)
-		return ;
-	
-	
+	parseHeaderAndBody(request, header, body);
+
+	std::vector<std::string>			requestLine = split(header[0], " ");
+	std::map<std::string, std::string>	requestHeaderField = HttpParser::createHeaderField(header);
+
+	httpRequest.setRequestLine(requestLine);
+	httpRequest.setHeaderField(requestHeaderField);
+	httpRequest.setBody(body);
 }
 
-std::vector<std::string>	HttpParser::getBody(char *request)
+std::map<std::string, std::string>	HttpParser::createHeaderField(std::vector<std::string>& headerField)
 {
-
-}
-
-
-// test code
-int main()
-{
-    char *p = strstr(request, "\r\n\r\n");
-
-    if (p == NULL) {
-        // "\r\n\r\n" 구분자가 없는 경우
-        return -1;
-    }
-
-    // 헤더 부분을 저장할 버퍼 생성
-    char header[1024] = {0};
-    strncpy(header, request, p - request + 4);
-    printf("Header: %s\n", header);
-
-    // 바디 부분을 저장할 버퍼 생성
-    char body[1024] = {0};
-    strncpy(body, p + 4, strlen(request) - (p - request) - 4);
-    printf("Body: %s\n", body);
-
-    return 0;
+	// 오늘 구현할거
 }
