@@ -20,7 +20,9 @@ SRCS =  main.cpp	\
 		classes/ErrorPage.cpp		\
 		classes/LimitExcept.cpp		\
 		classes/ServerInfo.cpp		\
-		classes/TcpSocket.cpp
+		classes/TcpSocket.cpp		\
+		classes/KqueueHandler.cpp	\
+		classes/SocketEventHandler.cpp
 
 
 SRCS_DIR = src/

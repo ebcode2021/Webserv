@@ -71,6 +71,7 @@
 		"functional": "cpp",
 		"iterator": "cpp",
 		"unordered_set": "cpp",
-		"utility": "cpp"
+		"utility": "cpp",
+		"set": "cpp"
 	}
 }
