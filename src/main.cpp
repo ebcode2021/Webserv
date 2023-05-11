@@ -60,11 +60,11 @@ int main(int argc, char *argv[])
 		struct kevent kev;
 		EV_SET(&kev, listenSocket.getSockFd(), EVFILT_READ, EV_ADD, 0, 0, &listenSocket);
 		changeList.push_back(kev);
-		
+	
 		while(1)
 		{
 			struct kevent eventList[FD_SETSIZE];
-			int eventCnt = kevent(kq, &changeList[0], changeList.size(), eventList, FD_SETSIZE, NULL); // changeList 등록 후에 -> event 대기
+			int eventCnt = kqHandler.waitEvent();
 			changeList.clear();
 
 			for (int i = 0; i < eventCnt; i++)

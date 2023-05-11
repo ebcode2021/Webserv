@@ -30,6 +30,7 @@
 
 /* utility hpp*/
 
+
 /* src */
 void		printErrorWithExit(std::string msg);
 int			getErrorLine(std::ifstream& file);

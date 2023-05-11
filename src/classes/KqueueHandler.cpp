@@ -2,7 +2,6 @@
 
 KqueueHandler::KqueueHandler() {
 	this->kq = kqueue();
-	eventCnt = 0;
 }
 
 const struct kevent *KqueueHandler::getEventList() {
@@ -15,6 +14,11 @@ void	KqueueHandler::changeEvent(uintptr_t ident, short filter, unsigned short fl
 	changeList.push_back(kev);
 }
 
-int	KqueueHandler::kevent() {
-	
+int	KqueueHandler::waitEvent() {
+	int eventCnt = kevent(this->kq, &this->changeList[0], this->changeList.size(), this->eventList, FD_SETSIZE, NULL);
+	return eventCnt;
+}
+
+struct kevent KqueueHandler::getCurEventByIndex(int i) {
+	return this->eventList[i];
 }
