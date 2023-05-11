@@ -5,9 +5,9 @@
 
 class KqueueHandler {
 	private :
-		int				kq;
-		std::vector<struct kevent> changeList;
-		struct kevent	eventList[FD_SETSIZE];
+		int							kq;
+		std::vector<struct kevent>	changeList;
+		struct kevent				eventList[FD_SETSIZE];
 
 	public :
 		KqueueHandler();

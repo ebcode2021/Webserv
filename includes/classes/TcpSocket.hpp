@@ -7,6 +7,7 @@ class TcpSocket
 {
 	private :
 		SocketInfo	_socketInfo;
+		std::string	buf;
 
 	public :
 		TcpSocket();
@@ -21,14 +22,20 @@ class TcpSocket
 
 
 		void	changeToNonblocking();
+		void	bufJoin(char *);
 
 		// getter, setter
 		int	 getSockFd();
 		int	 getSendByte();
 		int 	getRecvByte();
 		char	*getBuf();
+		std::string getString();
 
 		void	bufClear();
+
+		//test
+		const char *getStringToCStr();
+		size_t	getStringSzie();
 };
 
 #endif

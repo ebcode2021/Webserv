@@ -47,8 +47,9 @@ int main(int argc, char *argv[])
 		std::vector<struct kevent>	changeList;
 		std::set<int>				listenSockList;
 		KqueueHandler				kqHandler;
+		SocketEventHandler			sockEventHandler;
 		
-		int kq = kqueue(); // kqueue
+		
 		// 여기 for문  openListenSockets(config, changeList);
 
 		int listenSock = createSocket();
@@ -63,57 +64,46 @@ int main(int argc, char *argv[])
 	
 		while(1)
 		{
-			struct kevent eventList[FD_SETSIZE];
 			int eventCnt = kqHandler.waitEvent();
 			kqHandler.changeListClear();
 
 			for (int i = 0; i < eventCnt; i++)
 			{
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
-				TcpSocket *curSocket = (TcpSocket *)curEvent.udata;
+				sockEventHandler.setSocket((TcpSocket *)curEvent.udata);
 
 				if (curEvent.filter == EVFILT_READ)  // 현재 발생한 이벤트가 read일 경우
 				{
 					std::cout << "읽기 이벤트 발생" << std::endl;
 					if (listenSockList.find(curEvent.ident) != listenSockList.end()) // listen port일 경우
 					{
-						int clientSock = curSocketInfo->socketAccept();
+						int clientSock = sockEventHandler.socketAccept();
 						if (clientSock == INVALID_SOCKET) {
 							printErrorWithExit("error : accept()");
 						}
-						TcpSocket clientSocket(clientSock);
-						clientSocket.changeToNonblocking();
-
-						EV_SET(&kev, clientSocket.getSockFd(), EVFILT_READ, EV_ADD, 0, 0, &clientSocket);
-						changeList.push_back(kev);
-						// EV_SET(&kev, clientSocket.getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, &clientSocket);
-						// changeList.push_back(kev);
+						TcpSocket *clientSocket = new TcpSocket(clientSock);
+						clientSocket->changeToNonblocking();
+						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
 					}
 					else {
-						int readSize = recv(curEvent.ident, curSocketInfo->getBuf(), BUFSIZE + 1, 0);
-
+						int readSize = sockEventHandler.dataRecv();
+						kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_ENABLE, 0, 0, curEvent.udata);
 						if (readSize == -1) {
 							printErrorWithExit("error: read()");
 						}
 						else if (readSize == 0) {
-							close(curEvent.ident);
+							kqHandler.changeEvent(curEvent.ident, EVFILT_READ, EV_DELETE, 0, 0, NULL);
+							sockEventHandler.closeSocket();
 						}
 						else {
-							char *curBuf = curSocketInfo->getBuf();
-							curBuf[readSize] = '\0';
-							std::cout << curSocketInfo->getBuf() << std::endl;
-							EV_SET(&kev, curEvent.ident, EVFILT_WRITE, EV_ENABLE, 0, 0, curSocketInfo);
-							changeList.push_back(kev);
+							sockEventHandler.printSockBuf();
 						}
 					}
 				}
 				else if (curEvent.filter == EVFILT_WRITE) // write 일 경우
 				{
-					std::cout << "쓰기 이벤트 발생" << std::endl;
-					std::cout << "data check" << curSocketInfo->getBuf() << std::endl;
-					send(curEvent.ident, curSocketInfo->getBuf(), std::strlen(curSocketInfo->getBuf()), 0);
-					EV_SET(&kev, curEvent.ident, EVFILT_WRITE, EV_DISABLE, 0, 0, curSocketInfo);
-					changeList.push_back(kev);
+					sockEventHandler.dataSend();
+					kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DISABLE, 0, 0, curEvent.udata);
 				}
 				else
 				{
@@ -125,12 +115,3 @@ int main(int argc, char *argv[])
 	}
 	return 0;
 }
-
-
-		// for (1;1;1;) {
-		// 	TcpSocket listenSocket(createSocket());
-		// 	listenSocket.bind(port);
-		// 	listenSocket.listen();
-		// 	listenSocket.changeToNonblocking();
-		// 	// kqueue에 이벤트 등록
-		// }

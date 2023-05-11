@@ -79,3 +79,19 @@ int		TcpSocket::socketAccept() {
 	return (accept(getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize));
 
 }
+
+void	TcpSocket::bufJoin(char *str) {
+	this->buf += str;
+}
+
+std::string TcpSocket::getString() {
+	return this->buf;
+}
+
+const char	*TcpSocket::getStringToCStr() {
+	return this->buf.c_str();
+}
+
+size_t	TcpSocket::getStringSzie() {
+	return this->buf.size();
+}
