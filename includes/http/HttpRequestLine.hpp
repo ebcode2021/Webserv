@@ -8,16 +8,16 @@ class	HttpRequestLine
 	private :
 		Method		_method;
 		std::string	_requestURI;
+		std::string	_version;
 
 	public :
 		// getter, setter
 		Method		getMethod();
 		std::string	getRequestURI();
+
 		void		setMethod();
 		void		setRequestURI();
-
-		// validate
-		void		validateHttpVersion();
+		void		setVersion();
 };
 
 #endif
