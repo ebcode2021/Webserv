@@ -3,14 +3,15 @@
 
 # include "ServerInfo.hpp"
 
-class ServerList {
-    private :
-        std::vector<ServerInfo> _serverList;
-    public :
-        void    addServer(std::ifstream &);
+class ServerList
+{
+	private :
+		std::vector<ServerInfo> _serverList;
+	public :
+		void	addServer(std::ifstream &);
 
-        //test
-        void    printserverList();
+		//test
+		void	printserverList();
 };
 
 #endif

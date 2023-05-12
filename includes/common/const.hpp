@@ -25,6 +25,13 @@ const std::string INDICATION_PATH = "/Users/eunson/Desktop/webserv/indication/";
 
 const std::string KEYWORD_PATH = "/Users/eunson/Desktop/webserv/keywords/.server_keywords";
 
+/* http */
+const std::string CRLF =  "\r\n";
+const std::string DOUBLE_CRLF = "\r\n\r\n";
+
+const std::size_t BUFSIZE = 512;
+
+const std::size_t CLIENT_BODY_SIZE = 1048576;
 # define BUFSIZE 10
 
 #endif

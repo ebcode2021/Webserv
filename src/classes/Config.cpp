@@ -27,6 +27,7 @@ bool Config::fileCheck(int argc, char *argv[])
 	std::string					line;
 	std::vector<std::string>	splitted;
 
+	// fileMode를 int로
 	fileMode mode = Validate::argumentCheck(argc, argv);
 	if (mode)
 	{
