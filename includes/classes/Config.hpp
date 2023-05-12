@@ -1,22 +1,21 @@
 #ifndef CONFIG_HPP
 # define CONFIG_HPP
 
-# include "ServerList.hpp"
+# include "ServerInfo.hpp"
 
 
 class	Config {
 	private :
-		ServerList	_serverList;
-		
+		std::vector<ServerInfo>	_serverList;
 
 	public :
 		Config(std::string);
 		static bool fileCheck(std::string);
-
 		//test
-
 		static bool	fileCheck(int, char *[]);
-		void	printServerList();
+		//void	printServerList();
+
+		void	addServer(std::ifstream &);
 };
 
 #endif

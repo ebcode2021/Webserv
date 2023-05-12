@@ -7,25 +7,38 @@ class TcpSocket
 {
 	private :
 		SocketInfo	_socketInfo;
+		std::string	buf;
 
 	public :
 		TcpSocket();
 		TcpSocket(int);
 		
-		void socketSend();
-		void socketRecv();
+		void	socketSend();
+		void	socketRecv();
 
-		void socketAccept();
-		void socketBind(int);
-		void socketListen();
+		int		socketAccept();
+		void	socketBind(int);
+		void	socketListen();
 
-		void changeToNonblocking();
+
+		void	changeToNonblocking();
+		void	bufJoin(char *);
 
 		// getter, setter
 		int	 getSockFd();
 		int	 getSendByte();
 		int 	getRecvByte();
 		char	*getBuf();
+		std::string getString();
+
+		void	bufClear();
+		
+		void	setBufbyIndex(int, char);
+
+		//test
+		const char *getStringToCStr();
+		size_t	getStringSzie();
+		void stringClear();
 };
 
 #endif
