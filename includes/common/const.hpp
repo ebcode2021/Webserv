@@ -32,6 +32,13 @@ const std::string DOUBLE_CRLF = "\r\n\r\n";
 const std::size_t BUFSIZE = 512;
 
 const std::size_t CLIENT_BODY_SIZE = 1048576;
+
+const std::string METHODS[] = {
+	"GET", "POST", "DELETE"
+};
+
+const std::string HTTP_VERSION = "HTTP/1.1";
+
 # define BUFSIZE 10
 
 #endif

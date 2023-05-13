@@ -34,6 +34,7 @@ void	HttpParser::parseRequest(HttpRequest& httpRequest, std::string& request)
 	httpRequest.setRequestLine(requestLine);
 	httpRequest.setHeaderField(requestHeaderField);
 	httpRequest.setBody(body);
+
 }
 
 std::map<std::string, std::string>	HttpParser::createHeaderField(std::vector<std::string>& headerField)

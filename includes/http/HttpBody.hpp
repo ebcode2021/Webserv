@@ -9,7 +9,7 @@ class	HttpBody
 	public :
 		// getter, setter
 		std::string	getBody();
-		void		setBody();
+		void		setBody(std::string);
 };
 
 #endif

@@ -14,7 +14,6 @@ namespace	HttpParser
 
 };
 
-// char request[] = 
 // "GET /index.html HTTP/1.1\r\nHost: example.com\r\nConnection: keep-alive\r\n\r\nHello, world!";
 
 // if(this->_httprequest.header에 아무 것도  없다면)

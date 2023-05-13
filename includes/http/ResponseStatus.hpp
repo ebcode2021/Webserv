@@ -1,6 +1,7 @@
 #ifndef STATUSCODE_HPP
 # define STATUSCODE_HPP
 
+#include "webserv.hpp"
 /* * * * * * * * * * * * Status Code and Reason Phrase * * * * * * * * * * * */
 /*
 	The Status-Code element is a 3-digit integer result code of the
@@ -30,7 +31,39 @@
 		valid request
 */
 
-enum	StatusCode
+
+static const std::string statusScript[] = {
+	"200 OK",
+	"201 Created",
+	"204 No Content",
+	"400 Bad Request",
+	"401 Unauthorized",
+	"403 Forbidden",
+	"404 Not Found",
+	"500 Internal Server Error",
+	"503 Service Unavailable"
+};
+
+
+struct ResponseStatus
+{
+	static int code[];
+	static std::string reason[];
+
+	static void	init()
+	{
+		int size = sizeof(statusScript) / sizeof(std::string);
+
+		for (int idx = 0; idx < size; idx++)
+		{
+			std::vector<std::string>	splitted = split(statusScript[idx], " ");
+			code[idx] = std::atoi(splitted[0].c_str());
+			reason[idx] = splitted[1];
+		}
+	}
+};
+
+enum	StatusCodeaa
 {
 	// 1xx
 	HTTP_STATUS_CONTINUE = 100,
@@ -83,4 +116,43 @@ enum	StatusCode
 	HTTP_STATUS_HTTP_VERSION_NOT_SUPPORTED = 505,
 };
 
+// const int ResponseStatus::code[] = {
+// 	"200",
+// 	"201",
+// 	"204",
+// 	"400",
+// 	"401",
+// 	"403",
+// 	"404",
+// 	"500",
+// 	"503",
+// };
+
+// const std::string ResponseStatus::reason[] = {
+// 	"OK",
+// 	"Created",
+// 	"No Content"
+// 	"Bad Request",
+// 	"Unauthorized",
+// 	"Forbidden",
+// 	"Not Found",
+// 	"Internal Server Error",
+// 	"Service Unavailable"
+// }
+
+
+// throw ResponseException(C404);
+
+// try
+// {
+// 	req.setHttpRequest();
+// 	{
+// 		throw 
+// 	}
+// }
+// catch(std::exception &e)
+// {
+// 	header = http/1.1 + " " + ResopnseStats::code() + " " + ReseponseStatus::reason()
+//  	body = setNotFound();
+// }
 #endif
