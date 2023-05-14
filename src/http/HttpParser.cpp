@@ -2,12 +2,11 @@
 #include "webserv.hpp"
 
 char request[] = "GET /index.html HTTP/1.1\r\nHost: example.com\r\nConnection: keep-alive\r\n\r\nHello, world!";
-#define PARSE_ERROR -1
 
 void	HttpParser::parseHeaderAndBody(std::string request, std::vector<std::string>& header, std::string& body)
 {
-	size_t	doubleCRLFIndex = request.find(DOUBLE_CRLF);
 	std::vector<std::string>	data;
+	size_t						doubleCRLFIndex = request.find(DOUBLE_CRLF);
 
 	// header, body
 	data.push_back(request.substr(0, doubleCRLFIndex));
@@ -22,7 +21,7 @@ void	HttpParser::parseHeaderAndBody(std::string request, std::vector<std::string
 	body = data[1];
 }
 
-void	HttpParser::parseHttpRequest(HttpRequest& httpRequest, char *request)
+void	HttpParser::parseRequest(HttpRequest& httpRequest, std::string& request)
 {
 	std::vector<std::string>	header;
 	std::string					body;
@@ -30,7 +29,7 @@ void	HttpParser::parseHttpRequest(HttpRequest& httpRequest, char *request)
 	parseHeaderAndBody(request, header, body);
 
 	std::vector<std::string>			requestLine = split(header[0], " ");
-	std::map<std::string, std::string>	requestHeaderField = HttpParser::createHeaderField(header);
+	std::map<std::string, std::string>	requestHeaderField = createHeaderField(header);
 
 	httpRequest.setRequestLine(requestLine);
 	httpRequest.setHeaderField(requestHeaderField);
@@ -39,5 +38,22 @@ void	HttpParser::parseHttpRequest(HttpRequest& httpRequest, char *request)
 
 std::map<std::string, std::string>	HttpParser::createHeaderField(std::vector<std::string>& headerField)
 {
-	// 오늘 구현할거
+	std::map<std::string, std::string>	headerMap;
+
+	std::vector<std::string>::iterator it;
+
+	for (it = headerField.begin() + 1; it != headerField.end(); ++it)
+	{
+		std::string	delimiter = ": ";
+		std::string	header = *it;
+		size_t 		pos = header.find(delimiter);
+
+		if (pos != std::string::npos)
+		{
+			std::string	key	= header.substr(0, pos);
+			std::string	value = header.substr(pos + delimiter.size());
+			headerMap.insert(std::make_pair(key, value));
+		}
+	}
+	return (headerMap);
 }

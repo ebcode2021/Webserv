@@ -6,18 +6,20 @@
 class	HttpRequestLine
 {
 	private :
-		Method		_method;
+		std::string	_method;
 		std::string	_requestURI;
 		std::string	_version;
 
 	public :
 		// getter, setter
-		Method		getMethod();
-		std::string	getRequestURI();
+		std::string	getMethod() const;
+		std::string	getRequestURI() const;
+		std::string getVersion() const;
 
-		void		setMethod();
-		void		setRequestURI();
-		void		setVersion();
+		void		setMethod(const std::string&);
+		void		setRequestURI(const std::string&);
+		void		setVersion(const std::string&);
+
 };
 
 #endif

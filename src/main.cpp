@@ -34,6 +34,7 @@ int createSocket()
 int main(int argc, char *argv[])
 {
 	(void)argc;
+	
 	if (1) //Config::fileCheck(argc, argv))
 	{
 		Config config(argv[1]);
