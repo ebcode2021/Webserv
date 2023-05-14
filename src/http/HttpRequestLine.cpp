@@ -13,7 +13,7 @@ void	HttpRequestLine::setMethod(const std::string& method)
 {
 	size_t	size = sizeof(METHODS) / sizeof(std::string);
 
-	for (int idx = 0; idx < size; idx++)
+	for (size_t idx = 0; idx < size; idx++)
 	{
 		if (METHODS[idx].compare(method) == 0)
 		{

@@ -19,6 +19,7 @@ Config::Config(std::string fileName)
 		if (splitedLine[0].compare("server") == 0)
 			addServer(confFile);
 	}
+	std::cout << "설정 끝" << std::endl;
 }
 
 bool Config::fileCheck(int argc, char *argv[])
@@ -69,7 +70,6 @@ static std::vector<std::string> LocationBlockBackup(std::ifstream& confFile, std
 	while (std::getline(confFile, line))
 	{
 		splittedLine = split(line, WHITESPACE);
-
 		if (splittedLine[0].compare("}") == 0)
 			break ;
 		else if (splittedLine[0].compare("limit_except") == 0) {
@@ -82,7 +82,7 @@ static std::vector<std::string> LocationBlockBackup(std::ifstream& confFile, std
 				backup += line + "\n";
 			}
 			locationBlock.push_back(backup);
-			// std::cout << "백업 = " << backup << std::endl;
+			//std::cout << "백업 = " << backup << std::endl;
 			backup = "";
 		}
 		else if (splittedLine[0].compare("{") != 0)
@@ -103,11 +103,10 @@ void	Config::addServer(std::ifstream & confFile) {
 	std::cout << "서버 클래스 저장 시작" << std::endl;
 	///
 
-	
-
 	while (std::getline(confFile, line))
 	{
-		splittedLine = split(line, static_cast<std::string>(WHITESPACE) + ";");
+		std::cout << line << std::endl;
+		splittedLine = split(line, WHITESPACE + ";");
 		if (splittedLine[0].compare("location") == 0)
 			locationBlockInfo.push_back(LocationBlockBackup(confFile, line));
 		else if (splittedLine[0].compare("}") == 0)

@@ -37,24 +37,15 @@ const std::string METHODS[] = {
 	"GET", "POST", "DELETE"
 };
 
-const std::vector<std::string> REQUEST_HEADERS = {
-	"Host",
-	"User-Agent",
-	"Connection",
-	"Content-Type",
-	"Content-Length",
-	"Transfer-Encoding"
-	"Cookie",
+// std::vector<std::string> REQUEST_HEADERS;
 
-};
-
-const std::vector<std::string> RESPONSE_HEADERS = {
-	"Date",
-	"Server",
-	"Content-Length",
-	"Content-Type",
-	"Set-Cookie"
-};
+// const std::vector<std::string> RESPONSE_HEADERS = {
+// 	"Date",
+// 	"Server",
+// 	"Content-Length",
+// 	"Content-Type",
+// 	"Set-Cookie"
+// };
 
 const std::string HTTP_VERSION = "HTTP/1.1";
 

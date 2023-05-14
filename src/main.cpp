@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 		listenSocket->changeToNonblocking();
 		listenSockList.insert(listenSock);
 		kqHandler.changeEvent(listenSocket->getSockFd(), EVFILT_READ, EV_ADD, 0, 0, listenSocket);
-	
+
 		while(1)
 		{
 			kqHandler.eventListReset();
@@ -88,10 +88,10 @@ int main(int argc, char *argv[])
 					else {
 						int readSize = sockEventHandler.dataRecv();
 						
-						if (readSize == -1) {
-							printErrorWithExit("error: recv()");
-						}
-						else if (readSize == 0) {
+						// if (readSize == -1) {
+						// 	printErrorWithExit("error: recv()");
+						// }
+						if (readSize == 0) {
 							std::cout << "접속 종료" << std::endl;
 							kqHandler.changeEvent(curEvent.ident, EVFILT_READ, EV_DELETE, 0, 0, curEvent.udata);
 							kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);

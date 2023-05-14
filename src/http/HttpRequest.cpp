@@ -3,6 +3,8 @@
 /* constructor */
 HttpRequest::HttpRequest(){}
 
+std::vector<std::string> REQUEST_HEADERS;
+
 
 /* setter */
 void	HttpRequest::setRequestLine(std::vector<std::string> requestLine)
@@ -12,11 +14,22 @@ void	HttpRequest::setRequestLine(std::vector<std::string> requestLine)
 	this->_httpRequestLine.setVersion(requestLine.at(2));
 }
 
+void delete_init() {
+	REQUEST_HEADERS.push_back("Host");
+	REQUEST_HEADERS.push_back("User-Agent");
+	REQUEST_HEADERS.push_back("Connection");
+	REQUEST_HEADERS.push_back("Content-Type");
+	REQUEST_HEADERS.push_back("Content-Length");
+	REQUEST_HEADERS.push_back("Transfer-Encoding");
+	REQUEST_HEADERS.push_back("Cookie");
+	REQUEST_HEADERS.push_back("Host");
+}
+
 void	HttpRequest::setHeaderField(std::map<std::string, std::string> headerMap)
 {
 	std::map<std::string, std::string>::const_iterator	it;
 	std::vector<std::string>::const_iterator 			findIt;
-
+	delete_init();
 	for (it = headerMap.begin(); it != headerMap.end(); ++it)
 	{
 		findIt = std::find(REQUEST_HEADERS.begin(), REQUEST_HEADERS.end(), it->first);

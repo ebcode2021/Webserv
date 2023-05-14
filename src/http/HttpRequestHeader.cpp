@@ -35,6 +35,7 @@ void	HttpRequestHeader::setCookie(std::string& cookie) { this->_cookie = split(c
 
 void	HttpRequestHeader::setSessionID(std::string& session)
 {
+	(void)session;
 	this->_sessionID = "setCookie에서 sessionID 분리해서 갖고 있을듯. public 에서 private으로 바꿀 예정인 setter";
 }
 

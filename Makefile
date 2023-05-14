@@ -22,7 +22,12 @@ SRCS =  main.cpp	\
 		classes/ServerInfo.cpp		\
 		classes/TcpSocket.cpp		\
 		classes/KqueueHandler.cpp	\
-		classes/SocketEventHandler.cpp
+		classes/SocketEventHandler.cpp \
+		http/HttpParser.cpp \
+		http/HttpRequest.cpp \
+		http/HttpRequestHeader.cpp \
+		http/HttpRequestLine.cpp 
+
 
 
 SRCS_DIR = src/
@@ -32,6 +37,7 @@ INCS = includes/
 CLASS_INCS = includes/classes/
 COMMON_INCS = includes/common/
 UTILITY_INCS = includes/utility/
+HTTP_INCS = includes/http/
 
 OBJS = $(SRCS_PATH:.cpp=.o)
 
@@ -40,7 +46,7 @@ OBJS = $(SRCS_PATH:.cpp=.o)
 # COMMANDS
 %.o : %.cpp
 	@echo "$(YELLOW) *** Generating push_swap objects... *** $(DEFAULT)"
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCS) -I $(CLASS_INCS) -I $(COMMON_INCS) -I $(UTILITY_INCS)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCS) -I $(CLASS_INCS) -I $(COMMON_INCS) -I $(UTILITY_INCS) -I $(HTTP_INCS)
 
 $(NAME) : $(OBJS)
 	@echo "$(GREEN) *** Compiling philo ... *** $(DEFAULT)"

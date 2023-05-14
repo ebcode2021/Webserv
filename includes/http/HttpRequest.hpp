@@ -3,7 +3,6 @@
 
 # include "webserv.hpp"
 # include "Config.hpp"
-# include "HttpParser.hpp"
 # include "HttpRequestLine.hpp"
 # include "HttpRequestHeader.hpp"
 # include "HttpBody.hpp"
@@ -17,7 +16,6 @@
 // validate (cgi-> .py, .php 버튼의 경로..? cgi로 경로설정??)
 
 
-#define DEFULAT_REQUESTURI;
 
 class	HttpRequest
 {
