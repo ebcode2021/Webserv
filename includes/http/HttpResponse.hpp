@@ -2,7 +2,7 @@
 # define HTTPRESPONSE_HPP
 
 #include "webserv.hpp"
-#include "StatusCode.hpp"
+#include "ResponseStatus.hpp"
 #include "HttpRequest.hpp"
 
 
@@ -16,7 +16,7 @@ class	HttpResponse
 {
 	private :
 		// response-line
-		StatusCode	_statusCode;
+		ResponseStatus	_responseStatus;
 
 		// response-header
 		std::string	_date; // 응답이 생성된 날짜와 시간

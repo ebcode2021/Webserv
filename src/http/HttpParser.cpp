@@ -29,12 +29,11 @@ void	HttpParser::parseRequest(HttpRequest& httpRequest, std::string& request)
 	parseHeaderAndBody(request, header, body);
 
 	std::vector<std::string>			requestLine = split(header[0], " ");
-	std::map<std::string, std::string>	requestHeaderField = HttpParser::createHeaderField(header);
+	std::map<std::string, std::string>	requestHeaderField = createHeaderField(header);
 
 	httpRequest.setRequestLine(requestLine);
 	httpRequest.setHeaderField(requestHeaderField);
 	httpRequest.setBody(body);
-
 }
 
 std::map<std::string, std::string>	HttpParser::createHeaderField(std::vector<std::string>& headerField)

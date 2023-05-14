@@ -8,8 +8,8 @@ class	HttpBody
 
 	public :
 		// getter, setter
-		std::string	getBody();
-		void		setBody(std::string);
+		std::string	getBody() { return (this->_body);};
+		void		setBody(std::string body) {this->_body += body;};
 };
 
 #endif
