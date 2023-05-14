@@ -77,6 +77,8 @@ int main(int argc, char *argv[])
 				{
 					if (listenSockList.find(curEvent.ident) != listenSockList.end()) // listen port일 경우
 					{
+						std::cout << "연결 해줘" << std::endl;
+						std::cout << "port = " << curEvent.ident << std::endl;
 						int clientSock = sockEventHandler.socketAccept();
 						if (clientSock == INVALID_SOCKET) {
 							printErrorWithExit("error : accept()");
@@ -86,12 +88,13 @@ int main(int argc, char *argv[])
 						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
 					}
 					else {
+						std::cout << curEvent.ident << std::endl;
 						int readSize = sockEventHandler.dataRecv();
 						
-						// if (readSize == -1) {
-						// 	printErrorWithExit("error: recv()");
-						// }
-						if (readSize == 0) {
+						if (readSize == -1) {
+							printErrorWithExit("error: recv()");
+						}
+						else if (readSize == 0) {
 							std::cout << "접속 종료" << std::endl;
 							kqHandler.changeEvent(curEvent.ident, EVFILT_READ, EV_DELETE, 0, 0, curEvent.udata);
 							kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);

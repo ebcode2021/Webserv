@@ -38,6 +38,9 @@ CLASS_INCS = includes/classes/
 COMMON_INCS = includes/common/
 UTILITY_INCS = includes/utility/
 HTTP_INCS = includes/http/
+HTTP_COMMON_INCS = includes/http/common/
+HTTP_REQUEST_INCS = includes/http/request/
+HTTP_RESPONSE_INCS = includes/http/response/
 
 OBJS = $(SRCS_PATH:.cpp=.o)
 
@@ -46,7 +49,7 @@ OBJS = $(SRCS_PATH:.cpp=.o)
 # COMMANDS
 %.o : %.cpp
 	@echo "$(YELLOW) *** Generating push_swap objects... *** $(DEFAULT)"
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCS) -I $(CLASS_INCS) -I $(COMMON_INCS) -I $(UTILITY_INCS) -I $(HTTP_INCS)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCS) -I $(CLASS_INCS) -I $(COMMON_INCS) -I $(UTILITY_INCS) -I $(HTTP_INCS) -I $(HTTP_COMMON_INCS) -I $(HTTP_REQUEST_INCS) -I $(HTTP_RESPONSE_INCS)
 
 $(NAME) : $(OBJS)
 	@echo "$(GREEN) *** Compiling philo ... *** $(DEFAULT)"

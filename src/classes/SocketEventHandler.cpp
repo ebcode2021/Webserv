@@ -11,12 +11,19 @@ int SocketEventHandler::socketAccept() {
 	sockaddr_in clientAddress;
 	socklen_t	clientAddressSize = sizeof(clientAddress);
 
+	char addr[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr));
+	printf("\n[TCP 서버] 클라이언트 접속 : IP 주소=%s, 포트 번호 = %d\n", addr, ntohs(clientAddress.sin_port));
+
 	clientSock = accept(this->_socket->getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize);
+	std::cout << "sock fd = " << clientSock << std::endl;
+	if (clientSock == INVALID_SOCKET)
+		printErrorWithExit("뭔가 잘못됨");
 	return (clientSock);
 }
 
 void SocketEventHandler::closeSocket() {
-	close(this->_socket->getSockFd());
+	close (this->_socket->getSockFd());
 	delete (this->_socket);
 }
 
@@ -29,11 +36,11 @@ int SocketEventHandler::dataRecv() {
 	while (recvByte > 0)
 	{
 		ret += recvByte;
-		std::cout << "ret = " << ret << std::endl;
+		//std::cout << "ret = " << ret << std::endl;
 		this->_socket->setBufbyIndex(recvByte + 1, '\0');
 		this->_socket->bufJoin(this->_socket->getBuf());
 		recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
-		std::cout << recvByte << std::endl;;
+		//std::cout << recvByte << std::endl;;
 	}
 	return (ret);
 }

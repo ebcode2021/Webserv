@@ -2,7 +2,6 @@
 # define HTTPEXCETPION_HPP
 
 # include "webserv.hpp"
-# include "StatusCode.hpp"
 
 // struct ResponseException : public std::exception
 // {
