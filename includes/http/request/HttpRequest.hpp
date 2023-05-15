@@ -29,6 +29,7 @@ class	HttpRequest
 		HttpRequest();
 		HttpRequest& operator=(const HttpRequest&);
 
+		// setter
 		void	setRequestLine(std::vector<std::string>);
 		void	setHeaderField(std::map<std::string, std::string>);
 		void	setBody(std::string);
