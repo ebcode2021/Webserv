@@ -65,13 +65,16 @@ int main(int argc, char *argv[])
 		while(1)
 		{
 			kqHandler.eventListReset();
-			int eventCnt = kqHandler.waitEvent();
+			kqHandler.printEvent();
+			kqHandler.waitEvent();
 			kqHandler.changeListClear();
+			kqHandler.printEvent();
 
-			for (int i = 0; i < eventCnt; i++)
+			for (int i = 0; i < kqHandler.getEventCnt(); i++)
 			{
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
-				sockEventHandler.setSocket((TcpSocket *)curEvent.udata);
+				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
+				sockEventHandler.setSocket(curSock);
 
 				if (curEvent.filter == EVFILT_READ)  // 현재 발생한 이벤트가 read일 경우
 				{
@@ -96,13 +99,13 @@ int main(int argc, char *argv[])
 						}
 						else if (readSize == 0) {
 							std::cout << "접속 종료" << std::endl;
-							kqHandler.changeEvent(curEvent.ident, EVFILT_READ, EV_DELETE, 0, 0, curEvent.udata);
-							kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);
+							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_READ, EV_DELETE, 0, 0, NULL);
 							sockEventHandler.closeSocket();
 						}
 						else {
 							sockEventHandler.printSockBuf();
-							kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_ADD, 0, 0, curEvent.udata);
+							//curSock->setRequest();
+							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
 					}
 				}
@@ -118,6 +121,9 @@ int main(int argc, char *argv[])
 					exit(1);
 				}
 			} 
+			std::cout << "Asdf" << std::endl;
+			kqHandler.eventUpdate();
+
 		}
 	}
 	return 0;

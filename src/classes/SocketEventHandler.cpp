@@ -45,8 +45,26 @@ int SocketEventHandler::dataRecv() {
 	return (ret);
 }
 
+std::string createHttpResponse(const std::string& body) {
+    std::ostringstream response;
+    
+    response << "HTTP/1.1 200 OK\r\n";
+    response << "Content-Type: text/html\r\n";
+	response << "Connection: keep-alive\r\n";
+    response << "Content-Length: " << body.length() << "\r\n";
+    response << "\r\n";
+    response << body;
+
+    return response.str();
+}
+
 int SocketEventHandler::dataSend() {
-	int sendByte = send(this->_socket->getSockFd(), this->_socket->getStringToCStr(), this->_socket->getStringSzie() - 1, 0);
+
+	std::string htmlBody = "<html><body>Hello World</body></html>";
+    std::string httpResponse = createHttpResponse(htmlBody);
+	
+
+	int sendByte = send(this->_socket->getSockFd(), httpResponse.c_str(), httpResponse.size(), 0);
 	this->_socket->stringClear();
 	return (sendByte);
 }

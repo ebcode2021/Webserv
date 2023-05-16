@@ -11,6 +11,9 @@ void	HttpParser::parseHeaderAndBody(std::string request, std::vector<std::string
 	// header, body
 	data.push_back(request.substr(0, doubleCRLFIndex));
 	data.push_back(request.substr(doubleCRLFIndex + DOUBLE_CRLF.size(), request.size()));
+	std::cout << data[0] << std::endl;
+	std::cout << data[1] << std::endl;
+	
 
 	int start, end = 0;
 	while ((end = data[0].find(CRLF)) != -1)
