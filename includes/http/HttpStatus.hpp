@@ -11,11 +11,11 @@ class	HttpStatus
 
 	public :
 		// getter, setter
-		int			getStatusCode();
-		std::string	getReason();
+		int			getStatusCode() const;
+		std::string	getReason() const;
 
-		void		setStatusCode();
-		void		setReason();
+		void		setStatusCode(const int);
+		void		setReason(const std::string&);
 };
 
 #endif

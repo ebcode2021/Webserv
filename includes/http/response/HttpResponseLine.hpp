@@ -11,10 +11,14 @@ class	HttpResponseLine
 		HttpStatus	_httpStatus;
 
 	public :
-		// getter, setter
-		std::string	getVersion();
-		HttpStatus	getHttpStatus();
+		// constructor
+		HttpResponseLine();
+		HttpResponseLine(const HttpStatus&);
 
-		void		setHttpStatus(HttpStatus&);
+		// getter, setter
+		std::string	getVersion() const;
+		HttpStatus	getHttpStatus() const;
+
+		void		setHttpStatus(const HttpStatus&);
 };
 #endif

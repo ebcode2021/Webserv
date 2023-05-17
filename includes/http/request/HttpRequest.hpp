@@ -33,6 +33,8 @@ class	HttpRequest
 		void	setRequestLine(std::vector<std::string>);
 		void	setHeaderField(std::map<std::string, std::string>);
 		void	setBody(std::string);
+
+		//void	printRequest();
 };
 
 // 요청라인 먼저 갖고있고, 해당 소켓이 갖고있자고?

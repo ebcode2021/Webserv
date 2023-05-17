@@ -3,9 +3,6 @@
 /* constructor */
 HttpRequest::HttpRequest(){}
 
-//std::vector<std::string> REQUEST_HEADERS;
-
-
 /* setter */
 void	HttpRequest::setRequestLine(std::vector<std::string> requestLine)
 {
