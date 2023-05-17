@@ -25,7 +25,7 @@ void	HttpRequest::setHeaderField(std::map<std::string, std::string> headerMap)
 		{
 			if (REQUEST_HEADERS[idx] == fieldName)
 			{
-				if (fieldName == "host")
+				if (fieldName == "Host")
 					this->_httpRequestHeader.setHost(fieldValue);
 				else if (fieldName == "User-Agent")
 					this->_httpRequestHeader.setUserAgent(fieldValue);
@@ -48,16 +48,3 @@ void	HttpRequest::setBody(std::string content)
 {
 	this->_httpBody.setBody(content);
 }
-
-
-
-// void delete_init() {
-// 	REQUEST_HEADERS.push_back("Host");
-// 	REQUEST_HEADERS.push_back("User-Agent");
-// 	REQUEST_HEADERS.push_back("Connection");
-// 	REQUEST_HEADERS.push_back("Content-Type");
-// 	REQUEST_HEADERS.push_back("Content-Length");
-// 	REQUEST_HEADERS.push_back("Transfer-Encoding");
-// 	REQUEST_HEADERS.push_back("Cookie");
-// 	REQUEST_HEADERS.push_back("Host");
-// }

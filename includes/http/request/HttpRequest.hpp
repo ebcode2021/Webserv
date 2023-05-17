@@ -34,7 +34,27 @@ class	HttpRequest
 		void	setHeaderField(std::map<std::string, std::string>);
 		void	setBody(std::string);
 
-		//void	printRequest();
+		// print
+		std::string	toString()
+		{
+			const std::string tab = "\n\t ";
+
+			std::string requestLine = "request-line" + tab + \
+										"method : " + this->_httpRequestLine.getMethod() + tab + \
+										"uri : " + this->_httpRequestLine.getRequestURI() + tab + \
+										"version : " + this->_httpRequestLine.getVersion() + "\n";
+			std::string requestHeader = "request-header" + tab + \
+										"host : " + this->_httpRequestHeader.getHost() + tab + \
+										"User-Agent : " + this->_httpRequestHeader.getUserAgent() + tab + \
+										"Connection : " + this->_httpRequestHeader.getConnection() + tab + \
+										"Content-Type : " + this->_httpRequestHeader.getContentType() + tab + \
+										"Content-Length : " + std::to_string(this->_httpRequestHeader.getContentLength()) + tab + \
+										"Transfer-Encoding : " + this->_httpRequestHeader.getTransferEncoding() + tab + \
+										"Cookie : " + this->_httpRequestHeader.getCookie() + "\n"; 
+			std::string requestBody = "request-body" + tab + this->_httpBody.getBody() + "\n";
+			
+			return (requestLine + requestHeader + requestBody);
+		};
 };
 
 // 요청라인 먼저 갖고있고, 해당 소켓이 갖고있자고?

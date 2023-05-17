@@ -8,20 +8,29 @@ void	HttpParser::parseHeaderAndBody(std::string request, std::vector<std::string
 	std::vector<std::string>	data;
 	size_t						doubleCRLFIndex = request.find(DOUBLE_CRLF);
 
+	//std::cout << "request : " << request << std::endl;
+
 	// header, body
 	data.push_back(request.substr(0, doubleCRLFIndex));
 	data.push_back(request.substr(doubleCRLFIndex + DOUBLE_CRLF.size(), request.size()));
-	std::cout << "hi?" << std::endl;
+
 	std::cout << data[0] << std::endl;
+	std::cout << "ddddddddddddddddd" << std::endl;
 	std::cout << data[1] << std::endl;
+	std::cout << "ddddddddddddddddd" << std::endl;
 	
 
-	int start, end = 0;
-	while ((end = data[0].find(CRLF)) != -1)
+	int start = 0;
+	size_t end = data[0].find(CRLF);
+	while (end != std::string::npos)
 	{
-		header.push_back(data[0].substr(start, end));
+		std::string line = data[0].substr(start, end - start);
+		header.push_back(line);
 		start = end + CRLF.size();
+		end = data[0].find(CRLF, start);
 	}
+	std::string lastLine = data[0].substr(start);
+	header.push_back(lastLine);
 	body = data[1];
 }
 
@@ -30,7 +39,6 @@ void	HttpParser::parseRequest(HttpRequest& httpRequest, const std::string& reque
 	std::vector<std::string>	header;
 	std::string					body;
 
-	//std::cout << "===================" << std::endl;
 	parseHeaderAndBody(request, header, body);
 
 	std::vector<std::string>			requestLine = split(header[0], " ");
@@ -39,6 +47,7 @@ void	HttpParser::parseRequest(HttpRequest& httpRequest, const std::string& reque
 	httpRequest.setRequestLine(requestLine);
 	httpRequest.setHeaderField(requestHeaderField);
 	httpRequest.setBody(body);
+	std::cout << "저장 완료" << std::endl;
 }
 
 std::map<std::string, std::string>	HttpParser::createHeaderField(std::vector<std::string>& headerField)

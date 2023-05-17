@@ -3,6 +3,7 @@
 
 # include "webserv.hpp"
 # include "HttpRequest.hpp"
+# include "TcpSocket.hpp"
 
 # define BUFFER_SIZE 1024
 
@@ -10,6 +11,9 @@ namespace	HttpParser
 {
 	void								parseHeaderAndBody(std::string, std::vector<std::string>&, std::string&);
 	void								parseRequest(HttpRequest&, const std::string&);
+	// 구현해야할거
+	void								parseRequest(TcpSocket &, const std::string&);
+	//
 	std::map<std::string, std::string>	createHeaderField(std::vector<std::string>&);
 
 };

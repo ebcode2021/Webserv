@@ -91,8 +91,12 @@ int main(int argc, char *argv[])
 					else {
 						int readSize = sockEventHandler.dataRecv();
 						///
+						// std::cout << "넘겨준거 " << std::endl;
+						// sockEventHandler.printSockBuf();
+						// std::cout << "=------- " << std::endl;
 						HttpRequest request;
-						HttpParser::parseRequest(request, curSock->getBuf());
+						HttpParser::parseRequest(request, curSock->getString());
+						std::cout << request.toString() << std::endl;
 						///
 						if (readSize == -1) {
 							std::cout << strerror(errno) << std::endl;

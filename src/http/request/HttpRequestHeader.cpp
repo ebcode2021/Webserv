@@ -13,7 +13,7 @@ size_t  HttpRequestHeader::getContentLength() { return(this->_contentLength); }
 
 std::string HttpRequestHeader::getTransferEncoding() { return(this->_transferEncoding); }
 
-std::vector<std::string> HttpRequestHeader::getCookie() { return(this->_cookie); }
+std::string HttpRequestHeader::getCookie() { return(this->_cookie); }
 
 std::string HttpRequestHeader::getSessionID() { return(this->_sessionID); }
 
@@ -31,7 +31,7 @@ void	HttpRequestHeader::setContentLength(size_t contentLength) { this->_contentL
 
 void	HttpRequestHeader::setTransferEncoding(std::string& transferEncoding) { this->_transferEncoding = transferEncoding; }
 
-void	HttpRequestHeader::setCookie(std::string& cookie) { this->_cookie = split(cookie, SP); }
+void	HttpRequestHeader::setCookie(std::string& cookie) { this->_cookie = cookie; }
 
 void	HttpRequestHeader::setSessionID(std::string& session)
 {

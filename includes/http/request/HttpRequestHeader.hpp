@@ -12,7 +12,7 @@ class	HttpRequestHeader
 		std::string					_contentType;
 		size_t						_contentLength;
 		std::string					_transferEncoding;
-		std::vector<std::string>	_cookie;
+		std::string	_cookie;
 		std::string					_sessionID;
 
 	public :
@@ -23,7 +23,7 @@ class	HttpRequestHeader
 		std::string					getContentType();
 		size_t						getContentLength();
 		std::string					getTransferEncoding();
-		std::vector<std::string>	getCookie();
+		std::string	getCookie();
 		std::string					getSessionID();
 
 		void	setHost(std::string&);

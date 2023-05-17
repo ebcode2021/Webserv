@@ -18,7 +18,7 @@ void	HttpRequestLine::setMethod(const std::string& method)
 		if (METHODS[idx].compare(method) == 0)
 		{
 			this->_method = METHODS[idx];
-			break ;
+			return ;
 		}
 	}
 	this->_method = "ERROR";
