@@ -1,7 +1,7 @@
 #include "HttpParser.hpp"
 #include "webserv.hpp"
 
-char request[] = "GET /index.html HTTP/1.1\r\nHost: example.com\r\nConnection: keep-alive\r\n\r\nHello, world!";
+//char request[] = "GET /index.html HTTP/1.1\r\nHost: example.com\r\nConnection: keep-alive\r\n\r\nHello, world!";
 
 void	HttpParser::parseHeaderAndBody(std::string request, std::vector<std::string>& header, std::string& body)
 {
@@ -11,6 +11,7 @@ void	HttpParser::parseHeaderAndBody(std::string request, std::vector<std::string
 	// header, body
 	data.push_back(request.substr(0, doubleCRLFIndex));
 	data.push_back(request.substr(doubleCRLFIndex + DOUBLE_CRLF.size(), request.size()));
+	std::cout << "hi?" << std::endl;
 	std::cout << data[0] << std::endl;
 	std::cout << data[1] << std::endl;
 	
@@ -24,11 +25,12 @@ void	HttpParser::parseHeaderAndBody(std::string request, std::vector<std::string
 	body = data[1];
 }
 
-void	HttpParser::parseRequest(HttpRequest& httpRequest, std::string& request)
+void	HttpParser::parseRequest(HttpRequest& httpRequest, const std::string& request)
 {
 	std::vector<std::string>	header;
 	std::string					body;
 
+	//std::cout << "===================" << std::endl;
 	parseHeaderAndBody(request, header, body);
 
 	std::vector<std::string>			requestLine = split(header[0], " ");

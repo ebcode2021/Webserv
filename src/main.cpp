@@ -2,6 +2,7 @@
 #include "Config.hpp"
 #include "KqueueHandler.hpp"
 #include "SocketEventHandler.hpp"
+#include "HttpParser.hpp"
 
 /*
 	[남은거?]
@@ -70,16 +71,14 @@ int main(int argc, char *argv[])
 			kqHandler.eventListReset();
 			kqHandler.waitEvent();
 			kqHandler.changeListClear();
-			std::cout << "roof" << std::endl;
 			for (int i = 0; i < kqHandler.getEventCnt(); i++)
 			{
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
 				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
 				sockEventHandler.setSocket(curSock);
-
-				if (curEvent.filter == EVFILT_READ)  // 현재 발생한 이벤트가 read일 경우
+				if (curEvent.filter == EVFILT_READ)
 				{
-					if (listenSockList.find(curEvent.ident) != listenSockList.end()) // listen port일 경우
+					if (listenSockList.find(curEvent.ident) != listenSockList.end())
 					{
 						int clientSock = sockEventHandler.socketAccept();
 						if (clientSock == INVALID_SOCKET) {
@@ -91,7 +90,10 @@ int main(int argc, char *argv[])
 					}
 					else {
 						int readSize = sockEventHandler.dataRecv();
-						
+						///
+						HttpRequest request;
+						HttpParser::parseRequest(request, curSock->getBuf());
+						///
 						if (readSize == -1) {
 							std::cout << strerror(errno) << std::endl;
 							printErrorWithExit("error: recv()");
@@ -106,7 +108,7 @@ int main(int argc, char *argv[])
 						}
 					}
 				}
-				else if (curEvent.filter == EVFILT_WRITE) // write 일 경우
+				else if (curEvent.filter == EVFILT_WRITE)
 				{
 					std::cout << "write fd = " << curSock->getSockFd() << std::endl;
 					int sendsize = sockEventHandler.dataSend();

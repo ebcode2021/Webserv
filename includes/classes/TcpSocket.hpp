@@ -10,6 +10,7 @@ class TcpSocket
 		SocketInfo	_socketInfo;
 		HttpRequest	_request;
 		std::string	buf;
+		int			readEvent;
 
 	public :
 		TcpSocket();

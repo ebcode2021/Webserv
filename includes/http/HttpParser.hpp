@@ -9,7 +9,7 @@
 namespace	HttpParser
 {
 	void								parseHeaderAndBody(std::string, std::vector<std::string>&, std::string&);
-	void								parseRequest(HttpRequest&, std::string&);
+	void								parseRequest(HttpRequest&, const std::string&);
 	std::map<std::string, std::string>	createHeaderField(std::vector<std::string>&);
 
 };
