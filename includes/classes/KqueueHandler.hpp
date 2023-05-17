@@ -6,8 +6,9 @@
 class KqueueHandler {
 	private :
 		int							kq;
+		size_t						eventCnt;
 		std::vector<struct kevent>	changeList;
-		struct kevent				eventList[FD_SETSIZE];
+		struct kevent				eventList[256];
 
 	public :
 		KqueueHandler();
@@ -16,8 +17,15 @@ class KqueueHandler {
 		int		waitEvent();
 		void	changeListClear();
 		void	eventListReset();
+		void	eventUpdate();
+		
 
 		struct kevent getCurEventByIndex(int);
+		int				getEventCnt();
+		int				getKqFd();
+
+		// test
+		void printEvent();
 };
 
 # endif

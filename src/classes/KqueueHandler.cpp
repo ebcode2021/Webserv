@@ -15,7 +15,11 @@ void	KqueueHandler::changeEvent(uintptr_t ident, short filter, unsigned short fl
 }
 
 int	KqueueHandler::waitEvent() {
-	int eventCnt = kevent(this->kq, &this->changeList[0], this->changeList.size(), this->eventList, FD_SETSIZE, NULL);
+	struct timespec timeout;
+	timeout.tv_sec = 0;
+	timeout.tv_nsec = 500000000;
+	int eventCnt = kevent(this->kq, &this->changeList[0], this->changeList.size(), this->eventList, 256, &timeout);
+	this->eventCnt = eventCnt;
 	return (eventCnt);
 }
 
@@ -28,5 +32,37 @@ void	KqueueHandler::changeListClear() {
 }
 
 void	KqueueHandler::eventListReset() {
-	memset(this->eventList, 0, sizeof(struct kevent) * FD_SETSIZE);
+	this->eventCnt = 0;
+	memset(this->eventList, 0, sizeof(struct kevent) * 256);
+}
+
+void	KqueueHandler::eventUpdate() {
+	int ret = kevent(this->kq, &this->changeList[0], this->changeList.size(), NULL, 0, NULL);
+	if (ret == -1) {
+		std::cout << "등록 실패" << std::endl;
+		printErrorWithExit(strerror(errno));
+	}
+	this->changeListClear();
+}
+
+int		KqueueHandler::getEventCnt() {
+	return this->eventCnt;
+}
+
+int		KqueueHandler::getKqFd() {
+	return this->kq;
+}
+
+void	KqueueHandler::printEvent() {
+	std::cout << "\n===============Event List===============\n";
+	for (size_t i = 0; i < this->eventCnt; i++)
+	{
+		std::cout << "sockfd = " << this->eventList[i].ident << std::endl;
+		std::cout << "event = ";
+		if (this->eventList[i].filter == EVFILT_READ)
+			std::cout << "Read" << std::endl;
+		else if (this->eventList[i].filter == EVFILT_WRITE)
+			std::cout << "Write" << std::endl;
+	}
+	std::cout << "============================================\n";
 }

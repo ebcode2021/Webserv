@@ -2,11 +2,13 @@
 # define TCPSOCKET_HPP
 
 # include "webserv.hpp"
+# include "HttpRequest.hpp"
 
 class TcpSocket
 {
 	private :
 		SocketInfo	_socketInfo;
+		HttpRequest	_request;
 		std::string	buf;
 
 	public :
@@ -34,6 +36,9 @@ class TcpSocket
 		void	bufClear();
 		
 		void	setBufbyIndex(int, char);
+
+		void	setRequest();
+
 
 		//test
 		const char *getStringToCStr();

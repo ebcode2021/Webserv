@@ -13,17 +13,18 @@ int SocketEventHandler::socketAccept() {
 
 	char addr[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr));
-	printf("\n[TCP 서버] 클라이언트 접속 : IP 주소=%s, 포트 번호 = %d\n", addr, ntohs(clientAddress.sin_port));
+	//printf("[TCP 서버] 클라이언트 접속 : IP 주소=%s, 포트 번호 = %d\n", addr, ntohs(clientAddress.sin_port));
 
 	clientSock = accept(this->_socket->getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize);
-	std::cout << "sock fd = " << clientSock << std::endl;
+	std::cout << "accept sock fd = " << clientSock << std::endl;
 	if (clientSock == INVALID_SOCKET)
 		printErrorWithExit("뭔가 잘못됨");
 	return (clientSock);
 }
 
 void SocketEventHandler::closeSocket() {
-	close (this->_socket->getSockFd());
+	std::cout << "closeSocket = " << this->_socket->getSockFd() << std::endl;
+	close(this->_socket->getSockFd());
 	delete (this->_socket);
 }
 
@@ -36,17 +37,36 @@ int SocketEventHandler::dataRecv() {
 	while (recvByte > 0)
 	{
 		ret += recvByte;
-		//std::cout << "ret = " << ret << std::endl;
 		this->_socket->setBufbyIndex(recvByte + 1, '\0');
 		this->_socket->bufJoin(this->_socket->getBuf());
 		recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
-		//std::cout << recvByte << std::endl;;
 	}
 	return (ret);
 }
 
+std::string createHttpResponse(const std::string& body) {
+    std::ostringstream response;
+    
+    response << "HTTP/1.1 200 OK\r\n";
+    response << "Content-Type: text/html\r\n";
+	response << "Connection: close\r\n";
+    response << "Content-Length: " << body.length() << "\r\n";
+    response << "\r\n";
+    response << body;
+
+    return response.str();
+}
+
 int SocketEventHandler::dataSend() {
-	int sendByte = send(this->_socket->getSockFd(), this->_socket->getStringToCStr(), this->_socket->getStringSzie() - 1, 0);
+
+	//send(this->_socket->getSockFd(), "a", 1, 0);
+	//return (0);
+
+	std::string htmlBody = "<html><body>Hello World</body></html>";
+    std::string httpResponse = createHttpResponse(htmlBody);
+	
+
+	int sendByte = send(this->_socket->getSockFd(), httpResponse.c_str(), httpResponse.size(), 0);
 	this->_socket->stringClear();
 	return (sendByte);
 }

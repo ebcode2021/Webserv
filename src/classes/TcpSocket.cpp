@@ -1,4 +1,5 @@
 # include "TcpSocket.hpp"
+# include "HttpParser.hpp"
 
 /* constructor*/
 
@@ -27,7 +28,7 @@ void	TcpSocket::socketBind(int port)
 
 void	TcpSocket::socketListen()
 {
-	int res = listen(this->_socketInfo.sock, SOMAXCONN);
+	int res = listen(this->_socketInfo.sock, 256);
 
 	if (res == SOCKET_ERROR)
 		printErrorWithExit("listen() error");
@@ -80,6 +81,8 @@ int		TcpSocket::socketAccept() {
 
 }
 
+
+
 void	TcpSocket::bufJoin(char *str) {
 	this->buf += str;
 }
@@ -103,4 +106,8 @@ void	TcpSocket::setBufbyIndex(int idx, char a) {
 
 void TcpSocket::stringClear() {
 	this->buf.clear();
+}
+
+void TcpSocket::setRequest() {
+	HttpParser::parseRequest(this->_request, this->buf);
 }

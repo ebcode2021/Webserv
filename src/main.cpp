@@ -25,7 +25,10 @@
 int createSocket()
 {
 	int	sock = socket(AF_INET, SOCK_STREAM, 0);
-
+	int option = 1;
+    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option)) < 0) {
+        std::cout << "setsockopt error" << std::endl;
+    }
 	if (sock == INVALID_SOCKET)
 		printErrorWithExit("배고파");
 	return (sock);
@@ -56,7 +59,7 @@ int main(int argc, char *argv[])
 
 		int listenSock = createSocket();
 		TcpSocket *listenSocket = new TcpSocket(listenSock);
-		listenSocket->socketBind(1234);
+		listenSocket->socketBind(9999);
 		listenSocket->socketListen();
 		listenSocket->changeToNonblocking();
 		listenSockList.insert(listenSock);
@@ -65,57 +68,53 @@ int main(int argc, char *argv[])
 		while(1)
 		{
 			kqHandler.eventListReset();
-			int eventCnt = kqHandler.waitEvent();
+			kqHandler.waitEvent();
 			kqHandler.changeListClear();
-
-			for (int i = 0; i < eventCnt; i++)
+			std::cout << "roof" << std::endl;
+			for (int i = 0; i < kqHandler.getEventCnt(); i++)
 			{
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
-				sockEventHandler.setSocket((TcpSocket *)curEvent.udata);
+				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
+				sockEventHandler.setSocket(curSock);
 
 				if (curEvent.filter == EVFILT_READ)  // 현재 발생한 이벤트가 read일 경우
 				{
 					if (listenSockList.find(curEvent.ident) != listenSockList.end()) // listen port일 경우
 					{
-						std::cout << "연결 해줘" << std::endl;
-						std::cout << "port = " << curEvent.ident << std::endl;
 						int clientSock = sockEventHandler.socketAccept();
 						if (clientSock == INVALID_SOCKET) {
-							printErrorWithExit("error : accept()");
+							printErrorWithExit(strerror(errno));
 						}
 						TcpSocket *clientSocket = new TcpSocket(clientSock);
 						clientSocket->changeToNonblocking();
 						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
 					}
 					else {
-						std::cout << curEvent.ident << std::endl;
 						int readSize = sockEventHandler.dataRecv();
 						
 						if (readSize == -1) {
+							std::cout << strerror(errno) << std::endl;
 							printErrorWithExit("error: recv()");
 						}
 						else if (readSize == 0) {
-							std::cout << "접속 종료" << std::endl;
-							kqHandler.changeEvent(curEvent.ident, EVFILT_READ, EV_DELETE, 0, 0, curEvent.udata);
-							kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);
+							std::cout << "close fd = " << curSock->getSockFd() << std::endl;
 							sockEventHandler.closeSocket();
 						}
 						else {
-							sockEventHandler.printSockBuf();
-							kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_ADD, 0, 0, curEvent.udata);
+							std::cout << "read fd = " << curSock->getSockFd() << std::endl;
+							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
 					}
 				}
 				else if (curEvent.filter == EVFILT_WRITE) // write 일 경우
 				{
+					std::cout << "write fd = " << curSock->getSockFd() << std::endl;
 					int sendsize = sockEventHandler.dataSend();
-					std::cout << "sendSize = " << sendsize << std::endl;
-					kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);
-				}
-				else
-				{
-					std::cerr << "뭔가 많이 잘못됬음" << std::endl;
-					exit(1);
+					if (sendsize == -1) {
+						printErrorWithExit(strerror(errno));
+					}
+					std::cout << "close fd = " << curSock->getSockFd() << std::endl;
+					sockEventHandler.closeSocket();
 				}
 			} 
 		}

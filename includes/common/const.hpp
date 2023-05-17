@@ -51,7 +51,6 @@ const size_t RESPONSE_HEADER_SIZE = sizeof(RESPONSE_HEADERS) / sizeof(std::strin
 
 const std::string HTTP_VERSION = "HTTP/1.1";
 
-# define BUFSIZE 10
 const std::string SP = " ";
 
 #endif
