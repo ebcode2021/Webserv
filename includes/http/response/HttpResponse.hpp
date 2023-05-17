@@ -22,13 +22,15 @@ class	HttpResponse
 
 	public :
 		// constructor
-		HttpResponse();
+		HttpResponse(); 
 		HttpResponse& operator=(const HttpResponse&);
 
 		// setter
-		void	setResponseLine();
+		void	setResponseLine(HttpStatus&);
 		void	setResponseField();
 		void	setBody();
+
+		// getter
 
 };
 #endif

@@ -24,9 +24,9 @@ SRCS =  main.cpp	\
 		classes/KqueueHandler.cpp	\
 		classes/SocketEventHandler.cpp \
 		http/HttpParser.cpp \
-		http/HttpRequest.cpp \
-		http/HttpRequestHeader.cpp \
-		http/HttpRequestLine.cpp 
+		http/request/HttpRequest.cpp \
+		http/request/HttpRequestHeader.cpp \
+		http/request/HttpRequestLine.cpp 
 
 
 
