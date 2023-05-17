@@ -60,6 +60,9 @@ std::string createHttpResponse(const std::string& body) {
 
 int SocketEventHandler::dataSend() {
 
+	//send(this->_socket->getSockFd(), "a", 1, 0);
+	//return (0);
+
 	std::string htmlBody = "<html><body>Hello World</body></html>";
     std::string httpResponse = createHttpResponse(htmlBody);
 	

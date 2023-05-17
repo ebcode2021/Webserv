@@ -28,7 +28,7 @@ void	TcpSocket::socketBind(int port)
 
 void	TcpSocket::socketListen()
 {
-	int res = listen(this->_socketInfo.sock, SOMAXCONN);
+	int res = listen(this->_socketInfo.sock, 16);
 
 	if (res == SOCKET_ERROR)
 		printErrorWithExit("listen() error");
