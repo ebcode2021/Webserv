@@ -23,6 +23,7 @@ int SocketEventHandler::socketAccept() {
 }
 
 void SocketEventHandler::closeSocket() {
+	std::cout << "closeSocket = " << this->_socket->getSockFd() << std::endl;
 	close(this->_socket->getSockFd());
 	delete (this->_socket);
 }
@@ -48,7 +49,7 @@ std::string createHttpResponse(const std::string& body) {
     
     response << "HTTP/1.1 200 OK\r\n";
     response << "Content-Type: text/html\r\n";
-	response << "Connection: keep-alive\r\n";
+	response << "Connection: close\r\n";
     response << "Content-Length: " << body.length() << "\r\n";
     response << "\r\n";
     response << body;

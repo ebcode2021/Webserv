@@ -15,7 +15,10 @@ void	KqueueHandler::changeEvent(uintptr_t ident, short filter, unsigned short fl
 }
 
 int	KqueueHandler::waitEvent() {
-	int eventCnt = kevent(this->kq, &this->changeList[0], this->changeList.size(), this->eventList, 256, NULL);
+	struct timespec timeout;
+	timeout.tv_sec = 0;
+	timeout.tv_nsec = 500000000;
+	int eventCnt = kevent(this->kq, &this->changeList[0], this->changeList.size(), this->eventList, 256, &timeout);
 	this->eventCnt = eventCnt;
 	return (eventCnt);
 }

@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
 		int listenSock = createSocket();
 		TcpSocket *listenSocket = new TcpSocket(listenSock);
-		listenSocket->socketBind(1234);
+		listenSocket->socketBind(9999);
 		listenSocket->socketListen();
 		listenSocket->changeToNonblocking();
 		listenSockList.insert(listenSock);
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 			kqHandler.eventListReset();
 			kqHandler.waitEvent();
 			kqHandler.changeListClear();
-
+			std::cout << "roof" << std::endl;
 			for (int i = 0; i < kqHandler.getEventCnt(); i++)
 			{
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 					{
 						int clientSock = sockEventHandler.socketAccept();
 						if (clientSock == INVALID_SOCKET) {
-							printErrorWithExit("error : accept()");
+							printErrorWithExit(strerror(errno));
 						}
 						TcpSocket *clientSocket = new TcpSocket(clientSock);
 						clientSocket->changeToNonblocking();
@@ -102,8 +102,6 @@ int main(int argc, char *argv[])
 						}
 						else {
 							std::cout << "read fd = " << curSock->getSockFd() << std::endl;
-							//sockEventHandler.printSockBuf();
-							//curSock->setRequest();
 							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
 					}
@@ -115,12 +113,8 @@ int main(int argc, char *argv[])
 					if (sendsize == -1) {
 						printErrorWithExit(strerror(errno));
 					}
-					kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);
-				}
-				else
-				{
-					std::cerr << "뭔가 많이 잘못됬음" << std::endl;
-					exit(1);
+					std::cout << "close fd = " << curSock->getSockFd() << std::endl;
+					sockEventHandler.closeSocket();
 				}
 			} 
 		}
