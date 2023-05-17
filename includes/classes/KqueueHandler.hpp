@@ -8,7 +8,7 @@ class KqueueHandler {
 		int							kq;
 		size_t						eventCnt;
 		std::vector<struct kevent>	changeList;
-		struct kevent				eventList[16];
+		struct kevent				eventList[256];
 
 	public :
 		KqueueHandler();

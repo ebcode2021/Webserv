@@ -68,10 +68,8 @@ int main(int argc, char *argv[])
 		while(1)
 		{
 			kqHandler.eventListReset();
-		//	kqHandler.printEvent();
 			kqHandler.waitEvent();
-			//kqHandler.changeListClear();
-			//kqHandler.printEvent();
+			kqHandler.changeListClear();
 
 			for (int i = 0; i < kqHandler.getEventCnt(); i++)
 			{
@@ -83,24 +81,15 @@ int main(int argc, char *argv[])
 				{
 					if (listenSockList.find(curEvent.ident) != listenSockList.end()) // listen port일 경우
 					{
-						std::cout << "연결 해줘" << std::endl;
-						std::cout << "port = " << curEvent.ident << std::endl;
 						int clientSock = sockEventHandler.socketAccept();
 						if (clientSock == INVALID_SOCKET) {
 							printErrorWithExit("error : accept()");
 						}
-
 						TcpSocket *clientSocket = new TcpSocket(clientSock);
 						clientSocket->changeToNonblocking();
 						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
 					}
 					else {
-
-						std::cout << curEvent.ident << std::endl;
-
-						if (strlen(curSock->getBuf()) != 0)
-							continue;
-
 						int readSize = sockEventHandler.dataRecv();
 						
 						if (readSize == -1) {
@@ -108,13 +97,12 @@ int main(int argc, char *argv[])
 							printErrorWithExit("error: recv()");
 						}
 						else if (readSize == 0) {
-							std::cout << "접속 종료" << std::endl;
-							close(curEvent.ident);
-							kqHandler.changeEvent(curEvent.ident, EVFILT_READ, EV_DELETE, 0, 0, curSock);
-							//sockEventHandler.closeSocket();
+							std::cout << "close fd = " << curSock->getSockFd() << std::endl;
+							sockEventHandler.closeSocket();
 						}
 						else {
-							sockEventHandler.printSockBuf();
+							std::cout << "read fd = " << curSock->getSockFd() << std::endl;
+							//sockEventHandler.printSockBuf();
 							//curSock->setRequest();
 							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
@@ -122,25 +110,11 @@ int main(int argc, char *argv[])
 				}
 				else if (curEvent.filter == EVFILT_WRITE) // write 일 경우
 				{
-
-
-									int error;
-				socklen_t errorLen = sizeof(error);
-				getsockopt(curEvent.ident, SOL_SOCKET, SO_ERROR, &error, &errorLen);
-				if (error != 0) {
-					//kqHandler.changeEvent(curSock->getSockFd(), EVFILT_READ, EV_DELETE, 0, 0, curSock);
-					close(curEvent.ident);
-					std::cout << "gg" << std::endl;
-					//sockEventHandler.closeSocket();
-					continue;
-				}
-
-
+					std::cout << "write fd = " << curSock->getSockFd() << std::endl;
 					int sendsize = sockEventHandler.dataSend();
 					if (sendsize == -1) {
 						printErrorWithExit(strerror(errno));
 					}
-					//std::cout << "sendSize = " << sendsize << std::endl;
 					kqHandler.changeEvent(curEvent.ident, EVFILT_WRITE, EV_DELETE, 0, 0, curEvent.udata);
 				}
 				else
@@ -149,8 +123,6 @@ int main(int argc, char *argv[])
 					exit(1);
 				}
 			} 
-			kqHandler.eventUpdate();
-
 		}
 	}
 	return 0;

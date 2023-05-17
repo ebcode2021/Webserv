@@ -28,7 +28,7 @@ void	TcpSocket::socketBind(int port)
 
 void	TcpSocket::socketListen()
 {
-	int res = listen(this->_socketInfo.sock, 16);
+	int res = listen(this->_socketInfo.sock, 256);
 
 	if (res == SOCKET_ERROR)
 		printErrorWithExit("listen() error");

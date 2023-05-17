@@ -15,7 +15,7 @@ void	KqueueHandler::changeEvent(uintptr_t ident, short filter, unsigned short fl
 }
 
 int	KqueueHandler::waitEvent() {
-	int eventCnt = kevent(this->kq, &this->changeList[0], this->changeList.size(), this->eventList, 16, NULL);
+	int eventCnt = kevent(this->kq, &this->changeList[0], this->changeList.size(), this->eventList, 256, NULL);
 	this->eventCnt = eventCnt;
 	return (eventCnt);
 }
@@ -30,12 +30,15 @@ void	KqueueHandler::changeListClear() {
 
 void	KqueueHandler::eventListReset() {
 	this->eventCnt = 0;
-	memset(this->eventList, 0, sizeof(struct kevent) * 16);
+	memset(this->eventList, 0, sizeof(struct kevent) * 256);
 }
 
 void	KqueueHandler::eventUpdate() {
-	std::cout << kevent(this->kq, &this->changeList[0], this->changeList.size(), NULL, 0, NULL) << std::endl;
-	std::cout << "등록" << std::endl;
+	int ret = kevent(this->kq, &this->changeList[0], this->changeList.size(), NULL, 0, NULL);
+	if (ret == -1) {
+		std::cout << "등록 실패" << std::endl;
+		printErrorWithExit(strerror(errno));
+	}
 	this->changeListClear();
 }
 
