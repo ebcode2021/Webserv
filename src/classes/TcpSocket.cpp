@@ -65,6 +65,11 @@ char*	TcpSocket::getBuf()
 	return (this->_socketInfo.buf);
 }
 
+void	TcpSocket::setBuf(std::string& body)
+{
+	this->buf = body;
+}
+
 void	TcpSocket::bufClear() {
 	memset(this->_socketInfo.buf, 0, sizeof(BUFSIZE));
 }
@@ -123,4 +128,34 @@ void	TcpSocket::setBufbyIndex(int idx, char a) {
 
 void TcpSocket::stringClear() {
 	this->_buf.clear();
+}
+
+
+
+///////////////////////////////////////////
+/* 나중에 utils로 뺄거*/
+
+void	TcpSocket::setRequestHeader(const std::string& request)
+{
+	std::vector<std::string>	header;
+	std::string					body;
+
+	HttpRequest::parseHeaderAndBody(request, header, body);
+	this->_request.setHeader(header);
+	this->buf = body;
+}
+
+void	TcpSocket::setRequestBody(const std::string& body)
+{
+	std::string encodingMethod = this->_request.getRequestField().getTransferEncoding();
+
+	if (encodingMethod.compare("identity"))
+	{
+		// identity된 데이터를 처리하는 방법
+		this->_request.setBody(body);
+	}
+	else if (encodingMethod.compare("chunked"))
+	{
+		// chunked된 데이터를 처리하는 방법
+	}
 }

@@ -12,7 +12,6 @@
 	// Request-Header-Field (FiledName, FiledValue)
 // Request-Body
 
-// validate (cgi-> .py, .php 버튼의 경로..? cgi로 경로설정??)
 class TcpSocket;
 
 class	HttpRequest
@@ -27,18 +26,26 @@ class	HttpRequest
 		HttpRequest();
 		//HttpRequest& operator=(const HttpRequest&);
 
-		// setter
-		static void	setRequest(TcpSocket*, const std::string&);
-		void		setRequestLine(std::vector<std::string>);
-		void		setHeaderField(std::map<std::string, std::string>);
-		void		setBody(std::string);
+		// getter, setter
+		HttpRequestLine&						getRequestLine() ;
+		HttpRequestHeader&					getRequestField() ;
+		HttpBody&								getBody() ;
 
+		void										setHeader(std::vector<std::string>&);
+		void										setBody(const std::string&);
+
+		void										setRequestLine(std::vector<std::string>);
+		void										setHeaderField(std::map<std::string, std::string>);
+
+		// parser
+		static void 								parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
 		const HttpRequestLine&		getHttpRequestLine();
 		const HttpRequestHeader&	getHttpRequestHeader();
 
 		// static
 		static void parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
 		static std::map<std::string, std::string>	createHeaderField(std::vector<std::string>&);
+
 
 		// print
 		std::string	toString()

@@ -3,23 +3,22 @@
 /* constructor */
 HttpRequest::HttpRequest(){}
 
+/* getter */
+HttpRequestLine&		HttpRequest::getRequestLine() { return(this->_httpRequestLine); }
 /* setter */
-void	HttpRequest::setRequest(TcpSocket *tcpSocket, const std::string& request)
+
+HttpRequestHeader&	HttpRequest::getRequestField() { return(this->_httpRequestHeader); }
+
+HttpBody&				HttpRequest::getBody(){ return(this->_httpBody); }
+
+/* setter */
+void	HttpRequest::setHeader(std::vector<std::string>& header)
 {
-	std::vector<std::string>	header;
-	std::string					body;
-	HttpRequest 				httpRequest;
-
-	HttpRequest::parseHeaderAndBody(request, header, body);
-
 	std::vector<std::string>			requestLine = split(header[0], " ");
 	std::map<std::string, std::string>	requestHeaderField = createHeaderField(header);
 
-	httpRequest.setRequestLine(requestLine);
-	httpRequest.setHeaderField(requestHeaderField);
-	httpRequest.setBody(body);
-
-	tcpSocket->setRequest(httpRequest);
+	this->setRequestLine(requestLine);
+	this->setHeaderField(requestHeaderField);
 }
 
 void	HttpRequest::setRequestLine(std::vector<std::string> requestLine)
@@ -62,7 +61,7 @@ void	HttpRequest::setHeaderField(std::map<std::string, std::string> headerMap)
 	}
 }
 
-void	HttpRequest::setBody(std::string content)
+void	HttpRequest::setBody(const std::string& content)
 {
 	this->_httpBody.setBody(content);
 }
@@ -90,6 +89,7 @@ void	HttpRequest::parseHeaderAndBody(const std::string& request, std::vector<std
 	header.push_back(lastLine);
 	body = data[1];
 }
+
 
 std::map<std::string, std::string>	HttpRequest::createHeaderField(std::vector<std::string>& headerField)
 {
