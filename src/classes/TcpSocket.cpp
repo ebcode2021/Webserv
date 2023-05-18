@@ -11,7 +11,7 @@ TcpSocket::TcpSocket(int socketFd)
 	this->_socketInfo.sendbyte = 0;
 	this->_socketInfo.recvbyte = 0;
 	this->buf = "";
-	this->readEvent = 0;
+	this->encoding = 0;
 }
 
 void	TcpSocket::socketBind(int port)

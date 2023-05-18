@@ -10,15 +10,12 @@ class TcpSocket
 		SocketInfo	_socketInfo;
 		HttpRequest	_request;
 		std::string	buf;
-		int			readEvent;
+		int			encoding;
 
 	public :
 		TcpSocket();
 		TcpSocket(int);
 		
-		void	socketSend();
-		void	socketRecv();
-
 		int		socketAccept();
 		void	socketBind(int);
 		void	socketListen();
