@@ -1,9 +1,27 @@
 #include "HttpRequest.hpp"
-
+#include "TcpSocket.hpp"
 /* constructor */
 HttpRequest::HttpRequest(){}
 
 /* setter */
+void	HttpRequest::setRequest(TcpSocket *tcpSocket, const std::string& request)
+{
+	std::vector<std::string>	header;
+	std::string					body;
+	HttpRequest 				httpRequest;
+
+	HttpRequest::parseHeaderAndBody(request, header, body);
+
+	std::vector<std::string>			requestLine = split(header[0], " ");
+	std::map<std::string, std::string>	requestHeaderField = createHeaderField(header);
+
+	httpRequest.setRequestLine(requestLine);
+	httpRequest.setHeaderField(requestHeaderField);
+	httpRequest.setBody(body);
+
+	tcpSocket->setRequest(httpRequest);
+}
+
 void	HttpRequest::setRequestLine(std::vector<std::string> requestLine)
 {
 	this->_httpRequestLine.setMethod(requestLine.at(0));
@@ -47,4 +65,58 @@ void	HttpRequest::setHeaderField(std::map<std::string, std::string> headerMap)
 void	HttpRequest::setBody(std::string content)
 {
 	this->_httpBody.setBody(content);
+}
+
+/* parser */
+void	HttpRequest::parseHeaderAndBody(const std::string& request, std::vector<std::string>& header, std::string& body)
+{
+	std::vector<std::string>	data;
+	size_t						doubleCRLFIndex = request.find(DOUBLE_CRLF);
+
+	// header, body
+	data.push_back(request.substr(0, doubleCRLFIndex));
+	data.push_back(request.substr(doubleCRLFIndex + DOUBLE_CRLF.size(), request.size()));
+
+	int start = 0;
+	size_t end = data[0].find(CRLF);
+	while (end != std::string::npos)
+	{
+		std::string line = data[0].substr(start, end - start);
+		header.push_back(line);
+		start = end + CRLF.size();
+		end = data[0].find(CRLF, start);
+	}
+	std::string lastLine = data[0].substr(start);
+	header.push_back(lastLine);
+	body = data[1];
+}
+
+std::map<std::string, std::string>	HttpRequest::createHeaderField(std::vector<std::string>& headerField)
+{
+	std::map<std::string, std::string>	headerMap;
+
+	std::vector<std::string>::iterator it;
+
+	for (it = headerField.begin() + 1; it != headerField.end(); ++it)
+	{
+		std::string	delimiter = ": ";
+		std::string	header = *it;
+		size_t 		pos = header.find(delimiter);
+
+		if (pos != std::string::npos)
+		{
+			std::string	key	= header.substr(0, pos);
+			std::string	value = header.substr(pos + delimiter.size());
+			headerMap.insert(std::make_pair(key, value));
+		}
+	}
+	return (headerMap);
+}
+
+const HttpRequestLine& HttpRequest::getHttpRequestLine() {
+	return this->_httpRequestLine;
+}
+
+const HttpRequestHeader& HttpRequest::getHttpRequestHeader() {
+	return this->_httpRequestHeader;
 }

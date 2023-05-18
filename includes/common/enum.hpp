@@ -34,5 +34,12 @@ enum	Method
 	DELETE,
 };
 
+enum readMode
+{
+	HEADER,
+	IDENTITY,
+	CHUNKED
+};
+
 
 #endif

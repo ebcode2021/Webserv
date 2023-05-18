@@ -2,7 +2,7 @@
 #include "Config.hpp"
 #include "KqueueHandler.hpp"
 #include "SocketEventHandler.hpp"
-#include "HttpParser.hpp"
+
 
 /*
 	[남은거?]
@@ -91,9 +91,6 @@ int main(int argc, char *argv[])
 					else {
 						std::cout << "read fd = " << curSock->getSockFd() << std::endl;
 						int readSize = sockEventHandler.dataRecv();
-						
-					
-						
 						if (readSize == -1) {
 							std::cout << strerror(errno) << std::endl;
 							printErrorWithExit("error: recv()");
@@ -103,9 +100,15 @@ int main(int argc, char *argv[])
 							sockEventHandler.closeSocket();
 						}
 						else {
-							HttpRequest request;
-							HttpParser::parseRequest(request, curSock->getString());
-							std::cout << request.toString() << std::endl;
+							//HttpRequest::setRequest(curSock, curSock->getString());
+							if (curSock->getReadMode() == HEADER) {
+								HttpRequest::setRequest(curSock, curSock->getString());
+								curSock->changeReadMode();
+							}
+							else {
+								
+							}
+							curSock->printRequestInfo();
 							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
 					}
@@ -118,8 +121,8 @@ int main(int argc, char *argv[])
 					if (sendsize == -1) {
 						printErrorWithExit(strerror(errno));
 					}
-					//std::cout << "close fd = " << curSock->getSockFd() << std::endl;
-					//sockEventHandler.closeSocket();
+					std::cout << "close fd = " << curSock->getSockFd() << std::endl;
+					sockEventHandler.closeSocket();
 				}
 			} 
 		}

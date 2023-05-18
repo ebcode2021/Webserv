@@ -1,5 +1,5 @@
 # include "TcpSocket.hpp"
-# include "HttpParser.hpp"
+
 
 /* constructor*/
 
@@ -10,8 +10,8 @@ TcpSocket::TcpSocket(int socketFd)
 	this->_socketInfo.sock = socketFd;
 	this->_socketInfo.sendbyte = 0;
 	this->_socketInfo.recvbyte = 0;
-	this->buf = "";
-	this->encoding = 0;
+	this->_buf = "";
+	this->_readMode = HEADER;
 }
 
 void	TcpSocket::socketBind(int port)
@@ -83,22 +83,37 @@ int		TcpSocket::socketAccept() {
 
 }
 
-
+void TcpSocket::printRequestInfo()
+{
+	std::cout << this->_request.toString() << std::endl;
+}
 
 void	TcpSocket::bufJoin(char *str) {
-	this->buf += str;
+	this->_buf += str;
 }
 
 std::string TcpSocket::getString() {
-	return this->buf;
+	return this->_buf;
 }
 
 const char	*TcpSocket::getStringToCStr() {
-	return this->buf.c_str();
+	return this->_buf.c_str();
+}
+
+int	TcpSocket::getReadMode() {
+	return this->_readMode;
+}
+
+void	TcpSocket::changeReadMode() {
+	const HttpRequestHeader requestline = this->_request.getHttpRequestHeader();
+	std::string encoding = requestline.getTransferEncoding();
+
+	if (encoding == "Chunked")
+		this->_readMode = CHUNKED;
 }
 
 size_t	TcpSocket::getStringSzie() {
-	int size = this->buf.size();
+	int size = this->_buf.size();
 	return size;
 }
 
@@ -107,9 +122,5 @@ void	TcpSocket::setBufbyIndex(int idx, char a) {
 }
 
 void TcpSocket::stringClear() {
-	this->buf.clear();
-}
-
-void TcpSocket::setRequest() {
-	HttpParser::parseRequest(this->_request, this->buf);
+	this->_buf.clear();
 }

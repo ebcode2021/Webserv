@@ -22,7 +22,7 @@ class	HttpRequestHeader
 		std::string					getConnection();
 		std::string					getContentType();
 		size_t						getContentLength();
-		std::string					getTransferEncoding();
+		std::string					getTransferEncoding() const;
 		std::string	getCookie();
 		std::string					getSessionID();
 
