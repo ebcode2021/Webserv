@@ -2,7 +2,7 @@
 #include "Config.hpp"
 #include "KqueueHandler.hpp"
 #include "SocketEventHandler.hpp"
-#include "HttpParser.hpp"
+
 
 /*
 	[남은거?]
@@ -103,9 +103,13 @@ int main(int argc, char *argv[])
 							sockEventHandler.closeSocket();
 						}
 						else {
-							HttpRequest request;
-							HttpParser::parseRequest(request, curSock->getString());
-							std::cout << request.toString() << std::endl;
+							//////////////
+							HttpRequest::setRequest(curSock, curSock->getString());
+							curSock->printRequestInfo();
+
+							///////////////
+							// HttpRequest request;
+							// HttpParser::parseRequest(request, curSock->getString());
 							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
 					}

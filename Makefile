@@ -23,7 +23,6 @@ SRCS =  main.cpp	\
 		classes/TcpSocket.cpp		\
 		classes/KqueueHandler.cpp	\
 		classes/SocketEventHandler.cpp \
-		http/HttpParser.cpp \
 		http/request/HttpRequest.cpp \
 		http/request/HttpRequestHeader.cpp \
 		http/request/HttpRequestLine.cpp 

@@ -7,12 +7,12 @@
 class	HttpResponseLine
 {
 	private :
-		const std::string	_version = "HTTP/1.1";
+		const std::string	_version;
 		HttpStatus	_httpStatus;
 
 	public :
 		// constructor
-		HttpResponseLine();
+		HttpResponseLine() : _version("HTTP/1.1"){};
 		HttpResponseLine(const HttpStatus&);
 
 		// getter, setter
