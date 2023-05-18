@@ -7,7 +7,10 @@
 
 class	RequestHandler
 {
+	private :
+		
 	public : 
+		
 		
 };
 

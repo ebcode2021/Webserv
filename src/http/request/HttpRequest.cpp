@@ -3,6 +3,13 @@
 /* constructor */
 HttpRequest::HttpRequest(){}
 
+/* getter */
+const HttpRequestLine&		HttpRequest::getRequestLine() const { return(this->_httpRequestLine); }
+
+const HttpRequestHeader&	HttpRequest::getRequestField() const { return(this->_httpRequestHeader); }
+
+const HttpBody&				HttpRequest::getBody() const { return(this->_httpBody); }
+
 /* setter */
 void	HttpRequest::setRequest(TcpSocket *tcpSocket, const std::string& request)
 {

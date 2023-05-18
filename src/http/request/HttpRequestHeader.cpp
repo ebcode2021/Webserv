@@ -1,5 +1,8 @@
 #include "HttpRequestHeader.hpp"
 
+/* constructor */
+HttpRequestHeader::HttpRequestHeader() : _transferEncoding("identity") {}
+
 /* getter */
 std::string HttpRequestHeader::getHost() { return(this->_host); }
 
