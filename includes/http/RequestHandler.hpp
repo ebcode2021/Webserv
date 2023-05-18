@@ -5,9 +5,14 @@
 // 유효성 검사, URL 파싱 등을 수행
 # include "webserv.hpp"
 
+// namespace로 함수들을 가지고 있을지 생각중
+// 1) methods가 
 class	RequestHandler
 {
+	private :
+		
 	public : 
+		
 		
 };
 

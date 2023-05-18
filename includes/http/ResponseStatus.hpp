@@ -23,7 +23,6 @@ static const std::map<int, std::string> httpStatusMap = {
 	{ 505, "HTTP Version Not Supported" }
 };
 
-
 // struct ResponseStatus
 // {
 // 	static int code[];
@@ -40,7 +39,7 @@ static const std::map<int, std::string> httpStatusMap = {
 // 			reason[idx] = splitted[1];
 // 		}
 // 	}
-};
+
 
 enum	StatusCodeaa
 {
@@ -94,31 +93,6 @@ enum	StatusCodeaa
 	HTTP_STATUS_GATEWAY_TIME_OUT = 504,
 	HTTP_STATUS_HTTP_VERSION_NOT_SUPPORTED = 505,
 };
-
-// const int ResponseStatus::code[] = {
-// 	"200",
-// 	"201",
-// 	"204",
-// 	"400",
-// 	"401",
-// 	"403",
-// 	"404",
-// 	"500",
-// 	"503",
-// };
-
-// const std::string ResponseStatus::reason[] = {
-// 	"OK",
-// 	"Created",
-// 	"No Content"
-// 	"Bad Request",
-// 	"Unauthorized",
-// 	"Forbidden",
-// 	"Not Found",
-// 	"Internal Server Error",
-// 	"Service Unavailable"
-// }
-
 
 // throw ResponseException(C404);
 

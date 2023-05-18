@@ -65,6 +65,11 @@ char*	TcpSocket::getBuf()
 	return (this->_socketInfo.buf);
 }
 
+void	TcpSocket::setBuf(std::string& body)
+{
+	this->_buf = body;
+}
+
 void	TcpSocket::bufClear() {
 	memset(this->_socketInfo.buf, 0, sizeof(BUFSIZE));
 }
@@ -108,8 +113,10 @@ void	TcpSocket::changeReadMode() {
 	const HttpRequestHeader requestline = this->_request.getHttpRequestHeader();
 	std::string encoding = requestline.getTransferEncoding();
 
-	if (encoding == "Chunked")
+	if (encoding == "chunked")
 		this->_readMode = CHUNKED;
+	else if (encoding == "identity")
+		this->_readMode = IDENTITY;
 }
 
 size_t	TcpSocket::getStringSzie() {
@@ -123,4 +130,32 @@ void	TcpSocket::setBufbyIndex(int idx, char a) {
 
 void TcpSocket::stringClear() {
 	this->_buf.clear();
+}
+
+
+
+///////////////////////////////////////////
+/* 나중에 utils로 뺄거*/
+
+void	TcpSocket::setRequestHeader(const std::string& request)
+{
+	std::vector<std::string>	header;
+	std::string					body;
+
+	HttpRequest::parseHeaderAndBody(request, header, body);
+	this->_request.setHeader(header);
+	this->_buf = body;
+}
+
+void	TcpSocket::setRequestBody(const std::string& body)
+{
+	if (this->getReadMode() == IDENTITY)
+	{
+		// identity된 데이터를 처리하는 방법
+		this->_request.setBody(body);
+	}
+	else if (this->getReadMode() == CHUNKED)
+	{
+		// chunked된 데이터를 처리하는 방법
+	}
 }

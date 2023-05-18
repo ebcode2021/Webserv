@@ -90,26 +90,26 @@ int main(int argc, char *argv[])
 					}
 					else {
 						std::cout << "read fd = " << curSock->getSockFd() << std::endl;
-						int readSize = sockEventHandler.dataRecv();
-						if (readSize == -1) {
+						int ret = sockEventHandler.dataRecv();
+						if (ret == -1) {
 							std::cout << strerror(errno) << std::endl;
 							printErrorWithExit("error: recv()");
 						}
-						else if (readSize == 0) {
+						else if (ret == 0) {
 							std::cout << "close fd = " << curSock->getSockFd() << std::endl;
 							sockEventHandler.closeSocket();
 						}
 						else {
-							//HttpRequest::setRequest(curSock, curSock->getString());
 							if (curSock->getReadMode() == HEADER) {
-								HttpRequest::setRequest(curSock, curSock->getString());
+								curSock->setRequestHeader(curSock->getString());
 								curSock->changeReadMode();
 							}
-							else {
-								
-							}
+							if (curSock->getRequest().getRequestLine().getMethod() == "POST")
+								curSock->setRequestBody(curSock->getString());
+							std::cout << curSock->getReadMode() << std::endl;
 							curSock->printRequestInfo();
-							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
+							if (curSock->getReadMode() == END || curSock->getRequest().getRequestLine().getMethod() == "GET")
+								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
 					}
 				}
@@ -121,11 +121,11 @@ int main(int argc, char *argv[])
 					if (sendsize == -1) {
 						printErrorWithExit(strerror(errno));
 					}
-					std::cout << "close fd = " << curSock->getSockFd() << std::endl;
-					sockEventHandler.closeSocket();
+					// std::cout << "close fd = " << curSock->getSockFd() << std::endl;
+					// sockEventHandler.closeSocket();
 				}
 			} 
 		}
 	}
-	return 0;
+	return (0);
 }
