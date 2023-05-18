@@ -5,6 +5,7 @@ HttpRequest::HttpRequest(){}
 
 /* getter */
 HttpRequestLine&		HttpRequest::getRequestLine() { return(this->_httpRequestLine); }
+/* setter */
 
 HttpRequestHeader&	HttpRequest::getRequestField() { return(this->_httpRequestHeader); }
 
@@ -110,4 +111,12 @@ std::map<std::string, std::string>	HttpRequest::createHeaderField(std::vector<st
 		}
 	}
 	return (headerMap);
+}
+
+const HttpRequestLine& HttpRequest::getHttpRequestLine() {
+	return this->_httpRequestLine;
+}
+
+const HttpRequestHeader& HttpRequest::getHttpRequestHeader() {
+	return this->_httpRequestHeader;
 }
