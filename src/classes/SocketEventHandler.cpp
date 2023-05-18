@@ -16,6 +16,16 @@ int SocketEventHandler::socketAccept() {
 	//printf("[TCP 서버] 클라이언트 접속 : IP 주소=%s, 포트 번호 = %d\n", addr, ntohs(clientAddress.sin_port));
 
 	clientSock = accept(this->_socket->getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize);
+
+	struct linger linger_opt;
+	linger_opt.l_onoff = 1;  // 1이면 TIME_WAIT 사용
+	linger_opt.l_linger = 0; // TIME_WAIT 상태를 0초로 설정
+	if (setsockopt(clientSock, SOL_SOCKET, SO_LINGER,
+					&linger_opt, sizeof(linger_opt)) < 0) {
+		std::cout << "setsockopt error" << std::endl;
+	}
+
+
 	std::cout << "accept sock fd = " << clientSock << std::endl;
 	if (clientSock == INVALID_SOCKET)
 		printErrorWithExit("뭔가 잘못됨");

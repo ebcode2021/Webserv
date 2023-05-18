@@ -94,9 +94,9 @@ int main(int argc, char *argv[])
 						// std::cout << "넘겨준거 " << std::endl;
 						// sockEventHandler.printSockBuf();
 						// std::cout << "=------- " << std::endl;
-						HttpRequest request;
-						HttpParser::parseRequest(request, curSock->getString());
-						std::cout << request.toString() << std::endl;
+						// HttpRequest request;
+						// HttpParser::parseRequest(request, curSock->getString());
+						// std::cout << request.toString() << std::endl;
 						///
 						if (readSize == -1) {
 							std::cout << strerror(errno) << std::endl;
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 						}
 						else {
 							std::cout << "read fd = " << curSock->getSockFd() << std::endl;
-							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
+							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ONESHOT, 0, 0, curSock);
 						}
 					}
 				}
