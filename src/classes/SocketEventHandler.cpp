@@ -39,19 +39,21 @@ void SocketEventHandler::closeSocket() {
 }
 
 int SocketEventHandler::dataRecv() {
+	int recvSize = 0;
+	int ret;
+	char buf[BUFSIZE + 1];
 
-	int ret = 0;
-	int recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
-	if (recvByte == -1)
-		return (-1);
-	while (recvByte > 0)
+	while (true)
 	{
-		ret += recvByte;
-		this->_socket->setBufbyIndex(recvByte + 1, '\0');
-		this->_socket->bufJoin(this->_socket->getBuf());
-		recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
+		ret = recv(this->_socket->getSockFd(), buf, BUFSIZE, 0);
+		if (ret == -1)
+			return (-1);
+		else if (ret == 0)
+			break;
+		
 	}
-	return (ret);
+	
+	
 }
 
 std::string createHttpResponse(const std::string& body) {

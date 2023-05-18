@@ -11,16 +11,13 @@ class TcpSocket
 		SocketInfo	_socketInfo;
 		HttpRequest		_request;
 		//HttpResponse _response;
-		std::string	buf;
-		int			readEvent;
+		std::string	_buf;
+		int			_readMode;
 
 	public :
 		TcpSocket();
 		TcpSocket(int);
 		
-		void	socketSend();
-		void	socketRecv();
-
 		int		socketAccept();
 		void	socketBind(int);
 		void	socketListen();
@@ -40,10 +37,14 @@ class TcpSocket
 		void	setRequest(HttpRequest& httpRequest){this->_request = httpRequest;};
 		//
 		void	bufClear();
+
+		int		getReadMode();
 		
 		void	setBufbyIndex(int, char);
 
 		void	setRequest();
+
+		void	changeReadMode();
 
 
 		//test

@@ -8,7 +8,7 @@ void	HttpRequest::setRequest(TcpSocket *tcpSocket, const std::string& request)
 {
 	std::vector<std::string>	header;
 	std::string					body;
-	HttpRequest httpRequest;
+	HttpRequest 				httpRequest;
 
 	HttpRequest::parseHeaderAndBody(request, header, body);
 
@@ -111,4 +111,12 @@ std::map<std::string, std::string>	HttpRequest::createHeaderField(std::vector<st
 		}
 	}
 	return (headerMap);
+}
+
+const HttpRequestLine& HttpRequest::getHttpRequestLine() {
+	return this->_httpRequestLine;
+}
+
+const HttpRequestHeader& HttpRequest::getHttpRequestHeader() {
+	return this->_httpRequestHeader;
 }
