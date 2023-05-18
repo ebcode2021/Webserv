@@ -67,7 +67,7 @@ char*	TcpSocket::getBuf()
 
 void	TcpSocket::setBuf(std::string& body)
 {
-	this->buf = body;
+	this->_buf = body;
 }
 
 void	TcpSocket::bufClear() {
@@ -142,7 +142,7 @@ void	TcpSocket::setRequestHeader(const std::string& request)
 
 	HttpRequest::parseHeaderAndBody(request, header, body);
 	this->_request.setHeader(header);
-	this->buf = body;
+	this->_buf = body;
 }
 
 void	TcpSocket::setRequestBody(const std::string& body)
