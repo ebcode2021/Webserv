@@ -27,18 +27,20 @@ class	HttpRequest
 		//HttpRequest& operator=(const HttpRequest&);
 
 		// getter, setter
-		const HttpRequestLine&							getRequestLine() const;
-		const HttpRequestHeader&						getRequestField() const;
-		const HttpBody&									getBody() const;
+		HttpRequestLine&						getRequestLine() ;
+		HttpRequestHeader&					getRequestField() ;
+		HttpBody&								getBody() ;
 
-		static void									setRequest(TcpSocket*, const std::string&);
+		void										setHeader(std::vector<std::string>&);
+		void										setBody(const std::string&);
+
 		void										setRequestLine(std::vector<std::string>);
 		void										setHeaderField(std::map<std::string, std::string>);
-		void										setBody(std::string);
 
 		// parser
 		static void 								parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
 		static std::map<std::string, std::string>	createHeaderField(std::vector<std::string>&);
+
 
 		// print
 		std::string	toString()

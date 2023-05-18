@@ -34,16 +34,20 @@ class TcpSocket
 		int	 getSendByte();
 		int 	getRecvByte();
 		char	*getBuf();
+		void	setBuf(std::string&);
 		std::string getString();
 
 		//
-		void	setRequest(HttpRequest& httpRequest){this->_request = httpRequest;};
+		HttpRequest&	getRequest(){ return(this->_request);};
+		void			setRequest(HttpRequest& httpRequest){this->_request = httpRequest;};
+		
+		void			setRequestHeader(const std::string&);
+		void			setRequestBody(const std::string&);
 		//
 		void	bufClear();
 		
 		void	setBufbyIndex(int, char);
 
-		void	setRequest();
 
 
 		//test
