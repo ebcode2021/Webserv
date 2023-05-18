@@ -38,7 +38,8 @@ enum readMode
 {
 	HEADER,
 	IDENTITY,
-	CHUNKED
+	CHUNKED,
+	END
 };
 
 
