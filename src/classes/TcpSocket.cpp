@@ -1,5 +1,5 @@
 # include "TcpSocket.hpp"
-# include "HttpParser.hpp"
+
 
 /* constructor*/
 
@@ -83,7 +83,10 @@ int		TcpSocket::socketAccept() {
 
 }
 
-
+void TcpSocket::printRequestInfo()
+{
+	std::cout << this->_request.toString() << std::endl;
+}
 
 void	TcpSocket::bufJoin(char *str) {
 	this->buf += str;
@@ -108,8 +111,4 @@ void	TcpSocket::setBufbyIndex(int idx, char a) {
 
 void TcpSocket::stringClear() {
 	this->buf.clear();
-}
-
-void TcpSocket::setRequest() {
-	HttpParser::parseRequest(this->_request, this->buf);
 }

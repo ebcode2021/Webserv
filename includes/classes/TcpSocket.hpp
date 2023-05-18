@@ -3,12 +3,14 @@
 
 # include "webserv.hpp"
 # include "HttpRequest.hpp"
+# include "HttpResponse.hpp"
 
 class TcpSocket
 {
 	private :
 		SocketInfo	_socketInfo;
-		HttpRequest	_request;
+		HttpRequest		_request;
+		//HttpResponse _response;
 		std::string	buf;
 		int			readEvent;
 
@@ -34,6 +36,9 @@ class TcpSocket
 		char	*getBuf();
 		std::string getString();
 
+		//
+		void	setRequest(HttpRequest& httpRequest){this->_request = httpRequest;};
+		//
 		void	bufClear();
 		
 		void	setBufbyIndex(int, char);
@@ -45,6 +50,7 @@ class TcpSocket
 		const char *getStringToCStr();
 		size_t	getStringSzie();
 		void stringClear();
+		void printRequestInfo();
 };
 
 #endif
