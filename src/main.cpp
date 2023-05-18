@@ -89,15 +89,11 @@ int main(int argc, char *argv[])
 						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
 					}
 					else {
+						std::cout << "read fd = " << curSock->getSockFd() << std::endl;
 						int readSize = sockEventHandler.dataRecv();
-						///
-						// std::cout << "넘겨준거 " << std::endl;
-						// sockEventHandler.printSockBuf();
-						// std::cout << "=------- " << std::endl;
-						// HttpRequest request;
-						// HttpParser::parseRequest(request, curSock->getString());
-						// std::cout << request.toString() << std::endl;
-						///
+						
+					
+						
 						if (readSize == -1) {
 							std::cout << strerror(errno) << std::endl;
 							printErrorWithExit("error: recv()");
@@ -107,8 +103,10 @@ int main(int argc, char *argv[])
 							sockEventHandler.closeSocket();
 						}
 						else {
-							std::cout << "read fd = " << curSock->getSockFd() << std::endl;
-							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ONESHOT, 0, 0, curSock);
+							HttpRequest request;
+							HttpParser::parseRequest(request, curSock->getString());
+							std::cout << request.toString() << std::endl;
+							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
 					}
 				}
@@ -116,11 +114,12 @@ int main(int argc, char *argv[])
 				{
 					std::cout << "write fd = " << curSock->getSockFd() << std::endl;
 					int sendsize = sockEventHandler.dataSend();
+					kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
 					if (sendsize == -1) {
 						printErrorWithExit(strerror(errno));
 					}
-					std::cout << "close fd = " << curSock->getSockFd() << std::endl;
-					sockEventHandler.closeSocket();
+					//std::cout << "close fd = " << curSock->getSockFd() << std::endl;
+					//sockEventHandler.closeSocket();
 				}
 			} 
 		}
