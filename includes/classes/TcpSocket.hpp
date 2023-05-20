@@ -10,7 +10,7 @@ class TcpSocket
 	private :
 		SocketInfo		_socketInfo;
 		HttpRequest		_request;
-		//HttpResponse _response;
+		HttpResponse	_response;
 		std::string		_buf;
 		int				_readMode;
 

@@ -76,6 +76,12 @@ int main(int argc, char *argv[])
 			{
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
 				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
+
+				
+				// currequest
+				// method = curRequest.getMethod()
+				// cursoccket
+				// method = cursocket
 				sockEventHandler.setSocket(curSock);
 				if (curEvent.filter == EVFILT_READ)
 				{
