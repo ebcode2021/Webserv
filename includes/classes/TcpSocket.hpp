@@ -39,7 +39,7 @@ class TcpSocket
 		void			setRequest(HttpRequest& httpRequest){this->_request = httpRequest;};
 		
 		void			setRequestHeader(const std::string&);
-		void			setRequestBody(const std::string&);
+		void			setRequestBody();
 		//
 		void	bufClear();
 

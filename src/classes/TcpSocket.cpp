@@ -147,12 +147,14 @@ void	TcpSocket::setRequestHeader(const std::string& request)
 	this->_buf = body;
 }
 
-void	TcpSocket::setRequestBody(const std::string& body)
+void	TcpSocket::setRequestBody()
 {
+	std::string encodedBuf;
+
 	if (this->getReadMode() == IDENTITY)
 	{
-		// identity된 데이터를 처리하는 방법
-		this->_request.setBody(body);
+		encodedBuf = this->getString();
+		this->_request.setBody(encodedBuf);
 	}
 	else if (this->getReadMode() == CHUNKED)
 	{

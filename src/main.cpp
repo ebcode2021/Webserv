@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 								curSock->changeReadMode();
 							}
 							if (curSock->getRequest().getRequestLine().getMethod() == "POST")
-								curSock->setRequestBody(curSock->getString());
+								curSock->setRequestBody();
 							std::cout << curSock->getReadMode() << std::endl;
 							curSock->printRequestInfo();
 							if (curSock->getReadMode() == END || curSock->getRequest().getRequestLine().getMethod() == "GET")
