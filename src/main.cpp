@@ -2,6 +2,7 @@
 #include "Config.hpp"
 #include "KqueueHandler.hpp"
 #include "SocketEventHandler.hpp"
+#include "HttpResponse.hpp"
 
 
 /*
@@ -100,22 +101,25 @@ int main(int argc, char *argv[])
 							sockEventHandler.closeSocket();
 						}
 						else {
-							//HttpRequest::setRequest(curSock, curSock->getString());
-							if (curSock->getReadMode() == HEADER) {
-								HttpRequest::setRequest(curSock, curSock->getString());
-								curSock->changeReadMode();
+							if (curSock->getReadMode() == HEADER)
+								curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
+							else if (curSock->getReadMode() == POST)
+								curSock->setRequestBody();
+							else if (curSock->getReadMode() == END)
+							{
+								// [은비 추가 코드] ************************
+								// response 생성자에서 처리.
+								HttpResponse response(config, curSock->getRequest());
+								curSock->setResponse(response);
+								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
-							else {
-								
-							}
-							curSock->printRequestInfo();
-							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
 					}
 				}
 				else if (curEvent.filter == EVFILT_WRITE)
 				{
 					std::cout << "write fd = " << curSock->getSockFd() << std::endl;
+					// 맞는 response 내보내게끔
 					int sendsize = sockEventHandler.dataSend();
 					kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
 					if (sendsize == -1) {

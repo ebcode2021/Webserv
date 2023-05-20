@@ -86,7 +86,7 @@ void	HttpRequest::parseHeaderAndBody(const std::string& request, std::vector<std
 		end = data[0].find(CRLF, start);
 	}
 	std::string lastLine = data[0].substr(start);
-	header.push_back(lastLine);
+
 	body = data[1];
 }
 
