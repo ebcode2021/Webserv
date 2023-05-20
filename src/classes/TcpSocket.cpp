@@ -160,9 +160,9 @@ void	TcpSocket::setRequestBody()
 	}
 	else if (this->getReadMode() == CHUNKED)
 	{
-
+		encodedBuf = asdfjnikmlo();
 	}
-	this->_request.setBody(encodingBody);
+	this->_request.setBody(encodedBuf);
 }
 HttpRequest&	TcpSocket::getRequest() { return(this->_request); }
 
