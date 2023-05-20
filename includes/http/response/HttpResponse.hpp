@@ -6,6 +6,8 @@
 # include "HttpResponseHeader.hpp"
 # include "HttpBody.hpp"
 
+# include "Config.hpp"
+# include "TcpSocket.hpp"
 
 // Response-Header
 	// Response-Line
@@ -23,10 +25,11 @@ class	HttpResponse
 	public :
 		// constructor
 		HttpResponse(); 
+		HttpResponse(Config&, HttpRequest&);
 		HttpResponse& operator=(const HttpResponse&);
 
 		// setter
-		void	setResponseLine(HttpStatus&);
+		void	setResponseLine(Config&, const HttpRequestLine&);
 		void	setResponseField();
 		void	setBody();
 

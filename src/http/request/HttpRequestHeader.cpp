@@ -1,7 +1,7 @@
 #include "HttpRequestHeader.hpp"
 
 /* constructor */
-HttpRequestHeader::HttpRequestHeader() : _transferEncoding("identity") {}
+HttpRequestHeader::HttpRequestHeader() : _contentType("text/html"), _transferEncoding("identity") {}
 
 /* getter */
 std::string HttpRequestHeader::getHost() { return(this->_host); }
@@ -14,7 +14,7 @@ std::string HttpRequestHeader::getContentType() { return(this->_contentType); }
 
 size_t  HttpRequestHeader::getContentLength() { return(this->_contentLength); }
 
-std::string HttpRequestHeader::getTransferEncoding() const { return(this->_transferEncoding); }
+std::string HttpRequestHeader::getTransferEncoding() { return(this->_transferEncoding); }
 
 std::string HttpRequestHeader::getCookie() { return(this->_cookie); }
 

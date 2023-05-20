@@ -8,37 +8,38 @@
 class TcpSocket
 {
 	private :
-		SocketInfo	_socketInfo;
+		SocketInfo		_socketInfo;
 		HttpRequest		_request;
 		//HttpResponse _response;
-		std::string	_buf;
-		int			_readMode;
+		std::string		_buf;
+		int				_readMode;
 
 	public :
 		TcpSocket();
 		TcpSocket(int);
 		
-		int		socketAccept();
-		void	socketBind(int);
-		void	socketListen();
+		int				socketAccept();
+		void			socketBind(int);
+		void			socketListen();
 
-
-		void	changeToNonblocking();
-		void	bufJoin(char *);
+		void			changeToNonblocking();
+		void			bufJoin(char *);
 
 		// getter, setter
-		int	 getSockFd();
-		int	 getSendByte();
-		int 	getRecvByte();
-		char	*getBuf();
-		void	setBuf(std::string&);
-		std::string getString();
+		int	 			getSockFd();
+		int	 			getSendByte();
+		int 			getRecvByte();
+		char*			getBuf();
+		std::string 	getString();
+		
+		void			setBuf(std::string&);
 
 		//
-		HttpRequest&	getRequest(){ return(this->_request);};
-		void			setRequest(HttpRequest& httpRequest){this->_request = httpRequest;};
+		HttpRequest&	getRequest();
+		void			setRequest(HttpRequest&);
+		void			setResponse(HttpResponse&);
 		
-		void			setRequestHeader(const std::string&);
+		void			setRequestHeader();
 		void			setRequestBody();
 		//
 		void	bufClear();

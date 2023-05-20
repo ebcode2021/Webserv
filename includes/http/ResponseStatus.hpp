@@ -3,44 +3,6 @@
 
 #include "webserv.hpp"
 
-struct HttpStatus {
-	int 		statusCode;
-	std::string reason;
-};
-
-static const std::map<int, std::string> httpStatusMap = {
-	{ 200, "OK" },
-	{ 201, "Created" },
-	{ 202, "Accepted" },
-	{ 400, "Bad Request" },
-	{ 401, "Unauthorized" },
-	{ 403, "Forbidden" },
-	{ 404, "Not Found" },
-	{ 405, "Method Not Allowed" },
-	{ 500, "Internal Server Error" },
-	{ 502, "Bad Gateway" },
-	{ 503, "Service Unavailable" },
-	{ 505, "HTTP Version Not Supported" }
-};
-
-// struct ResponseStatus
-// {
-// 	static int code[];
-// 	static std::string reason[];
-
-// 	static void	init()
-// 	{
-// 		int size = sizeof(statusScript) / sizeof(std::string);
-
-// 		for (int idx = 0; idx < size; idx++)
-// 		{
-// 			std::vector<std::string>	splitted = split(statusScript[idx], " ");
-// 			code[idx] = std::atoi(splitted[0].c_str());
-// 			reason[idx] = splitted[1];
-// 		}
-// 	}
-
-
 enum	StatusCodeaa
 {
 	// 1xx

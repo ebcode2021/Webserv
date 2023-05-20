@@ -110,7 +110,7 @@ int	TcpSocket::getReadMode() {
 }
 
 void	TcpSocket::changeReadMode() {
-	const HttpRequestHeader requestline = this->_request.getHttpRequestHeader();
+	HttpRequestHeader requestline = this->_request.getHttpRequestHeader();
 	std::string encoding = requestline.getTransferEncoding();
 
 	if (encoding == "chunked")
@@ -137,12 +137,14 @@ void TcpSocket::stringClear() {
 ///////////////////////////////////////////
 /* 나중에 utils로 뺄거*/
 
-void	TcpSocket::setRequestHeader(const std::string& request)
+void	TcpSocket::setRequestHeader()
 {
 	std::vector<std::string>	header;
 	std::string					body;
+	std::string					request = this->getString();
 
 	HttpRequest::parseHeaderAndBody(request, header, body);
+
 	this->_request.setHeader(header);
 	this->_buf = body;
 }
@@ -158,6 +160,12 @@ void	TcpSocket::setRequestBody()
 	}
 	else if (this->getReadMode() == CHUNKED)
 	{
-		// chunked된 데이터를 처리하는 방법
+
 	}
+	this->_request.setBody(encodingBody);
 }
+HttpRequest&	TcpSocket::getRequest() { return(this->_request); }
+
+void	TcpSocket::setRequest(HttpRequest& httpRequest) { this->_request = httpRequest; }
+
+void	TcpSocket::setResponse(HttpResponse& httpResponse) { this->_response = httpResponse; }
