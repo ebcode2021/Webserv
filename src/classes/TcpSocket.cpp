@@ -113,8 +113,10 @@ void	TcpSocket::changeReadMode() {
 	HttpRequestHeader requestline = this->_request.getHttpRequestHeader();
 	std::string encoding = requestline.getTransferEncoding();
 
-	if (encoding == "Chunked")
+	if (encoding == "chunked")
 		this->_readMode = CHUNKED;
+	else if (encoding == "identity")
+		this->_readMode = IDENTITY;
 }
 
 size_t	TcpSocket::getStringSzie() {
@@ -149,13 +151,12 @@ void	TcpSocket::setRequestHeader()
 
 void	TcpSocket::setRequestBody()
 {
-	std::string encodingMethod = this->_request.getRequestField().getTransferEncoding();
-	std::string	body = this->getString();
-	std::string encodingBody = body;
+	std::string encodedBuf;
 
 	if (this->getReadMode() == IDENTITY)
 	{
-
+		encodedBuf = this->getString();
+		this->_request.setBody(encodedBuf);
 	}
 	else if (this->getReadMode() == CHUNKED)
 	{

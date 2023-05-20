@@ -91,12 +91,12 @@ int main(int argc, char *argv[])
 					}
 					else {
 						std::cout << "read fd = " << curSock->getSockFd() << std::endl;
-						int readSize = sockEventHandler.dataRecv();
-						if (readSize == -1) {
+						int ret = sockEventHandler.dataRecv();
+						if (ret == -1) {
 							std::cout << strerror(errno) << std::endl;
 							printErrorWithExit("error: recv()");
 						}
-						else if (readSize == 0) {
+						else if (ret == 0) {
 							std::cout << "close fd = " << curSock->getSockFd() << std::endl;
 							sockEventHandler.closeSocket();
 						}
@@ -125,11 +125,11 @@ int main(int argc, char *argv[])
 					if (sendsize == -1) {
 						printErrorWithExit(strerror(errno));
 					}
-					std::cout << "close fd = " << curSock->getSockFd() << std::endl;
-					sockEventHandler.closeSocket();
+					// std::cout << "close fd = " << curSock->getSockFd() << std::endl;
+					// sockEventHandler.closeSocket();
 				}
 			} 
 		}
 	}
-	return 0;
+	return (0);
 }
