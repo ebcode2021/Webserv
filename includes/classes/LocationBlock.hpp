@@ -4,8 +4,8 @@
 # include "ServerBlock.hpp"
 # include "LimitExcept.hpp"
 
-class LocationBlock : public ServerBlock {
-
+class LocationBlock : public ServerBlock
+{
 	private :
 		std::string		_path;
 		LimitExcept		_limitExcept;

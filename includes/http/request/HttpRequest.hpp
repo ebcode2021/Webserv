@@ -27,15 +27,15 @@ class	HttpRequest
 		//HttpRequest& operator=(const HttpRequest&);
 
 		// getter, setter
-		HttpRequestLine&						getRequestLine() ;
+		HttpRequestLine&					getRequestLine() ;
 		HttpRequestHeader&					getRequestField() ;
-		HttpBody&								getBody() ;
+		HttpBody&							getBody() ;
 
-		void										setHeader(std::vector<std::string>&);
-		void										setBody(const std::string&);
+		void								setHeader(std::vector<std::string>&);
+		void								setBody(const std::string&);
 
-		void										setRequestLine(std::vector<std::string>);
-		void										setHeaderField(std::map<std::string, std::string>);
+		void								setRequestLine(std::vector<std::string>);
+		void								setHeaderField(std::map<std::string, std::string>);
 
 		// parser
 		static void 								parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);

@@ -19,7 +19,7 @@ class	HttpRequestHeader
 		HttpRequestHeader();
 	
 		// getter, setter
-		std::string			getHost();
+		std::string			getHost() const;
 		std::string			getUserAgent();
 		std::string			getConnection();
 		std::string			getContentType();

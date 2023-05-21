@@ -25,16 +25,16 @@ class	HttpResponse
 
 	public :
 		// constructor
-		HttpResponse(); 
+		HttpResponse();
 		HttpResponse(Config&, HttpRequest&);
 		HttpResponse& operator=(const HttpResponse&);
 
 		// setter
-		//void	setResponseLine(Config&, const HttpRequestLine&);
-		void	setResponseField();
-		void	setBody();
+		void	setResponseLine(const HttpStatus&);
+		void	setResponseHeader(const HttpRequestHeader&);
+		void	setBody(const std::string&);
 
 		// getter
-
+		std::string	getResponse();
 };
 #endif

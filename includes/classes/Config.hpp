@@ -2,7 +2,7 @@
 # define CONFIG_HPP
 
 # include "ServerInfo.hpp"
-
+# include "HttpRequestHeader.hpp"
 
 class	Config {
 	private :
@@ -10,12 +10,17 @@ class	Config {
 
 	public :
 		Config(std::string);
+
 		static bool fileCheck(std::string);
 		//test
 		static bool	fileCheck(int, char *[]);
 		//void	printServerList();
 
 		void	addServer(std::ifstream &);
+
+		//ServerInfo&	getServer(const HttpRequestHeader&);
+		//size_t	getServerListSize();
+		std::vector<ServerInfo>&	getServerList();
 };
 
 #endif

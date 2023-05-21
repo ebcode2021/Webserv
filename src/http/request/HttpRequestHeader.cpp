@@ -4,7 +4,7 @@
 HttpRequestHeader::HttpRequestHeader() : _contentType("text/html"), _transferEncoding("identity") {}
 
 /* getter */
-std::string HttpRequestHeader::getHost() { return(this->_host); }
+std::string HttpRequestHeader::getHost() const { return(this->_host); }
 
 std::string HttpRequestHeader::getUserAgent() { return(this->_userAgent); }
 

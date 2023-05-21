@@ -6,6 +6,12 @@ ServerInfo::ServerInfo(ServerBlock &serverBlcok, std::vector<LocationBlock> &loc
 }
 
 
+///////////
+ServerBlock&	ServerInfo::getServerBlock() { return(this->_serverBlock); }
+
+
+
+
 // test
 using namespace std;
 void	ServerInfo::printServerInfo() {

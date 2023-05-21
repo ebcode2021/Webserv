@@ -20,24 +20,29 @@ static const std::map<int, std::string> httpStatusMap;
 // 	{ 505, "HTTP Version Not Supported" }
 // };
 
+std::map<int, std::string>	init()
+{
+	std::map<int, std::string> a;
+
+	return(a);
+}
+
 class	HttpStatus
 {
 	private :
 		int			_statusCode;
 		std::string	_reason;
+		//static const std::map<int, std::string>	_httpStatusMap;
 
 	public :
 		// constructor
 		HttpStatus();
-		HttpStatus(const int);
+		HttpStatus(int);
 		
 		// getter, setter
+		std::map<int, std::string>& getmap();
 		int			getStatusCode() const;
 		std::string	getReason() const;
-
-		void		setStatusCode(const int);
-		void		setReason(const std::string&);
-		void		setStatus();
 };
 
 #endif

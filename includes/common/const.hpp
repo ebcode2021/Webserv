@@ -53,4 +53,6 @@ const std::string HTTP_VERSION = "HTTP/1.1";
 
 const std::string SP = " ";
 
+const std::string SERVER_NAME = "webserv/1.0.0";
+
 #endif

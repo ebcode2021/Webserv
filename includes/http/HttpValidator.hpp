@@ -7,28 +7,25 @@
 # include "HttpRequestHeader.hpp"
 # include "HttpBody.hpp"
 # include "Config.hpp"
+# include "ServerInfo.hpp"
+# include "LocationBlock.hpp"
 
 namespace	HttpValidator
 {
 	// check method and http-version
-	void	ValidateRequestLine(Config&, const HttpRequestLine&);
+	void		CheckRequestSyntax(const HttpRequestLine&);
+	void		CheckRequestHeaderSyntax(const HttpRequestHeader&);
+
+	void		MethodPermitted(LocationBlock&, std::string&);
 }
 
 namespace	HttpHandler
 {
-	// void	ValidateRequestLine(Config&, const HttpRequestLine&);
-	//void	ValidateRequestHeader(Config&, const HttpRequestHeader&);
-	//void	ValidateRequestBody(Config&, const HttpBody&);
+	ServerInfo&		findServerInfo(Config&, const HttpRequestHeader&);
+	LocationBlock&	findLocation(ServerInfo&, const std::string&);
+
+	// autoIndex 처리
+	std::string		generateResponseBody(ServerBlock&, LocationBlock&);
 }
-
-namespace	ResponseHandler
-{
-	void	setSuccessStatas();
-}
-
-// namespace	ResponseHandler
-// {
-
-// }
 
 #endif

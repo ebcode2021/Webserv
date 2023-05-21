@@ -135,3 +135,9 @@ void	Config::addServer(std::ifstream & confFile) {
 }
 
 
+
+////////////////////
+
+size_t	Config::getServerListSize() { return(this->_serverList.size()); }
+
+std::vector<ServerInfo>&	Config::getServerList() { return(this->_serverList); }
