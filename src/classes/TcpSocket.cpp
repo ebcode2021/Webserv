@@ -166,10 +166,12 @@ std::string TcpSocket::chunkedEncoding()
 	while (1)
 	{
 		pos = this->_buf.find("\r\n");
+		std::cout << "pos = " << pos << std::endl;
 		if (pos == std::string::npos)
 			break ;
 		chunkSizeString = this->_buf.substr(0, pos);
 		int chunkSize = std::stoi(chunkSizeString, nullptr, 16);
+		std::cout << chunkSize << std::endl;
 		if (chunkSize == 0) {
 			this->setReadMode(END);
 			break ;
@@ -177,6 +179,7 @@ std::string TcpSocket::chunkedEncoding()
 		this->_buf.erase(0, pos + 2);
 		std::cout << _buf.substr(0, chunkSize) << std::endl;
 		body += _buf.substr(0, chunkSize);
+		this->_buf.erase(0, chunkSize);
 	}
 	return (body);
 }

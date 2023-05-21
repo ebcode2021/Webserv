@@ -1,6 +1,6 @@
-3\r\n
+3
 ABC
-5\r\n
+5
 DEFGH
-0\r\n
-\r\n
+0
+

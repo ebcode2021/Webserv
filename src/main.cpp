@@ -98,6 +98,9 @@ int main(int argc, char *argv[])
 					else {
 						std::cout << "read fd = " << curSock->getSockFd() << std::endl;
 						int ret = sockEventHandler.dataRecv();
+						std::cout << "=============================" << std::endl;
+								std::cout << curSock->getString() << std::endl;
+						std::cout << "=============================" << std::endl;
 						if (ret == -1) {
 							std::cout << strerror(errno) << std::endl;
 							printErrorWithExit("error: recv()");
@@ -109,6 +112,9 @@ int main(int argc, char *argv[])
 						else {
 							if (curSock->getReadMode() == HEADER) {
 								curSock->setRequestHeader();
+								std::cout << "=============================" << std::endl;
+								std::cout << curSock->getString() << std::endl;
+								std::cout << "=============================" << std::endl;
 								if (curSock->getRequest().getHttpRequestLine().getMethod() == "GET")
 									curSock->setReadMode(END);
 								else if (curSock->getRequest().getHttpRequestHeader().getTransferEncoding() == "chunked")
