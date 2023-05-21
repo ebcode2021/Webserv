@@ -149,6 +149,11 @@ void	TcpSocket::setRequestHeader()
 	this->_buf = body;
 }
 
+static std::string chunkedEncoding()
+{
+	
+}
+
 void	TcpSocket::setRequestBody()
 {
 	std::string encodedBuf;
@@ -160,7 +165,7 @@ void	TcpSocket::setRequestBody()
 	}
 	else if (this->getReadMode() == CHUNKED)
 	{
-		encodedBuf = asdfjnikmlo();
+		encodedBuf = chunkedEncoding();
 	}
 	this->_request.setBody(encodedBuf);
 }
