@@ -7,7 +7,7 @@
 # include "HttpBody.hpp"
 
 # include "Config.hpp"
-# include "TcpSocket.hpp"
+# include "HttpRequest.hpp"
 
 // Response-Header
 	// Response-Line
@@ -22,6 +22,7 @@ class	HttpResponse
 		HttpResponseHeader	_httpResponseHeader;
 		HttpBody			_httpBody;
 
+
 	public :
 		// constructor
 		HttpResponse(); 
@@ -29,7 +30,7 @@ class	HttpResponse
 		HttpResponse& operator=(const HttpResponse&);
 
 		// setter
-		void	setResponseLine(Config&, const HttpRequestLine&);
+		//void	setResponseLine(Config&, const HttpRequestLine&);
 		void	setResponseField();
 		void	setBody();
 

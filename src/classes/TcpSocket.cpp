@@ -162,7 +162,7 @@ void	TcpSocket::setRequestBody()
 	{
 
 	}
-	this->_request.setBody(encodingBody);
+	this->_request.setBody(encodedBuf);
 }
 HttpRequest&	TcpSocket::getRequest() { return(this->_request); }
 

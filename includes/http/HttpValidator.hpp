@@ -16,11 +16,15 @@ namespace	HttpValidator
 
 namespace	HttpHandler
 {
-	void	ValidateRequestLine(Config&, const HttpRequestLine&);
-	void	ValidateRequestHeader(Config&, const HttpRequestHeader&);
-	void	ValidateRequestBody(Config&, const HttpBody&);
+	// void	ValidateRequestLine(Config&, const HttpRequestLine&);
+	//void	ValidateRequestHeader(Config&, const HttpRequestHeader&);
+	//void	ValidateRequestBody(Config&, const HttpBody&);
 }
 
+namespace	ResponseHandler
+{
+	void	setSuccessStatas();
+}
 
 // namespace	ResponseHandler
 // {
