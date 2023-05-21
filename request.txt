@@ -1,0 +1,6 @@
+3\r\n
+ABC
+5\r\n
+DEFGH
+0\r\n
+\r\n

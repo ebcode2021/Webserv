@@ -40,7 +40,7 @@ class	HttpRequest
 		// parser
 		static void 								parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
 		const HttpRequestLine&		getHttpRequestLine();
-		const HttpRequestHeader&	getHttpRequestHeader();
+		HttpRequestHeader&	getHttpRequestHeader();
 
 		// static
 		// static void parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);

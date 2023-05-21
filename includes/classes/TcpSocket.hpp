@@ -28,7 +28,7 @@ class TcpSocket
 		// getter, setter
 		int	 			getSockFd();
 		int	 			getSendByte();
-		int 			getRecvByte();
+		size_t 			getRecvByte();
 		char*			getBuf();
 		std::string 	getString();
 		
@@ -41,15 +41,21 @@ class TcpSocket
 		
 		void			setRequestHeader();
 		void			setRequestBody();
+
+		void			setReadMode(int);
 		//
 		void	bufClear();
 
 		int		getReadMode();
+
+		void	addReadSize(size_t);
 		
 		void	setBufbyIndex(int, char);
 
 
 		void	changeReadMode();
+
+		std::string chunkedEncoding();
 
 
 		//test

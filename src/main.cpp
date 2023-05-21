@@ -107,11 +107,19 @@ int main(int argc, char *argv[])
 							sockEventHandler.closeSocket();
 						}
 						else {
-							if (curSock->getReadMode() == HEADER)
-								curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
-							else if (curSock->getReadMode() == POST)
+							if (curSock->getReadMode() == HEADER) {
+								curSock->setRequestHeader();
+								if (curSock->getRequest().getHttpRequestLine().getMethod() == "GET")
+									curSock->setReadMode(END);
+								else if (curSock->getRequest().getHttpRequestHeader().getTransferEncoding() == "chunked")
+									curSock->setReadMode(CHUNKED);
+								else
+									curSock->setReadMode(IDENTITY);
+							}
+							std::cout << curSock->getRequest().toString() << std::endl;
+							if (curSock->getReadMode() != END)
 								curSock->setRequestBody();
-							else if (curSock->getReadMode() == END)
+							else
 							{
 								// [은비 추가 코드] ************************
 								// response 생성자에서 처리.
