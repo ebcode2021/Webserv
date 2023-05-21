@@ -16,7 +16,6 @@ SRCS =  main.cpp	\
 		classes/Config.cpp	\
 		classes/LocationBlock.cpp	\
 		classes/ServerBlock.cpp		\
-		classes/ServerList.cpp		\
 		classes/ErrorPage.cpp		\
 		classes/LimitExcept.cpp		\
 		classes/ServerInfo.cpp		\
@@ -25,8 +24,10 @@ SRCS =  main.cpp	\
 		classes/SocketEventHandler.cpp \
 		http/request/HttpRequest.cpp \
 		http/request/HttpRequestHeader.cpp \
-		http/request/HttpRequestLine.cpp 
-
+		http/request/HttpRequestLine.cpp \
+		http/response/HttpResponse.cpp \
+		http/HttpStatus.cpp \
+		http/HttpValidator.cpp
 
 
 SRCS_DIR = src/
