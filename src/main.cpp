@@ -98,9 +98,9 @@ int main(int argc, char *argv[])
 					else {
 						std::cout << "read fd = " << curSock->getSockFd() << std::endl;
 						int ret = sockEventHandler.dataRecv();
-						std::cout << "=============================" << std::endl;
-								std::cout << curSock->getString() << std::endl;
-						std::cout << "=============================" << std::endl;
+						std::cout << "============body=============" << std::endl;
+						std::cout << curSock->getString() << std::endl;
+						std::cout << "============body=============" << std::endl;
 						if (ret == -1) {
 							std::cout << strerror(errno) << std::endl;
 							printErrorWithExit("error: recv()");
@@ -112,9 +112,9 @@ int main(int argc, char *argv[])
 						else {
 							if (curSock->getReadMode() == HEADER) {
 								curSock->setRequestHeader();
-								std::cout << "=============================" << std::endl;
+								std::cout << "===========header============" << std::endl;
 								std::cout << curSock->getString() << std::endl;
-								std::cout << "=============================" << std::endl;
+								std::cout << "===========header============" << std::endl;
 								if (curSock->getRequest().getHttpRequestLine().getMethod() == "GET")
 									curSock->setReadMode(END);
 								else if (curSock->getRequest().getHttpRequestHeader().getTransferEncoding() == "chunked")
@@ -125,12 +125,12 @@ int main(int argc, char *argv[])
 							std::cout << curSock->getRequest().toString() << std::endl;
 							if (curSock->getReadMode() != END)
 								curSock->setRequestBody();
-							else
+							if (curSock->getReadMode() == END)
 							{
 								// [은비 추가 코드] ************************
 								// response 생성자에서 처리.
-								HttpResponse response(config, curSock->getRequest());
-								curSock->setResponse(response);
+								//HttpResponse response(config, curSock->getRequest());
+								//curSock->setResponse(response);
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
 						}
