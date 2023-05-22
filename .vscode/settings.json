@@ -72,6 +72,7 @@
 		"iterator": "cpp",
 		"unordered_set": "cpp",
 		"utility": "cpp",
-		"set": "cpp"
+		"set": "cpp",
+		"filesystem": "cpp"
 	}
 }

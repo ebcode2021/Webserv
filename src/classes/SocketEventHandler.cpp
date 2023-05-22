@@ -79,6 +79,7 @@ std::string createHttpResponse(const std::string& body) {
     response << "Content-Type: text/html\r\n";
 	response << "Connection: close\r\n";
     response << "Content-Length: " << body.length() << "\r\n";
+	//response << "Transfer-Encoding : chunked\r\n";
     response << "\r\n";
     response << body;
 

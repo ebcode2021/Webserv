@@ -20,7 +20,7 @@ class TcpSocket
 		
 		int				socketAccept();
 		void			socketBind(int);
-		void			socketListen();
+		void			socketListen();     
 
 		void			changeToNonblocking();
 		void			bufJoin(char *);
