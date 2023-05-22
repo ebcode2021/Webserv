@@ -22,7 +22,6 @@ class	HttpResponse
 		HttpResponseHeader	_httpResponseHeader;
 		HttpBody			_httpBody;
 
-
 	public :
 		// constructor
 		HttpResponse();
@@ -34,7 +33,8 @@ class	HttpResponse
 		void	setResponseHeader(const HttpRequestHeader&);
 		void	setBody(const std::string&);
 
-		// getter
-		std::string	getResponse();
+		// getter, setter
+		const char*	getResponse();
+		void		setResponse(const HttpRequest&, int);
 };
 #endif

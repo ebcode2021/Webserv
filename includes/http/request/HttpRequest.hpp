@@ -38,7 +38,9 @@ class	HttpRequest
 		void								setHeaderField(std::map<std::string, std::string>);
 
 		// parser
-		static void 								parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
+		static void 						parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
+		
+		
 		const HttpRequestLine&		getHttpRequestLine();
 		const HttpRequestHeader&	getHttpRequestHeader();
 

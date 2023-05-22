@@ -115,7 +115,11 @@ int main(int argc, char *argv[])
 							{
 								// [은비 추가 코드] ************************
 								// response 생성자에서 처리.
+
+								// request -> validate request -> (처리) ->  response
+								
 								HttpResponse response(config, curSock->getRequest());
+								// HttpResponse response = makeResponse(인자 etc);
 								curSock->setResponse(response);
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
