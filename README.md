@@ -1,10 +1,8 @@
 #Webserv
 
-0518(목)
+0525(월급날)
 -> (은비) 
--> GET 요청
--> requestHandler() == host가 맞는지. || exception..!
--> response (40x, 50x 줘야 하니까.)
+-> response....언제끝나
 
 -> (민수칸)
--> POST 요청일 때, 나눠받는거
+-> cgi 공부..?

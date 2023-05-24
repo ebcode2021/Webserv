@@ -25,7 +25,7 @@ class	HttpResponse
 	public :
 		// constructor
 		HttpResponse();
-		HttpResponse(Config&, HttpRequest&);
+		//HttpResponse(Config&, HttpRequest&);
 		HttpResponse& operator=(const HttpResponse&);
 
 		// setter

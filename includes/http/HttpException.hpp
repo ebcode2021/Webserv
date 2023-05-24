@@ -13,8 +13,12 @@ class	ResponseException
 	public :
 		explicit	ResponseException(const int statusCode)
 			:_httpStatus(statusCode){}
+
+		
 		
 		HttpStatus httpStatus() const { return(_httpStatus); }
+
+		// method
 };
 
 #endif

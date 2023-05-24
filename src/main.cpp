@@ -3,6 +3,7 @@
 #include "KqueueHandler.hpp"
 #include "SocketEventHandler.hpp"
 #include "HttpResponse.hpp"
+#include "HttpValidator.hpp"
 
 
 /*
@@ -77,11 +78,7 @@ int main(int argc, char *argv[])
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
 				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
 
-				
-				// currequest
-				// method = curRequest.getMethod()
-				// cursoccket
-				// method = cursocket
+
 				sockEventHandler.setSocket(curSock);
 				if (curEvent.filter == EVFILT_READ)
 				{
@@ -107,20 +104,39 @@ int main(int argc, char *argv[])
 							sockEventHandler.closeSocket();
 						}
 						else {
-							if (curSock->getReadMode() == HEADER)
-								curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
-							else if (curSock->getReadMode() == POST)
-								curSock->setRequestBody();
-							else if (curSock->getReadMode() == END)
+							//if (curSock->getReadMode() == HEADER)
+							curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
+							//else if (curSock->getReadMode() == POST)
+							curSock->setRequestBody();
+							std::cout << curSock->getRequest().toString() << std::endl;
+							//else if (curSock->getReadMode() == END)
 							{
-								// [은비 추가 코드] ************************
-								// response 생성자에서 처리.
+								////////////////////////////
+								// request -> validate request -> (process) -> generate response -> response
+								std::cout << "--------------------------" << std::endl;
 
-								// request -> validate request -> (처리) ->  response
+								HttpRequest httpRequest = curSock->getRequest();
+
+								HttpPage httpPage = HttpHandler::requestHandler(config, httpRequest);
+								//HttpHandler::processRequest(config, httpPage); //200, 300
+								// HttpResponse response = response.generateResponse(httpRequest, httpPage);
+								// curSock->setResponse(response);
+								//if (httpP)
+								// statusCode -> ..?
+								// error_page에 따라서. error_page 400 50x.html;
 								
-								HttpResponse response(config, curSock->getRequest());
-								// HttpResponse response = makeResponse(인자 etc);
-								curSock->setResponse(response);
+								// responseException
+								// {
+								// 	ex.httpStatus().// 400, 500 -> body
+
+								// }
+								
+								// basdf : public ResponseException
+								// {
+									
+								// }
+
+								
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
 						}

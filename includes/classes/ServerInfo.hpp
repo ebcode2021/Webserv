@@ -8,7 +8,7 @@
 class ServerInfo {
 	private :
 		ServerBlock _serverBlock;
-		std::vector<LocationBlock> locationList;
+		std::vector<LocationBlock> _locationList;
 
 	public :
 		ServerInfo() {};
@@ -19,6 +19,7 @@ class ServerInfo {
 
 		///////
 		ServerBlock&	getServerBlock();
+		std::vector<LocationBlock>	getLocationList();
 		
 		// static
 		//ServerInfo&	findServerInfo(const HttpRequestHeader&);

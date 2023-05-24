@@ -12,8 +12,8 @@ HttpStatus::HttpStatus(const int statusCode)
 	this->_reason = it->second;
 }
 
-std::map<int, std::string>& HttpStatus::getmap()
-{
-	static std::map<int, std::string> statusMap = init();
-	return (statusMap);
-}
+// std::map<int, std::string>& HttpStatus::getmap()
+// {
+// 	static std::map<int, std::string> statusMap = init();
+// 	return (statusMap);
+// }

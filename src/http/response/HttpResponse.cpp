@@ -5,74 +5,74 @@
 /* constructor */
 HttpResponse::HttpResponse(){}
 
-HttpResponse::HttpResponse(Config& config, HttpRequest& request)
-{
+// HttpResponse::HttpResponse(Config& config, HttpRequest& request)
+// {
 
-	try
-	{
-		// HttpRequestLine		requestLine = request.getRequestLine();
-		// HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
-		// std::string			method = requestLine.getMethod();
+// 	// try
+// 	// {
+// 	// 	// HttpRequestLine		requestLine = request.getRequestLine();
+// 	// 	// HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
+// 	// 	// std::string			method = requestLine.getMethod();
 
-		// // 1) Syntax Check
-		// HttpValidator::CheckRequestLineSyntax(requestLine);
-		// HttpValidator::CheckRequestHeaderSyntax(requestHeader); // default value 생각
+// 	// 	// // 1) Syntax Check
+// 	// 	// HttpValidator::CheckRequestLineSyntax(requestLine);
+// 	// 	// HttpValidator::CheckRequestHeaderSyntax(requestHeader); // default value 생각
 
-		// // 2) find Server
-		// ServerInfo serverInfo = HttpHandler::findServerInfo(config, requestHeader);
+// 	// 	// // 2) find Server
+// 	// 	// ServerInfo serverInfo = HttpHandler::findServerInfo(config, requestHeader);
 
-		// // 3) validate Location
-		// LocationBlock location = HttpHandler::findLocation(serverInfo, requestLine.getRequestURI());
-		// 3-1) location block과 일치하는 url가 있나없나 확인. 
-		// 	-> 있으면 location block의 설정 참고 (index가 안되면 autoindex 확인)
-		//	-> location block에 없으면 -> server block 설정 참고(초기화 리스트 default root 추가)
+// 	// 	// // 3) validate Location
+// 	// 	// LocationBlock location = HttpHandler::findLocation(serverInfo, requestLine.getRequestURI());
+// 	// 	// 3-1) location block과 일치하는 url가 있나없나 확인. 
+// 	// 	// 	-> 있으면 location block의 설정 참고 (index가 안되면 autoindex 확인)
+// 	// 	//	-> location block에 없으면 -> server block 설정 참고(초기화 리스트 default root 추가)
 
-		// 어쨋거나, setBOdy() 에서 오픈할 파일경로전달.
-		// // 4) limit_except Check
-		// HttpValidator::MethodPermitted(location, method);
-		// 	// 메서드가 허용된지 확인하는 로직
-		// 	// 허용되지 않으면 예외를 던질 수 있음
+// 	// 	// 어쨋거나, setBOdy() 에서 오픈할 파일경로전달.
+// 	// 	// // 4) limit_except Check
+// 	// 	// HttpValidator::MethodPermitted(location, method);
+// 	// 	// 	// 메서드가 허용된지 확인하는 로직
+// 	// 	// 	// 허용되지 않으면 예외를 던질 수 있음
 
-		HttpValidator::validateRequest(config, request);
-		// fielUploade or fileDelete();
-		setResponse(request, 200);
+// 	// 	HttpValidator::validateRequest(config, request);
+// 	// 	// fielUploade or fileDelete();
+// 	// 	setResponse(request, 200);
 		
-		// 5) method별 response 생성
-		if (method == "GET")
-		{
-			// setResponse
-			// auto-index?
-			// get(o) , 
-			this->setResponseLine(HttpStatus(200));
-			// auto-index
-			this->setBody(HttpHandler::generateResponseBody(serverInfo.getServerBlock(), location));
-			this->setResponseHeader(requestHeader);
-		}
-		else if (method == "POST")
-		{
+// 	// 	// 5) method별 response 생성
+// 	// 	if (method == "GET")
+// 	// 	{
+// 	// 		// setResponse
+// 	// 		// auto-index?
+// 	// 		// get(o) , 
+// 	// 		this->setResponseLine(HttpStatus(200));
+// 	// 		// auto-index
+// 	// 		this->setBody(HttpHandler::generateResponseBody(serverInfo.getServerBlock(), location));
+// 	// 		this->setResponseHeader(requestHeader);
+// 	// 	}
+// 	// 	else if (method == "POST")
+// 	// 	{
 			
-		}
-		else if (method == "DELETE")
-		{
+// 	// 	}
+// 	// 	else if (method == "DELETE")
+// 	// 	{
 
-		}
-	}
-	catch (ResponseException &e)
-	{
-		setResponse(request, e.httpStatus()); // 400
-		//setResponse(request, 200);
-	}
-	catch () // 500?
-	{
+// 	// 	}
+// 	// }
+// 	// catch (ResponseException &e)
+// 	// {
+// 	// 	setResponse(request, e.httpStatus()); // 400
+// 	// 	//setResponse(request, 200);
+// 	// }
+// 	// catch () // 500?
+// 	// {
 
-	}
+// 	// }
 	
-	setResponse(config, request, 200);
-	// default-error-page
-		// ** auto-index
-	// 4) 맞다면 -> 맞춰서 
+// 	// setResponse(config, request, 200);
+// 	// // default-error-page
+// 	// 	// ** auto-index
+// 	// // 4) 맞다면 -> 맞춰서 
 
-}
+// }
 
 HttpResponse&	HttpResponse::operator=(const HttpResponse& prev)
 {
@@ -82,11 +82,13 @@ HttpResponse&	HttpResponse::operator=(const HttpResponse& prev)
 
 void	HttpResponse::setResponseLine(const HttpStatus& httpStatus)
 {
-	this->_httpResponseLine.setHttpStatus(httpStatus);
+	(void)httpStatus;
+	//this->_httpResponseLine.setHttpStatus(httpStatus);
 }
 
 void	HttpResponse::setResponseHeader(const HttpRequestHeader& requestHeader)
 {
+	(void)requestHeader;
 	//this->_httpResponseHeader.setContentLength(this->_httpBody.getBodySize());
 }
 

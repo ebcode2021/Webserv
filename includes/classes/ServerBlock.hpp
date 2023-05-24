@@ -32,6 +32,7 @@ class ServerBlock {
 
 		////
 		std::vector<std::string>	getServerNameList();
+		std::vector<int>			getListenList();
 
 
 		//test

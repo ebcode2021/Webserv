@@ -3,15 +3,17 @@
 
 # include "TcpSocket.hpp"
 # include "webserv.hpp"
-# include "HttpRequestLine.hpp"
-# include "HttpRequestHeader.hpp"
-# include "HttpBody.hpp"
+# include "HttpRequest.hpp"
 # include "Config.hpp"
-# include "ServerInfo.hpp"
-# include "LocationBlock.hpp"
+# include "HttpException.hpp"
+# include "HttpPage.hpp"
+
 
 namespace	HttpValidator
 {
+	// Validate request
+	void		validateRequest(Config&, HttpRequest&);
+
 	// check method and http-version
 	void		CheckRequestLineSyntax(const HttpRequestLine&);
 	void		CheckRequestHeaderSyntax(const HttpRequestHeader&);
@@ -19,20 +21,25 @@ namespace	HttpValidator
 	void		validateURI(Config&, const HttpRequest&);
 
 	void		validateServer(Config&, const HttpRequestHeader&);
-	void		validateLocation(ServerInfo&, const std::string&);
-	void		MethodPermitted(LocationBlock&, std::string&);
+	void		validateLocation(HttpPage&, const std::string&);
 
-	// Validate request
-	void		validateRequest(Config&, HttpRequest&);
+
+	void		MethodPermitted(LocationBlock&, std::string&);
 }
+
 
 namespace	HttpHandler
 {
-	ServerInfo&		findServerInfo(Config&, const HttpRequestHeader&);
-	LocationBlock&	findLocation(ServerInfo&, const std::string&);
+	ServerInfo		findServerInfo(Config&, const std::string&);
+	//ServerInfo		compareServerData(std::vector<ServerInfo>&, std::string&, size_t);
+
+	LocationBlock	findLocation(HttpPage&, const std::string&);
 
 	// autoIndex 처리
 	std::string		generateResponseBody(ServerBlock&, LocationBlock&);
+	void			processRequest();
+
+	HttpPage		requestHandler(Config&, HttpRequest&);
 }
 
 #endif
