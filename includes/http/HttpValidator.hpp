@@ -31,15 +31,19 @@ namespace	HttpValidator
 namespace	HttpHandler
 {
 	ServerInfo		findServerInfo(Config&, const std::string&);
+	LocationBlock	findLocation(ServerInfo&, const std::string&);
+
 	//ServerInfo		compareServerData(std::vector<ServerInfo>&, std::string&, size_t);
 
-	LocationBlock	findLocation(HttpPage&, const std::string&);
 
 	// autoIndex 처리
 	std::string		generateResponseBody(ServerBlock&, LocationBlock&);
 	void			processRequest();
 
 	HttpPage		requestHandler(Config&, HttpRequest&);
+	HttpPage		setPageFromConfigAndRequest(Config&, HttpRequest&);
+
+
 }
 
 #endif

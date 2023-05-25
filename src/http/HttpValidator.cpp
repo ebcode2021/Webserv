@@ -86,30 +86,20 @@ ServerInfo	HttpHandler::findServerInfo(Config& config, const std::string& host)
 	return (defaultServer);
 }
 
-HttpPage		HttpHandler::requestHandler(Config& config, HttpRequest& request)
+HttpPage		HttpHandler::setPageFromConfigAndRequest(Config& config, HttpRequest& request)
 {
-	HttpRequestLine		requestLine = request.getRequestLine();
-	HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
-	std::string			method = requestLine.getMethod();
-
-	ServerInfo	serverInfo = HttpHandler::findServerInfo(config, requestHeader.getHost());
-	// locationlist
-	std::cout << "server 선택 완료" << std::endl;
-
-	// set default httpPage
-	HttpPage httpPage(serverInfo);
-
-	try
-	{
-		// try-catch 부분은 generateresponse
-		HttpValidator::CheckRequestLineSyntax(requestLine); //version, method
-		LocationBlock location = HttpHandler::findLocation(httpPage, requestLine.getRequestURI());
-		HttpValidator::MethodPermitted(location, method);
-	}
-	catch (ResponseException &ex)
-	{
-		std::cout << "우리가 볼 수 있게 로그나 남길까" << std::endl;
-	}
+	// generate httpPage
+	HttpPage httpPage;
+	HttpStatus httpStatus;
+	
+	const ServerInfo curServerInfo = HttpHandler::findServerInfo(config, request.getHttpRequestHeader().getHost());
+	// select and save Server Data
+	ServerInfo		serverInfo = HttpHandler::findServerInfo(config, request.getHttpRequestHeader().getHost());
+	httpPage.setServerData(serverInfo.getServerBlock());
+	
+	// select and save Location Data
+	LocationBlock	location  = HttpHandler::findLocation(serverInfo, request.getRequestLine().getRequestURI());
+	httpPage.setLocationData(location);
 	
 	return (httpPage);
 }
@@ -145,8 +135,13 @@ HttpPage		HttpHandler::requestHandler(Config& config, HttpRequest& request)
 		// 에러페이지가 없는거라면 -> 404
 
 
-
-	
+	//index.html
+	//40x.html
+	//50x.html
+	// 	try-catch 부분은 generateresponse
+	// HttpValidator::CheckRequestLineSyntax(requestLine); //version, method
+	// LocationBlock location = HttpHandler::findLocation(httpPage, requestLine.getRequestURI());
+	// HttpValidator::MethodPermitted(location, method);
 // 	int	command_handler(t_exec_block *exec)
 // {
 // 	char		**env_lst;

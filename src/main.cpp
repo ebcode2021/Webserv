@@ -117,10 +117,15 @@ int main(int argc, char *argv[])
 
 								HttpRequest httpRequest = curSock->getRequest();
 
-								HttpPage httpPage = HttpHandler::requestHandler(config, httpRequest);
-								//HttpHandler::processRequest(config, httpPage); //200, 300
-								// HttpResponse response = response.generateResponse(httpRequest, httpPage);
+													// /HttpPage httpPage = HttpHandler::setPageFromConfigAndRequest(config, httpRequest);
+													// 1. server, location block 정하기(따로 저장)
+													// HttpPage = HttpHandler::setPage;
+								// 3. response 마저 만들기
+								// HttpResponse response = HttpResponse::createResponse(httpRequest);
 								// curSock->setResponse(response);
+										// 2. processing
+										// HttpHandler::processRequest(config, httpPage); // createBody(), post, delete
+								
 								//if (httpP)
 								// statusCode -> ..?
 								// error_page에 따라서. error_page 400 50x.html;

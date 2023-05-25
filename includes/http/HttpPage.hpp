@@ -12,14 +12,21 @@ class	HttpPage
 		HttpStatus					_httpStatus;
 
 		// default page set
-		std::string					_defaultRoot;
-		std::string					_defaultPath; //index
-		std::string					_default40xPath; 
-		std::string					_default50xPath;
+		bool						defaultSwitch;
+		// default
 
 		// "error_page" keyword in server_block
-		ErrorPage					_40xErrorPage;
-		ErrorPage					_50xErrorPage;
+		std::vector<ErrorPage>					_ServerErrorPage;
+		std::vector<ErrorPage>					_locationErrorPage;
+		//index index.html
+		ServerBlock					_serverBlock;
+		LocationBlock				_locationBlock;
+
+		// 40x, 50x -> 생성하는 함수
+		// index.html
+
+
+		// location error_page
 
 		// "root", "index" keyword (priority : location block > server block)
 		std::string					_serverRoot;
@@ -29,14 +36,18 @@ class	HttpPage
 		std::string					_returnPage;
 
 		// auto_index
-		bool						_isAutoIndex; // on을 줄 경우에는 무조건 보이게
-
+		bool						_isAutoIndex; // on을 줄 경우에는 무조건 보이게 "on"
+		
+		
 	public :
 		// constructor
+		HttpPage();
 		HttpPage(ServerInfo&);
 
 		// methods
 		HttpPage	saveLocationBlockData();
+		void		setServerData(ServerBlock&);
+		void		setLocationData(LocationBlock&);
 
 };
 
