@@ -26,15 +26,29 @@ class	HttpResponse
 		// constructor
 		HttpResponse();
 		//HttpResponse(Config&, HttpRequest&);
+
 		HttpResponse& operator=(const HttpResponse&);
 
 		// setter
-		void	setResponseLine(const HttpStatus&);
-		void	setResponseHeader(const HttpRequestHeader&);
+		void	setResponseLine(const HttpResponseLine&);
+		void	setResponseHeader(const HttpResponseHeader&);
 		void	setBody(const std::string&);
 
+		HttpResponseLine&	getResponseLine();
+		HttpResponseHeader&	getResponseHeader();
+		HttpBody&			getBody();
+
 		// getter, setter
-		const char*	getResponse();
-		void		setResponse(const HttpRequest&, int);
+		//const char*	getResponse();
+		//void		setResponse(const HttpRequest&, int);
+
+		// create
+		static HttpResponse&	createResponse(Config&, HttpRequest&);
+
+		// compose
+		static const HttpResponse&			composeResponse();
+		static const HttpResponseLine&		composeResponseLine();
+		static const HttpResponseHeader&	composeResponseHeader() ;
+		static const std::string&			composeBody();
 };
 #endif

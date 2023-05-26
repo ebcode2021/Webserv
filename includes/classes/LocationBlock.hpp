@@ -22,6 +22,8 @@ class LocationBlock : public ServerBlock
 		
 		//	test
 		void	printLocationBlock();
+
+		
 };
 
 #endif

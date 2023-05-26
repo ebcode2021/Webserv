@@ -21,6 +21,9 @@ class	Config {
 		//ServerInfo&	getServer(const HttpRequestHeader&);
 		//size_t	getServerListSize();
 		std::vector<ServerInfo>&	getServerList();
+
+		// 추가추가
+		ServerInfo&		findServerInfoByHost(const std::string&);
 };
 
 #endif

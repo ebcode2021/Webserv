@@ -9,7 +9,7 @@ void	HttpValidator::CheckRequestLineSyntax(const HttpRequestLine& requestLine)
 
 	// check http-version
 	if (requestLine.getVersion() != HTTP_VERSION)
-		throw ResponseException(505);// 505 HTTP Version Not Supported
+		throw ResponseException(505); // 505 HTTP Version Not Supported
 }
 
 // void	HttpValidator::CheckRequestHeaderSyntax(const HttpRequestHeader& requestHeader)
@@ -17,92 +17,9 @@ void	HttpValidator::CheckRequestLineSyntax(const HttpRequestLine& requestLine)
 
 // }
 
-ServerInfo	HttpHandler::findServerInfo(Config& config, const std::string& host)
-{
-	// default server : 127.0.0.1:8080
-
-	// request inform
-	std::vector<std::string>	splittedHost = split(host, ":");
-	std::string					serverName = splittedHost[0];
-	size_t						port = std::atoi(splittedHost[1].c_str());
-
-	// config inform
-	std::vector<ServerInfo>		serverList = config.getServerList();
-	size_t						serverListSize = serverList.size();
-	ServerInfo 					defaultServer = serverList[0];
-
-	// each data from ServerInfo
-	std::vector<std::string>	serverNameList;
-	size_t						serverNameListSize;
-	std::vector<int>			listenList;
-	size_t			 			listenListeSize;
-
-	// 1. compare 'server_list' and 'host' && compare 'listen' and 'port'
-	for (size_t i = 0; i < serverListSize; i++)
-	{
-		ServerBlock serverBlock = serverList[i].getServerBlock();
-
-		serverNameList = serverBlock.getServerNameList();
-		serverNameListSize = serverNameList.size();
-
-		listenList = serverBlock.getListenList();
-		listenListeSize = listenList.size();
-
-		for (size_t j = 0; j < serverNameListSize; j++)
-		{
-			if (serverNameList[j].compare(serverName) == 0)
-			{
-				for (size_t k = 1; k < listenListeSize; k++)
-				{
-					if (port == (size_t)listenList[k])
-						return (serverList[i]);
-				}
-			}
-		}
-	}
 
 	// 2. compare port
-	for (size_t i = 0; i < serverListSize; i++)
-	{
-		ServerBlock serverBlock = serverList[i].getServerBlock();
 
-		serverNameList = serverBlock.getServerNameList();
-		serverNameListSize = serverNameList.size();
-
-		listenList = serverBlock.getListenList();
-		listenListeSize = listenList.size();
-
-		for (size_t j = 0; j < serverNameListSize; j++)
-		{
-			for (size_t k = 1; k < listenListeSize; k++)
-			{
-				if (port == (size_t)listenList[k])
-					return (serverList[i]);
-			}
-		}
-	}
-
-	// 3. default Server
-	return (defaultServer);
-}
-
-HttpPage		HttpHandler::setPageFromConfigAndRequest(Config& config, HttpRequest& request)
-{
-	// generate httpPage
-	HttpPage httpPage;
-	HttpStatus httpStatus;
-	
-	const ServerInfo curServerInfo = HttpHandler::findServerInfo(config, request.getHttpRequestHeader().getHost());
-	// select and save Server Data
-	ServerInfo		serverInfo = HttpHandler::findServerInfo(config, request.getHttpRequestHeader().getHost());
-	httpPage.setServerData(serverInfo.getServerBlock());
-	
-	// select and save Location Data
-	LocationBlock	location  = HttpHandler::findLocation(serverInfo, request.getRequestLine().getRequestURI());
-	httpPage.setLocationData(location);
-	
-	return (httpPage);
-}
 	// ** index가 autoindex보다 더 높은 우선순위
 	// ** 
 	// root는 default로 세팅 : webserv의 경로 + resources/html까지의 경로
@@ -134,14 +51,6 @@ HttpPage		HttpHandler::setPageFromConfigAndRequest(Config& config, HttpRequest& 
 			// serverblock내 error_page도 없으면 -> default_error_page
 		// 에러페이지가 없는거라면 -> 404
 
-
-	//index.html
-	//40x.html
-	//50x.html
-	// 	try-catch 부분은 generateresponse
-	// HttpValidator::CheckRequestLineSyntax(requestLine); //version, method
-	// LocationBlock location = HttpHandler::findLocation(httpPage, requestLine.getRequestURI());
-	// HttpValidator::MethodPermitted(location, method);
 // 	int	command_handler(t_exec_block *exec)
 // {
 // 	char		**env_lst;

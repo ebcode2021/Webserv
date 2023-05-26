@@ -5,14 +5,44 @@
 /* constructor */
 HttpResponse::HttpResponse(){}
 
-// HttpResponse::HttpResponse(Config& config, HttpRequest& request)
-// {
+HttpResponse& HttpResponse::createResponse(Config& config, HttpRequest& httpRequest)
+{
+	HttpRequestLine		requestLine   = httpRequest.getHttpRequestLine();
+	HttpRequestHeader	requestHeader = httpRequest.getHttpRequestHeader();
+	HttpBody			requestBody   = httpRequest.getBody();
 
-// 	// try
-// 	// {
-// 	// 	// HttpRequestLine		requestLine = request.getRequestLine();
-// 	// 	// HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
-// 	// 	// std::string			method = requestLine.getMethod();
+	std::string			method = requestLine.getMethod();
+
+	// create response
+	HttpResponse	response; // x
+
+	// find server block and location block
+	ServerInfo		serverInfo  = config.findServerInfoByHost(requestHeader.getHost());
+	ServerBlock		serverBlock = serverInfo.getServerBlock();
+
+	// std::Vector<LocationBlock>의 0번째 index가 default
+	LocationBlock	locationBlock =  serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
+
+	exit(1);
+	try
+	{
+		HttpValidator::validateRequest(httpRequest, serverBlock, locationBlock);
+		if (method == "POST")
+			;
+		else if (method == "DELETE")
+			; // unset
+	}
+	catch(const ResponseException &ex)
+	{
+		// status 저장 해야댐
+		//response.getResponseLine().setHttpStatus(ex.httpStatus());
+	}
+	return (HttpResponse());
+}
+
+// response.setResponseLine(HttpResponse::createResponseLine());
+// response.setResponseHeader(HttpResponse::composeResponseHeader());
+// response.setBody(HttpResponse::composeBody());
 
 // 	// 	// // 1) Syntax Check
 // 	// 	// HttpValidator::CheckRequestLineSyntax(requestLine);
@@ -33,46 +63,6 @@ HttpResponse::HttpResponse(){}
 // 	// 	// 	// 메서드가 허용된지 확인하는 로직
 // 	// 	// 	// 허용되지 않으면 예외를 던질 수 있음
 
-// 	// 	HttpValidator::validateRequest(config, request);
-// 	// 	// fielUploade or fileDelete();
-// 	// 	setResponse(request, 200);
-		
-// 	// 	// 5) method별 response 생성
-// 	// 	if (method == "GET")
-// 	// 	{
-// 	// 		// setResponse
-// 	// 		// auto-index?
-// 	// 		// get(o) , 
-// 	// 		this->setResponseLine(HttpStatus(200));
-// 	// 		// auto-index
-// 	// 		this->setBody(HttpHandler::generateResponseBody(serverInfo.getServerBlock(), location));
-// 	// 		this->setResponseHeader(requestHeader);
-// 	// 	}
-// 	// 	else if (method == "POST")
-// 	// 	{
-			
-// 	// 	}
-// 	// 	else if (method == "DELETE")
-// 	// 	{
-
-// 	// 	}
-// 	// }
-// 	// catch (ResponseException &e)
-// 	// {
-// 	// 	setResponse(request, e.httpStatus()); // 400
-// 	// 	//setResponse(request, 200);
-// 	// }
-// 	// catch () // 500?
-// 	// {
-
-// 	// }
-	
-// 	// setResponse(config, request, 200);
-// 	// // default-error-page
-// 	// 	// ** auto-index
-// 	// // 4) 맞다면 -> 맞춰서 
-
-// }
 
 HttpResponse&	HttpResponse::operator=(const HttpResponse& prev)
 {
@@ -80,15 +70,14 @@ HttpResponse&	HttpResponse::operator=(const HttpResponse& prev)
 	return (*this);
 }
 
-void	HttpResponse::setResponseLine(const HttpStatus& httpStatus)
+void	HttpResponse::setResponseLine(const HttpResponseLine& httpResponseLine)
 {
-	(void)httpStatus;
+	//(void)httpStatus;
 	//this->_httpResponseLine.setHttpStatus(httpStatus);
 }
 
-void	HttpResponse::setResponseHeader(const HttpRequestHeader& requestHeader)
+void	HttpResponse::setResponseHeader(const HttpResponseHeader& responseHeader)
 {
-	(void)requestHeader;
 	//this->_httpResponseHeader.setContentLength(this->_httpBody.getBodySize());
 }
 
@@ -96,39 +85,3 @@ void	HttpResponse::setBody(const std::string& body)
 {
 	this->_httpBody.setBody(body);
 }
-
-
-
-
-// std::string responseBody = "This is the response body.";
-// std::string contentLength = std::to_string(responseBody.length());
-
-
-//
-
-	// HttpResponseLine
-	// HttpStatus httpStatus(setDefaultStatusCode(request.getHttpRequestLine().getMethod()));
-	
-	// try
-	// {
-	// 	HttpHandler::ValidateRequestLine(config, request.getHttpRequestLine());
-	// }
-	// catch (ResponseException &ex)
-	// {
-	// 	this->_httpResponseLine.setHttpStatus(ex.httpStatus());
-	// }
-	
-	// this->_httpResponseLine.setHttpStatus(httpStatus);
-	// std::cout << "ResponseLine처리 완료" << std::endl;
-	// 
-	// 순서
-	// a) request-line에서 http/1.1, 유효한 method인지 체크 (validateRequestLine)
-	// b) request-header의 server_name과 일치하는 server_block->server_name찾아서 갖고있기. (ServerBlock serverBlock)
-	// c) config.serverblock과 request 비교
-		// [compareValuewithConfig]
-		// c-3) 유효한 root + index(전체 경로) == 인가?
-		// [request value 분석]
-		// c-4) 유효한 content-type 인가?
-	// d) get 요청은 get요청 처리로. (단순 경로 주기)
-	// e) post 요청은 post 요청으로 (upload를 원할 경우..? cgi..?)
-	// f) delete 요청은 delete 요청으로 (cgi)

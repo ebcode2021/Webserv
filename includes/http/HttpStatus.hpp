@@ -38,6 +38,7 @@ class	HttpStatus
 		// constructor
 		HttpStatus();
 		HttpStatus(int);
+		HttpStatus(std::string&);
 		
 		// getter, setter
 		std::map<int, std::string>& getmap();

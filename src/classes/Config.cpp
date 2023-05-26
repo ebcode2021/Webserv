@@ -141,3 +141,84 @@ void	Config::addServer(std::ifstream & confFile) {
 //size_t	Config::getServerListSize() { return(this->_serverList.size()); }
 
 std::vector<ServerInfo>&	Config::getServerList() { return(this->_serverList); }
+
+# define HOST_N_PORT 100
+# define ONLY_PORT 	 101
+
+ServerInfo&	Config::findServerInfoByHost(const std::string& host)
+{
+	// 127.0.0.1:8080 도 처리
+
+	// request inform
+	std::vector<std::string>	splittedHost = split(host, ":");
+	std::string					serverName   = splittedHost[0];
+	size_t						port         = std::atoi(splittedHost[1].c_str());
+
+	// config inform
+	std::vector<ServerInfo>		serverList = this->_serverList;
+	size_t						serverListSize = this->_serverList.size();
+	ServerInfo					defaultServer = serverList[0];
+
+	// each data from ServerInfo
+	std::vector<std::string>	serverNameList;
+	size_t						serverNameListSize;
+	std::vector<int>			listenList;
+	size_t			 			listenListeSize;
+
+	return (findServerInfoByParamter(serverName, port));
+}
+	// 1. port가 일치하는 서버 블럭 저장
+		// 하나도 없으면 default server
+	// 2. compare 'host name'
+
+	// 1. compare 'server_list' and 'host' && compare 'listen' and 'port'
+	// for (size_t i = 0; i < serverListSize; i++)
+	// {
+	// 	ServerBlock serverBlock = serverList[i].getServerBlock();
+
+	// 	serverNameList = serverBlock.getServerNameList();
+	// 	serverNameListSize = serverNameList.size();
+
+	// 	listenList = serverBlock.getListenList();
+	// 	listenListeSize = listenList.size();
+
+	// 	for (size_t j = 0; j < serverNameListSize; j++)
+	// 	{
+	// 		if (serverNameList[j].compare(serverName) == 0)
+	// 		{
+	// 			for (size_t k = 1; k < listenListeSize; k++)
+	// 			{
+	// 				if (port == (size_t)listenList[k])
+	// 					return (serverList[i]);
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// server_name naver, google;
+	// listen 8080;
+	// listen 9090;
+
+	// // 2. compare port
+	// for (size_t i = 0; i < serverListSize; i++)
+	// {
+	// 	ServerBlock serverBlock = serverList[i].getServerBlock();
+
+	// 	serverNameList = serverBlock.getServerNameList();
+	// 	serverNameListSize = serverNameList.size();
+
+	// 	listenList = serverBlock.getListenList();
+	// 	listenListeSize = listenList.size();
+
+	// 	for (size_t j = 0; j < serverNameListSize; j++)
+	// 	{
+	// 		for (size_t k = 1; k < listenListeSize; k++)
+	// 		{
+	// 			if (port == (size_t)listenList[k])
+	// 				return (serverList[i]);
+	// 		}
+	// 	}
+	// }
+
+// 	// 3. default Server
+// 	return (defaultServer);
+// }

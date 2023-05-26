@@ -193,6 +193,6 @@ void	ServerBlock::printInfo() {
 
 ////
 
-std::vector<std::string>	ServerBlock::getServerNameList() { return(this->_serverNameList); }
+std::vector<std::string>	ServerBlock::getServerNameList() const{ return(this->_serverNameList); }
 
 std::vector<int>	ServerBlock::getListenList() { return(this->_listenList); }

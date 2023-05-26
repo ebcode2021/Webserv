@@ -31,9 +31,9 @@ class ServerBlock {
 		void		setRoot(std::vector<std::string>&);
 
 		////
-		std::vector<std::string>	getServerNameList();
+		std::vector<std::string>	getServerNameList() const;
 		std::vector<int>			getListenList();
-
+		
 
 		//test
 		void		printInfo();
