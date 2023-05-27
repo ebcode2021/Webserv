@@ -12,8 +12,8 @@ HttpStatus	HttpResponseLine::getHttpStatus() const { return(this->_httpStatus); 
 
 /* setter */
 
-void	HttpResponseLine::setHttpStatus(const HttpStatus& httpStatus)
-{
-	this->_httpStatus.setStatusCode(httpStatus.getStatusCode());
-	this->_httpStatus.setReason(httpStatus.getReason());
-}
+// void	HttpResponseLine::setHttpStatus(const HttpStatus& httpStatus)
+// {
+// 	// this->_httpStatus.setStatusCode(httpStatus.getStatusCode());
+// 	// this->_httpStatus.setReason(httpStatus.getReason());
+// }

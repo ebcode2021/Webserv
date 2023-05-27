@@ -90,7 +90,6 @@ int SocketEventHandler::dataSend() {
 
 	//send(this->_socket->getSockFd(), "a", 1, 0);
 	//return (0);
-	// 고민 해해봤봤어어??
 
 	std::string htmlBody = "<html><body>Hello World</body></html>";
     std::string httpResponse = createHttpResponse(htmlBody);

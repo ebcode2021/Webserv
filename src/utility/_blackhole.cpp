@@ -36,3 +36,15 @@ if (p != NULL)
 	printf("Header : %s\n", buffer);
 }
 
+
+
+int	setSuccessStatusCode(std::string method)
+{
+	if (method.compare("GET") == 0)
+		return (200);
+	else if (method.compare("POST") == 0)
+		return (201);
+	else if (method.compare("DELETE") == 0)
+		return (204);
+	return (600);
+}

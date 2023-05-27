@@ -4,14 +4,15 @@
 # include "ServerBlock.hpp"
 # include "LimitExcept.hpp"
 
-class LocationBlock : public ServerBlock {
-
+class LocationBlock : public ServerBlock
+{
 	private :
 		std::string		_path;
 		LimitExcept		_limitExcept;
 		
 
 	public :
+		LocationBlock(const ServerBlock &);
 		LocationBlock(const ServerBlock&, const std::vector<std::string>&);
 		//LocationBlock();
 		//~LocationBlock();
@@ -19,9 +20,13 @@ class LocationBlock : public ServerBlock {
 		static void blockCheck(std::ifstream&, Validate&);
 		void	setLocationPath(const std::vector<std::string>&);
 		void	setLimitExcept(const std::string &);
+
+		std::string	getPath() { return(this->_path);};
 		
 		//	test
 		void	printLocationBlock();
+
+		
 };
 
 #endif

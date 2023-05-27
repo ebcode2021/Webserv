@@ -21,6 +21,7 @@ const std::string LIMIT_EXCEPT = ".limit_except_indications";
 const std::string EXTENSION = ".conf";
 
 /* path */
+const std::string ROOT_PATH = "/Users/eunson/Desktop/webserv/";
 const std::string INDICATION_PATH = "/Users/eunson/Desktop/webserv/indication/";
 
 const std::string KEYWORD_PATH = "/Users/eunson/Desktop/webserv/keywords/.server_keywords";
@@ -52,5 +53,7 @@ const size_t RESPONSE_HEADER_SIZE = sizeof(RESPONSE_HEADERS) / sizeof(std::strin
 const std::string HTTP_VERSION = "HTTP/1.1";
 
 const std::string SP = " ";
+
+const std::string SERVER_NAME = "webserv/1.0.0";
 
 #endif

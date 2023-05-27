@@ -28,7 +28,10 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 			this->configsetting(splittedLine);
 		}
 	}
-		
+}
+
+LocationBlock::LocationBlock(const ServerBlock &origin) : ServerBlock(origin) {
+	this->_path = "";
 }
 
 void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
