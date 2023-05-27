@@ -43,8 +43,13 @@ int main(int argc, char *argv[])
 		KqueueHandler				kqHandler;
 		SocketEventHandler			sockEventHandler;
 		
+
 		
 		// 여기 for문  openListenSockets(config, changeList);
+
+		listenSockList = config.getListenSockList();
+
+		initListenSocket(config);
 
 		int listenSock = createSocket();
 		TcpSocket *listenSocket = new TcpSocket(listenSock);
@@ -140,6 +145,7 @@ int main(int argc, char *argv[])
 					}
 					// std::cout << "close fd = " << curSock->getSockFd() << std::endl;
 					// sockEventHandler.closeSocket();
+				}
 				}
 			} 
 		}

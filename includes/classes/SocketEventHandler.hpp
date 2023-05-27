@@ -14,6 +14,10 @@ class SocketEventHandler
 		int socketAccept();
 		//socketConnect
 
+		// socketFunction
+		int		sockAccept();
+		int		sockBind();
+		int		sockListen();
 
 		// Event Processing
 		int		dataRecv();
