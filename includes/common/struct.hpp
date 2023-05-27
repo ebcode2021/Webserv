@@ -13,8 +13,8 @@ typedef struct SocketInfo
 {
 	int		sock;
 	char	buf[BUFSIZE + 1];
-	int		sendbyte;
-	int		recvbyte;
+	size_t	sendbyte;
+	size_t	recvbyte;
 }			SocketInfo;
 
 #endif

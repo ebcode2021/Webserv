@@ -39,7 +39,7 @@ void SocketEventHandler::closeSocket() {
 }
 
 // int SocketEventHandler::dataRecv() {
-// 	int recvSize = 0;
+// 	//int recvSize = 0;
 // 	int ret;
 // 	char buf[BUFSIZE + 1];
 
@@ -50,8 +50,11 @@ void SocketEventHandler::closeSocket() {
 // 			return (-1);
 // 		else if (ret == 0)
 // 			break;
-		
+// 		buf[ret + 1] = '\0';
+// 		std::cout << "now buf = " << buf << std::endl;
+// 		this->_socket->bufJoin(buf);
 // 	}
+// 	return (this->_socket->getStringSzie());
 // }
 
 int SocketEventHandler::dataRecv() {
@@ -76,6 +79,7 @@ std::string createHttpResponse(const std::string& body) {
     response << "Content-Type: text/html\r\n";
 	response << "Connection: close\r\n";
     response << "Content-Length: " << body.length() << "\r\n";
+	//response << "Transfer-Encoding : chunked\r\n";
     response << "\r\n";
     response << body;
 

@@ -55,7 +55,7 @@ int	TcpSocket::getSendByte()
 	return (this->_socketInfo.sendbyte);
 }
 
-int	TcpSocket::getRecvByte()
+size_t	TcpSocket::getRecvByte()
 {
 	return (this->_socketInfo.recvbyte);
 }
@@ -132,6 +132,14 @@ void TcpSocket::stringClear() {
 	this->_buf.clear();
 }
 
+void TcpSocket::addReadSize(size_t readSize) {
+	this->_socketInfo.recvbyte += readSize;
+}
+
+void TcpSocket::setReadMode(int readMode) {
+	this->_readMode = readMode;
+}
+
 
 
 ///////////////////////////////////////////
@@ -149,6 +157,34 @@ void	TcpSocket::setRequestHeader()
 	this->_buf = body;
 }
 
+std::string TcpSocket::chunkedEncoding()
+{
+	std::string body;
+	std::string chunkSizeString;
+	size_t		pos;
+	
+	while (1)
+	{
+		pos = this->_buf.find("\r\n");
+		std::cout << "pos = " << pos << std::endl;
+		if (pos == std::string::npos)
+			break ;
+		chunkSizeString = this->_buf.substr(0, pos);
+		int chunkSize = std::stoi(chunkSizeString, nullptr, 16);
+		std::cout << chunkSize << std::endl;
+		if (chunkSize == 0) {
+			std::cout << "setReadMode = END" << std::endl;
+			this->setReadMode(END);
+			break ;
+		}
+		this->_buf.erase(0, pos + 2);
+		std::cout << _buf.substr(0, chunkSize) << std::endl;
+		body += _buf.substr(0, chunkSize);
+		this->_buf.erase(0, chunkSize + 2);
+	}
+	return (body);
+}
+
 void	TcpSocket::setRequestBody()
 {
 	std::string encodedBuf;
@@ -156,13 +192,19 @@ void	TcpSocket::setRequestBody()
 	if (this->getReadMode() == IDENTITY)
 	{
 		encodedBuf = this->getString();
+		this->addReadSize(encodedBuf.size());
 		this->_request.setBody(encodedBuf);
+		if (this->getRecvByte() == this->_request.getHttpRequestHeader().getContentLength())
+			this->setReadMode(END);
 	}
 	else if (this->getReadMode() == CHUNKED)
 	{
-
+		encodedBuf = chunkedEncoding();
+		this->addReadSize(encodedBuf.size());
+		this->_request.setBody(encodedBuf);
 	}
 	this->_request.setBody(encodedBuf);
+	std::cout << _request.getBody().getBody() << std::endl;
 }
 HttpRequest&	TcpSocket::getRequest() { return(this->_request); }
 

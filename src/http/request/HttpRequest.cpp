@@ -117,6 +117,6 @@ const HttpRequestLine& HttpRequest::getHttpRequestLine() {
 	return this->_httpRequestLine;
 }
 
-const HttpRequestHeader& HttpRequest::getHttpRequestHeader() {
+HttpRequestHeader& HttpRequest::getHttpRequestHeader() {
 	return this->_httpRequestHeader;
 }
