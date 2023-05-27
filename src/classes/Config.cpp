@@ -16,7 +16,7 @@ Config::Config(std::string fileName)
 	while (std::getline(confFile, line))
 	{
 		splitedLine = split(line, WHITESPACE);
-		if (splitedLine[0].compare("server") == 0)
+		if (splitedLine.size() && splitedLine[0].compare("server") == 0)
 			addServer(confFile);
 	}
 	std::cout << "설정 끝" << std::endl;
@@ -123,15 +123,82 @@ void	Config::addServer(std::ifstream & confFile) {
 	std::cout << "\n";
 	std::cout << "로케이션 클래스 저장 시작" << std::endl;
 	
+	locationBlock.push_back(LocationBlock(serverBlock));
+	
 	for (size_t i = 0; i < locationBlockInfo.size(); i++) {
 		locationBlock.push_back(LocationBlock(serverBlock, locationBlockInfo[i]));
 	}	
 
 	std::cout << "로케이션 클래스 저장 완료" << std::endl;
 	this->_serverList.push_back(ServerInfo(serverBlock, locationBlock));
-
-	
-	///
 }
 
 
+
+////////////////////
+
+std::vector<ServerInfo>&	Config::getServerList() { return(this->_serverList); }
+
+ServerInfo	Config::findServerInfoByHost(const std::string& host)
+{
+	// 127.0.0.1:8080 도 처리
+
+	// request inform
+	std::vector<std::string>	splittedHost = split(host, ":");
+	std::string					serverName   = splittedHost[0];
+	size_t						port         = std::atoi(splittedHost[1].c_str());
+
+	return (findServerInfoByParameter(serverName, port));
+}
+
+ServerInfo	Config::findServerInfoByParameter(std::string& serverName, size_t port)
+{
+	// config inform
+	std::vector<ServerInfo>		serverList = this->_serverList;
+	size_t						serverListSize = this->_serverList.size();
+	ServerInfo					defaultServer = serverList[0];
+
+	// each data from ServerInfo
+	std::vector<int>			listenList;
+	size_t			 			listenListeSize;
+
+	// 1. save ServerInfo matching port
+	std::vector<ServerInfo>	 portList;
+	for (size_t i = 0; i < serverListSize; i++)
+	{
+		ServerBlock serverBlock = serverList[i].getServerBlock();
+
+		listenList = serverBlock.getListenList();
+		listenListeSize = listenList.size();
+
+		for (size_t j = 1; j < listenListeSize; j++)
+		{
+			if ((size_t)listenList[j] == port)
+			 portList.push_back(serverList[i]);
+		}
+	}
+
+	if (portList.empty())
+		return (defaultServer);
+
+
+	// 2. compare server_name
+	std::vector<std::string>	serverNameList;
+	size_t						serverNameListSize;
+
+	size_t	portListSize = portList.size();
+	std::cout << portListSize << std::endl;
+	for (size_t i = 0; i < portListSize; i++)
+	{
+		ServerBlock serverBlock  = portList[i].getServerBlock();
+
+		serverNameList = serverBlock.getServerNameList();
+		serverNameListSize = serverNameList.size();
+		for (size_t j = 0; j < serverNameListSize; j++)
+		{
+			if (serverNameList[j] == serverName)
+				return (portList[i]);
+		}
+	}
+	return (portList[0]);
+}

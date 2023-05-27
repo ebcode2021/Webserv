@@ -30,6 +30,11 @@ class ServerBlock {
 		void		setClientBodyTempPath(std::vector<std::string>&);
 		void		setRoot(std::vector<std::string>&);
 
+		////
+		std::vector<std::string>	getServerNameList() const;
+		std::vector<int>			getListenList();
+		
+
 		//test
 		void		printInfo();
 

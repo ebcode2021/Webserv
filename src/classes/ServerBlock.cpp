@@ -190,3 +190,9 @@ void	ServerBlock::printInfo() {
 	
 	cout << "client_body_temp_path : " << this->_clientBodyTempPath << endl;
 }
+
+////
+
+std::vector<std::string>	ServerBlock::getServerNameList() const{ return(this->_serverNameList); }
+
+std::vector<int>	ServerBlock::getListenList() { return(this->_listenList); }

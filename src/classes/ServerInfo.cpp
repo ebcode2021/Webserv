@@ -2,18 +2,37 @@
 
 ServerInfo::ServerInfo(ServerBlock &serverBlcok, std::vector<LocationBlock> &locationBlock) {
 	this->_serverBlock = serverBlcok;
-	this->locationList = locationBlock;
+	this->_locationList = locationBlock;
 }
 
+
+///////////
+ServerBlock&	ServerInfo::getServerBlock() { return(this->_serverBlock); }
+std::vector<LocationBlock>	ServerInfo::getLocationList() { return(this->_locationList);};
+
+LocationBlock	ServerInfo::findLocationBlockByURL(const std::string& requestURL)
+{
+	std::vector<LocationBlock>	locationList = this->_locationList;
+	size_t						locationListSize = locationList.size();
+
+	for (size_t i = 1; i < locationListSize; i++)
+	{
+		LocationBlock	locationBlock = locationList[i];
+
+		if (locationBlock.getPath() == requestURL)
+			return (locationBlock);
+	}
+	return (locationList[0]);
+}
 
 // test
 using namespace std;
 void	ServerInfo::printServerInfo() {
 	this->_serverBlock.printInfo();
 	cout << "\n";
-	for (size_t i = 0; i < this->locationList.size(); i++)
+	for (size_t i = 0; i < this->_locationList.size(); i++)
 	{
-		this->locationList[i].printLocationBlock();
+		this->_locationList[i].printLocationBlock();
 	}
 	cout << "------------------------\n";
 }

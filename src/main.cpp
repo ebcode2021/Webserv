@@ -3,20 +3,7 @@
 #include "KqueueHandler.hpp"
 #include "SocketEventHandler.hpp"
 #include "HttpResponse.hpp"
-
-
-/*
-	[남은거?]
-	1) fileCheck 공사 ->(get, post, delete ... limitExcept) -> 은비
-
-	2) HTTP parsing
-
-	4) 3) 한 후에 클래스 분리 (내일 끝내기)
-
-	5) CGI(py, php) -> 같이 공부하면 좋겠어
-	6) html 간단하게 사진 넣기 (은비 심심하면 요령껏...)
-	7) 쿠키, 세션
-*/
+#include "HttpValidator.hpp"
 
 // 요청 라인 분석해서 메서드와 url 확인
 // 요청이 url이 cgi 인지 확인
@@ -77,11 +64,7 @@ int main(int argc, char *argv[])
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
 				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
 
-				
-				// currequest
-				// method = curRequest.getMethod()
-				// cursoccket
-				// method = cursocket
+
 				sockEventHandler.setSocket(curSock);
 				if (curEvent.filter == EVFILT_READ)
 				{
@@ -107,16 +90,20 @@ int main(int argc, char *argv[])
 							sockEventHandler.closeSocket();
 						}
 						else {
-							if (curSock->getReadMode() == HEADER)
-								curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
-							else if (curSock->getReadMode() == POST)
-								curSock->setRequestBody();
-							else if (curSock->getReadMode() == END)
+							//if (curSock->getReadMode() == HEADER)
+							curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
+							//else if (curSock->getReadMode() == POST)
+							curSock->setRequestBody();
+							
+							std::cout << curSock->getRequest().toString() << std::endl;
+							//else if (curSock->getReadMode() == END)
 							{
-								// [은비 추가 코드] ************************
-								// response 생성자에서 처리.
-								HttpResponse response(config, curSock->getRequest());
+								////////////////////////////
+								std::cout << "--------------------------" << std::endl;
+								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
 								curSock->setResponse(response);
+								// /HttpPage httpPage = HttpHandler::setPageFromConfigAndRequest(config, httpRequest);
+							
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
 						}

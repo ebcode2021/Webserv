@@ -18,7 +18,8 @@ class	HttpResponseLine
 		// getter, setter
 		std::string	getVersion() const;
 		HttpStatus	getHttpStatus() const;
-
 		void		setHttpStatus(const HttpStatus&);
+
+		//void		setHttpStatus(const HttpStatus&);
 };
 #endif
