@@ -5,24 +5,24 @@
 /* constructor */
 HttpResponse::HttpResponse(){}
 
-HttpResponse& HttpResponse::createResponse(Config& config, HttpRequest& httpRequest)
+HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpRequest)
 {
+	std::cout << "createResponse 입장! " << std::endl;
+
 	HttpRequestLine		requestLine   = httpRequest.getHttpRequestLine();
 	HttpRequestHeader	requestHeader = httpRequest.getHttpRequestHeader();
 	HttpBody			requestBody   = httpRequest.getBody();
 
 	std::string			method = requestLine.getMethod();
 
-	// create response
-	HttpResponse	response; // x
-
 	// find server block and location block
 	ServerInfo		serverInfo  = config.findServerInfoByHost(requestHeader.getHost());
 	ServerBlock		serverBlock = serverInfo.getServerBlock();
 
-	// std::Vector<LocationBlock>의 0번째 index가 default
+	serverInfo.printServerInfo();
 	LocationBlock	locationBlock =  serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
-
+	HttpStatus	httpStatus;
+	std::cout << "exit 직전" << std::endl;
 	exit(1);
 	try
 	{
@@ -34,10 +34,9 @@ HttpResponse& HttpResponse::createResponse(Config& config, HttpRequest& httpRequ
 	}
 	catch(const ResponseException &ex)
 	{
-		// status 저장 해야댐
-		//response.getResponseLine().setHttpStatus(ex.httpStatus());
+		httpStatus = ex.httpStatus();
 	}
-	return (HttpResponse());
+	return (HttpResponse(httpRequest, serverBlock, locationBlock, httpStatus));
 }
 
 // response.setResponseLine(HttpResponse::createResponseLine());
@@ -70,16 +69,16 @@ HttpResponse&	HttpResponse::operator=(const HttpResponse& prev)
 	return (*this);
 }
 
-void	HttpResponse::setResponseLine(const HttpResponseLine& httpResponseLine)
-{
-	//(void)httpStatus;
-	//this->_httpResponseLine.setHttpStatus(httpStatus);
-}
+// void	HttpResponse::setResponseLine(const HttpResponseLine& httpResponseLine)
+// {
+// 	//(void)httpStatus;
+// 	//this->_httpResponseLine.setHttpStatus(httpStatus);
+// }
 
-void	HttpResponse::setResponseHeader(const HttpResponseHeader& responseHeader)
-{
-	//this->_httpResponseHeader.setContentLength(this->_httpBody.getBodySize());
-}
+// void	HttpResponse::setResponseHeader(const HttpResponseHeader& responseHeader)
+// {
+// 	//this->_httpResponseHeader.setContentLength(this->_httpBody.getBodySize());
+// }
 
 void	HttpResponse::setBody(const std::string& body)
 {

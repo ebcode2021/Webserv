@@ -21,11 +21,6 @@ namespace	HttpValidator
 	// check url path
 	void		validateURI(Config&, const HttpRequest&);
 
-	localhost:1111/asdf
-	root/asdf
-	{
-		
-	}
 	void		MethodPermitted(LocationBlock&, const std::string&);
 }
 

@@ -5,20 +5,6 @@
 #include "HttpResponse.hpp"
 #include "HttpValidator.hpp"
 
-
-/*
-	[남은거?]
-	1) fileCheck 공사 ->(get, post, delete ... limitExcept) -> 은비
-
-	2) HTTP parsing
-
-	4) 3) 한 후에 클래스 분리 (내일 끝내기)
-
-	5) CGI(py, php) -> 같이 공부하면 좋겠어
-	6) html 간단하게 사진 넣기 (은비 심심하면 요령껏...)
-	7) 쿠키, 세션
-*/
-
 // 요청 라인 분석해서 메서드와 url 확인
 // 요청이 url이 cgi 인지 확인
 // cgi이면 fork()후에 표준출력으로 데이터 전달 표준 입력으로 데이터 받기
@@ -108,6 +94,7 @@ int main(int argc, char *argv[])
 							curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
 							//else if (curSock->getReadMode() == POST)
 							curSock->setRequestBody();
+							
 							std::cout << curSock->getRequest().toString() << std::endl;
 							//else if (curSock->getReadMode() == END)
 							{

@@ -7,6 +7,7 @@
 class	Config {
 	private :
 		std::vector<ServerInfo>	_serverList;
+		//std::vector<int>	lis
 
 	public :
 		Config(std::string);
@@ -18,12 +19,11 @@ class	Config {
 
 		void	addServer(std::ifstream &);
 
-		//ServerInfo&	getServer(const HttpRequestHeader&);
-		//size_t	getServerListSize();
 		std::vector<ServerInfo>&	getServerList();
 
 		// 추가추가
-		ServerInfo&		findServerInfoByHost(const std::string&);
+		ServerInfo		findServerInfoByHost(const std::string&);
+		ServerInfo		findServerInfoByParameter(std::string&, size_t);
 };
 
 #endif
