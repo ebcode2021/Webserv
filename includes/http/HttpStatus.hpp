@@ -19,6 +19,14 @@ class	HttpStatus
 		int							getStatusCode() const;
 		std::string					getReason() const;
 		HttpStatus& operator=(const HttpStatus&);
+
+		// test
+		void	printStatus()
+		{
+			std::cout << "[HttpStatus 출력]" << std::endl;
+			std::cout << "- statusCode : " << this->_statusCode << std::endl;
+			std::cout << "- reason : " << this->_reason << std::endl;
+		};
 };
 
 

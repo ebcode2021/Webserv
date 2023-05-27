@@ -14,14 +14,15 @@ LocationBlock	ServerInfo::findLocationBlockByURL(const std::string& requestURL)
 {
 	std::vector<LocationBlock>	locationList = this->_locationList;
 	size_t						locationListSize = locationList.size();
-
+	std::cout << "url : " << requestURL << std::endl;
 	for (size_t i = 1; i < locationListSize; i++)
 	{
 		LocationBlock	locationBlock = locationList[i];
-
+		std::cout << "--- " << locationBlock.getPath() << std::endl;
 		if (locationBlock.getPath() == requestURL)
 			return (locationBlock);
 	}
+	std::cout << "들어오면 안되용 " << std::endl;
 	return (locationList[0]);
 }
 

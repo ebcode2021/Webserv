@@ -19,18 +19,17 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpReque
 	ServerInfo		serverInfo  = config.findServerInfoByHost(requestHeader.getHost());
 	ServerBlock		serverBlock = serverInfo.getServerBlock();
 
-	serverInfo.printServerInfo();
 	LocationBlock	locationBlock =  serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
+
 	HttpStatus	httpStatus;
-	std::cout << "exit 직전" << std::endl;
-	exit(1);
+
 	try
 	{
 		HttpValidator::validateRequest(httpRequest, serverBlock, locationBlock);
 		if (method == "POST")
-			;
+			exit(0);
 		else if (method == "DELETE")
-			; // unset
+			exit(0);
 	}
 	catch(const ResponseException &ex)
 	{

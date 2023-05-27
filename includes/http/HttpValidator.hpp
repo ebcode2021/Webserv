@@ -24,23 +24,4 @@ namespace	HttpValidator
 	void		MethodPermitted(LocationBlock&, const std::string&);
 }
 
-
-// namespace	HttpHandler
-// {
-// 	ServerInfo		findServerInfo(Config&, const std::string&);
-// 	LocationBlock	findLocation(ServerBlock&, const std::string&);
-
-// 	//ServerInfo		compareServerData(std::vector<ServerInfo>&, std::string&, size_t);
-
-
-// 	// autoIndex 처리
-// 	std::string		generateResponseBody(ServerBlock&, LocationBlock&);
-// 	void			processRequest();
-
-// 	HttpPage		requestHandler(Config&, HttpRequest&);
-// 	HttpPage		setPageFromConfigAndRequest(Config&, HttpRequest&);
-
-
-// }
-
 #endif
