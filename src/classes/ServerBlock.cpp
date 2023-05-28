@@ -6,7 +6,7 @@
 
 ServerBlock::ServerBlock() {
 	this->_clientMaxBodySize = 1;
-	this->_listenList.push_back(8080);
+	this->_listenList.push_back(4242);
 	this->_root = "html";
 }
 
@@ -70,9 +70,12 @@ void	ServerBlock::setAutoIndex(std::vector<std::string>& value) {
 }
 
 void	ServerBlock::setIndex(std::vector<std::string>& value) {
+	std::vector<std::string> index;
+	index.push_back("index.html");
 	for(size_t i = 1; i < value.size(); i++) {
-		this->_index.push_back(value[i]);
+		index.push_back(value[i]);
 	}
+	this->_index = index;
 }
 
 void	ServerBlock::setClientBodyTempPath(std::vector<std::string>& value) {

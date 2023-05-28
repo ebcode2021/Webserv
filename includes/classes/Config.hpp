@@ -17,7 +17,7 @@ class	Config {
 		//void	printServerList();
 
 		void	addServer(std::ifstream &);
-		std::vector<int>	getListenSockList();
+		std::set<int>	getListenSockList();
 
 		std::vector<ServerInfo>&	getServerList();
 

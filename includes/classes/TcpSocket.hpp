@@ -18,20 +18,14 @@ class TcpSocket
 		TcpSocket();
 		TcpSocket(int);
 		
-		int				socketAccept();
-		void			socketBind(int);
-		void			socketListen();     
-
 		void			changeToNonblocking();
 		void			bufJoin(char *);
-
 		// getter, setter
 		int	 			getSockFd();
 		int	 			getSendByte();
 		size_t 			getRecvByte();
 		char*			getBuf();
 		std::string 	getString();
-		
 		void			setBuf(std::string&);
 
 		//
