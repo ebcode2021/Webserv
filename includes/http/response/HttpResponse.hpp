@@ -9,6 +9,7 @@
 # include "Config.hpp"
 # include "HttpRequest.hpp"
 # include "ServerInfo.hpp"
+# include "PathInfo.hpp"
 
 // Response-Header
 	// Response-Line
@@ -27,7 +28,7 @@ class	HttpResponse
 		// constructor
 		HttpResponse();
 		HttpResponse(std::string&);
-		HttpResponse(HttpRequest&, ServerBlock&, LocationBlock&, HttpStatus&);
+		HttpResponse(HttpRequest&, PathInfo&, HttpStatus&);
 
 		HttpResponse& 				operator=(const HttpResponse&);
 
@@ -48,8 +49,10 @@ class	HttpResponse
 
 		// create
 		static HttpResponse			createResponse(Config&, HttpRequest&);
-		const HttpResponseLine&		createResponseLine();
-		const HttpResponseHeader&	createResponseHeader() ;
-		const std::string&			createBody();
+ 		std::string			createResponseBody(PathInfo&);
+
+		// print
+		void						printHttpResponse();
+
 };
 #endif

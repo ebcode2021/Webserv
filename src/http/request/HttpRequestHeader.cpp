@@ -42,5 +42,16 @@ void	HttpRequestHeader::setSessionID(std::string& session)
 	this->_sessionID = "setCookie에서 sessionID 분리해서 갖고 있을듯. public 에서 private으로 바꿀 예정인 setter";
 }
 
-
-
+void	HttpRequestHeader::validateRequestHeader(LocationBlock& locationBlock)
+{
+	try
+	{
+		if(this->_contentLength > locationBlock.getClientMaxBodySize())
+			throw ResponseException(413);
+		
+	}
+	catch(const ResponseException &ex)
+	{
+		throw ResponseException(ex.statusCode());
+	}
+}

@@ -56,22 +56,6 @@ enum	StatusCodeaa
 	HTTP_STATUS_HTTP_VERSION_NOT_SUPPORTED = 505,
 };
 
-// throw ResponseException(C404);
-
-// try
-// {
-// 	req.setHttpRequest();
-// 	{
-// 		throw 
-// 	}
-// }
-// catch(std::exception &e)
-// {
-// 	header = http/1.1 + " " + ResopnseStats::code() + " " + ReseponseStatus::reason()
-//  	body = setNotFound();
-// }
-
-
 /* * * * * * * * * * * * Status Code and Reason Phrase * * * * * * * * * * * */
 /*
 	The Status-Code element is a 3-digit integer result code of the

@@ -9,6 +9,11 @@ HttpStatus::HttpStatus()
 	this->_reason = it->second;
 }
 
+HttpStatus::HttpStatus(const HttpStatus& httpStatus)
+{
+	*this = httpStatus;
+}
+
 HttpStatus::HttpStatus(const int statusCode)
 {
 	std::map<int, std::string>::const_iterator it = getStatusMap().find(statusCode);
@@ -31,6 +36,14 @@ HttpStatus&	HttpStatus::operator=(const HttpStatus& prev)
 	this->_statusCode = prev.getStatusCode();
 	this->_reason = prev.getReason();
 	return (*this);
+}
+
+void	HttpStatus::setHttpStatus(int statusCode)
+{
+	std::map<int, std::string>::const_iterator it = getStatusMap().find(statusCode);
+
+	this->_statusCode = it->first;
+	this->_reason = it->second;
 }
 
 /* method */

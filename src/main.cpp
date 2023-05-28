@@ -78,7 +78,8 @@ int main(int argc, char *argv[])
 						clientSocket->changeToNonblocking();
 						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
 					}
-					else {
+					else 
+					{
 						std::cout << "read fd = " << curSock->getSockFd() << std::endl;
 						int ret = sockEventHandler.dataRecv();
 						std::cout << "============body=============" << std::endl;
@@ -128,6 +129,7 @@ int main(int argc, char *argv[])
 							}
 							}
 						}
+					}
 				}
 				else if (curEvent.filter == EVFILT_WRITE)
 				{
@@ -141,7 +143,8 @@ int main(int argc, char *argv[])
 					// std::cout << "close fd = " << curSock->getSockFd() << std::endl;
 					// sockEventHandler.closeSocket();
 				}
-			} 
+			
+			}
 		}
 	}
 	return (0);

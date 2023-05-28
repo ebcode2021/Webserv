@@ -9,7 +9,6 @@ class LocationBlock : public ServerBlock
 	private :
 		std::string		_path;
 		LimitExcept		_limitExcept;
-		
 
 	public :
 		LocationBlock(const ServerBlock &);
@@ -19,13 +18,15 @@ class LocationBlock : public ServerBlock
 
 		static void blockCheck(std::ifstream&, Validate&);
 		void	setLocationPath(const std::vector<std::string>&);
-		void	setLimitExcept(const std::string &);
-
+		void	setLimitExcept(const std::string&);
+		void	setPath(const std::string&);
 		std::string	getPath() { return(this->_path);};
 		
 		//	test
 		void	printLocationBlock();
 
+		bool	isValidMethodByLimitExcept(const std::string&) {return true;};
+		
 		
 };
 

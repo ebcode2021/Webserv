@@ -12,16 +12,13 @@
 namespace	HttpValidator
 {
 	// Validate request
-	void		validateRequest(const HttpRequest&, ServerBlock&, LocationBlock&);
+	void		validateRequest(HttpRequest&, ServerBlock&, LocationBlock&);
 
 	// check request-line 'method' and 'http-version'
-	void		CheckRequestLineSyntax(const HttpRequestLine&);
+	void		checkRequestLineSyntax(const HttpRequestLine&);
 	void		CheckRequestHeaderSyntax(const HttpRequestHeader&);
 
-	// check url path
-	void		validateURI(Config&, const HttpRequest&);
-
-	void		MethodPermitted(LocationBlock&, const std::string&);
+	void		validatePath(PathInfo& pathInfo);
 }
 
 #endif

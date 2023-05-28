@@ -20,6 +20,8 @@ class	HttpResponseLine
 		HttpStatus	getHttpStatus() const;
 		void		setHttpStatus(const HttpStatus&);
 
+		void		setHttpResponseLine(HttpStatus&);
+
 		//void		setHttpStatus(const HttpStatus&);
 };
 #endif

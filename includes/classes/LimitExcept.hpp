@@ -22,6 +22,7 @@ class LimitExcept {
 		void	setAllow(const std::vector<std::string> &);
 		void	setDeny(const std::vector<std::string> &);
 
+		bool	isValidMethod(const std::string&, const std::string&);
 		//test
 		void	printInfo();
 

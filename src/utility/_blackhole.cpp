@@ -48,3 +48,51 @@ int	setSuccessStatusCode(std::string method)
 		return (204);
 	return (600);
 }
+
+HttpResponse::HttpResponse(HttpRequest& httpRequest, LocationBlock& block, HttpStatus& httpStatus)
+{
+	std::string	path = block.getRoot() + block.getPath();
+	std::string method = httpRequest.getHttpRequestLine().getMethod();
+	std::string host = httpRequest.getHttpRequestHeader().getServerNameToHost();
+
+	PathInfo pathInfo(path);
+
+	//if (httpStatus == 200)
+	// 1. validate Path
+	if (pathInfo.getPathType() != P_NONE)
+	{
+		if (pathInfo.getAccess() == false)
+			httpStatus = HttpStatus(403);
+	}
+	else
+		httpStatus = HttpStatus(404);
+	
+	// 2. validate directory Path
+	if (pathInfo.isValidDirectory() == true)
+	{
+		std::vector<std::string>	indexList = block.getIndexList();
+		size_t						indexListSize = indexList.size();
+
+		if (indexListSize > 1)
+		{
+			for (size_t	i = 1; i < indexListSize; i++)
+			{
+				std::string addIndexpath = pathInfo.getPath() + indexList[i];
+				if (pathInfo.isFile(addIndexpath) == true)
+				{
+					if (pathInfo.isAccess() == false)
+						httpStatus = HttpStatus(403);
+					break ;
+				}
+			}
+			if (block.getAutoIndex() == true)
+				pathInfo.autoIndexOn();
+		}
+		else
+		{
+			std::string addIndexpath = pathInfo.getPath() + indexList[0];
+			if (pathInfo.isFile(addIndexpath) == false || pathInfo.isAccess() == false)
+				httpStatus = HttpStatus(403);
+		}
+	}
+}

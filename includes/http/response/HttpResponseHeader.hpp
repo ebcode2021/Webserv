@@ -2,6 +2,7 @@
 # define HTTP_RESPONSE_HEADER_HPP
 
 # include "webserv.hpp"
+# include "HttpRequest.hpp"
 
 class	HttpResponseHeader
 {
@@ -14,13 +15,16 @@ class	HttpResponseHeader
 		std::vector<std::string>	_setCookie;	//Cookie 관련
 
 	public :
+		// constructor
+		HttpResponseHeader();
+
 		// getter, setter
-		std::string					getDate();
-		std::string					getServer();
-		std::string					getContentType();
-		size_t						getContentLength();
-		std::string					getTransferEncoding();
-		std::vector<std::string>	getSetCookie();
+		std::string					getDate() const;
+		std::string					getServer() const;
+		std::string					getContentType() const;
+		size_t						getContentLength() const;
+		std::string					getTransferEncoding() const;
+		std::vector<std::string>	getSetCookie() const;
 
 		void						setDate(std::string&);
 		void						setServer(std::string&);
@@ -28,6 +32,12 @@ class	HttpResponseHeader
 		void						setContentLength(size_t);
 		void						setTransferEncoding(std::string&);
 		void						setSetCookie(std::string&);
+
+		// method
+		void						setHttpResponseHeader(HttpRequest&, size_t);
+		std::string					getCurrentTime();
+
+
 };
 
 #endif

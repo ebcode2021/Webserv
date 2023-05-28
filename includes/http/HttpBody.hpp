@@ -12,7 +12,7 @@ class	HttpBody
 		size_t		getBodySize() { return(this->_body.size()); };
 
 		void		setBody(std::string body) { this->_body += body; };
-
+		void		setResponseBody(std::string body) { this->_body += body; };
 };
 
 #endif

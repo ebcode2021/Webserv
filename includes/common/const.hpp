@@ -54,6 +54,12 @@ const std::string HTTP_VERSION = "HTTP/1.1";
 
 const std::string SP = " ";
 
+const size_t DEFAULT_PORT = 4242;
+
 const std::string SERVER_NAME = "webserv/1.0.0";
+
+const std::string DEFAULT_ROOT = "/Users/eunson/Desktop/webserv/resources/html";
+
+const std::string DEFAULT_INDEX = "index.html";
 
 #endif

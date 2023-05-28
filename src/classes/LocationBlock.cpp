@@ -114,3 +114,7 @@ void	LocationBlock::printLocationBlock() {
 	std::cout << "path : " << this->_path << std::endl;
 	this->_limitExcept.printInfo();
 }
+
+void	LocationBlock::setPath(const std::string& path) { 
+	this->_path = path; 
+}

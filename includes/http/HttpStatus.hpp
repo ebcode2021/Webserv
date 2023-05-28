@@ -12,12 +12,16 @@ class	HttpStatus
 	public :
 		// constructor
 		HttpStatus();
+		HttpStatus(const HttpStatus&);
 		HttpStatus(int);
 		
 		// getter, setter
 		std::map<int, std::string>& getStatusMap();
 		int							getStatusCode() const;
 		std::string					getReason() const;
+		void						setHttpStatus(int);
+
+		
 		HttpStatus& operator=(const HttpStatus&);
 
 		// test
