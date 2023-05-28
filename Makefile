@@ -27,7 +27,10 @@ SRCS =  main.cpp	\
 		http/request/HttpRequestLine.cpp \
 		http/response/HttpResponse.cpp \
 		http/HttpStatus.cpp \
-		http/HttpValidator.cpp
+		http/HttpValidator.cpp \
+		http/PathInfo.cpp \
+		http/response/HttpResponseLine.cpp \
+		http/response/HttpResponseHeader.cpp
 
 
 SRCS_DIR = src/

@@ -2,6 +2,8 @@
 # define HTTPREQUESTLINE_HPP
 
 #include "webserv.hpp"
+#include "HttpException.hpp"
+#include "LocationBlock.hpp"
 
 class	HttpRequestLine
 {
@@ -20,6 +22,8 @@ class	HttpRequestLine
 		void		setRequestURI(const std::string&);
 		void		setVersion(const std::string&);
 
+		// add
+		void		validateRequestLine(LocationBlock& locationBlock);
 };
 
 #endif

@@ -27,3 +27,21 @@ void	HttpRequestLine::setMethod(const std::string& method)
 void	HttpRequestLine::setRequestURI(const std::string& requestURI) { this->_requestURI = requestURI; }
 
 void	HttpRequestLine::setVersion(const std::string& version) { this->_version = version; }
+
+void	HttpRequestLine::validateRequestLine(LocationBlock& locationBlock)
+{
+	try
+	{
+		// check http-version
+		if (this->_version != HTTP_VERSION)
+			throw ResponseException(505); // HTTP_VERSION_NOT_SUPPORTED
+
+		// check Method
+		if (METHODS->find(this->_method) == std::string::npos || locationBlock.isValidMethodByLimitExcept(this->_method) == false)
+			throw ResponseException(405); // NOT_ALLOWED
+	}
+	catch (const ResponseException &ex)
+	{
+		throw ResponseException(ex.httpStatus().getStatusCode());
+	}
+}

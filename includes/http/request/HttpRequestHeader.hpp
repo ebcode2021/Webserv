@@ -2,6 +2,8 @@
 # define HTTPREQUESTHEADER_HPP
 
 #include "webserv.hpp"
+#include "LocationBlock.hpp"
+#include "HttpException.hpp"
 
 class	HttpRequestHeader
 {
@@ -28,6 +30,13 @@ class	HttpRequestHeader
 		std::string			getCookie();
 		std::string			getSessionID();
 
+		std::string			getServerNameToHost()
+		{
+			std::vector<std::string>	splittedHost = split(this->_host, ":");
+			std::string					serverName   = splittedHost[0];
+			return (serverName);
+		};
+
 		void				setHost(std::string&);
 		void				setUserAgent(std::string&);
 		void				setConnection(std::string&);
@@ -36,6 +45,9 @@ class	HttpRequestHeader
 		void				setTransferEncoding(std::string&);
 		void				setCookie(std::string&);
 		void				setSessionID(std::string&);
+
+		////
+		void	validateRequestHeader(LocationBlock& locationBlock);
 };
 
 #endif

@@ -87,3 +87,8 @@ void	LimitExcept::printInfo()
 	std::cout << "allow : " << this->_allow << std::endl;
 	std::cout << "deny : " << this->_deny << std::endl;
 }
+
+// bool	LimitExcept::isValidMethod(const std::string& method, const std::string& host)
+// {
+	
+// }

@@ -14,7 +14,8 @@ class	ResponseException
 		explicit	ResponseException(const int statusCode)
 			:_httpStatus(statusCode){}
 
-		HttpStatus httpStatus() const { return(_httpStatus); }
+		HttpStatus	httpStatus() const { return(_httpStatus); }
+		int			statusCode() const { return(_httpStatus.getStatusCode());}
 
 		// method
 };

@@ -1,7 +1,23 @@
 #include "HttpValidator.hpp"
 #include "HttpPage.hpp"
+#include "HttpException.hpp"
 
-void	HttpValidator::CheckRequestLineSyntax(const HttpRequestLine& requestLine)
+// void	HttpValidator::validateRequest(HttpRequest& request, LocationBlock& locationBlock)
+// {
+// 	const HttpRequestLine	requestLine = request.getHttpRequestLine();
+// 	std::string				method = requestLine.getMethod();
+
+// 	try
+// 	{
+// 		checkRequestLineSyntax(requestLine);
+// 		//methodPermitted(locationBlock, method);
+// 	}
+// 	catch(ResponseException &ex)
+// 	{
+// 		throw ResponseException(ex.httpStatus().getStatusCode());
+// 	}
+// }
+void	HttpValidator::checkRequestLineSyntax(const HttpRequestLine& requestLine)
 {
 	// check method
 	if (METHODS->find(requestLine.getMethod()) == std::string::npos)
@@ -12,13 +28,25 @@ void	HttpValidator::CheckRequestLineSyntax(const HttpRequestLine& requestLine)
 		throw ResponseException(505); // 505 HTTP Version Not Supported
 }
 
-// void	HttpValidator::CheckRequestHeaderSyntax(const HttpRequestHeader& requestHeader)
+// void	HttpValidator::validatePath(PathInfo& pathInfo)
+// {
+// 	if (pathInfo.getPathType() != P_NONE)
+// 	{
+// 		if (pathInfo.getAccess() == false)
+// 			throw ResponseException(403);
+// 	}
+// 	else
+// 		throw ResponseException(404);
+// }
+// 4) limit_except Check
+//HttpValidator::MethodPermitted(location, method);
+	// 메서드가 허용된지 확인하는 로직
+	// 허용되지 않으면 예외를 던질 수 있음
+
+// void	HttpValidator::methodPermitted(LocationBlock& locationBlock, std::string& method)
 // {
 
 // }
-
-
-	// 2. compare port
 
 	// ** index가 autoindex보다 더 높은 우선순위
 	// ** 
@@ -51,33 +79,7 @@ void	HttpValidator::CheckRequestLineSyntax(const HttpRequestLine& requestLine)
 			// serverblock내 error_page도 없으면 -> default_error_page
 		// 에러페이지가 없는거라면 -> 404
 
-// 	int	command_handler(t_exec_block *exec)
-// {
-// 	char		**env_lst;
-// 	struct stat	path_stat;
 
-// 	env_lst = current_env_lst();
-// 	if (stat(exec->command, &path_stat) == 0)
-// 	{
-// 		if (S_ISDIR(path_stat.st_mode))
-// 			print_custom_error(exec->command, 0, IS_DIR);
-// 		else if (S_ISREG(path_stat.st_mode))
-// 		{
-// 			if (execve(exec->command, exec->args, env_lst) == -1)
-// 				print_error(exec->command, 0);
-// 		}
-// 	}
-// 	else if (ft_strchr(exec->command, '/'))
-// 	{
-// 		if (errno == ENOENT)
-// 			print_custom_error(exec->command, 0, NO_SUCH_FILE_DIR);
-// 		else if (errno == ENOTDIR)
-// 			print_custom_error(exec->command, 0, NOT_A_DIR);
-// 	}
-// 	else
-// 		command_execute(exec, env_lst);
-// 	return (g_sys.last_exit_status_code);
-//}
 	//exit(0);
 	// root?
 	// 2) find location
@@ -97,7 +99,3 @@ void	HttpValidator::CheckRequestLineSyntax(const HttpRequestLine& requestLine)
 // 3) find Location
 //LocationBlock location = HttpHandler::findLocation(serverInfo, requestLine.getRequestURI());
 
-// 4) limit_except Check
-//HttpValidator::MethodPermitted(location, method);
-	// 메서드가 허용된지 확인하는 로직
-	// 허용되지 않으면 예외를 던질 수 있음

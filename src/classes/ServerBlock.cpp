@@ -5,9 +5,10 @@
 
 
 ServerBlock::ServerBlock() {
-	this->_clientMaxBodySize = 1;
-	this->_listenList.push_back(4242);
-	this->_root = "html";
+	this->_clientMaxBodySize = 1000000; //1MB
+	this->_listenList.push_back(DEFAULT_PORT);
+	this->_root = DEFAULT_ROOT;
+	this->_index.push_back(DEFAULT_INDEX);
 }
 
 std::map<std::string, int> create_directivemap() {
@@ -71,11 +72,11 @@ void	ServerBlock::setAutoIndex(std::vector<std::string>& value) {
 
 void	ServerBlock::setIndex(std::vector<std::string>& value) {
 	std::vector<std::string> index;
-	index.push_back("index.html");
-	for(size_t i = 1; i < value.size(); i++) {
-		index.push_back(value[i]);
-	}
-	this->_index = index;
+    index.push_back("index.html");
+    for(size_t i = 1; i < value.size(); i++) {
+        index.push_back(value[i]);
+    }
+    this->_index = index;
 }
 
 void	ServerBlock::setClientBodyTempPath(std::vector<std::string>& value) {
@@ -199,3 +200,4 @@ void	ServerBlock::printInfo() {
 std::vector<std::string>	ServerBlock::getServerNameList() const{ return(this->_serverNameList); }
 
 std::vector<int>	ServerBlock::getListenList() { return(this->_listenList); }
+

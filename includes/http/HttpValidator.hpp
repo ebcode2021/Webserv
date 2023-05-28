@@ -12,35 +12,13 @@
 namespace	HttpValidator
 {
 	// Validate request
-	void		validateRequest(const HttpRequest&, ServerBlock&, LocationBlock&);
+	void		validateRequest(HttpRequest&, ServerBlock&, LocationBlock&);
 
 	// check request-line 'method' and 'http-version'
-	void		CheckRequestLineSyntax(const HttpRequestLine&);
+	void		checkRequestLineSyntax(const HttpRequestLine&);
 	void		CheckRequestHeaderSyntax(const HttpRequestHeader&);
 
-	// check url path
-	void		validateURI(Config&, const HttpRequest&);
-
-	void		MethodPermitted(LocationBlock&, const std::string&);
+	void		validatePath(PathInfo& pathInfo);
 }
-
-
-// namespace	HttpHandler
-// {
-// 	ServerInfo		findServerInfo(Config&, const std::string&);
-// 	LocationBlock	findLocation(ServerBlock&, const std::string&);
-
-// 	//ServerInfo		compareServerData(std::vector<ServerInfo>&, std::string&, size_t);
-
-
-// 	// autoIndex 처리
-// 	std::string		generateResponseBody(ServerBlock&, LocationBlock&);
-// 	void			processRequest();
-
-// 	HttpPage		requestHandler(Config&, HttpRequest&);
-// 	HttpPage		setPageFromConfigAndRequest(Config&, HttpRequest&);
-
-
-// }
 
 #endif

@@ -29,11 +29,17 @@ class ServerBlock {
 		void		setIndex(std::vector<std::string>&);
 		void		setClientBodyTempPath(std::vector<std::string>&);
 		void		setRoot(std::vector<std::string>&);
+		std::vector<ErrorPage>		getErrorPage();
 
 		////
 		std::vector<std::string>	getServerNameList() const;
 		std::vector<int>			getListenList();
-		
+		std::string					getRoot() {return(this->_root);};
+		std::vector<std::string>	getIndexList() {return(this->_index);};
+		bool						getAutoIndex() {return(this->_autoindex);};
+		unsigned int				getClientMaxBodySize() {return(this->_clientMaxBodySize);};
+
+		////
 
 		//test
 		void		printInfo();

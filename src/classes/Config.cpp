@@ -199,7 +199,6 @@ ServerInfo	Config::findServerInfoByParameter(std::string& serverName, size_t por
 	size_t						serverNameListSize;
 
 	size_t	portListSize = portList.size();
-	std::cout << portListSize << std::endl;
 	for (size_t i = 0; i < portListSize; i++)
 	{
 		ServerBlock serverBlock  = portList[i].getServerBlock();
