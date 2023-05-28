@@ -19,6 +19,14 @@ Config::Config(std::string fileName)
 		if (splitedLine.size() && splitedLine[0].compare("server") == 0)
 			addServer(confFile);
 	}
+	
+	for (size_t i = 0; i < this->_serverList.size(); i++) {
+		ServerBlock server = this->_serverList[i].getServerBlock();
+		std::vector<int> listenSockList = server.getListenList();
+		for (size_t j = 0; j < listenSockList.size(); j++) {
+			this->_listenSockList.insert(listenSockList[i]);
+		}
+	}
 	std::cout << "설정 끝" << std::endl;
 }
 
@@ -131,6 +139,10 @@ void	Config::addServer(std::ifstream & confFile) {
 
 	std::cout << "로케이션 클래스 저장 완료" << std::endl;
 	this->_serverList.push_back(ServerInfo(serverBlock, locationBlock));
+}
+
+std::set<int>	Config::getListenSockList() {
+	return (this->_listenSockList);
 }
 
 

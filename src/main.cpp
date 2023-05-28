@@ -23,37 +23,41 @@ int createSocket()
 	return (sock);
 }
 
+
+void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &listenSockFdList) 
+{
+	SocketEventHandler sockEventHandler;
+	std::set<int> listenSockList = config.getListenSockList(); 
+	for (std::set<int>::iterator it = listenSockList.begin(); it != listenSockList.end(); it++)
+	{
+		int listenSockFd = createSocket();
+		if (listenSockFd == INVALID_SOCKET) {
+			printErrorWithExit(strerror(errno));
+		}
+		TcpSocket *listenSock = new TcpSocket(listenSockFd);
+		sockEventHandler.setSocket(listenSock);
+		if (sockEventHandler.sockBind(*it) < 0)
+			printErrorWithExit(strerror(errno));
+		if (sockEventHandler.sockListen())
+			printErrorWithExit(strerror(errno));
+		listenSock->changeToNonblocking();
+		kqHandler.changeEvent(listenSockFd, EVFILT_READ, EV_ADD, 0, 0, listenSock);
+		listenSockFdList.insert(listenSockFd);
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	(void)argc;
-	
 	if (1) //Config::fileCheck(argc, argv))
 	{
 		Config config(argv[1]);
-		//config.printServerList();
-
-		// fd 늘리는 로직 추가
-
-		// create_listen_sock(); // linten sock read event 등록 
-		// openListenSockets(config, kq);
-
-		// 이벤트에 대한 정보(Read, Write, Add, Delete)를 저장하는 vector
 		std::vector<struct kevent>	changeList;
-		std::set<int>				listenSockList;
+		std::set<int>				listenSockFdList;
 		KqueueHandler				kqHandler;
 		SocketEventHandler			sockEventHandler;
 		
-		
-		// 여기 for문  openListenSockets(config, changeList);
-
-		int listenSock = createSocket();
-		TcpSocket *listenSocket = new TcpSocket(listenSock);
-		listenSocket->socketBind(9999);
-		listenSocket->socketListen();
-		listenSocket->changeToNonblocking();
-		listenSockList.insert(listenSock);
-		kqHandler.changeEvent(listenSocket->getSockFd(), EVFILT_READ, EV_ADD, 0, 0, listenSocket);
-
+		initListenSocket(kqHandler, config, listenSockFdList);
 		while(1)
 		{
 			kqHandler.eventListReset();
@@ -64,15 +68,15 @@ int main(int argc, char *argv[])
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
 				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
 
-
 				sockEventHandler.setSocket(curSock);
 				if (curEvent.filter == EVFILT_READ)
 				{
-					if (listenSockList.find(curEvent.ident) != listenSockList.end())
+					
+					if (listenSockFdList.find(curEvent.ident) != listenSockFdList.end())
 					{
 						int clientSock = sockEventHandler.socketAccept();
 						if (clientSock == INVALID_SOCKET) {
-							printErrorWithExit(strerror(errno));
+							continue ;
 						}
 						TcpSocket *clientSocket = new TcpSocket(clientSock);
 						clientSocket->changeToNonblocking();
@@ -80,30 +84,15 @@ int main(int argc, char *argv[])
 					}
 					else 
 					{
-						std::cout << "read fd = " << curSock->getSockFd() << std::endl;
-						int ret = sockEventHandler.dataRecv();
-						std::cout << "============body=============" << std::endl;
-						std::cout << curSock->getString() << std::endl;
-						std::cout << "============body=============" << std::endl;
-						if (ret == -1) {
-							std::cout << strerror(errno) << std::endl;
-							printErrorWithExit("error: recv()");
-						}
-						else if (ret == 0) {
-							std::cout << "close fd = " << curSock->getSockFd() << std::endl;
+						if (sockEventHandler.dataRecv() <= 0) 
 							sockEventHandler.closeSocket();
-						}
-						else {
-							if (curSock->getReadMode() == HEADER) {
+						else 
+						{
+							if (curSock->getReadMode() == HEADER) 
+							{
 								curSock->setRequestHeader();
-								if (curSock->getRequest().getHttpRequestLine().getMethod() == "GET")
-									curSock->setReadMode(END);
-								else if (curSock->getRequest().getHttpRequestHeader().getTransferEncoding() == "chunked")
-									curSock->setReadMode(CHUNKED);
-								else
-									curSock->setReadMode(IDENTITY);
+								curSock->changeReadMode();
 							}
-							std::cout << curSock->getRequest().toString() << std::endl;
 							if (curSock->getReadMode() != END)
 								curSock->setRequestBody();
 							if (curSock->getReadMode() == END)
@@ -112,40 +101,31 @@ int main(int argc, char *argv[])
 								// response 생성자에서 처리.
 								//HttpResponse response(config, curSock->getRequest());
 								//curSock->setResponse(response);
-							//if (curSock->getReadMode() == HEADER)
-							//curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
-							//else if (curSock->getReadMode() == POST)
-							//curSock->setRequestBody();
-							
-							std::cout << curSock->getRequest().toString() << std::endl;
-							{
+								//if (curSock->getReadMode() == HEADER)
+								//curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
+								//else if (curSock->getReadMode() == POST)
+								//curSock->setRequestBody();
+								//std::cout << curSock->getRequest().toString() << std::endl;
 								////////////////////////////
 								std::cout << "--------------------------" << std::endl;
-								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
-								curSock->setResponse(response);
+								//HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
+								//curSock->setResponse(response);
 								// /HttpPage httpPage = HttpHandler::setPageFromConfigAndRequest(config, httpRequest);
-							
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
-							}
 							}
 						}
 					}
 				}
 				else if (curEvent.filter == EVFILT_WRITE)
 				{
-					std::cout << "write fd = " << curSock->getSockFd() << std::endl;
-					// 맞는 response 내보내게끔
 					int sendsize = sockEventHandler.dataSend();
+					sendsize = 10;
 					kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
-					if (sendsize == -1) {
-						printErrorWithExit(strerror(errno));
-					}
-					// std::cout << "close fd = " << curSock->getSockFd() << std::endl;
-					// sockEventHandler.closeSocket();
+					// if (sendsize == -1 || curSock->getRequest().getHttpRequestHeader().getConnection() == "close") 
+					// 	sockEventHandler.closeSocket();
 				}
-			
 			}
 		}
+		return (0);
 	}
-	return (0);
 }
