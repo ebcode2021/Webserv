@@ -87,8 +87,8 @@ std::string createHttpResponse(std::string &path) {
 	// 	std::cout << line;
 	// }
     response << "HTTP/1.1 200 OK\r\n";
-    response << "Content-Type: application/octet-stream\r\n";
-	response << "Content-Disposition: attachment; filename=\"eunbi\"\r\n";
+    response << "Content-Type: image/jpeg\r\n";
+	//response << "Content-Disposition: attachment; filename=\"eunbi\"\r\n";
 	response << "Connection: close\r\n";
     response << "Content-Length: " << body.length() << "\r\n";
 	//response << "Transfer-Encoding : chunked\r\n";
@@ -98,19 +98,20 @@ std::string createHttpResponse(std::string &path) {
     return response.str();
 }
 
-void createAutoIndex(std::string &path) {
+// void createAutoIndex(std::string &path) {
 
-}
+// }
 
 int SocketEventHandler::dataSend() {
+	HttpResponseHeader header = this->_socket->getResponse().getResponseHeader();
 
 	//send(this->_socket->getSockFd(), "a", 1, 0);
 	//return (0);
 	// hello.html
 	// eunbi.jepg
-	std::string path = "/Users/minsukan/Desktop/42/webserv/Webserv/resources/html/";
+	std::string path = DEFAULT_ROOT + "/eunbi.jpeg";
     std::string httpResponse;
-	//httpResponse = createHttpResponse(path);
+	httpResponse = createHttpResponse(path);
 	//httpResponse = createAutoIndex(path);
 	
 

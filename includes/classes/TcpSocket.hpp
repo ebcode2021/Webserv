@@ -51,6 +51,8 @@ class TcpSocket
 
 		std::string chunkedEncoding();
 
+		HttpResponse getResponse();
+
 
 		//test
 		const char *getStringToCStr();

@@ -108,8 +108,8 @@ int main(int argc, char *argv[])
 								//std::cout << curSock->getRequest().toString() << std::endl;
 								////////////////////////////
 								std::cout << "--------------------------" << std::endl;
-								//HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
-								//curSock->setResponse(response);
+								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
+								curSock->setResponse(response);
 								// /HttpPage httpPage = HttpHandler::setPageFromConfigAndRequest(config, httpRequest);
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
@@ -121,8 +121,8 @@ int main(int argc, char *argv[])
 					int sendsize = sockEventHandler.dataSend();
 					sendsize = 10;
 					kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
-					// if (sendsize == -1 || curSock->getRequest().getHttpRequestHeader().getConnection() == "close") 
-					// 	sockEventHandler.closeSocket();
+					if (sendsize == -1 || curSock->getRequest().getHttpRequestHeader().getConnection() == "close") 
+						sockEventHandler.closeSocket();
 				}
 			}
 		}
