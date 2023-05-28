@@ -7,17 +7,17 @@
 class	Config {
 	private :
 		std::vector<ServerInfo>	_serverList;
-		//std::vector<int>	lis
+		std::set<int>			_listenSockList;
 
 	public :
 		Config(std::string);
 
-		static bool fileCheck(std::string);
 		//test
 		static bool	fileCheck(int, char *[]);
 		//void	printServerList();
 
 		void	addServer(std::ifstream &);
+		std::set<int>	getListenSockList();
 
 		std::vector<ServerInfo>&	getServerList();
 

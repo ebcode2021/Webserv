@@ -14,11 +14,15 @@ class SocketEventHandler
 		int socketAccept();
 		//socketConnect
 
+		// socketFunction
+		int		sockAccept();
+		int		sockBind(int);
+		int		sockListen();
 
 		// Event Processing
 		int		dataRecv();
 		int		dataSend();
-		void closeSocket();
+		void	closeSocket();
 
 		// setter
 		void	setSocket(TcpSocket *);

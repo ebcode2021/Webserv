@@ -72,11 +72,23 @@ int SocketEventHandler::dataRecv() {
     return (ret);
 }
 
-std::string createHttpResponse(const std::string& body) {
+std::string createHttpResponse(std::string &path) {
     std::ostringstream response;
-    
+	std::ifstream file(path, std::ios::binary);
+	std::string	line;
+	std::string body;
+
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	body = buffer.str();
+	// while (std::getline(file, line))
+	// {
+	// 	tmpbody += line;
+	// 	std::cout << line;
+	// }
     response << "HTTP/1.1 200 OK\r\n";
-    response << "Content-Type: text/html\r\n";
+    response << "Content-Type: application/octet-stream\r\n";
+	response << "Content-Disposition: attachment; filename=\"eunbi\"\r\n";
 	response << "Connection: close\r\n";
     response << "Content-Length: " << body.length() << "\r\n";
 	//response << "Transfer-Encoding : chunked\r\n";
@@ -86,13 +98,20 @@ std::string createHttpResponse(const std::string& body) {
     return response.str();
 }
 
+void createAutoIndex(std::string &path) {
+
+}
+
 int SocketEventHandler::dataSend() {
 
 	//send(this->_socket->getSockFd(), "a", 1, 0);
 	//return (0);
-
-	std::string htmlBody = "<html><body>Hello World</body></html>";
-    std::string httpResponse = createHttpResponse(htmlBody);
+	// hello.html
+	// eunbi.jepg
+	std::string path = "/Users/minsukan/Desktop/42/webserv/Webserv/resources/html/";
+    std::string httpResponse;
+	//httpResponse = createHttpResponse(path);
+	//httpResponse = createAutoIndex(path);
 	
 
 	int sendByte = send(this->_socket->getSockFd(), httpResponse.c_str(), httpResponse.size(), 0);
@@ -106,4 +125,32 @@ void	SocketEventHandler::printSockBuf() {
 
 void SocketEventHandler::printSockFd() {
 	std::cout << this->_socket->getSockFd() << std::endl;
+}
+
+int SocketEventHandler::sockBind(int port) {
+	struct sockaddr_in	serverAddr;
+
+	memset(&serverAddr, 0, sizeof(serverAddr));
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	serverAddr.sin_port = htons(port);
+
+	return (bind(this->_socket->getSockFd(), (struct sockaddr *)&serverAddr, sizeof(serverAddr)));
+}
+
+int SocketEventHandler::sockListen() {
+	return (listen(this->_socket->getSockFd(), FD_SETSIZE));
+}
+
+int	SocketEventHandler::sockAccept() {
+	std::cout << "접속 수용 이벤트 발생" << std::endl;
+	sockaddr_in clientAddress;
+	socklen_t clientAddressSize = sizeof(clientAddress);
+	std::cout << "accept 전" << std::endl;
+
+	char addr[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr));
+	std::cout << "클라이언트 접속: IP = " << addr << " 포트 = " << ntohs(clientAddress.sin_port) << std::endl;
+
+	return (accept(this->_socket->getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize));
 }
