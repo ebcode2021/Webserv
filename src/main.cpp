@@ -23,7 +23,6 @@ int createSocket()
 	return (sock);
 }
 
-
 void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &listenSockFdList) 
 {
 	SocketEventHandler sockEventHandler;
