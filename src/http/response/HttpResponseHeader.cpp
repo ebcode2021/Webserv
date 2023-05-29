@@ -26,22 +26,36 @@ void						HttpResponseHeader::setTransferEncoding(std::string& transferEncoding)
 void						HttpResponseHeader::setHttpResponseHeader(HttpRequest& httpRequest, size_t bodySize)
 {
 	(void)httpRequest;
-	(void)bodySize;
 	this->_date = getCurrentTime();
 	this->_server = SERVER_NAME;
-	this->_contentType = "text/html";
-	this->_contentLength = 0;
-	this->_transferEncoding = "identity";
+	this->_contentType = "text/html"; //getContentType();
+	this->_contentLength = bodySize;
+	this->_transferEncoding = "identity"; 
 	// cookie 한 줄 추가
 }
 
 std::string					HttpResponseHeader::getCurrentTime()
 {
-	std::time_t currentTime = std::time(NULL);
-	std::tm* timeInfo = std::gmtime(&currentTime);
-
 	char buffer[100];
-	std::strftime(buffer, sizeof(buffer), "%a, %d %b %Y %H:%M:%S GMT", timeInfo);
 	
+	std::time_t	currentTime = std::time(NULL);
+	std::tm* 	timeInfo = std::localtime(&currentTime);
+
+	std::strftime(buffer, sizeof(buffer), "%a, %d %b %Y %H:%M:%S GMT", timeInfo);
+
 	return buffer;
+}
+
+std::string					HttpResponseHeader::getResponseHeaderToString()
+{
+	std::string	responseHeader;
+
+	responseHeader += ("Server:" + SP + this->_server + CRLF);
+	responseHeader += ("Date:" + SP + this->_date + CRLF);
+	responseHeader += ("Content-Type:" + SP + this->_contentType + CRLF);
+	responseHeader += ("Content-Length:" + SP + itos(this->_contentLength) + CRLF);
+	responseHeader += ("Transfer-Encoding:" + SP + this->_transferEncoding + CRLF);
+	responseHeader += CRLF;
+
+	return (responseHeader);
 }

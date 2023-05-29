@@ -99,7 +99,6 @@ int main(int argc, char *argv[])
 								std::cout << "--------------------------" << std::endl;
 								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
 								curSock->setResponse(response);
-								// /HttpPage httpPage = HttpHandler::setPageFromConfigAndRequest(config, httpRequest);
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
 						}

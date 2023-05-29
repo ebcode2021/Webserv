@@ -26,8 +26,7 @@ class LocationBlock : public ServerBlock
 		void	printLocationBlock();
 
 		bool	isValidMethodByLimitExcept(const std::string&) {return true;};
-		
-		
+
 };
 
 #endif

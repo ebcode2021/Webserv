@@ -11,6 +11,9 @@ class ErrorPage {
 		ErrorPage(std::vector<std::string>&);
 		void PrintInfo();
 
+		// getter, setter
+		std::vector<int>	getStatusCodeList() const;
+		std::string			getPath() const;
 };
 
 # endif

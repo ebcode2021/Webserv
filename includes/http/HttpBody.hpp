@@ -13,6 +13,7 @@ class	HttpBody
 
 		void		setBody(std::string body) { this->_body += body; };
 		void		setResponseBody(std::string body) { this->_body += body; };
+
 };
 
 #endif

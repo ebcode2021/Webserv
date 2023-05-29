@@ -2,8 +2,11 @@
 # define PATH_INFO_HPP
 
 # include "webserv.hpp"
-# include "LocationBlock.hpp"
 # include "HttpException.hpp"
+
+class LocationBlock;
+class ErrorPage;
+
 
 enum	PathType
 {
@@ -43,7 +46,8 @@ class PathInfo
 		bool		getAccess() const;
 		void		setAutoIndex(bool);
 		void		autoIndexOn() {(this->_autoIndex = true);};
-		std::string	setReturnPage(const std::string&);
+		void		setReturnPage(const std::string&);
+		std::string	getReturnPage(){return(this->_returnPage);};
 
 		// method
 		void		validatePath();
@@ -55,12 +59,12 @@ class PathInfo
 		PathType		determinePathType();
 		FileType		determineFileType();
 		bool			isAccess();
-		bool			isFile(std::string&);
+		static bool		isFile(std::string&);
 
 
 
 		// exception
-		void			validatePathInfo(LocationBlock& locationBlock);
+		void			validatePathInfo(LocationBlock&);
 		// print
 		void			printPathInfo();
 };

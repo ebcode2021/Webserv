@@ -20,23 +20,19 @@
 class	HttpResponse
 {
 	private :
-		HttpResponseLine	_httpResponseLine;
+		HttpResponseLine	_httpResponseLine; 
 		HttpResponseHeader	_httpResponseHeader;
 		HttpBody			_httpBody;
 
 	public :
 		// constructor
 		HttpResponse();
-		HttpResponse(std::string&);
 		HttpResponse(HttpRequest&, PathInfo&, HttpStatus&);
 
 		HttpResponse& 				operator=(const HttpResponse&);
 
 		// getter, setter
-		std::string					getResponse();
-		HttpResponseLine&			getResponseLine();
-		HttpResponseHeader&			getResponseHeader();
-		HttpBody&					getBody();
+		std::string					getResponseToString();
 		void						setResponse(HttpResponse&);
 		void						setResponseLine(const HttpResponseLine&);
 		void						setResponseHeader(const HttpResponseHeader&);

@@ -24,3 +24,11 @@ bool	endsWithSemicolon(std::string str)
 		return false;
 	return true;
 }
+
+std::string	itos(int integer)
+{
+	std::stringstream	str;
+	
+	str << integer;
+	return (str.str());
+}
