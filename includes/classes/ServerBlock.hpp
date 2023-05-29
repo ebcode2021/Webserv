@@ -44,6 +44,7 @@ class ServerBlock {
 
 		////
 		std::string					selectErrorPage(HttpStatus&);
+		bool						isIndex();
 		//test
 		void		printInfo();
 

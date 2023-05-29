@@ -85,7 +85,8 @@ void	PathInfo::validatePathInfo(LocationBlock& block)
 			std::vector<std::string>	indexList = block.getIndexList();
 			size_t						indexListSize = indexList.size();
 			std::string					addIndexPath = this->_path + indexList[0];
-			//std::cout << "indexPath : " << addIndexPath << std::endl;
+			std::cout << "originPath : " << this->_path << std::endl;
+			std::cout << "indexPath : " << addIndexPath << std::endl;
 			//std::cout << "indexListSize : " << indexListSize << std::endl;
 			if (indexListSize > 1)
 			{
@@ -100,8 +101,12 @@ void	PathInfo::validatePathInfo(LocationBlock& block)
 						return ;
 					}
 				}
-				if (this->_autoIndex == true)
+				if (block.getAutoIndex() == true)
+				{
+					this->_returnPage = this->_path;
 					this->autoIndexOn();
+					return ;
+				}
 				else
 					throw ResponseException(404);
 			}

@@ -11,7 +11,7 @@ HttpResponse::HttpResponse(HttpRequest& httpRequest, PathInfo& pathInfo, HttpSta
 	// response-line
 	this->_httpResponseLine.setHttpResponseLine(httpStatus);
 	// response-body
-	this->_httpBody.setResponseBody(createResponseBody(pathInfo));
+	this->_httpBody.setResponseBody(createResponseBody(pathInfo, httpStatus));
 	// response-header
 	this->_httpResponseHeader.setHttpResponseHeader(httpRequest, this->_httpBody.getBodySize());
 
@@ -52,8 +52,8 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpReque
 		// 3. post나 delete일 경우 뭐 처리하는 함수 하나 추가
 		
 		// 4. validate Path or File
-		//pathInfo.printPathInfo();
 		pathInfo.validatePathInfo(locationBlock);
+		pathInfo.printPathInfo();
 		std::cout << "---- [success] PathInfo validate! " << std::endl;
 	}
 	catch(const ResponseException &ex)
@@ -72,15 +72,24 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpReque
 	return (HttpResponse(httpRequest, pathInfo, httpStatus));
 }
 
-std::string	HttpResponse::createResponseBody(PathInfo& pathInfo)
+std::string	HttpResponse::createResponseBody(PathInfo& pathInfo, HttpStatus &httpStatus)
 {
 	std::stringstream	response;
 	std::ifstream		file(pathInfo.getReturnPage());
 
-	if (file.is_open())
+	// 1. Return error page
+	if (pathInfo.getReturnPage().empty())
+		return (createErrorBody(httpStatus));
+	// 2. Return autoIndex page
+	if (pathInfo.getAutoIndex() == true)
+		return (createAutoIndexBody(pathInfo.getReturnPage()));
+	else // 3. Return normal page
 	{
-		response << file.rdbuf();
-		file.close();
+		if (file.is_open())
+		{
+			response << file.rdbuf();
+			file.close();
+		}
 	}
 	return (response.str());
 }
@@ -121,4 +130,69 @@ std::string	HttpResponse::getResponseToString() {
 	response += this->_httpBody.getBody();
 
 	return (response);
+}
+
+std::string					HttpResponse::createErrorBody(HttpStatus& httpStatus)
+{
+	std::stringstream	body;
+
+	body << "<!DOCTYPE html>\n";
+	body << "<html>\n";
+	body << "<head><title>" << httpStatus.getStatusCode() << SP << httpStatus.getReason() << "</title>\n";
+	body << "<meta charset=\"UTF-8\">\n";
+	body << "</head>\n";
+	body << "<body>\n";
+	body << "<center><h1>" << httpStatus.getStatusCode() << SP << httpStatus.getReason() << "</h1></center>\n";
+	body << "<hr><center>" << SERVER_NAME << "</center>\n";
+	body << "</body>\n";
+	body << "</html>\n";
+	
+	return (body.str());
+}
+
+std::vector<std::string> HttpResponse::getFileNameByPath(const std::string &path)
+{
+	std::vector<std::string>	filename;
+	struct dirent				*entry;
+	DIR							*dir;
+
+	dir = opendir(path.c_str());
+	if (dir == nullptr) {
+		return (filename);
+	}
+
+	entry = readdir(dir);
+	while ((entry = readdir(dir)) != nullptr)
+	{
+		filename.push_back(entry->d_name);
+	}
+	closedir(dir);
+	return (filename);
+}
+
+std::string					HttpResponse::createAutoIndexBody(const std::string&path)
+{
+	std::stringstream	body;
+	std::vector<std::string> fileName = getFileNameByPath(path);
+
+	std::cout << "pathj!!!! " << path << std::endl;
+
+	body << "<!DOCTYPE html>\n";
+	body << "<html>\n";
+	body << "<title>" << path << "</title>\n";
+	body << "<meta charset=\"UTF-8\">\n";
+	body << "</head>\n";
+	body << "<body>\n";
+	body << "<h1>" << path << "</h1>\n";
+	body << "<hr>\n";
+	body << "<pre>\n";
+	for (size_t i = 0; i < fileName.size(); i++) {
+		body << "<a href=\"" << fileName[i] << "\">" << fileName[i] << "</a>\n";
+	}
+	body << "</pre>\n";
+	body << "<hr>\n";
+	body << "</body>\n";
+	body << "</html>\n";
+	
+	return (body.str());
 }
