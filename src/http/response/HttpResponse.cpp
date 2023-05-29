@@ -14,6 +14,11 @@ HttpResponse::HttpResponse(HttpRequest& httpRequest, PathInfo& pathInfo, HttpSta
 	this->_httpBody.setResponseBody(createResponseBody(pathInfo));
 	// response-header
 	this->_httpResponseHeader.setHttpResponseHeader(httpRequest, this->_httpBody.getBodySize());
+
+	std::cout << "asdf?????????????????" << std::endl;
+	std::cout << this->getResponseToString() << std::endl;
+	exit(1);
+	//this->printHttpResponse();
 }
 
 HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpRequest)
@@ -55,51 +60,41 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpReque
 	{
 		httpStatus = ex.httpStatus();
 		std::cout << "error 발생! " << httpStatus.getStatusCode() << std::endl;
-		//pathInfo.setReturnPage(pathInfo.selectErrorPage(httpStatus, locationBlock.getErrorPage()));
+		
+		std::string	selectPage = locationBlock.selectErrorPage(httpStatus);
+		if (selectPage.empty() == false)
+		{
+			path += locationBlock.selectErrorPage(httpStatus);
+			pathInfo.setReturnPage(path);
+		}
+		std::cout << "실제 에러 페이지 : " << path << std::endl;
 	}
 	return (HttpResponse(httpRequest, pathInfo, httpStatus));
 }
 
 std::string	HttpResponse::createResponseBody(PathInfo& pathInfo)
 {
-	(void)pathInfo;
-	std::string a = "붙일곳";
-	return(a);
+	std::stringstream	response;
+	std::ifstream		file(pathInfo.getReturnPage());
+
+	if (file.is_open())
+	{
+		response << file.rdbuf();
+		file.close();
+	}
+	return (response.str());
 }
+
 HttpResponse&	HttpResponse::operator=(const HttpResponse& prev)
 {
 	(void)prev;
 	return (*this);
 }
 
-// void	HttpResponse::setResponseLine(const HttpResponseLine& httpResponseLine)
-// {
-// 	//(void)httpStatus;
-// 	//this->_httpResponseLine.setHttpStatus(httpStatus);
-// }
-
-// void	HttpResponse::setResponseHeader(const HttpResponseHeader& responseHeader)
-// {
-// 	//this->_httpResponseHeader.setContentLength(this->_httpBody.getBodySize());
-// }
-
 void	HttpResponse::setBody(const std::string& body)
 {
 	this->_httpBody.setBody(body);
 }
-
-	// 1. block의 root + location 조합해서, 파일인지 아닌지 검사
-
-	// 2. file인 경우 -> 파일 오픈. (정상적으로 열리는지, 없으면 404)
-
-	// 3. 경로인 경우 ** path가 null인 경우와 아닌 경우에 따라 또 나누고.
-
-	// 3-1. index가 있는가?
-		// 있으면 -> 파일 오픈
-		// 있는데 존재하지 않음 -> auto-index가 있는가? -> 있으면 auto-indexing, 없으면 403
-		// 없음 -> 403 not found
-	// 4. 에러인 경우, error_page 탐색
-	// std::string returnPage() 를 createResponseBody()인자로.
 
 void	HttpResponse::printHttpResponse()
 {
@@ -108,14 +103,27 @@ void	HttpResponse::printHttpResponse()
 	HttpBody body = this->_httpBody;
 
 	std::cout << "\n---- [response 출력] ----" << std::endl;
-	std::cout << "\t response-line" << std::endl;
-	std::cout << "\2t httpStatus : " << line.getHttpStatus().getStatusCode() << " " << line.getHttpStatus().getReason() << std::endl;
-	std::cout << "\2t version : " << line.getVersion() << std::endl;
-	std::cout << "\t response-header" << std::endl;
-	std::cout << "\2t date : " << header.getDate() << std::endl;
-	std::cout << "\2t server : " << header.getServer() << std::endl;
-	std::cout << "\2t transfer-encoding : " << header.getTransferEncoding() << std::endl;
-	std::cout << "\2t content-length" << header.getContentLength() << std::endl;
-	std::cout << "\2t contnet-type" << header.getContentType() << std::endl;
+	std::cout << " -- response-line" << std::endl;
+	std::cout << "\t httpStatus : " << line.getHttpStatus().getStatusCode() << " " << line.getHttpStatus().getReason() << std::endl;
+	std::cout << "\t version : " << line.getVersion() << std::endl;
+	std::cout << " -- response-header" << std::endl;
+	std::cout << "\t date : " << header.getDate() << std::endl;
+	std::cout << "\t server : " << header.getServer() << std::endl;
+	std::cout << "\t transfer-encoding : " << header.getTransferEncoding() << std::endl;
+	std::cout << "\t content-length : " << header.getContentLength() << std::endl;
+	std::cout << "\t content-type : " << header.getContentType() << std::endl;
+	std::cout << " -- response-body" << std::endl;
+	std::cout << body.getBody() << std::endl;
+
 	std::cout << "---- [response 출력 끝] ----\n" << std::endl;
+}
+
+std::string	HttpResponse::getResponseToString() {
+	std::string response = "";
+
+	response += this->_httpResponseLine.getResponseLineToString();
+	response += this->_httpResponseHeader.getResponseHeaderToString();
+	response += this->_httpBody.getBody();
+
+	return (response);
 }

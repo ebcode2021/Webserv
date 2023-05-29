@@ -98,19 +98,10 @@ int main(int argc, char *argv[])
 							if (curSock->getReadMode() == END)
 							{
 								// [은비 추가 코드] ************************
-								// response 생성자에서 처리.
-								//HttpResponse response(config, curSock->getRequest());
-								//curSock->setResponse(response);
-								//if (curSock->getReadMode() == HEADER)
-								//curSock->setRequestHeader(); // << 내부에 curSock->changeReadMode()
-								//else if (curSock->getReadMode() == POST)
-								//curSock->setRequestBody();
+								
 								//std::cout << curSock->getRequest().toString() << std::endl;
-								////////////////////////////
-								std::cout << "--------------------------" << std::endl;
 								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
 								curSock->setResponse(response);
-								// /HttpPage httpPage = HttpHandler::setPageFromConfigAndRequest(config, httpRequest);
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
 						}

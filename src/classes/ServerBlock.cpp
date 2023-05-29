@@ -2,6 +2,7 @@
 #include "ServerBlock.hpp"
 #include "webserv.hpp"
 #include "map"
+#include "PathInfo.hpp"
 
 
 ServerBlock::ServerBlock() {
@@ -201,3 +202,25 @@ std::vector<std::string>	ServerBlock::getServerNameList() const{ return(this->_s
 
 std::vector<int>	ServerBlock::getListenList() { return(this->_listenList); }
 
+std::string			ServerBlock::selectErrorPage(HttpStatus& httpStatus)
+{
+	int 					statusCode = httpStatus.getStatusCode();
+
+	std::vector<ErrorPage>	errorPageList = this->_errorPage;
+	size_t					errorPageListSize = errorPageList.size();
+
+	for (size_t i = 0; i < errorPageListSize; i++)
+	{
+		std::vector<int>	statusCodeList = errorPageList[i].getStatusCodeList();
+		size_t				statusCodeListSize = statusCodeList.size();
+
+		for (size_t j = 0; j < statusCodeListSize; j++)
+		{
+			std::string pagePath = errorPageList[i].getPath();
+
+			if (statusCode == statusCodeList[j] && PathInfo::isFile(pagePath) == true)
+				return (pagePath);
+		}
+	}
+	return ("");
+}

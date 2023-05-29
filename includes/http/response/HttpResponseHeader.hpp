@@ -36,7 +36,7 @@ class	HttpResponseHeader
 		// method
 		void						setHttpResponseHeader(HttpRequest&, size_t);
 		std::string					getCurrentTime();
-
+		std::string					getResponseHeaderToString();
 
 };
 

@@ -23,5 +23,7 @@ class	HttpResponseLine
 		void		setHttpResponseLine(HttpStatus&);
 
 		//void		setHttpStatus(const HttpStatus&);
+
+		std::string					getResponseLineToString();
 };
 #endif

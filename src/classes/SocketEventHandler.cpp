@@ -103,7 +103,7 @@ std::string createHttpResponse(std::string &path) {
 // }
 
 int SocketEventHandler::dataSend() {
-	HttpResponseHeader header = this->_socket->getResponse().getResponseHeader();
+	//HttpResponseHeader header = this->_socket->getResponse().getResponseHeader();
 
 	//send(this->_socket->getSockFd(), "a", 1, 0);
 	//return (0);

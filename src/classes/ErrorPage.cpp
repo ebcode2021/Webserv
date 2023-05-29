@@ -18,3 +18,12 @@ void ErrorPage::PrintInfo() {
 	}
 	cout << path << endl;
 }
+
+/* getter, setter */
+std::vector<int>	ErrorPage::getStatusCodeList() const {
+	return (this->statusCode);
+}
+
+std::string			ErrorPage::getPath() const {
+	return (this->path);
+}

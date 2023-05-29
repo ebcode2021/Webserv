@@ -1,4 +1,5 @@
 #include "PathInfo.hpp"
+#include "LocationBlock.hpp"
 
 /* constructor */
 PathInfo::PathInfo(){}
@@ -56,6 +57,7 @@ FileType	PathInfo::getFileType() const { return(this->_fileType); };
 std::string	PathInfo::getPath() const { return(this->_path); };
 bool		PathInfo::getAccess() const { return(this->_access); };
 
+
 /* method */
 bool	PathInfo::isValidDirectory()
 {
@@ -82,7 +84,7 @@ void	PathInfo::validatePathInfo(LocationBlock& block)
 		{
 			std::vector<std::string>	indexList = block.getIndexList();
 			size_t						indexListSize = indexList.size();
-			std::string					addIndexPath = this->_path + "/" + indexList[0];
+			std::string					addIndexPath = this->_path + indexList[0];
 			std::cout << "indexPath : " << addIndexPath << std::endl;
 			std::cout << "indexListSize : " << indexListSize << std::endl;
 			if (indexListSize > 1)
@@ -131,4 +133,9 @@ void	PathInfo::printPathInfo()
 	std::cout << "- autoIndex : " << this->_autoIndex << std::endl;
 	std::cout << "- returnPage : " << this->_returnPage << std::endl;
 	std::cout << "--------------------\n" << std::endl;
+}
+
+/////
+void	PathInfo::setReturnPage(const std::string& path){
+	this->_returnPage = path;
 }
