@@ -177,6 +177,3 @@ void	TcpSocket::setRequest(HttpRequest& httpRequest) { this->_request = httpRequ
 
 void	TcpSocket::setResponse(HttpResponse& httpResponse) { this->_response = httpResponse; }
 
-void TcpSocket::getResopnse() {
-	return (this->_response);
-}

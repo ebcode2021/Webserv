@@ -17,6 +17,7 @@
 # include <arpa/inet.h> // htons(), htonl(), ...
 # include <netdb.h> // gethostbyname(), ...
 # include <sys/stat.h>
+# include <dirent.h>
 
 /* common hpp*/
 # include "const.hpp"
