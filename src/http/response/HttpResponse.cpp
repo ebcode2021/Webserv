@@ -15,9 +15,9 @@ HttpResponse::HttpResponse(HttpRequest& httpRequest, PathInfo& pathInfo, HttpSta
 	// response-header
 	this->_httpResponseHeader.setHttpResponseHeader(httpRequest, this->_httpBody.getBodySize());
 
-	std::cout << "asdf?????????????????" << std::endl;
-	std::cout << this->getResponseToString() << std::endl;
-	exit(1);
+	//std::cout << "asdf?????????????????" << std::endl;
+	//std::cout << this->getResponseToString() << std::endl;
+	//exit(1);
 	//this->printHttpResponse();
 }
 
@@ -32,11 +32,11 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpReque
 	// 1. find server block and location block
 	ServerInfo		serverInfo  = config.findServerInfoByHost(requestHeader.getHost());
 	LocationBlock	locationBlock =  serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
-	//locationBlock.printInfo();
+	locationBlock.printInfo();
 	std::string		path = locationBlock.getRoot() + locationBlock.getPath();
 
 
-	std::cout << "locationBlock root: " << locationBlock.getRoot() << std::endl;
+	//std::cout << "locationBlock root: " << locationBlock.getRoot() << std::endl;
 	//std::cout << "locationBlock path : " << locationBlock.getPath() << std::endl;
 	
 	HttpStatus	httpStatus;
@@ -52,7 +52,7 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpReque
 		// 3. post나 delete일 경우 뭐 처리하는 함수 하나 추가
 		
 		// 4. validate Path or File
-		pathInfo.printPathInfo();
+		//pathInfo.printPathInfo();
 		pathInfo.validatePathInfo(locationBlock);
 		std::cout << "---- [success] PathInfo validate! " << std::endl;
 	}
@@ -85,12 +85,6 @@ std::string	HttpResponse::createResponseBody(PathInfo& pathInfo)
 	return (response.str());
 }
 
-HttpResponse&	HttpResponse::operator=(const HttpResponse& prev)
-{
-	(void)prev;
-	return (*this);
-}
-
 void	HttpResponse::setBody(const std::string& body)
 {
 	this->_httpBody.setBody(body);
@@ -117,6 +111,7 @@ void	HttpResponse::printHttpResponse()
 
 	std::cout << "---- [response 출력 끝] ----\n" << std::endl;
 }
+
 
 std::string	HttpResponse::getResponseToString() {
 	std::string response = "";

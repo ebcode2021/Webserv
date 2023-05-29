@@ -29,23 +29,20 @@ class	HttpResponse
 		HttpResponse();
 		HttpResponse(HttpRequest&, PathInfo&, HttpStatus&);
 
-		HttpResponse& 				operator=(const HttpResponse&);
 
 		// getter, setter
-		std::string					getResponseToString();
+		HttpResponse				getResponse();
 		void						setResponse(HttpResponse&);
 		void						setResponseLine(const HttpResponseLine&);
 		void						setResponseHeader(const HttpResponseHeader&);
 		void						setBody(const std::string&);
 
+		/* method */
+		std::string					getResponseToString();
 
-		// getter, setter
-		//const char*	getResponse();
-		//void		setResponse(const HttpRequest&, int);
-
-		// create
+		// create method
 		static HttpResponse			createResponse(Config&, HttpRequest&);
- 		std::string			createResponseBody(PathInfo&);
+ 		std::string					createResponseBody(PathInfo&);
 
 		// print
 		void						printHttpResponse();

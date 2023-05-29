@@ -98,7 +98,9 @@ int main(int argc, char *argv[])
 							{
 								std::cout << "--------------------------" << std::endl;
 								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
+							//	response.printHttpResponse();
 								curSock->setResponse(response);
+								//curSock->getResponse().printHttpResponse();
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
 						}
@@ -107,6 +109,7 @@ int main(int argc, char *argv[])
 				else if (curEvent.filter == EVFILT_WRITE)
 				{
 					int sendsize = sockEventHandler.dataSend();
+					curSock->setReadMode(HEADER);
 					sendsize = 10;
 					kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
 					if (sendsize == -1 || curSock->getRequest().getHttpRequestHeader().getConnection() == "close") 

@@ -78,15 +78,15 @@ void	PathInfo::validatePathInfo(LocationBlock& block)
 		}
 		else
 			throw ResponseException(404);
-
+		
 		// 2. validate directory Path
 		if (this->isValidDirectory() == true)
 		{
 			std::vector<std::string>	indexList = block.getIndexList();
 			size_t						indexListSize = indexList.size();
 			std::string					addIndexPath = this->_path + indexList[0];
-			std::cout << "indexPath : " << addIndexPath << std::endl;
-			std::cout << "indexListSize : " << indexListSize << std::endl;
+			//std::cout << "indexPath : " << addIndexPath << std::endl;
+			//std::cout << "indexListSize : " << indexListSize << std::endl;
 			if (indexListSize > 1)
 			{
 				for (size_t i = 1; i < indexListSize; i++)
@@ -115,11 +115,14 @@ void	PathInfo::validatePathInfo(LocationBlock& block)
 			// 3. save return_page
 			this->_returnPage = addIndexPath;
 		}
+		else
+			this->_returnPage = this->_path;
 	}
 	catch (const ResponseException &ex)
 	{
 		throw ResponseException(ex.statusCode());
 	}
+	
 }
 
 /////////////

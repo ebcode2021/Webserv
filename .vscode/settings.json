@@ -73,6 +73,8 @@
 		"unordered_set": "cpp",
 		"utility": "cpp",
 		"set": "cpp",
-		"filesystem": "cpp"
+		"filesystem": "cpp",
+		"__functional_03": "cpp",
+		"memory_resource": "cpp"
 	}
 }

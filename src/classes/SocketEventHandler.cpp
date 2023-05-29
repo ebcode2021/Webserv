@@ -143,16 +143,12 @@ std::string getbody(std::string &path) {
 
 int SocketEventHandler::dataSend() 
 {
-	// HttpResponseHeader header = this->_socket->getResponse().getResponseHeader();
-	std::string path = DEFAULT_ROOT + "/";
-	std::string body;
-
-    std::string httpResponse;
+    std::string responseMessage = this->_socket->getResponse().getResponseToString();
 	//body = getfile(path);
-	body = createAutoIndex(path);
-	httpResponse = createHttpResponse(body);
+	//body = createAutoIndex(path);
+	//httpResponse = createHttpResponse(body);
 
-	int sendByte = send(this->_socket->getSockFd(), httpResponse.c_str(), httpResponse.size(), 0);
+	int sendByte = send(this->_socket->getSockFd(), responseMessage.c_str(), responseMessage.size(), 0);
 	this->_socket->stringClear();
 	return (sendByte);
 }

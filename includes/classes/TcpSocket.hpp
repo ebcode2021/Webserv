@@ -30,6 +30,7 @@ class TcpSocket
 
 		//
 		HttpRequest&	getRequest();
+		HttpResponse	getResponse();
 		void			setRequest(HttpRequest&);
 		void			setResponse(HttpResponse&);
 		
@@ -51,7 +52,7 @@ class TcpSocket
 
 		std::string chunkedEncoding();
 
-		HttpResponse getResponse();
+		
 
 
 		//test

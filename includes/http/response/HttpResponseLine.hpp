@@ -7,8 +7,8 @@
 class	HttpResponseLine
 {
 	private :
-		const std::string	_version;
-		HttpStatus	_httpStatus;
+		std::string			_version;
+		HttpStatus			_httpStatus;
 
 	public :
 		// constructor
@@ -16,14 +16,12 @@ class	HttpResponseLine
 		HttpResponseLine(const HttpStatus&);
 
 		// getter, setter
-		std::string	getVersion() const;
-		HttpStatus	getHttpStatus() const;
-		void		setHttpStatus(const HttpStatus&);
+		std::string		getVersion() const;
+		HttpStatus		getHttpStatus() const;
+		void			setHttpStatus(const HttpStatus&);
 
-		void		setHttpResponseLine(HttpStatus&);
-
-		//void		setHttpStatus(const HttpStatus&);
-
-		std::string					getResponseLineToString();
+		// method
+		void			setHttpResponseLine(HttpStatus&);
+		std::string		getResponseLineToString();
 };
 #endif
