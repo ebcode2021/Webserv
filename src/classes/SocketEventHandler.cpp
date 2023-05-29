@@ -72,22 +72,11 @@ int SocketEventHandler::dataRecv() {
     return (ret);
 }
 
-std::string createHttpResponse(std::string &path) {
+std::string createHttpResponse(std::string &body) {
     std::ostringstream response;
-	std::ifstream file(path, std::ios::binary);
-	std::string	line;
-	std::string body;
-
-	std::stringstream buffer;
-	buffer << file.rdbuf();
-	body = buffer.str();
-	// while (std::getline(file, line))
-	// {
-	// 	tmpbody += line;
-	// 	std::cout << line;
-	// }
+	
     response << "HTTP/1.1 200 OK\r\n";
-    response << "Content-Type: image/jpeg\r\n";
+    response << "Content-Type: text.html\r\n";
 	//response << "Content-Disposition: attachment; filename=\"eunbi\"\r\n";
 	response << "Connection: close\r\n";
     response << "Content-Length: " << body.length() << "\r\n";
@@ -98,22 +87,70 @@ std::string createHttpResponse(std::string &path) {
     return response.str();
 }
 
-// void createAutoIndex(std::string &path) {
+std::vector<std::string> getFileNameByPath(const std::string &path)
+{
+	std::vector<std::string>	filename;
+	struct dirent				*entry;
+	DIR							*dir;
 
-// }
+	dir = opendir(path.c_str());
+	if (dir == nullptr) {
+		return (filename);
+	}
 
-int SocketEventHandler::dataSend() {
-	//HttpResponseHeader header = this->_socket->getResponse().getResponseHeader();
+	entry = readdir(dir);
+	while ((entry = readdir(dir)) != nullptr)
+	{
+		filename.push_back(entry->d_name);
+	}
+	closedir(dir);
+	return (filename);
+}
 
-	//send(this->_socket->getSockFd(), "a", 1, 0);
-	//return (0);
-	// hello.html
-	// eunbi.jepg
-	std::string path = DEFAULT_ROOT + "/eunbi.jpeg";
-    std::string httpResponse;
-	httpResponse = createHttpResponse(path);
-	//httpResponse = createAutoIndex(path);
+std::string createAutoIndex(std::string &path)
+{
+	std::stringstream body;
+	std::vector<std::string> filename = getFileNameByPath(path);
 	
+	body << "<!DOCTYPE html>\n";
+	body << "<html>\n";
+	body << "<title>" << path << "</title>\n";
+	body << "<meta charset=\"UTF-8\">\n";
+	body << "</head>\n";
+	body << "<body>\n";
+	body << "<h1>" << path << "</h1>\n";
+	body << "<hr>\n";
+	body << "<pre>\n";
+	for (size_t i = 0; i < filename.size(); i++) {
+		body << "<a href=\"" << filename[i] << "\">" << filename[i] << "</a>\n";
+	}
+	body << "</pre>\n";
+	body << "<hr>\n";
+	body << "</body>\n";
+	body << "</html>\n";
+	
+	return (body.str());
+}
+
+std::string getbody(std::string &path) {
+	std::ifstream file(path, std::ios::binary);
+
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+
+	return buffer.str();
+}
+
+int SocketEventHandler::dataSend() 
+{
+	// HttpResponseHeader header = this->_socket->getResponse().getResponseHeader();
+	std::string path = DEFAULT_ROOT + "/";
+	std::string body;
+
+    std::string httpResponse;
+	//body = getfile(path);
+	body = createAutoIndex(path);
+	httpResponse = createHttpResponse(body);
 
 	int sendByte = send(this->_socket->getSockFd(), httpResponse.c_str(), httpResponse.size(), 0);
 	this->_socket->stringClear();

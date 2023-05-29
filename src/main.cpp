@@ -23,7 +23,6 @@ int createSocket()
 	return (sock);
 }
 
-
 void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &listenSockFdList) 
 {
 	SocketEventHandler sockEventHandler;
@@ -97,9 +96,7 @@ int main(int argc, char *argv[])
 								curSock->setRequestBody();
 							if (curSock->getReadMode() == END)
 							{
-								// [은비 추가 코드] ************************
-								
-								//std::cout << curSock->getRequest().toString() << std::endl;
+								std::cout << "--------------------------" << std::endl;
 								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
 								curSock->setResponse(response);
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
