@@ -29,11 +29,11 @@ PathType	PathInfo::determinePathType()
 	return P_NONE;
 }
 
-FileType	PathInfo::determineFileType()
+std::string	PathInfo::determineFileType()
 {
-	if (this->_pathType != P_FILE)
-		return F_NONE;
-	return F_HTML;
+	if (this->_pathType != P_NONE)
+		return "nothing";
+	return "asdf";
 }
 
 bool		PathInfo::isAccess()
@@ -53,7 +53,7 @@ bool		PathInfo::isFile(std::string& path)
 
 /* getter, setter */
 PathType	PathInfo::getPathType() const { return(this->_pathType); };
-FileType	PathInfo::getFileType() const { return(this->_fileType); };
+std::string	PathInfo::getFileType() const { return(this->_fileType); };
 std::string	PathInfo::getPath() const { return(this->_path); };
 bool		PathInfo::getAccess() const { return(this->_access); };
 

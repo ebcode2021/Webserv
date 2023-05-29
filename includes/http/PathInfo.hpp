@@ -27,7 +27,7 @@ class PathInfo
 	private :
 		// variable
 		PathType		_pathType;
-		FileType		_fileType;
+		std::string		_fileType;
 		std::string		_path;
 		bool			_access;
 		bool			_autoIndex;
@@ -41,7 +41,7 @@ class PathInfo
 
 		// getter, setter
 		PathType	getPathType() const;
-		FileType	getFileType() const;
+		std::string	getFileType() const;
 		std::string	getPath() const;
 		bool		getAccess() const;
 		void		setAutoIndex(bool);
@@ -57,7 +57,7 @@ class PathInfo
 
 		// private method
 		PathType		determinePathType();
-		FileType		determineFileType();
+		std::string		determineFileType();
 		bool			isAccess();
 		static bool		isFile(std::string&);
 
