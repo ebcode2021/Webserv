@@ -53,8 +53,8 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpReque
 		
 		// 4. validate Path or File
 		pathInfo.validatePathInfo(locationBlock);
-		pathInfo.printPathInfo();
 		std::cout << "---- [success] PathInfo validate! " << std::endl;
+		//pathInfo.printPathInfo();
 	}
 	catch(const ResponseException &ex)
 	{

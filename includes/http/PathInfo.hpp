@@ -60,6 +60,7 @@ class PathInfo
 		PathType		determinePathType();
 		std::string		determineFileType();
 		bool			isAccess();
+		bool			isAccess(std::string&);
 		static bool		isFile(std::string&);
 
 
