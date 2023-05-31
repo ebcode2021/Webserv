@@ -17,12 +17,14 @@ const std::string LOCATION = ".location_indications";
 const std::string SERVER = ".server_indications";
 const std::string LIMIT_EXCEPT = ".limit_except_indications";
 
+
 /* extension */
 const std::string EXTENSION = ".conf";
 
 /* path */
 const std::string ROOT_PATH = "/Users/eunson/Desktop/webserv/";
 const std::string INDICATION_PATH = "/Users/eunson/Desktop/webserv/indication/";
+const std::string FILE_TYPE_PATH = "/Users/minsukan/Desktop/42/webserv/Webserv/filetype/mime.types";
 
 const std::string KEYWORD_PATH = "/Users/eunson/Desktop/webserv/keywords/.server_keywords";
 
@@ -58,7 +60,7 @@ const size_t DEFAULT_PORT = 4242;
 
 const std::string SERVER_NAME = "webserv/1.0.0";
 
-const std::string DEFAULT_ROOT = "/Users/eunson/Desktop/webserv/resources/html";
+const std::string DEFAULT_ROOT = "/Users/minsukan/Desktop/42/webserv/Webserv/resources/html";
 
 const std::string DEFAULT_INDEX = "index.html";
 

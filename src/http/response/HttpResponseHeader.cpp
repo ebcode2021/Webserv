@@ -1,4 +1,5 @@
 #include "HttpResponseHeader.hpp"
+#include "PathInfo.hpp"
 
 /* constructor */
 HttpResponseHeader::HttpResponseHeader(){}
@@ -23,12 +24,11 @@ void						HttpResponseHeader::setContentLength(size_t contentLength) { this->_co
 void						HttpResponseHeader::setTransferEncoding(std::string& transferEncoding) {this->_transferEncoding = transferEncoding;}
 
 /* method */
-void						HttpResponseHeader::setHttpResponseHeader(HttpRequest& httpRequest, size_t bodySize)
+void						HttpResponseHeader::setHttpResponseHeader(PathInfo &pathInfo, size_t bodySize)
 {
-	(void)httpRequest;
 	this->_date = getCurrentTime();
 	this->_server = SERVER_NAME;
-	this->_contentType = "text/html"; //getContentType();
+	this->_contentType = pathInfo.getFileType(); //getContentType();
 	this->_contentLength = bodySize;
 	this->_transferEncoding = "identity"; 
 	// cookie 한 줄 추가

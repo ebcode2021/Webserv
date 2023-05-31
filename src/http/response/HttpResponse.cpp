@@ -8,12 +8,13 @@ HttpResponse::HttpResponse(){}
 
 HttpResponse::HttpResponse(HttpRequest& httpRequest, PathInfo& pathInfo, HttpStatus& httpStatus)
 {
+	(void)httpRequest;
 	// response-line
 	this->_httpResponseLine.setHttpResponseLine(httpStatus);
 	// response-body
 	this->_httpBody.setResponseBody(createResponseBody(pathInfo));
 	// response-header
-	this->_httpResponseHeader.setHttpResponseHeader(httpRequest, this->_httpBody.getBodySize());
+	this->_httpResponseHeader.setHttpResponseHeader(pathInfo, this->_httpBody.getBodySize());
 
 	//std::cout << "asdf?????????????????" << std::endl;
 	//std::cout << this->getResponseToString() << std::endl;

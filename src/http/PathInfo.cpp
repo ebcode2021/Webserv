@@ -29,11 +29,49 @@ PathType	PathInfo::determinePathType()
 	return P_NONE;
 }
 
+std::map<std::string, std::string> createTypeTable() {
+	std::map<std::string, std::string> typeTable;
+	std::vector<std::string> splittedLine;
+	std::ifstream file(FILE_TYPE_PATH);
+	std::string line;
+
+	while (std::getline(file, line, ';'))
+	{
+		splittedLine = split(line, WHITESPACE);
+		if (splittedLine.size() > 0) {
+			for (size_t i = 1; i < splittedLine.size(); i++)
+				typeTable.insert(make_pair(splittedLine[i], splittedLine[0]));
+		}
+	}
+	return (typeTable);
+}
+
+std::string getFileExtension(const std::string &path) {
+	size_t dotIndex = path.find_last_of(".");
+    if (dotIndex != std::string::npos && dotIndex < path.length() - 1) {
+        return path.substr(dotIndex + 1);
+    }
+    return "";
+}
+
+std::string searchFileType(const std::string &path)
+{
+	static std::map<std::string, std::string> typeTable = createTypeTable();
+	std::string fileExtension = getFileExtension(path);
+	std::map<std::string, std::string>::iterator iter = typeTable.find(fileExtension);
+	std::cout << iter->second << std::endl;
+	if (iter == typeTable.end())
+		return ("application/octet-stream");
+	else
+		return (iter->second);
+	
+}
+
 std::string	PathInfo::determineFileType()
 {
-	if (this->_pathType != P_NONE)
+	if (this->_pathType != P_FILE)
 		return "nothing";
-	return "asdf";
+	return (searchFileType(this->_path));
 }
 
 bool		PathInfo::isAccess()

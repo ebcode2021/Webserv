@@ -3,6 +3,7 @@
 
 # include "webserv.hpp"
 # include "HttpRequest.hpp"
+# include "PathInfo.hpp"
 
 class	HttpResponseHeader
 {
@@ -34,7 +35,7 @@ class	HttpResponseHeader
 		void						setSetCookie(std::string&);
 
 		// method
-		void						setHttpResponseHeader(HttpRequest&, size_t);
+		void						setHttpResponseHeader(PathInfo&, size_t);
 		std::string					getCurrentTime();
 		std::string					getResponseHeaderToString();
 
