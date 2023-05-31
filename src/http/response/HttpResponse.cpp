@@ -1,6 +1,5 @@
 #include "HttpResponse.hpp"
-#include "HttpValidator.hpp"
-#include "HttpException.hpp"
+#include "ResponseException.hpp"
 
 
 /* constructor */
@@ -12,14 +11,10 @@ HttpResponse::HttpResponse(HttpRequest& httpRequest, PathInfo& pathInfo, HttpSta
 	// response-line
 	this->_httpResponseLine.setHttpResponseLine(httpStatus);
 	// response-body
-	this->_httpBody.setResponseBody(createResponseBody(pathInfo, httpStatus));
+	this->_httpBody.setBody(createResponseBody(pathInfo, httpStatus));
 	// response-header
 	this->_httpResponseHeader.setHttpResponseHeader(pathInfo, this->_httpBody.getBodySize());
 
-	//std::cout << "asdf?????????????????" << std::endl;
-	//std::cout << this->getResponseToString() << std::endl;
-	//exit(1);
-	//this->printHttpResponse();
 }
 
 HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpRequest)

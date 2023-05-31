@@ -39,8 +39,14 @@ enum readMode
 	HEADER,
 	IDENTITY,
 	CHUNKED,
-	END
+	END,
 };
 
+enum	PathType
+{
+	P_FILE,
+	P_DIRECTORY,
+	P_NONE,
+};
 
 #endif

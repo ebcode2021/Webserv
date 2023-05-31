@@ -3,7 +3,6 @@
 #include "KqueueHandler.hpp"
 #include "SocketEventHandler.hpp"
 #include "HttpResponse.hpp"
-#include "HttpValidator.hpp"
 
 // 요청 라인 분석해서 메서드와 url 확인
 // 요청이 url이 cgi 인지 확인

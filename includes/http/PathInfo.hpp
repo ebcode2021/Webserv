@@ -2,25 +2,10 @@
 # define PATH_INFO_HPP
 
 # include "webserv.hpp"
-# include "HttpException.hpp"
+# include "ResponseException.hpp"
 
 class LocationBlock;
 class ErrorPage;
-
-
-enum	PathType
-{
-	P_FILE,
-	P_DIRECTORY,
-	P_NONE,
-};
-
-enum	FileType
-{
-	F_HTML,
-	F_JPG,
-	F_NONE,
-};
 
 class PathInfo
 {
@@ -40,21 +25,18 @@ class PathInfo
 		PathInfo(std::string&);
 
 		// getter, setter
-		PathType	getPathType() const;
-		std::string	getFileType() const;
-		std::string	getPath() const;
-		bool		getAccess() const;
-		bool		getAutoIndex() const{ return(this->_autoIndex);};
-		void		setAutoIndex(bool);
-		void		autoIndexOn() {(this->_autoIndex = true);};
-		void		setReturnPage(const std::string&);
-		std::string	getReturnPage(){return(this->_returnPage);};
+		PathType		getPathType() const;
+		std::string		getFileType() const;
+		std::string		getPath() const;
+		std::string		getReturnPage() const;
+		bool			getAccess() const;
+		bool			getAutoIndex() const;
+		void			setAutoIndex(bool);
+		void			setReturnPage(const std::string&);
 
 		// method
-		void		validatePath();
-		bool		isValidDirectory();
-		bool		validateDirectoryIndex();
-		std::string selectErrorPage(HttpStatus&, const std::vector<ErrorPage>);
+		bool			isValidDirectory();
+		std::string 	selectErrorPage(HttpStatus&, const std::vector<ErrorPage>);
 
 		// private method
 		PathType		determinePathType();
@@ -63,11 +45,10 @@ class PathInfo
 		bool			isAccess(std::string&);
 		static bool		isFile(std::string&);
 
-
+		// print
+		void			printPathInfo();
 
 		// exception
 		void			validatePathInfo(LocationBlock&);
-		// print
-		void			printPathInfo();
 };
 #endif

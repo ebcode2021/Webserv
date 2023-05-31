@@ -11,20 +11,20 @@ class LimitExcept {
 		std::string					_deny;
 
 	public :
-		LimitExcept() {};;
+		/* constructor */
+		LimitExcept();
 		LimitExcept(const std::vector<std::string> &);
 
-		// check
-		static void blockCheck(std::ifstream&, Validate&);
-		
-		// getter, setter
-		void	setMethodList(const std::vector<std::string> &);
-		void	setAllow(const std::vector<std::string> &);
-		void	setDeny(const std::vector<std::string> &);
+		/* setter */
+		void		setMethodList(const std::vector<std::string> &);
+		void		setAllow(const std::vector<std::string> &);
+		void		setDeny(const std::vector<std::string> &);
 
-		bool	isValidMethod(const std::string&, const std::string&);
-		//test
-		void	printInfo();
+		/* check */
+		static void	blockCheck(std::ifstream&, Validate&);
+
+		/* print */
+		void		printInfo();
 
 };
 

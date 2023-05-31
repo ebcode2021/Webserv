@@ -25,22 +25,22 @@ class	HttpResponse
 		HttpBody			_httpBody;
 
 	public :
-		// constructor
+		/* constructor */
 		HttpResponse();
 		HttpResponse(HttpRequest&, PathInfo&, HttpStatus&);
 
-		// getter, setter
+		/* setter */
 		void						setBody(const std::string&);
 
 		/* method */
 		static HttpResponse			createResponse(Config&, HttpRequest&);
  		std::string					createResponseBody(PathInfo&, HttpStatus&);
-		std::string					createErrorBody(HttpStatus&);
 		std::string					createAutoIndexBody(const std::string&);
-		std::vector<std::string>	getFileNameByPath(const std::string&);
+		std::string					createErrorBody(HttpStatus&);
 		std::string					getResponseToString();
+		std::vector<std::string>	getFileNameByPath(const std::string&);
 
-		// print
+		/* print */
 		void						printHttpResponse();
 };
 #endif

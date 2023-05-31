@@ -34,14 +34,14 @@ void	HttpRequestLine::validateRequestLine(LocationBlock& locationBlock)
 	{
 		// check http-version
 		if (this->_version != HTTP_VERSION)
-			throw ResponseException(505); // HTTP_VERSION_NOT_SUPPORTED
+			throw ResponseException(505);
 
 		// check Method
 		if (METHODS->find(this->_method) == std::string::npos || locationBlock.isValidMethodByLimitExcept(this->_method) == false)
-			throw ResponseException(405); // NOT_ALLOWED
+			throw ResponseException(405);
 	}
 	catch (const ResponseException &ex)
 	{
-		throw ResponseException(ex.httpStatus().getStatusCode());
+		throw ResponseException(ex.statusCode());
 	}
 }

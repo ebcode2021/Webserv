@@ -8,18 +8,18 @@
 class	HttpResponseHeader
 {
 	private :
-		std::string					_date; // 응답이 생성된 날짜와 시간
-		std::string					_server; // 요청을 처리하는 서버의 이름과 버전
-		std::string					_contentType; // 응답이 본문을 포함하는 경우 반드시 포함
-		size_t						_contentLength; // 응답이 본문을 포함하는 경우 반드시 포함
+		std::string					_date;
+		std::string					_server;
+		std::string					_contentType;
+		size_t						_contentLength;
 		std::string					_transferEncoding;
-		std::vector<std::string>	_setCookie;	//Cookie 관련
+		std::vector<std::string>	_setCookie;
 
 	public :
-		// constructor
+		/* constructor */
 		HttpResponseHeader();
 
-		// getter, setter
+		/* getter, setter */
 		std::string					getDate() const;
 		std::string					getServer() const;
 		std::string					getContentType() const;
@@ -34,7 +34,7 @@ class	HttpResponseHeader
 		void						setTransferEncoding(std::string&);
 		void						setSetCookie(std::string&);
 
-		// method
+		/* method */
 		void						setHttpResponseHeader(PathInfo&, size_t);
 		std::string					getCurrentTime();
 		std::string					getResponseHeaderToString();

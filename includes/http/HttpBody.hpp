@@ -1,6 +1,8 @@
 #ifndef HTTPBODY_HPP
 # define HTTPBODY_HPP
 
+# include "webserv.hpp"
+
 class	HttpBody
 {
 	private :
@@ -8,12 +10,11 @@ class	HttpBody
 
 	public :
 		// getter, setter
-		std::string	getBody() { return(this->_body); };
-		size_t		getBodySize() { return(this->_body.size()); };
+		std::string	getBody() const;
+		void		setBody(const std::string&);
 
-		void		setBody(std::string body) { this->_body += body; };
-		void		setResponseBody(std::string body) { this->_body += body; };
-
+		// method
+		size_t		getBodySize() const;
 };
 
 #endif

@@ -29,8 +29,6 @@
 
 # define UNDEFINED_LINE "Undefined block Line :: line "
 
-/* indication file error */
-
 
 /* non-error */
 # define TEST_SUCCESS "Test Success! 🥰"

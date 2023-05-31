@@ -3,7 +3,7 @@
 
 #include "webserv.hpp"
 #include "LocationBlock.hpp"
-#include "HttpException.hpp"
+#include "ResponseException.hpp"
 
 class	HttpRequestHeader
 {
@@ -22,20 +22,13 @@ class	HttpRequestHeader
 	
 		// getter, setter
 		std::string			getHost() const;
-		std::string			getUserAgent();
-		std::string			getConnection();
-		std::string			getContentType();
-		size_t				getContentLength();
-		std::string			getTransferEncoding();
-		std::string			getCookie();
-		std::string			getSessionID();
-
-		std::string			getServerNameToHost()
-		{
-			std::vector<std::string>	splittedHost = split(this->_host, ":");
-			std::string					serverName   = splittedHost[0];
-			return (serverName);
-		};
+		std::string			getUserAgent() const;
+		std::string			getConnection() const;
+		std::string			getContentType() const;
+		size_t				getContentLength() const;
+		std::string			getTransferEncoding() const;
+		std::string			getCookie() const;
+		std::string			getSessionID() const;
 
 		void				setHost(std::string&);
 		void				setUserAgent(std::string&);
@@ -44,10 +37,12 @@ class	HttpRequestHeader
 		void				setContentLength(size_t);
 		void				setTransferEncoding(std::string&);
 		void				setCookie(std::string&);
-		void				setSessionID(std::string&);
 
-		////
-		void	validateRequestHeader(LocationBlock& locationBlock);
+		/* method */
+		std::string			getServerNameToHost();
+		
+		/* exception */
+		void				validateRequestHeader(LocationBlock& locationBlock);
 };
 
 #endif

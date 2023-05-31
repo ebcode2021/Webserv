@@ -1,5 +1,5 @@
-#ifndef HTTPEXCETPION_HPP
-# define HTTPEXCETPION_HPP
+#ifndef RESPONSE_EXCEPTION_HPP
+# define RESPONSE_EXCEPTION_HPP
 
 # include "webserv.hpp"
 # include "HttpStatus.hpp"

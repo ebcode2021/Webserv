@@ -2,6 +2,8 @@
 #include "validate.hpp"
 
 /* constructor */
+LimitExcept::LimitExcept() {}
+
 LimitExcept::LimitExcept(const std::vector<std::string> &exceptBlock) {
 	std::vector<std::string> splittedLine;
 	for (size_t i = 0; i < exceptBlock.size(); i++)
@@ -75,7 +77,7 @@ void	LimitExcept::setDeny(const std::vector<std::string> &value) {
 	this->_allow = value[1];
 }
 
-// test
+/* print */
 void	LimitExcept::printInfo()
 {
 	for (size_t i = 0; i < this->_methodList.size(); i++)
@@ -87,8 +89,3 @@ void	LimitExcept::printInfo()
 	std::cout << "allow : " << this->_allow << std::endl;
 	std::cout << "deny : " << this->_deny << std::endl;
 }
-
-// bool	LimitExcept::isValidMethod(const std::string& method, const std::string& host)
-// {
-	
-// }

@@ -38,7 +38,7 @@ HttpStatus&	HttpStatus::operator=(const HttpStatus& prev)
 	return (*this);
 }
 
-void	HttpStatus::setHttpStatus(int statusCode)
+void	HttpStatus::setHttpStatus(const int statusCode)
 {
 	std::map<int, std::string>::const_iterator it = getStatusMap().find(statusCode);
 
@@ -47,7 +47,7 @@ void	HttpStatus::setHttpStatus(int statusCode)
 }
 
 /* method */
-std::map<int, std::string>&	HttpStatus::getStatusMap()
+std::map<int, std::string>&	HttpStatus::getStatusMap() const
 {
 	static std::map<int, std::string> httpStatusMap;
 
@@ -67,4 +67,12 @@ std::map<int, std::string>&	HttpStatus::getStatusMap()
 		httpStatusMap.insert(std::make_pair( 505, "HTTP Version Not Supported" ));
 	}
 	return (httpStatusMap);
+}
+
+/* method */
+void	HttpStatus::printStatus()
+{
+	std::cout << "[HttpStatus 출력]" << std::endl;
+	std::cout << "- statusCode : " << this->_statusCode << std::endl;
+	std::cout << "- reason : " << this->_reason << std::endl;
 }

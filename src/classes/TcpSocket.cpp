@@ -56,7 +56,7 @@ void	TcpSocket::bufClear() {
 
 void TcpSocket::printRequestInfo()
 {
-	std::cout << this->_request.toString() << std::endl;
+	this->_request.printInfo();
 }
 
 void	TcpSocket::bufJoin(char *str) {

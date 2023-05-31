@@ -11,11 +11,11 @@
 # include <sstream>
 # include <unistd.h>
 # include <fcntl.h>
-# include <sys/types.h> // basic type definitions
+# include <sys/types.h>
 # include <sys/event.h>
-# include <sys/socket.h> // socket(), AF_INET, ...
-# include <arpa/inet.h> // htons(), htonl(), ...
-# include <netdb.h> // gethostbyname(), ...
+# include <sys/socket.h>
+# include <arpa/inet.h> 
+# include <netdb.h>
 # include <sys/stat.h>
 # include <dirent.h>
 
@@ -24,6 +24,8 @@
 # include "enum.hpp"
 # include "indication.hpp"
 # include "message.hpp"
+# include "path.hpp"
+# include "setting.hpp"
 # include "struct.hpp"
 
 /* src */

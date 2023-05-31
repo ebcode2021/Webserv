@@ -13,7 +13,38 @@ PathInfo::PathInfo(std::string &path)
 	this->_returnPage = "";
 }
 
+/* getter, setter */
+PathType	PathInfo::getPathType() const {
+	return(this->_pathType);
+}
 
+std::string	PathInfo::getFileType() const {
+	return(this->_fileType);
+}
+
+std::string	PathInfo::getPath() const {
+	return(this->_path);
+}
+
+bool		PathInfo::getAccess() const {
+	return(this->_access);
+}
+
+bool		PathInfo::getAutoIndex() const {
+	return (this->_autoIndex);
+}
+
+std::string	PathInfo::getReturnPage() const {
+	return (this->_returnPage);
+}
+
+void		PathInfo::setAutoIndex(bool value) {
+	this->_autoIndex = value;
+}
+
+void	PathInfo::setReturnPage(const std::string& path) {
+	this->_returnPage = path;
+}
 
 PathType	PathInfo::determinePathType()
 {
@@ -29,16 +60,19 @@ PathType	PathInfo::determinePathType()
 	return P_NONE;
 }
 
-std::map<std::string, std::string> createTypeTable() {
-	std::map<std::string, std::string> typeTable;
-	std::vector<std::string> splittedLine;
-	std::ifstream file(FILE_TYPE_PATH);
-	std::string line;
+std::map<std::string, std::string> createTypeTable()
+{
+	std::map<std::string, std::string>	typeTable;
+	std::vector<std::string> 			splittedLine;
+
+	std::ifstream						file(FILE_TYPE_PATH);
+	std::string							line;
 
 	while (std::getline(file, line, ';'))
 	{
 		splittedLine = split(line, WHITESPACE);
-		if (splittedLine.size() > 0) {
+		if (splittedLine.size() > 0)
+		{
 			for (size_t i = 1; i < splittedLine.size(); i++)
 				typeTable.insert(make_pair(splittedLine[i], splittedLine[0]));
 		}
@@ -46,12 +80,14 @@ std::map<std::string, std::string> createTypeTable() {
 	return (typeTable);
 }
 
-std::string getFileExtension(const std::string &path) {
+std::string getFileExtension(const std::string &path)
+{
 	size_t dotIndex = path.find_last_of(".");
-    if (dotIndex != std::string::npos && dotIndex < path.length() - 1) {
-        return path.substr(dotIndex + 1);
-    }
-    return "";
+
+	if (dotIndex != std::string::npos && dotIndex < path.length() - 1)
+		return path.substr(dotIndex + 1);
+
+	return "";
 }
 
 std::string searchFileType(const std::string &path)
@@ -61,7 +97,7 @@ std::string searchFileType(const std::string &path)
 	std::map<std::string, std::string>::iterator iter = typeTable.find(fileExtension);
 	std::cout << iter->second << std::endl;
 	if (iter == typeTable.end())
-		return ("application/octet-stream");
+		return (DEFAULT_FILE_TYPE);
 	else
 		return (iter->second);
 	
@@ -70,7 +106,7 @@ std::string searchFileType(const std::string &path)
 std::string	PathInfo::determineFileType()
 {
 	if (this->_pathType != P_FILE)
-		return "nothing";
+		return "";
 	return (searchFileType(this->_path));
 }
 
@@ -87,14 +123,6 @@ bool		PathInfo::isFile(std::string& path)
 
 	return (stat(path.c_str(), &fileStat) == 0);
 }
-
-
-/* getter, setter */
-PathType	PathInfo::getPathType() const { return(this->_pathType); };
-std::string	PathInfo::getFileType() const { return(this->_fileType); };
-std::string	PathInfo::getPath() const { return(this->_path); };
-bool		PathInfo::getAccess() const { return(this->_access); };
-
 
 /* method */
 bool	PathInfo::isValidDirectory()
@@ -135,18 +163,16 @@ void	PathInfo::validatePathInfo(LocationBlock& block)
 					addIndexPath = this->_path + indexList[i];
 					if (this->isFile(addIndexPath) == true)
 					{
-						std::cout << "hre???" << std::endl;
 						if (this->isAccess(addIndexPath) == false)
 							throw ResponseException(403);
 						this->_returnPage = addIndexPath;
 						return ;
 					}
 				}
-				std::cout << "???" << std::endl;
 				if (block.getAutoIndex() == true)
 				{
 					this->_returnPage = this->_path;
-					this->autoIndexOn();
+					this->setAutoIndex(true);
 					return ;
 				}
 				else
@@ -186,9 +212,7 @@ void	PathInfo::printPathInfo()
 }
 
 /////
-void	PathInfo::setReturnPage(const std::string& path){
-	this->_returnPage = path;
-}
+
 
 bool	PathInfo::isAccess(std::string&	path)
 {

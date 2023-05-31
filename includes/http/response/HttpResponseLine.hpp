@@ -12,7 +12,7 @@ class	HttpResponseLine
 
 	public :
 		// constructor
-		HttpResponseLine() : _version("HTTP/1.1"){};
+		HttpResponseLine();
 		HttpResponseLine(const HttpStatus&);
 
 		// getter, setter

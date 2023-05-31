@@ -86,7 +86,7 @@ HttpResponse::HttpResponse(HttpRequest& httpRequest, LocationBlock& block, HttpS
 				}
 			}
 			if (block.getAutoIndex() == true)
-				pathInfo.autoIndexOn();
+				pathInfo.setAutoIndex(true);
 		}
 		else
 		{

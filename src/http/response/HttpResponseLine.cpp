@@ -1,9 +1,9 @@
 #include "HttpResponseLine.hpp"
 
 /* constructor */
-//HttpResponseLine::HttpResponseLine(){}
+HttpResponseLine::HttpResponseLine() : _version(HTTP_VERSION) {}
 
-HttpResponseLine::HttpResponseLine (const HttpStatus& httpStatus)
+HttpResponseLine::HttpResponseLine(const HttpStatus& httpStatus) : _version(HTTP_VERSION) 
 {
 	this->setHttpStatus(httpStatus);
 }

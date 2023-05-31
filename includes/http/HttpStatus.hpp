@@ -13,24 +13,17 @@ class	HttpStatus
 		// constructor
 		HttpStatus();
 		HttpStatus(const HttpStatus&);
-		HttpStatus(int);
+		HttpStatus(const int);
+		HttpStatus& operator=(const HttpStatus&);
 		
 		// getter, setter
-		std::map<int, std::string>& getStatusMap();
+		std::map<int, std::string>& getStatusMap() const;
 		int							getStatusCode() const;
 		std::string					getReason() const;
-		void						setHttpStatus(int);
+		void						setHttpStatus(const int);
 
-		
-		HttpStatus& operator=(const HttpStatus&);
-
-		// test
-		void	printStatus()
-		{
-			std::cout << "[HttpStatus 출력]" << std::endl;
-			std::cout << "- statusCode : " << this->_statusCode << std::endl;
-			std::cout << "- reason : " << this->_reason << std::endl;
-		};
+		// print
+		void						printStatus();
 };
 
 

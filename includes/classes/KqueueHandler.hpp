@@ -8,23 +8,26 @@ class KqueueHandler {
 		int							kq;
 		size_t						eventCnt;
 		std::vector<struct kevent>	changeList;
-		struct kevent				eventList[256];
+		struct kevent				eventList[EVENT_SIZE];
 
 	public :
+		/* constructor */
 		KqueueHandler();
-		const struct kevent *getEventList();
+
+		/* getter */
+		const struct kevent	*getEventList();
+		struct kevent		getCurEventByIndex(int);
+		int					getEventCnt();
+		int					getKqFd();
+
+		/* method */
 		void	changeEvent(uintptr_t ident, short filter, unsigned short flags, unsigned int fflags, intptr_t data, void *udata);
-		int		waitEvent();
 		void	changeListClear();
 		void	eventListReset();
 		void	eventUpdate();
-		
+		int		waitEvent();
 
-		struct kevent getCurEventByIndex(int);
-		int				getEventCnt();
-		int				getKqFd();
-
-		// test
+		/* print */
 		void printEvent();
 };
 
