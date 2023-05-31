@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
 							{
 								curSock->setRequestHeader();
 								curSock->changeReadMode();
+								curSock->printRequestInfo();
 							}
 							if (curSock->getReadMode() != END)
 								curSock->setRequestBody();
