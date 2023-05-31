@@ -11,6 +11,7 @@ class LocationBlock : public ServerBlock
 		LimitExcept		_limitExcept;
 
 	public :
+		LocationBlock(){};
 		LocationBlock(const ServerBlock &);
 		LocationBlock(const ServerBlock&, const std::vector<std::string>&);
 		//LocationBlock();

@@ -4,10 +4,13 @@
 HttpRequest::HttpRequest(){}
 
 /* getter */
-HttpRequestLine&		HttpRequest::getRequestLine() { return(this->_httpRequestLine); }
-/* setter */
+HttpRequestLine&		HttpRequest::getRequestLine()
+{
+	return(this->_httpRequestLine);
+}
 
-HttpRequestHeader&	HttpRequest::getRequestField() { return(this->_httpRequestHeader); }
+
+/* setter */
 
 HttpBody&				HttpRequest::getBody(){ return(this->_httpBody); }
 

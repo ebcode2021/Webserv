@@ -44,6 +44,7 @@ class PathInfo
 		std::string	getFileType() const;
 		std::string	getPath() const;
 		bool		getAccess() const;
+		bool		getAutoIndex() const{ return(this->_autoIndex);};
 		void		setAutoIndex(bool);
 		void		autoIndexOn() {(this->_autoIndex = true);};
 		void		setReturnPage(const std::string&);
@@ -59,6 +60,7 @@ class PathInfo
 		PathType		determinePathType();
 		std::string		determineFileType();
 		bool			isAccess();
+		bool			isAccess(std::string&);
 		static bool		isFile(std::string&);
 
 

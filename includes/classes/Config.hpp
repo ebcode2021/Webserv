@@ -21,7 +21,7 @@ class	Config {
 
 		std::vector<ServerInfo>&	getServerList();
 
-		// 추가추가
+		/* method */
 		ServerInfo		findServerInfoByHost(const std::string&);
 		ServerInfo		findServerInfoByParameter(std::string&, size_t);
 };

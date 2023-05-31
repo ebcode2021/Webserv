@@ -105,11 +105,13 @@ bool	PathInfo::isValidDirectory()
 
 void	PathInfo::validatePathInfo(LocationBlock& block)
 {
-	
+	std::cout << "[validatePathInfo] 입장!" << std::endl;
+
+	block.printInfo();
 	try
 	{
 		// 1. validate Path
-		if (this->_pathType != P_NONE) //
+		if (this->_pathType != P_NONE)
 		{
 			if (this->_access == false)
 				throw ResponseException(403);
@@ -123,8 +125,9 @@ void	PathInfo::validatePathInfo(LocationBlock& block)
 			std::vector<std::string>	indexList = block.getIndexList();
 			size_t						indexListSize = indexList.size();
 			std::string					addIndexPath = this->_path + indexList[0];
-			//std::cout << "indexPath : " << addIndexPath << std::endl;
-			//std::cout << "indexListSize : " << indexListSize << std::endl;
+			//std::cout << "originPath : " << this->_path << std::endl;
+			std::cout << "indexPath : " << addIndexPath << std::endl;
+			std::cout << "indexListSize : " << indexListSize << std::endl;
 			if (indexListSize > 1)
 			{
 				for (size_t i = 1; i < indexListSize; i++)
@@ -132,16 +135,22 @@ void	PathInfo::validatePathInfo(LocationBlock& block)
 					addIndexPath = this->_path + indexList[i];
 					if (this->isFile(addIndexPath) == true)
 					{
-						if (this->isAccess() == false)
+						std::cout << "hre???" << std::endl;
+						if (this->isAccess(addIndexPath) == false)
 							throw ResponseException(403);
 						this->_returnPage = addIndexPath;
 						return ;
 					}
 				}
-				if (this->_autoIndex == true)
+				std::cout << "???" << std::endl;
+				if (block.getAutoIndex() == true)
+				{
+					this->_returnPage = this->_path;
 					this->autoIndexOn();
+					return ;
+				}
 				else
-					throw ResponseException(404);
+					throw ResponseException(403);
 			}
 			else
 			{
@@ -160,7 +169,7 @@ void	PathInfo::validatePathInfo(LocationBlock& block)
 	{
 		throw ResponseException(ex.statusCode());
 	}
-	
+		this->printPathInfo();
 }
 
 /////////////
@@ -179,4 +188,11 @@ void	PathInfo::printPathInfo()
 /////
 void	PathInfo::setReturnPage(const std::string& path){
 	this->_returnPage = path;
+}
+
+bool	PathInfo::isAccess(std::string&	path)
+{
+	if (access(path.c_str(), R_OK | W_OK) == 0)
+		return (true);
+	return (false);
 }

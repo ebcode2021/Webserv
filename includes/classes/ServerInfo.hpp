@@ -22,7 +22,6 @@ class ServerInfo {
 		std::vector<LocationBlock>	getLocationList();
 		
 		LocationBlock		findLocationBlockByURL(const std::string&);
-
 		// static
 		//ServerInfo&	findServerInfo(const HttpRequestHeader&);
 };
