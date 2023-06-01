@@ -16,10 +16,10 @@ class	HttpResponseHeader
 		std::vector<std::string>	_setCookie;
 
 	public :
-		/* constructor */
+		// constructor
 		HttpResponseHeader();
 
-		/* getter, setter */
+		// getter, setter
 		std::string					getDate() const;
 		std::string					getServer() const;
 		std::string					getContentType() const;
@@ -27,16 +27,14 @@ class	HttpResponseHeader
 		std::string					getTransferEncoding() const;
 		std::vector<std::string>	getSetCookie() const;
 
-		void						setDate(std::string&);
-		void						setServer(std::string&);
-		void						setContentType(std::string&);
-		void						setContentLength(size_t);
-		void						setTransferEncoding(std::string&);
-		void						setSetCookie(std::string&);
+		void						setDate(const std::string&);
+		void						setServer(const std::string&);
+		void						setContentType(const std::string&);
+		void						setContentLength(const size_t);
+		void						setTransferEncoding(const std::string&);
+		void						setSetCookie(const std::string&);
 
-		/* method */
-		void						setHttpResponseHeader(PathInfo&, size_t);
-		std::string					getCurrentTime();
+		// method
 		std::string					getResponseHeaderToString();
 
 };

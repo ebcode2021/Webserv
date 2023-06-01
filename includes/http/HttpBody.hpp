@@ -2,6 +2,8 @@
 # define HTTPBODY_HPP
 
 # include "webserv.hpp"
+# include "PathInfo.hpp"
+# include "HttpStatus.hpp"
 
 class	HttpBody
 {
@@ -15,6 +17,11 @@ class	HttpBody
 
 		// method
 		size_t		getBodySize() const;
+		void		createResponseBody(const PathInfo&, const HttpStatus&);
+		void	createErrorBody(const HttpStatus&);
+		void createAutoIndexBody(const std::string&);
+		void createGenericBody(const std::string&);
+		std::vector<std::string>	getFileNameByPath(const std::string&);
 };
 
 #endif

@@ -36,10 +36,8 @@ class PathInfo
 
 		// method
 		bool			isValidDirectory();
-		std::string 	selectErrorPage(HttpStatus&, const std::vector<ErrorPage>);
+		void			processGetRequest(LocationBlock&);
 		void			processDeleteRequest();
-		void			deleteFilesInDirectory();
-		void			addIndexToReturnPage(const std::string&);
 
 		// private method
 		PathType		determinePathType();
@@ -52,7 +50,5 @@ class PathInfo
 		// print
 		void			printPathInfo();
 
-		// exception
-		void			validatePathInfo(LocationBlock&);
 };
 #endif

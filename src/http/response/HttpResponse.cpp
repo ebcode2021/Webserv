@@ -9,21 +9,21 @@ HttpResponse::HttpResponse(HttpResponseLine& responseLine, HttpResponseHeader& r
 	this->_httpResponseLine = responseLine;
 	this->_httpResponseHeader = responseHeader;
 	this->_httpBody= responseBody;
-	// // response-line
-	// this->_httpResponseLine.setHttpResponseLine(httpStatus);
-	// // response-body
-	// this->_httpBody.setBody(createResponseBody(pathInfo, httpStatus));
-	// // response-header
-
-	// this->_httpResponseHeader.setHttpResponseHeader(pathInfo, this->_httpBody.getBodySize());
-
 }
 
+/* setter */
+void	HttpResponse::setBody(const std::string& body)
+{
+	this->_httpBody.setBody(body);
+}
+
+/* method */
 HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 {
 	// request
 	HttpRequestLine		requestLine = request.getHttpRequestLine();
 	HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
+	std::string			method = requestLine.getMethod();
 	// response
 	HttpResponseLine	responseLine;
 	HttpResponseHeader	responseHeader;
@@ -32,66 +32,37 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 	// 1. find server block and location block
 	ServerInfo		serverInfo    = config.findServerInfoByHost(requestHeader.getHost());
 	LocationBlock	locationBlock = serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
-	locationBlock.printInfo();
 
 	PathInfo 	pathInfo(locationBlock.getFullPath());
+
 	try
 	{
-		// 1. validate request-line
 		requestLine.validateRequestLine(locationBlock);
-		// 2. validate request-Header
 		requestHeader.validateRequestHeader(locationBlock);
 		std::cout << "---- [success] request-line validate!" << std::endl;
 
-		// 4. 3alidate Path or File
-		pathInfo.validatePathInfo(locationBlock);
+		
 		std::cout << "---- [success] PathInfo validate! " << std::endl;
 		//pathInfo.printPathInfo();
 		
-		if (requestLine.getMethod() == "DELETE")
-		{
-			
+		pathInfo.printPathInfo();
+		if (method == "GET")
+			pathInfo.processGetRequest(locationBlock);
+		else if (method == "DELETE")
 			pathInfo.processDeleteRequest();
-		}
 
-		
 	}
 	catch(const ResponseException &ex)
 	{
+		std::cout << "error" << ex.statusCode() << std::endl;
 		responseLine.setHttpStatus(ex.httpStatus());
 		pathInfo.setReturnPageByError(locationBlock.getErrorPage(), ex.statusCode());
-		std::cout << "error 발생! " << ex.statusCode() << std::endl;
-		std::cout << "실제 에러 페이지 : " << pathInfo.getReturnPage() << std::endl;
 	}
-	exit(1);
+	
+	responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
+	responseHeader = makeResponseHeader(pathInfo, responseBody.getBodySize());
+	
 	return (HttpResponse(responseLine, responseHeader, responseBody));
-}
-
-std::string	HttpResponse::createResponseBody(PathInfo& pathInfo, HttpStatus &httpStatus)
-{
-	std::stringstream	response;
-	std::ifstream		file(pathInfo.getReturnPage());
-
-	// 1. Return error page
-	if (pathInfo.getReturnPage().empty())
-		return (createErrorBody(httpStatus));
-	// 2. Return autoIndex page
-	if (pathInfo.getAutoIndex() == true)
-		return (createAutoIndexBody(pathInfo.getReturnPage()));
-	else // 3. Return normal page
-	{
-		if (file.is_open())
-		{
-			response << file.rdbuf();
-			file.close();
-		}
-	}
-	return (response.str());
-}
-
-void	HttpResponse::setBody(const std::string& body)
-{
-	this->_httpBody.setBody(body);
 }
 
 void	HttpResponse::printHttpResponse()
@@ -127,67 +98,42 @@ std::string	HttpResponse::getResponseToString() {
 	return (response);
 }
 
-std::string					HttpResponse::createErrorBody(HttpStatus& httpStatus)
+std::string		getCurrentTime()
 {
-	std::stringstream	body;
-
-	body << "<!DOCTYPE html>\n";
-	body << "<html>\n";
-	body << "<head><title>" << httpStatus.getStatusCode() << SP << httpStatus.getReason() << "</title>\n";
-	body << "<meta charset=\"UTF-8\">\n";
-	body << "</head>\n";
-	body << "<body>\n";
-	body << "<center><h1>" << httpStatus.getStatusCode() << SP << httpStatus.getReason() << "</h1></center>\n";
-	body << "<hr><center>" << SERVER_NAME << "</center>\n";
-	body << "</body>\n";
-	body << "</html>\n";
+	char buffer[100];
 	
-	return (body.str());
+	std::time_t	currentTime = std::time(NULL);
+	std::tm* 	timeInfo = std::localtime(&currentTime);
+
+	std::strftime(buffer, sizeof(buffer), "%a, %d %b %Y %H:%M:%S GMT", timeInfo);
+
+	return buffer;
 }
 
-std::vector<std::string> HttpResponse::getFileNameByPath(const std::string &path)
+HttpResponseHeader	HttpResponse::makeResponseHeader(const PathInfo& pathInfo, const size_t bodySize)
 {
-	std::vector<std::string>	filename;
-	struct dirent				*entry;
-	DIR							*dir;
+	HttpResponseHeader	header;
 
-	dir = opendir(path.c_str());
-	if (dir == nullptr) {
-		return (filename);
-	}
+	header.setDate(getCurrentTime());
+	header.setServer(SERVER_NAME);
+	header.setContentType(pathInfo.getFileType());
+	header.setContentLength(bodySize);
+	header.setTransferEncoding("identity");
 
-	entry = readdir(dir);
-	while ((entry = readdir(dir)) != nullptr)
-	{
-		filename.push_back(entry->d_name);
-	}
-	closedir(dir);
-	return (filename);
+	return (header); 
 }
 
-std::string					HttpResponse::createAutoIndexBody(const std::string&path)
+HttpBody	HttpResponse::makeResponseBody(const PathInfo& pathInfo, const HttpStatus& httpStatus)
 {
-	std::stringstream	body;
-	std::vector<std::string> fileName = getFileNameByPath(path);
+	HttpBody	httpBody;
+	std::string	path = pathInfo.getReturnPage();
 
-	std::cout << "pathj!!!! " << path << std::endl;
+	if (path.empty() == true)// 1. Return error page
+		httpBody.createErrorBody(httpStatus);
+	else if (pathInfo.getAutoIndex() == true) // 2. Return autoIndex page
+		httpBody.createAutoIndexBody(path);
+	else // 3. Return normal page
+		httpBody.createGenericBody(path);
 
-	body << "<!DOCTYPE html>\n";
-	body << "<html>\n";
-	body << "<title>" << path << "</title>\n";
-	body << "<meta charset=\"UTF-8\">\n";
-	body << "</head>\n";
-	body << "<body>\n";
-	body << "<h1>" << path << "</h1>\n";
-	body << "<hr>\n";
-	body << "<pre>\n";
-	for (size_t i = 0; i < fileName.size(); i++) {
-		body << "<a href=\"" << fileName[i] << "\">" << fileName[i] << "</a>\n";
-	}
-	body << "</pre>\n";
-	body << "<hr>\n";
-	body << "</body>\n";
-	body << "</html>\n";
-	
-	return (body.str());
+	return (httpBody);
 }

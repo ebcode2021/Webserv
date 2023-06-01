@@ -34,11 +34,9 @@ class	HttpResponse
 
 		/* method */
 		static HttpResponse			createResponse(Config&, HttpRequest&);
- 		std::string					createResponseBody(PathInfo&, HttpStatus&);
-		std::string					createAutoIndexBody(const std::string&);
-		std::string					createErrorBody(HttpStatus&);
+		static HttpBody				makeResponseBody(const PathInfo&, const HttpStatus&);
+		static HttpResponseHeader	makeResponseHeader(const PathInfo&, const size_t);
 		std::string					getResponseToString();
-		std::vector<std::string>	getFileNameByPath(const std::string&);
 
 		/* print */
 		void						printHttpResponse();
