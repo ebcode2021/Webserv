@@ -121,11 +121,9 @@ bool	LocationBlock::isValidMethodByLimitExcept(const std::string& method) {
 }
 
 std::string	LocationBlock::getFullPath() const {
-	std::string	fullPath = this->_root + this->_path;
-	std::cout << this->_root << std::endl;
-	std::cout << this->_path << std::endl;
-	std::cout << "fullPath :  " << fullPath << std::endl;
-	return (fullPath);
+	if (this->_path != "/")
+		return (this->_root + this->_path);
+	return (this->_root);
 }
 
 /* print */

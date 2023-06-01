@@ -1,5 +1,8 @@
 #include "HttpBody.hpp"
 
+HttpBody::HttpBody() {
+	this->_body = "";
+}
 /* getter, setter */
 std::string	HttpBody::getBody() const {
 	return (this->_body);

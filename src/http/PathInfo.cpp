@@ -177,7 +177,7 @@ void	PathInfo::processGetRequest(LocationBlock& block)
 
 void	PathInfo::processDeleteRequest()
 {
-	std::string		path = this->_returnPage;
+	std::string		path = this->_path;
 	std::cout << "delete path : " << path << std::endl;
 
 	if (this->_access == false)
@@ -207,6 +207,7 @@ void	PathInfo::processDeleteRequest()
 				throw ResponseException(403);
 		}
 	}
+
 }
 
 void			PathInfo::setReturnPageByError(const std::vector<ErrorPage>& errorPageList, const int statusCode)

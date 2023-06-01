@@ -4,11 +4,14 @@
 /* constructor */
 HttpResponse::HttpResponse(){}
 
-HttpResponse::HttpResponse(HttpResponseLine& responseLine, HttpResponseHeader& responseHeader, HttpBody responseBody)
+HttpResponse::HttpResponse(HttpResponseLine& responseLine, HttpResponseHeader& responseHeader, HttpBody& responseBody)
 {
 	this->_httpResponseLine = responseLine;
 	this->_httpResponseHeader = responseHeader;
+	//std::cout << "길이 : " << responseHeader.getContentLength() << std::endl;
 	this->_httpBody= responseBody;
+	this->printHttpResponse();
+	std::cout << "생성완료?" << std::endl;
 }
 
 /* setter */
@@ -24,8 +27,9 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 	HttpRequestLine		requestLine = request.getHttpRequestLine();
 	HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
 	std::string			method = requestLine.getMethod();
+
 	// response
-	HttpResponseLine	responseLine;
+	HttpResponseLine	responseLine(method);
 	HttpResponseHeader	responseHeader;
 	HttpBody			responseBody;
 
@@ -34,7 +38,9 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 	LocationBlock	locationBlock = serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
 
 	PathInfo 	pathInfo(locationBlock.getFullPath());
-
+	std::cout << requestLine.getMethod() << std::endl;
+	pathInfo.printPathInfo();
+	std::cout << "Full Path : " << locationBlock.getFullPath() << std::endl;
 	try
 	{
 		requestLine.validateRequestLine(locationBlock);
@@ -42,24 +48,24 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 		std::cout << "---- [success] request-line validate!" << std::endl;
 
 		pathInfo.validatePath();
-
+		std::cout << "---- [success] validate path! " << std::endl;
 		if (method == "GET")
 			pathInfo.processGetRequest(locationBlock);
 		else if (method == "DELETE")
 			pathInfo.processDeleteRequest();
-
 	}
 	catch(const ResponseException &ex)
 	{
-		std::cout << "error" << ex.statusCode() << std::endl;
+		std::cout << "error 발생!" << ex.statusCode() << std::endl;
 		responseLine.setHttpStatus(ex.httpStatus());
 		pathInfo.setReturnPageByError(locationBlock.getErrorPage(), ex.statusCode());
 	}
-	
 	if (method == "GET")
 		responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
 	responseHeader = makeResponseHeader(pathInfo, responseBody.getBodySize());
-	
+	std::cout << responseBody.getBodySize() << std::endl;
+	std::cout << responseHeader.getContentLength() << std::endl;
+	std::cout << "생성자 직전" << std::endl;
 	return (HttpResponse(responseLine, responseHeader, responseBody));
 }
 
@@ -116,8 +122,7 @@ HttpResponseHeader	HttpResponse::makeResponseHeader(const PathInfo& pathInfo, co
 	header.setServer(SERVER_NAME);
 	header.setContentType(pathInfo.getFileType());
 	header.setTransferEncoding("identity");
-	if (bodySize)
-		header.setContentLength(bodySize);
+	header.setContentLength(bodySize);
 
 	return (header); 
 }

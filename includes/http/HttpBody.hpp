@@ -11,6 +11,9 @@ class	HttpBody
 		std::string	_body;
 
 	public :
+		// constructor
+		HttpBody();
+
 		// getter, setter
 		std::string	getBody() const;
 		void		setBody(const std::string&);

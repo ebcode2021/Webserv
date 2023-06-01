@@ -11,6 +11,7 @@ HttpResponseLine::HttpResponseLine(const std::string& method) : _version(HTTP_VE
 	else if (method == "DELETE")
 		this->_httpStatus = HttpStatus(204);
 }
+
 HttpResponseLine::HttpResponseLine(const HttpStatus& httpStatus) : _version(HTTP_VERSION) 
 {
 	this->setHttpStatus(httpStatus);
