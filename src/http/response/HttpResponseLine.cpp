@@ -3,6 +3,14 @@
 /* constructor */
 HttpResponseLine::HttpResponseLine() : _version(HTTP_VERSION) {}
 
+HttpResponseLine::HttpResponseLine(const std::string& method) : _version(HTTP_VERSION) {
+	if (method == "GET")
+		this->_httpStatus = HttpStatus(200);
+	else if (method == "POST")
+		this->_httpStatus = HttpStatus(201);
+	else if (method == "DELETE")
+		this->_httpStatus = HttpStatus(204);
+}
 HttpResponseLine::HttpResponseLine(const HttpStatus& httpStatus) : _version(HTTP_VERSION) 
 {
 	this->setHttpStatus(httpStatus);

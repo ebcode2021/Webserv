@@ -25,9 +25,9 @@ class	HttpResponse
 		HttpBody			_httpBody;
 
 	public :
-		/* constructor */
+		// constructor
 		HttpResponse();
-		HttpResponse(HttpRequest&, PathInfo&, HttpStatus&);
+		HttpResponse(HttpResponseLine&, HttpResponseHeader&, HttpBody);
 
 		/* setter */
 		void						setBody(const std::string&);

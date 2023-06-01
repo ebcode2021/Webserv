@@ -22,7 +22,7 @@ class PathInfo
 	public :
 		// constructor
 		PathInfo();
-		PathInfo(std::string&);
+		PathInfo(const std::string&);
 
 		// getter, setter
 		PathType		getPathType() const;
@@ -37,6 +37,9 @@ class PathInfo
 		// method
 		bool			isValidDirectory();
 		std::string 	selectErrorPage(HttpStatus&, const std::vector<ErrorPage>);
+		void			processDeleteRequest();
+		void			deleteFilesInDirectory();
+		void			addIndexToReturnPage(const std::string&);
 
 		// private method
 		PathType		determinePathType();
@@ -44,6 +47,7 @@ class PathInfo
 		bool			isAccess();
 		bool			isAccess(std::string&);
 		static bool		isFile(std::string&);
+		void			setReturnPageByError(const std::vector<ErrorPage>&, const int);
 
 		// print
 		void			printPathInfo();

@@ -4,7 +4,7 @@
 /* constructor */
 PathInfo::PathInfo(){}
 
-PathInfo::PathInfo(std::string &path)
+PathInfo::PathInfo(const std::string &path)
 {
 	this->_path = path;
 	this->_pathType = determinePathType();
@@ -219,4 +219,55 @@ bool	PathInfo::isAccess(std::string&	path)
 	if (access(path.c_str(), R_OK | W_OK) == 0)
 		return (true);
 	return (false);
+}
+
+void	PathInfo::processDeleteRequest()
+{
+	std::string		path = this->_returnPage;
+
+	// if (this->_access == false)
+	// 	throw ResponseException(500);
+	if (this->_pathType == P_FILE)
+		std::remove(path.c_str());
+	else // 경로인 경우
+	{
+		DIR* dir = opendir(path.c_str());
+
+		if (dir)
+		{
+			dirent*	entry;
+
+			while ((entry = readdir(dir)) != NULL)
+			{
+				if (entry->d_type == DT_REG)
+				{
+					std::string	filePath = path + "/" + entry->d_name;
+					if (remove(filePath.c_str()) != 0)
+						throw ResponseException(500);
+				}
+			}
+			closedir(dir);
+		}
+	}
+}
+
+void			PathInfo::setReturnPageByError(const std::vector<ErrorPage>& errorPageList, const int statusCode)
+{
+	size_t	errorPageListSize	= errorPageList.size();
+
+	for (size_t i = 0; i < errorPageListSize; i++)
+	{
+		std::string			errorPagepath = this->_path + errorPageList[i].getPath();
+		std::vector<int>	statusCodeList = errorPageList[i].getStatusCodeList();
+		size_t				statusCodeListSize = statusCodeList.size();
+
+		for (size_t j = 0; j < statusCodeListSize; j++)
+		{
+			if (statusCode == statusCodeList[j] && PathInfo::isFile(errorPagepath) == true)
+			{
+				this->_returnPage = errorPagepath;
+				break ;
+			}
+		}
+	}
 }

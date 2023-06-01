@@ -1,42 +1,40 @@
 #include "HttpResponse.hpp"
 #include "ResponseException.hpp"
 
-
 /* constructor */
 HttpResponse::HttpResponse(){}
 
-HttpResponse::HttpResponse(HttpRequest& httpRequest, PathInfo& pathInfo, HttpStatus& httpStatus)
+HttpResponse::HttpResponse(HttpResponseLine& responseLine, HttpResponseHeader& responseHeader, HttpBody responseBody)
 {
-	(void)httpRequest;
-	// response-line
-	this->_httpResponseLine.setHttpResponseLine(httpStatus);
-	// response-body
-	this->_httpBody.setBody(createResponseBody(pathInfo, httpStatus));
-	// response-header
-	this->_httpResponseHeader.setHttpResponseHeader(pathInfo, this->_httpBody.getBodySize());
+	this->_httpResponseLine = responseLine;
+	this->_httpResponseHeader = responseHeader;
+	this->_httpBody= responseBody;
+	// // response-line
+	// this->_httpResponseLine.setHttpResponseLine(httpStatus);
+	// // response-body
+	// this->_httpBody.setBody(createResponseBody(pathInfo, httpStatus));
+	// // response-header
+
+	// this->_httpResponseHeader.setHttpResponseHeader(pathInfo, this->_httpBody.getBodySize());
 
 }
 
-HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpRequest)
+HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 {
-	std::cout << "createResponse 입장! " << std::endl;
-
-	HttpRequestLine		requestLine   = httpRequest.getHttpRequestLine();
-	HttpRequestHeader	requestHeader = httpRequest.getHttpRequestHeader();
-	HttpBody			requestBody   = httpRequest.getBody();
+	// request
+	HttpRequestLine		requestLine = request.getHttpRequestLine();
+	HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
+	// response
+	HttpResponseLine	responseLine;
+	HttpResponseHeader	responseHeader;
+	HttpBody			responseBody;
 
 	// 1. find server block and location block
-	ServerInfo		serverInfo  = config.findServerInfoByHost(requestHeader.getHost());
-	LocationBlock	locationBlock =  serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
+	ServerInfo		serverInfo    = config.findServerInfoByHost(requestHeader.getHost());
+	LocationBlock	locationBlock = serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
 	locationBlock.printInfo();
-	std::string		path = locationBlock.getRoot() + locationBlock.getPath();
 
-
-	//std::cout << "locationBlock root: " << locationBlock.getRoot() << std::endl;
-	//std::cout << "locationBlock path : " << locationBlock.getPath() << std::endl;
-	
-	HttpStatus	httpStatus;
-	PathInfo 	pathInfo(path);
+	PathInfo 	pathInfo(locationBlock.getFullPath());
 	try
 	{
 		// 1. validate request-line
@@ -45,27 +43,28 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpReque
 		requestHeader.validateRequestHeader(locationBlock);
 		std::cout << "---- [success] request-line validate!" << std::endl;
 
-		// 3. post나 delete일 경우 뭐 처리하는 함수 하나 추가
-		
-		// 4. validate Path or File
+		// 4. 3alidate Path or File
 		pathInfo.validatePathInfo(locationBlock);
 		std::cout << "---- [success] PathInfo validate! " << std::endl;
 		//pathInfo.printPathInfo();
+		
+		if (requestLine.getMethod() == "DELETE")
+		{
+			
+			pathInfo.processDeleteRequest();
+		}
+
+		
 	}
 	catch(const ResponseException &ex)
 	{
-		httpStatus = ex.httpStatus();
-		std::cout << "error 발생! " << httpStatus.getStatusCode() << std::endl;
-		
-		std::string	selectPage = locationBlock.selectErrorPage(httpStatus);
-		if (selectPage.empty() == false)
-		{
-			path += locationBlock.selectErrorPage(httpStatus);
-			pathInfo.setReturnPage(path);
-		}
-		std::cout << "실제 에러 페이지 : " << path << std::endl;
+		responseLine.setHttpStatus(ex.httpStatus());
+		pathInfo.setReturnPageByError(locationBlock.getErrorPage(), ex.statusCode());
+		std::cout << "error 발생! " << ex.statusCode() << std::endl;
+		std::cout << "실제 에러 페이지 : " << pathInfo.getReturnPage() << std::endl;
 	}
-	return (HttpResponse(httpRequest, pathInfo, httpStatus));
+	exit(1);
+	return (HttpResponse(responseLine, responseHeader, responseBody));
 }
 
 std::string	HttpResponse::createResponseBody(PathInfo& pathInfo, HttpStatus &httpStatus)
