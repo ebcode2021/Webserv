@@ -41,10 +41,6 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 		requestHeader.validateRequestHeader(locationBlock);
 		std::cout << "---- [success] request-line validate!" << std::endl;
 
-		
-		std::cout << "---- [success] PathInfo validate! " << std::endl;
-		//pathInfo.printPathInfo();
-		
 		pathInfo.printPathInfo();
 		if (method == "GET")
 			pathInfo.processGetRequest(locationBlock);

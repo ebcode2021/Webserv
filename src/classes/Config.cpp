@@ -58,7 +58,7 @@ bool Config::fileCheck(int argc, char *argv[])
 		}
 		infile.close();
 		if (mode == test)
-			notice::printMessage(TEST_SUCCESS);
+			std::cout << TEST_SUCCESS << std::endl;
 		else
 			return true;
 	}

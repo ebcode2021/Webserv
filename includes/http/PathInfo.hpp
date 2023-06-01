@@ -10,7 +10,6 @@ class ErrorPage;
 class PathInfo
 {
 	private :
-		// variable
 		PathType		_pathType;
 		std::string		_fileType;
 		std::string		_path;
@@ -35,11 +34,9 @@ class PathInfo
 		void			setReturnPage(const std::string&);
 
 		// method
-		bool			isValidDirectory();
 		void			processGetRequest(LocationBlock&);
 		void			processDeleteRequest();
 
-		// private method
 		PathType		determinePathType();
 		std::string		determineFileType();
 		bool			isAccess();
