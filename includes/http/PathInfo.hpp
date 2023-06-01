@@ -10,7 +10,6 @@ class ErrorPage;
 class PathInfo
 {
 	private :
-		// variable
 		PathType		_pathType;
 		std::string		_fileType;
 		std::string		_path;
@@ -22,7 +21,7 @@ class PathInfo
 	public :
 		// constructor
 		PathInfo();
-		PathInfo(std::string&);
+		PathInfo(const std::string&);
 
 		// getter, setter
 		PathType		getPathType() const;
@@ -35,20 +34,21 @@ class PathInfo
 		void			setReturnPage(const std::string&);
 
 		// method
-		bool			isValidDirectory();
-		std::string 	selectErrorPage(HttpStatus&, const std::vector<ErrorPage>);
+		void			processGetRequest(LocationBlock&);
+		void			processDeleteRequest();
 
-		// private method
 		PathType		determinePathType();
 		std::string		determineFileType();
 		bool			isAccess();
 		bool			isAccess(std::string&);
 		static bool		isFile(std::string&);
+		void			setReturnPageByError(const std::vector<ErrorPage>&, const int);
+
+		// validate
+		void			validatePath();
 
 		// print
 		void			printPathInfo();
 
-		// exception
-		void			validatePathInfo(LocationBlock&);
 };
 #endif

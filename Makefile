@@ -9,7 +9,6 @@ RM = rm -rf
 # PHILOSOPHERS_SRC
 SRCS =  main.cpp	\
 		utility/error.cpp	\
-		utility/notice.cpp	\
 		utility/utils.cpp	\
 		utility/validate.cpp	\
 		utility/validateUtils.cpp\

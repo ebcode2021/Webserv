@@ -4,12 +4,13 @@
 /* constructor */
 PathInfo::PathInfo(){}
 
-PathInfo::PathInfo(std::string &path)
+PathInfo::PathInfo(const std::string &path)
 {
 	this->_path = path;
 	this->_pathType = determinePathType();
 	this->_fileType = determineFileType();
 	this->_access = isAccess();
+	this->_autoIndex = false;
 	this->_returnPage = "";
 }
 
@@ -46,6 +47,7 @@ void	PathInfo::setReturnPage(const std::string& path) {
 	this->_returnPage = path;
 }
 
+/* method */
 PathType	PathInfo::determinePathType()
 {
 	struct stat pathStat;
@@ -55,7 +57,7 @@ PathType	PathInfo::determinePathType()
 		if (S_ISREG(pathStat.st_mode))
 			return P_FILE;
 		else if (S_ISDIR(pathStat.st_mode))
-			return P_DIRECTORY;
+			return P_DIR;
 	}
 	return P_NONE;
 }
@@ -125,80 +127,111 @@ bool		PathInfo::isFile(std::string& path)
 }
 
 /* method */
-bool	PathInfo::isValidDirectory()
+bool	PathInfo::isAccess(std::string&	path)
 {
-	return (this->_pathType == P_DIRECTORY && this->_access == true);
+	if (access(path.c_str(), R_OK | W_OK) == 0)
+		return (true);
+	return (false);
 }
 
-
-void	PathInfo::validatePathInfo(LocationBlock& block)
+void	PathInfo::processGetRequest(LocationBlock& block)
 {
-	std::cout << "[validatePathInfo] 입장!" << std::endl;
+	std::vector<std::string>	indexList = block.getIndexList();
+	size_t						indexListSize = indexList.size();
+	std::string					addIndexPath;
 
-	block.printInfo();
-	try
+	if (this->_pathType != P_NONE & this->_access == false)
+		throw ResponseException(403);
+
+	if (this->_pathType == P_FILE)
+		this->_returnPage = this->_path;
+	else
 	{
-		// 1. validate Path
-		if (this->_pathType != P_NONE)
+		if (indexListSize > 1)
 		{
-			if (this->_access == false)
-				throw ResponseException(403);
-		}
-		else
-			throw ResponseException(404);
-		
-		// 2. validate directory Path
-		if (this->isValidDirectory() == true)
-		{
-			std::vector<std::string>	indexList = block.getIndexList();
-			size_t						indexListSize = indexList.size();
-			std::string					addIndexPath = this->_path + indexList[0];
-			//std::cout << "originPath : " << this->_path << std::endl;
-			std::cout << "indexPath : " << addIndexPath << std::endl;
-			std::cout << "indexListSize : " << indexListSize << std::endl;
-			if (indexListSize > 1)
+			for (size_t i = 1; i < indexListSize; i++)
 			{
-				for (size_t i = 1; i < indexListSize; i++)
+				addIndexPath = this->_path + "/" + indexList[i];
+				if (this->isFile(addIndexPath) == true)
 				{
-					addIndexPath = this->_path + indexList[i];
-					if (this->isFile(addIndexPath) == true)
-					{
-						if (this->isAccess(addIndexPath) == false)
-							throw ResponseException(403);
-						this->_returnPage = addIndexPath;
-						return ;
-					}
-				}
-				if (block.getAutoIndex() == true)
-				{
-					this->_returnPage = this->_path;
-					this->setAutoIndex(true);
+					if (this->isAccess(addIndexPath) == false)
+						break ;
+					this->_returnPage = addIndexPath;
 					return ;
 				}
-				else
-					throw ResponseException(403);
 			}
-			else
-			{
-				if (this->isFile(addIndexPath) == false)
-					throw ResponseException(404);
-				if ((this->isFile(addIndexPath) == true && this->isAccess() == true) == false)
-					throw ResponseException(403);
-			}
-			// 3. save return_page
-			this->_returnPage = addIndexPath;
+			if (block.getAutoIndex() == false)
+				throw ResponseException(403);
+			this->_returnPage = this->_path;
+			this->setAutoIndex(true);
 		}
 		else
-			this->_returnPage = this->_path;
+		{
+			addIndexPath = this->_path + indexList[0];
+			if (this->isAccess(addIndexPath) == false)
+				throw ResponseException(403);
+			this->_returnPage = addIndexPath;
+		}
 	}
-	catch (const ResponseException &ex)
-	{
-		throw ResponseException(ex.statusCode());
-	}
-		this->printPathInfo();
 }
 
-/////////////
+void	PathInfo::processDeleteRequest()
+{
+	std::string		path = this->_path;
+	std::cout << "delete path : " << path << std::endl;
+
+	if (this->_access == false)
+		throw ResponseException(500);
+
+	if (this->_pathType == P_FILE)
+		std::remove(path.c_str());
+	else if (this->_pathType == P_DIR)
+	{
+		DIR* dir = opendir(path.c_str());
+
+		if (dir)
+		{
+			dirent*	entry;
+
+			while ((entry = readdir(dir)) != NULL)
+			{
+				if (entry->d_type == DT_REG)
+				{
+					std::string	filePath = path + "/" + entry->d_name;
+					if (remove(filePath.c_str()) != 0)
+						throw ResponseException(403);
+				}
+			}
+			closedir(dir);
+			if (rmdir(path.c_str()) != 0)
+				throw ResponseException(403);
+		}
+	}
+
+}
+
+void			PathInfo::setReturnPageByError(const std::vector<ErrorPage>& errorPageList, const int statusCode)
+{
+	size_t	errorPageListSize	= errorPageList.size();
+
+	for (size_t i = 0; i < errorPageListSize; i++)
+	{
+		std::string			errorPagepath = this->_path + errorPageList[i].getPath();
+		std::vector<int>	statusCodeList = errorPageList[i].getStatusCodeList();
+		size_t				statusCodeListSize = statusCodeList.size();
+
+		for (size_t j = 0; j < statusCodeListSize; j++)
+		{
+			if (statusCode == statusCodeList[j] && PathInfo::isFile(errorPagepath) == true)
+			{
+				this->_returnPage = errorPagepath;
+				break ;
+			}
+		}
+	}
+}
+
+/* print */
 void	PathInfo::printPathInfo()
 {
 	std::cout << "\n---- [PathInfo] ----" << std::endl;
@@ -211,12 +244,9 @@ void	PathInfo::printPathInfo()
 	std::cout << "--------------------\n" << std::endl;
 }
 
-/////
-
-
-bool	PathInfo::isAccess(std::string&	path)
+// validate
+void	PathInfo::validatePath()
 {
-	if (access(path.c_str(), R_OK | W_OK) == 0)
-		return (true);
-	return (false);
+	if (this->_pathType == P_NONE)
+		throw ResponseException(404);
 }

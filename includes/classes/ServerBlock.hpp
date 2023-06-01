@@ -43,7 +43,7 @@ class ServerBlock {
 		unsigned int				getClientMaxBodySize() {return(this->_clientMaxBodySize);};
 
 		////
-		std::string					selectErrorPage(HttpStatus&);
+
 		//test
 		void		printInfo();
 

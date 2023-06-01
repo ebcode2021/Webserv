@@ -35,7 +35,7 @@ void	ServerInfo::printServerInfo() {
 	cout << "\n";
 	for (size_t i = 0; i < this->_locationList.size(); i++)
 	{
-		this->_locationList[i].printLocationBlock();
+		this->_locationList[i].printInfo();
 	}
 	cout << "------------------------\n";
 }
