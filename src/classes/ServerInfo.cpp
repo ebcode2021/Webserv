@@ -1,15 +1,21 @@
 #include "ServerInfo.hpp"
 
+/* constructor */
 ServerInfo::ServerInfo(ServerBlock &serverBlcok, std::vector<LocationBlock> &locationBlock) {
 	this->_serverBlock = serverBlcok;
 	this->_locationList = locationBlock;
 }
 
+/* getter, setter */
+ServerBlock&	ServerInfo::getServerBlock() {
+	return(this->_serverBlock);
+}
 
-///////////
-ServerBlock&	ServerInfo::getServerBlock() { return(this->_serverBlock); }
-std::vector<LocationBlock>	ServerInfo::getLocationList() { return(this->_locationList);};
+std::vector<LocationBlock>	ServerInfo::getLocationList() {
+	return(this->_locationList);
+}
 
+/* method */
 LocationBlock	ServerInfo::findLocationBlockByURL(const std::string& requestURL)
 {
 	std::vector<LocationBlock>	locationList = this->_locationList;
@@ -24,18 +30,16 @@ LocationBlock	ServerInfo::findLocationBlockByURL(const std::string& requestURL)
 	}
 	std::cout << "default location setting " << std::endl;
 	locationList[0].setPath(requestURL);
-	//std::cout << "locationList[0] : " << locationList[0].getPath() << std::endl;
 	return (locationList[0]);
 }
 
-// test
-using namespace std;
+/* print */
 void	ServerInfo::printServerInfo() {
 	this->_serverBlock.printInfo();
-	cout << "\n";
+	std::cout << "\n";
 	for (size_t i = 0; i < this->_locationList.size(); i++)
 	{
 		this->_locationList[i].printInfo();
 	}
-	cout << "------------------------\n";
+	std::cout << "------------------------" << std::endl;
 }

@@ -6,11 +6,6 @@
 # include "HttpRequestHeader.hpp"
 # include "HttpBody.hpp"
 
-// Request-Header
-	// Request-Line (Method SP Request-URI SP HTTP-Version CRLF)
-	// Request-Header-Field (FiledName, FiledValue)
-// Request-Body
-
 class TcpSocket;
 
 class	HttpRequest

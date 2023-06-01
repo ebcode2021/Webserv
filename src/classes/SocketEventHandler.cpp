@@ -38,25 +38,6 @@ void SocketEventHandler::closeSocket() {
 	delete (this->_socket);
 }
 
-// int SocketEventHandler::dataRecv() {
-// 	//int recvSize = 0;
-// 	int ret;
-// 	char buf[BUFSIZE + 1];
-
-// 	while (true)
-// 	{
-// 		ret = recv(this->_socket->getSockFd(), buf, BUFSIZE, 0);
-// 		if (ret == -1)
-// 			return (-1);
-// 		else if (ret == 0)
-// 			break;
-// 		buf[ret + 1] = '\0';
-// 		std::cout << "now buf = " << buf << std::endl;
-// 		this->_socket->bufJoin(buf);
-// 	}
-// 	return (this->_socket->getStringSzie());
-// }
-
 int SocketEventHandler::dataRecv() {
     int ret = 0;
     int recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
@@ -70,75 +51,6 @@ int SocketEventHandler::dataRecv() {
         recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
     }
     return (ret);
-}
-
-std::string createHttpResponse(std::string &body) {
-    std::ostringstream response;
-	
-    response << "HTTP/1.1 200 OK\r\n";
-    response << "Content-Type: text.html\r\n";
-	//response << "Content-Disposition: attachment; filename=\"eunbi\"\r\n";
-	response << "Connection: close\r\n";
-    response << "Content-Length: " << body.length() << "\r\n";
-	//response << "Transfer-Encoding : chunked\r\n";
-    response << "\r\n";
-    response << body;
-
-    return response.str();
-}
-
-std::vector<std::string> getFileNameByPath(const std::string &path)
-{
-	std::vector<std::string>	filename;
-	struct dirent				*entry;
-	DIR							*dir;
-
-	dir = opendir(path.c_str());
-	if (dir == nullptr) {
-		return (filename);
-	}
-
-	entry = readdir(dir);
-	while ((entry = readdir(dir)) != nullptr)
-	{
-		filename.push_back(entry->d_name);
-	}
-	closedir(dir);
-	return (filename);
-}
-
-std::string createAutoIndex(std::string &path)
-{
-	std::stringstream body;
-	std::vector<std::string> filename = getFileNameByPath(path);
-	
-	body << "<!DOCTYPE html>\n";
-	body << "<html>\n";
-	body << "<title>" << path << "</title>\n";
-	body << "<meta charset=\"UTF-8\">\n";
-	body << "</head>\n";
-	body << "<body>\n";
-	body << "<h1>" << path << "</h1>\n";
-	body << "<hr>\n";
-	body << "<pre>\n";
-	for (size_t i = 0; i < filename.size(); i++) {
-		body << "<a href=\"" << filename[i] << "\">" << filename[i] << "</a>\n";
-	}
-	body << "</pre>\n";
-	body << "<hr>\n";
-	body << "</body>\n";
-	body << "</html>\n";
-	
-	return (body.str());
-}
-
-std::string getbody(std::string &path) {
-	std::ifstream file(path, std::ios::binary);
-
-	std::stringstream buffer;
-	buffer << file.rdbuf();
-
-	return buffer.str();
 }
 
 int SocketEventHandler::dataSend() 

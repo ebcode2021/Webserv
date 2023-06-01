@@ -20,10 +20,9 @@ class	HttpBody
 
 		// method
 		size_t		getBodySize() const;
-		void		createResponseBody(const PathInfo&, const HttpStatus&);
-		void	createErrorBody(const HttpStatus&);
-		void createAutoIndexBody(const std::string&);
-		void createGenericBody(const std::string&);
+		void		createErrorBody(const HttpStatus&);
+		void		createAutoIndexBody(const std::string&);
+		void 		createGenericBody(const std::string&);
 		std::vector<std::string>	getFileNameByPath(const std::string&);
 };
 

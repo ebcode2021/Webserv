@@ -1,8 +1,10 @@
 #include "HttpBody.hpp"
 
+/* constructor */
 HttpBody::HttpBody() {
 	this->_body = "";
 }
+
 /* getter, setter */
 std::string	HttpBody::getBody() const {
 	return (this->_body);
@@ -91,6 +93,6 @@ void	HttpBody::createGenericBody(const std::string& path)
 		body << file.rdbuf();
 		file.close();
 	}
-	
+
 	this->_body = body.str();
 }

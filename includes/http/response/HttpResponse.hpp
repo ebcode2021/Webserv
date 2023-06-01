@@ -11,11 +11,6 @@
 # include "ServerInfo.hpp"
 # include "PathInfo.hpp"
 
-// Response-Header
-	// Response-Line
-		// HTTP/1.1 <status code> <reason phrase>
-	// Response-Header-Field
-// Reasponse-Body
 
 class	HttpResponse
 {

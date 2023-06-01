@@ -8,10 +8,7 @@ HttpResponse::HttpResponse(HttpResponseLine& responseLine, HttpResponseHeader& r
 {
 	this->_httpResponseLine = responseLine;
 	this->_httpResponseHeader = responseHeader;
-	//std::cout << "길이 : " << responseHeader.getContentLength() << std::endl;
 	this->_httpBody= responseBody;
-	this->printHttpResponse();
-	std::cout << "생성완료?" << std::endl;
 }
 
 /* setter */
@@ -65,7 +62,6 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 	responseHeader = makeResponseHeader(pathInfo, responseBody.getBodySize());
 	std::cout << responseBody.getBodySize() << std::endl;
 	std::cout << responseHeader.getContentLength() << std::endl;
-	std::cout << "생성자 직전" << std::endl;
 	return (HttpResponse(responseLine, responseHeader, responseBody));
 }
 
