@@ -57,7 +57,7 @@ PathType	PathInfo::determinePathType()
 		if (S_ISREG(pathStat.st_mode))
 			return P_FILE;
 		else if (S_ISDIR(pathStat.st_mode))
-			return P_DIRECTORY;
+			return P_DIR;
 	}
 	return P_NONE;
 }
@@ -140,61 +140,52 @@ void	PathInfo::processGetRequest(LocationBlock& block)
 	size_t						indexListSize = indexList.size();
 	std::string					addIndexPath;
 
-	try
-	{
-		if (this->_pathType == P_NONE)
-			throw ResponseException(404);
-		else if (this->_pathType != P_NONE & this->_access == false)
-			throw ResponseException(403);
+	if (this->_pathType != P_NONE & this->_access == false)
+		throw ResponseException(403);
 
-		if (this->_pathType == P_FILE)
+	if (this->_pathType == P_FILE)
+		this->_returnPage = this->_path;
+	else
+	{
+		if (indexListSize > 1)
+		{
+			for (size_t i = 1; i < indexListSize; i++)
+			{
+				addIndexPath = this->_path + "/" + indexList[i];
+				if (this->isFile(addIndexPath) == true)
+				{
+					if (this->isAccess(addIndexPath) == false)
+						break ;
+					this->_returnPage = addIndexPath;
+					return ;
+				}
+			}
+			if (block.getAutoIndex() == false)
+				throw ResponseException(403);
 			this->_returnPage = this->_path;
+			this->setAutoIndex(true);
+		}
 		else
 		{
-			if (indexListSize > 1)
-			{
-				for (size_t i = 1; i < indexListSize; i++)
-				{
-					addIndexPath = this->_path + "/" + indexList[i];
-					if (this->isFile(addIndexPath) == true)
-					{
-						if (this->isAccess(addIndexPath) == false)
-							break ;
-						this->_returnPage = addIndexPath;
-						return ;
-					}
-				}
-				if (block.getAutoIndex() == false)
-					throw ResponseException(403);
-				this->_returnPage = this->_path;
-				this->setAutoIndex(true);
-			}
-			else
-			{
-				addIndexPath = this->_path + indexList[0];
-				if (this->isAccess(addIndexPath) == false)
-					throw ResponseException(403);
-				this->_returnPage = addIndexPath;
-			}
+			addIndexPath = this->_path + indexList[0];
+			if (this->isAccess(addIndexPath) == false)
+				throw ResponseException(403);
+			this->_returnPage = addIndexPath;
 		}
 	}
-	catch (const ResponseException &ex)
-	{
-		throw ResponseException(ex.statusCode());
-	}
-		this->printPathInfo();
 }
 
 void	PathInfo::processDeleteRequest()
 {
 	std::string		path = this->_returnPage;
+	std::cout << "delete path : " << path << std::endl;
 
 	if (this->_access == false)
 		throw ResponseException(500);
 
 	if (this->_pathType == P_FILE)
 		std::remove(path.c_str());
-	else if (this->_pathType == P_DIRECTORY)
+	else if (this->_pathType == P_DIR)
 	{
 		DIR* dir = opendir(path.c_str());
 
@@ -208,10 +199,12 @@ void	PathInfo::processDeleteRequest()
 				{
 					std::string	filePath = path + "/" + entry->d_name;
 					if (remove(filePath.c_str()) != 0)
-						throw ResponseException(500);
+						throw ResponseException(403);
 				}
 			}
 			closedir(dir);
+			if (rmdir(path.c_str()) != 0)
+				throw ResponseException(403);
 		}
 	}
 }
@@ -248,4 +241,11 @@ void	PathInfo::printPathInfo()
 	std::cout << "- autoIndex : " << this->_autoIndex << std::endl;
 	std::cout << "- returnPage : " << this->_returnPage << std::endl;
 	std::cout << "--------------------\n" << std::endl;
+}
+
+// validate
+void	PathInfo::validatePath()
+{
+	if (this->_pathType == P_NONE)
+		throw ResponseException(404);
 }

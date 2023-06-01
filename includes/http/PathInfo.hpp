@@ -44,6 +44,9 @@ class PathInfo
 		static bool		isFile(std::string&);
 		void			setReturnPageByError(const std::vector<ErrorPage>&, const int);
 
+		// validate
+		void			validatePath();
+
 		// print
 		void			printPathInfo();
 

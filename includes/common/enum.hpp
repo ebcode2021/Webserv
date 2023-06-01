@@ -45,7 +45,7 @@ enum readMode
 enum	PathType
 {
 	P_FILE,
-	P_DIRECTORY,
+	P_DIR,
 	P_NONE,
 };
 

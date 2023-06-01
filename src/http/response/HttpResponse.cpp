@@ -41,7 +41,8 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 		requestHeader.validateRequestHeader(locationBlock);
 		std::cout << "---- [success] request-line validate!" << std::endl;
 
-		pathInfo.printPathInfo();
+		pathInfo.validatePath();
+
 		if (method == "GET")
 			pathInfo.processGetRequest(locationBlock);
 		else if (method == "DELETE")
@@ -55,7 +56,8 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 		pathInfo.setReturnPageByError(locationBlock.getErrorPage(), ex.statusCode());
 	}
 	
-	responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
+	if (method == "GET")
+		responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
 	responseHeader = makeResponseHeader(pathInfo, responseBody.getBodySize());
 	
 	return (HttpResponse(responseLine, responseHeader, responseBody));
@@ -113,8 +115,9 @@ HttpResponseHeader	HttpResponse::makeResponseHeader(const PathInfo& pathInfo, co
 	header.setDate(getCurrentTime());
 	header.setServer(SERVER_NAME);
 	header.setContentType(pathInfo.getFileType());
-	header.setContentLength(bodySize);
 	header.setTransferEncoding("identity");
+	if (bodySize)
+		header.setContentLength(bodySize);
 
 	return (header); 
 }
