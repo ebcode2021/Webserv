@@ -4,18 +4,21 @@
 HttpRequest::HttpRequest(){}
 
 /* getter */
-HttpRequestLine&		HttpRequest::getRequestLine()
-{
-	return(this->_httpRequestLine);
+HttpRequestLine HttpRequest::getHttpRequestLine() const {
+	return this->_httpRequestLine;
 }
 
+HttpRequestHeader HttpRequest::getHttpRequestHeader() const {
+	return this->_httpRequestHeader;
+}
+
+HttpBody				HttpRequest::getBody() const {
+	return(this->_httpBody);
+
+}
 
 /* setter */
-
-HttpBody&				HttpRequest::getBody(){ return(this->_httpBody); }
-
-/* setter */
-void	HttpRequest::setHeader(std::vector<std::string>& header)
+void	HttpRequest::splitHeader(std::vector<std::string>& header)
 {
 	std::vector<std::string>			requestLine = split(header[0], " ");
 	std::map<std::string, std::string>	requestHeaderField = createHeaderField(header);
@@ -114,14 +117,6 @@ std::map<std::string, std::string>	HttpRequest::createHeaderField(std::vector<st
 		}
 	}
 	return (headerMap);
-}
-
-const HttpRequestLine& HttpRequest::getHttpRequestLine() {
-	return this->_httpRequestLine;
-}
-
-HttpRequestHeader& HttpRequest::getHttpRequestHeader() {
-	return this->_httpRequestHeader;
 }
 
 void	HttpRequest::printInfo()

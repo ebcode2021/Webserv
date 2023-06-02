@@ -117,7 +117,7 @@ void	TcpSocket::setRequestHeader()
 
 	HttpRequest::parseHeaderAndBody(request, header, body);
 
-	this->_request.setHeader(header);
+	this->_request.splitHeader(header);
 	this->_buf = body;
 }
 

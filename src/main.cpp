@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 		initListenSocket(kqHandler, config, listenSockFdList);
 		while(1)
 		{
-			kqHandler.eventListReset();
+			kqHandler.eventListReset(); // kq = 소켓 이벤트 관리.(감지, 등록, 삭제)
 			kqHandler.waitEvent();
 			kqHandler.changeListClear();
 			for (int i = 0; i < kqHandler.getEventCnt(); i++)
@@ -66,21 +66,21 @@ int main(int argc, char *argv[])
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
 				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
 
-				sockEventHandler.setSocket(curSock);
+				sockEventHandler.setSocket(curSock); // 소켓 -> 이벤트 처리
 				if (curEvent.filter == EVFILT_READ)
 				{
-					
-					if (listenSockFdList.find(curEvent.ident) != listenSockFdList.end())
+					// listen socket인가 아닌가. (따로 함수 빼면 좋겠다)
+					if (listenSockFdList.find(curEvent.ident) != listenSockFdList.end()) // listen 소켓이면
 					{
-						int clientSock = sockEventHandler.socketAccept();
+						int clientSock = sockEventHandler.socketAccept(); // 새로운 클라이언트
 						if (clientSock == INVALID_SOCKET) {
 							continue ;
 						}
-						TcpSocket *clientSocket = new TcpSocket(clientSock);
-						clientSocket->changeToNonblocking();
-						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
+						TcpSocket *clientSocket = new TcpSocket(clientSock); 
+						clientSocket->changeToNonblocking(); // 소켓 함수를 호출했을 때, 바로 리턴하게 하는거.
+						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket); // udata에는 클라이언트 소켓 정보.(udata)
 					}
-					else 
+					else // client 소켓이면
 					{
 						if (sockEventHandler.dataRecv() <= 0) 
 							sockEventHandler.closeSocket();
@@ -97,9 +97,7 @@ int main(int argc, char *argv[])
 							{
 								std::cout << "--------------------------" << std::endl;
 								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
-							//	response.printHttpResponse();
 								curSock->setResponse(response);
-								//curSock->getResponse().printHttpResponse();
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
 						}

@@ -7,28 +7,26 @@ void	SocketEventHandler::setSocket(TcpSocket *socket) {
 }
 
 int SocketEventHandler::socketAccept() {
-	int clientSock;
+	int clientSock; //반환할 클라이언트 sock fd
 	sockaddr_in clientAddress;
-	socklen_t	clientAddressSize = sizeof(clientAddress);
+	socklen_t	clientAddressSize = sizeof(clientAddress); // client의 정보를 담는 구조체의 크기
 
-	char addr[INET_ADDRSTRLEN];
-	inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr));
-	//printf("[TCP 서버] 클라이언트 접속 : IP 주소=%s, 포트 번호 = %d\n", addr, ntohs(clientAddress.sin_port));
+	// char addr[INET_ADDRSTRLEN];
+	//inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr)); // 
 
+	// printf("[TCP 서버] 클라이언트 접속 : IP 주소=%s, 포트 번호 = %d\n", addr, ntohs(clientAddress.sin_port));
 	clientSock = accept(this->_socket->getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize);
 
+	// stress test 위해
 	struct linger linger_opt;
 	linger_opt.l_onoff = 1;  // 1이면 TIME_WAIT 사용
 	linger_opt.l_linger = 0; // TIME_WAIT 상태를 0초로 설정
-	if (setsockopt(clientSock, SOL_SOCKET, SO_LINGER,
-					&linger_opt, sizeof(linger_opt)) < 0) {
+	if (setsockopt(clientSock, SOL_SOCKET, SO_LINGER, &linger_opt, sizeof(linger_opt)) < 0) {
 		std::cout << "setsockopt error" << std::endl;
 	}
 
-
 	std::cout << "accept sock fd = " << clientSock << std::endl;
-	if (clientSock == INVALID_SOCKET)
-		printErrorWithExit("뭔가 잘못됨");
+	
 	return (clientSock);
 }
 
