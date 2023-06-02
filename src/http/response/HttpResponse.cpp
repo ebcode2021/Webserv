@@ -28,7 +28,7 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& httpReque
 	// 1. find server block and location block
 	ServerInfo		serverInfo  = config.findServerInfoByHost(requestHeader.getHost());
 	LocationBlock	locationBlock =  serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
-	locationBlock.printInfo();
+	//locationBlock.printInfo();
 	std::string		path = locationBlock.getRoot() + locationBlock.getPath();
 
 

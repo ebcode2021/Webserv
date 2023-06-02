@@ -82,17 +82,20 @@ int main(int argc, char *argv[])
 					}
 					else 
 					{
-						if (sockEventHandler.dataRecv() <= 0) 
+						int ret;
+						if ((ret = sockEventHandler.dataRecv()) <= 0) {
 							sockEventHandler.closeSocket();
+						}
 						else 
 						{
+							std::cout << "ret = " << ret << std::endl;
 							if (curSock->getReadMode() == HEADER) 
 							{
 								curSock->setRequestHeader();
 								curSock->changeReadMode();
-								std::cout << "\n-----------리퀘스트 메시지-----------\n" << std::endl;
-								curSock->printRequestInfo();
-								std::cout << "\n-----------리퀘스트 메시지 끝-----------\n" << std::endl;
+								// std::cout << "\n-----------리퀘스트 메시지-----------\n" << std::endl;
+								// curSock->printRequestInfo();
+								// std::cout << "\n-----------리퀘스트 메시지 끝-----------\n" << std::endl;
 							}
 							if (curSock->getReadMode() != END)
 								curSock->setRequestBody();

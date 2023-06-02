@@ -3,14 +3,13 @@
 
 /* constructor*/
 
-TcpSocket::TcpSocket(){}
+TcpSocket::TcpSocket() {}
 
 TcpSocket::TcpSocket(int socketFd)
 {
 	this->_socketInfo.sock = socketFd;
 	this->_socketInfo.sendbyte = 0;
 	this->_socketInfo.recvbyte = 0;
-	this->_buf = "";
 	this->_readMode = HEADER;
 }
 
@@ -38,37 +37,23 @@ size_t	TcpSocket::getRecvByte()
 	return (this->_socketInfo.recvbyte);
 }
 
-char*	TcpSocket::getBuf()
-{
-	return (this->_socketInfo.buf);
-}
-
 void	TcpSocket::setBuf(std::string& body)
 {
-	this->_buf = body;
+	this->_socketInfo.buf = body;
 }
-
-void	TcpSocket::bufClear() {
-	memset(this->_socketInfo.buf, 0, sizeof(BUFSIZE));
-}
-
-
 
 void TcpSocket::printRequestInfo()
 {
 	this->_request.printInfo();
 }
 
-void	TcpSocket::bufJoin(char *str) {
-	this->_buf += str;
-}
 
 std::string TcpSocket::getString() {
-	return this->_buf;
+	this->_socketInfo.buf;
 }
 
 const char	*TcpSocket::getStringToCStr() {
-	return this->_buf.c_str();
+	this->_socketInfo.buf.c_str();
 }
 
 int	TcpSocket::getReadMode() {
@@ -76,17 +61,16 @@ int	TcpSocket::getReadMode() {
 }
 
 
-size_t	TcpSocket::getStringSzie() {
-	int size = this->_buf.size();
-	return size;
+size_t	TcpSocket::getBufSzie() {
+	return (this->_socketInfo.buf.size());
 }
 
 void	TcpSocket::setBufbyIndex(int idx, char a) {
 	this->_socketInfo.buf[idx] = a;
 }
 
-void TcpSocket::stringClear() {
-	this->_buf.clear();
+void TcpSocket::bufClear() {
+	this->_socketInfo.buf.clear();
 }
 
 void TcpSocket::addReadSize(size_t readSize) {
@@ -119,8 +103,8 @@ void	TcpSocket::setRequestHeader()
 	HttpRequest::parseHeaderAndBody(request, header, body);
 
 	this->_request.setHeader(header);
-	this->_buf = body;
-	std::cout << "buf = " << this->_buf << std:::endl;
+	this->setBuf(body);
+	std::cout << "buf = " << this->_socketInfo.buf << std::endl;
 }
 
 std::string TcpSocket::chunkedEncoding()
@@ -159,6 +143,7 @@ void	TcpSocket::setRequestBody()
 	{
 		std::cout << "IDENTY" << std::endl;
 		encodedBuf = this->getString();
+		std::cout << "encodedBuf size = " << encodedBuf.size() << std::endl;
 		this->addReadSize(encodedBuf.size());
 		this->_request.setBody(encodedBuf);
 		std::cout << "recvbyte = " << this->getRecvByte() << "\ncontentlength = " << this->_request.getHttpRequestHeader().getContentLength() << std::endl;

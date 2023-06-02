@@ -38,39 +38,37 @@ void SocketEventHandler::closeSocket() {
 	delete (this->_socket);
 }
 
-// int SocketEventHandler::dataRecv() {
-// 	//int recvSize = 0;
-// 	int ret;
-// 	char buf[BUFSIZE + 1];
-
-// 	while (true)
-// 	{
-// 		ret = recv(this->_socket->getSockFd(), buf, BUFSIZE, 0);
-// 		if (ret == -1)
-// 			return (-1);
-// 		else if (ret == 0)
-// 			break;
-// 		buf[ret + 1] = '\0';
-// 		std::cout << "now buf = " << buf << std::endl;
-// 		this->_socket->bufJoin(buf);
-// 	}
-// 	return (this->_socket->getStringSzie());
-// }
-
 int SocketEventHandler::dataRecv() {
-    int ret = 0;
-    int recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
-    if (recvByte == -1)
-        return (-1);
-    while (recvByte > 0)
-    {
-        ret += recvByte;
-        this->_socket->setBufbyIndex(recvByte + 1, '\0');
-        this->_socket->bufJoin(this->_socket->getBuf());
-        recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
-    }
-    return (ret);
+	const int sockFd = this->_socket->getSockFd();
+	int		readByte;
+	char	buf[BUFSIZE];
+
+	std::memset(buf, 0, BUFSIZE);
+
+	while (true)
+	{
+		readByte = recv(sockFd, buf, BUFSIZE, 0);
+		if (readByte > 0) {
+			this->_socket.
+		}
+	}
+	return (this->_socket->getBufSzie());
 }
+
+// int SocketEventHandler::dataRecv() {
+//     int ret = 0;
+//     int recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
+//     if (recvByte == -1)
+//         return (-1);
+//     while (recvByte > 0)
+//     {
+//         ret += recvByte;
+//         this->_socket->setBufbyIndex(recvByte + 1, '\0');
+//         this->_socket->bufJoin(this->_socket->getBuf());
+//         recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
+//     }
+//     return (ret);
+// }
 
 std::string createHttpResponse(std::string &body) {
     std::ostringstream response;
@@ -153,9 +151,6 @@ int SocketEventHandler::dataSend()
 	return (sendByte);
 }
 
-void	SocketEventHandler::printSockBuf() {
-	std::cout << this->_socket->getString() << std::endl;
-}
 
 void SocketEventHandler::printSockFd() {
 	std::cout << this->_socket->getSockFd() << std::endl;
