@@ -23,7 +23,7 @@ class	Config {
 		/* method */
 		void			addServer(std::ifstream &);
 		ServerInfo		findServerInfoByHost(const std::string&);
-		ServerInfo		findServerInfoByParameter(std::string&, size_t);
+		ServerInfo		findServerInfoByParameter(const std::string&, const size_t);
 };
 
 #endif

@@ -36,13 +36,7 @@ void	HttpRequestLine::validateRequestLine(LocationBlock& locationBlock)
 	if (this->_version != HTTP_VERSION)
 		throw ResponseException(505);
 
-	//std::cout << "*" << this->_method << "*" <<std::endl;
-	//std::cout << "*" << METHODS[2] << "*" <<std::endl;
 	// check Method
-	//locationBlock.isValidMethodByLimitExcept(this->_method) == false
-	//if (METHODS->find(this->_method) == std::string::npos)
 	if ((this->_method == "GET" || this->_method == "DELETE" || this->_method == "POST") == false)
 		throw ResponseException(405);
-	
-
 }
