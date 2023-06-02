@@ -120,6 +120,7 @@ void	TcpSocket::setRequestHeader()
 
 	this->_request.setHeader(header);
 	this->_buf = body;
+	std::cout << "buf = " << this->_buf << std:::endl;
 }
 
 std::string TcpSocket::chunkedEncoding()
@@ -156,9 +157,11 @@ void	TcpSocket::setRequestBody()
 
 	if (this->getReadMode() == IDENTITY)
 	{
+		std::cout << "IDENTY" << std::endl;
 		encodedBuf = this->getString();
 		this->addReadSize(encodedBuf.size());
 		this->_request.setBody(encodedBuf);
+		std::cout << "recvbyte = " << this->getRecvByte() << "\ncontentlength = " << this->_request.getHttpRequestHeader().getContentLength() << std::endl;
 		if (this->getRecvByte() == this->_request.getHttpRequestHeader().getContentLength())
 			this->setReadMode(END);
 	}
@@ -169,7 +172,7 @@ void	TcpSocket::setRequestBody()
 		this->_request.setBody(encodedBuf);
 	}
 	this->_request.setBody(encodedBuf);
-	std::cout << _request.getBody().getBody() << std::endl;
+	//std::cout << _request.getBody().getBody() << std::endl;
 }
 HttpRequest&	TcpSocket::getRequest() { return(this->_request); }
 

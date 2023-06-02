@@ -90,16 +90,27 @@ int main(int argc, char *argv[])
 							{
 								curSock->setRequestHeader();
 								curSock->changeReadMode();
+								std::cout << "\n-----------리퀘스트 메시지-----------\n" << std::endl;
 								curSock->printRequestInfo();
+								std::cout << "\n-----------리퀘스트 메시지 끝-----------\n" << std::endl;
 							}
 							if (curSock->getReadMode() != END)
 								curSock->setRequestBody();
 							if (curSock->getReadMode() == END)
 							{
-								std::cout << "--------------------------" << std::endl;
-								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
-							//	response.printHttpResponse();
-								curSock->setResponse(response);
+
+								// test code
+								if (curSock->getRequest().getHttpRequestLine().getMethod() == "POST") {
+									exit(1);
+								}
+								else {
+									HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
+								//	response.printHttpResponse();
+									curSock->setResponse(response);
+
+								}
+								//
+								
 								//curSock->getResponse().printHttpResponse();
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
