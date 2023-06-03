@@ -39,36 +39,26 @@ void SocketEventHandler::closeSocket() {
 }
 
 int SocketEventHandler::dataRecv() {
-	const int sockFd = this->_socket->getSockFd();
-	int		readByte;
-	char	buf[BUFSIZE];
+	const int	sockFd = this->_socket->getSockFd();
+	int			readByte;
+	char		buf[BUFSIZE];
 
 	std::memset(buf, 0, BUFSIZE);
-
 	while (true)
 	{
 		readByte = recv(sockFd, buf, BUFSIZE, 0);
 		if (readByte > 0) {
-			this->_socket.
+			this->_socket->addBuf(std::string(buf, readByte));
+			std::memset(buf, 0, BUFSIZE);
+			if (static_cast<size_t>(readByte) < BUFSIZE)
+				return (true);
 		}
+		else if (readByte == 0)
+			return (0);
+		else 
+			return (-1);
 	}
-	return (this->_socket->getBufSzie());
 }
-
-// int SocketEventHandler::dataRecv() {
-//     int ret = 0;
-//     int recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
-//     if (recvByte == -1)
-//         return (-1);
-//     while (recvByte > 0)
-//     {
-//         ret += recvByte;
-//         this->_socket->setBufbyIndex(recvByte + 1, '\0');
-//         this->_socket->bufJoin(this->_socket->getBuf());
-//         recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
-//     }
-//     return (ret);
-// }
 
 std::string createHttpResponse(std::string &body) {
     std::ostringstream response;
@@ -147,7 +137,6 @@ int SocketEventHandler::dataSend()
 	//httpResponse = createHttpResponse(body);
 
 	int sendByte = send(this->_socket->getSockFd(), responseMessage.c_str(), responseMessage.size(), 0);
-	this->_socket->stringClear();
 	return (sendByte);
 }
 

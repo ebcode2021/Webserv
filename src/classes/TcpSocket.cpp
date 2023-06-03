@@ -37,9 +37,13 @@ size_t	TcpSocket::getRecvByte()
 	return (this->_socketInfo.recvbyte);
 }
 
-void	TcpSocket::setBuf(std::string& body)
+void	TcpSocket::setBuf(const std::string& buf)
 {
-	this->_socketInfo.buf = body;
+	this->_socketInfo.buf = buf;
+}
+
+void	TcpSocket::addBuf(const std::string& buf) {
+	this->_socketInfo.buf += buf;
 }
 
 void TcpSocket::printRequestInfo()
@@ -48,12 +52,12 @@ void TcpSocket::printRequestInfo()
 }
 
 
-std::string TcpSocket::getString() {
-	this->_socketInfo.buf;
+std::string TcpSocket::getBuf() {
+	return (this->_socketInfo.buf);
 }
 
-const char	*TcpSocket::getStringToCStr() {
-	this->_socketInfo.buf.c_str();
+const char	*TcpSocket::getBufToCStr() {
+	return (this->_socketInfo.buf.c_str());
 }
 
 int	TcpSocket::getReadMode() {
@@ -98,7 +102,7 @@ void	TcpSocket::setRequestHeader()
 {
 	std::vector<std::string>	header;
 	std::string					body;
-	std::string					request = this->getString();
+	std::string					request = this->getBuf();
 
 	HttpRequest::parseHeaderAndBody(request, header, body);
 
@@ -115,11 +119,11 @@ std::string TcpSocket::chunkedEncoding()
 	
 	while (1)
 	{
-		pos = this->_buf.find("\r\n");
+		pos = this->_socketInfo.buf.find("\r\n");
 		std::cout << "pos = " << pos << std::endl;
 		if (pos == std::string::npos)
 			break ;
-		chunkSizeString = this->_buf.substr(0, pos);
+		chunkSizeString = this->_socketInfo.buf.substr(0, pos);
 		int chunkSize = std::stoi(chunkSizeString, nullptr, 16);
 		std::cout << chunkSize << std::endl;
 		if (chunkSize == 0) {
@@ -127,10 +131,10 @@ std::string TcpSocket::chunkedEncoding()
 			this->setReadMode(END);
 			break ;
 		}
-		this->_buf.erase(0, pos + 2);
-		std::cout << _buf.substr(0, chunkSize) << std::endl;
-		body += _buf.substr(0, chunkSize);
-		this->_buf.erase(0, chunkSize + 2);
+		this->_socketInfo.buf.erase(0, pos + 2);
+		std::cout << this->_socketInfo.buf.substr(0, chunkSize) << std::endl;
+		body += this->_socketInfo.buf.substr(0, chunkSize);
+		this->_socketInfo.buf.erase(0, chunkSize + 2);
 	}
 	return (body);
 }
@@ -142,7 +146,7 @@ void	TcpSocket::setRequestBody()
 	if (this->getReadMode() == IDENTITY)
 	{
 		std::cout << "IDENTY" << std::endl;
-		encodedBuf = this->getString();
+		encodedBuf = this->getBuf();
 		std::cout << "encodedBuf size = " << encodedBuf.size() << std::endl;
 		this->addReadSize(encodedBuf.size());
 		this->_request.setBody(encodedBuf);

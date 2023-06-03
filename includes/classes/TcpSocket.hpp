@@ -22,14 +22,15 @@ class TcpSocket
 		int	 			getSockFd();
 		int	 			getSendByte();
 		size_t 			getRecvByte();
-		void			setBuf(std::string&);
+		void			setBuf(const std::string&);
 
 		//
 		HttpRequest&	getRequest();
 		HttpResponse	getResponse();
 		void			setRequest(HttpRequest&);
 		void			setResponse(HttpResponse&);
-		std::string		getString();
+		std::string		getBuf();
+		void			addBuf(const std::string&);
 		
 		void			setRequestHeader();
 		void			setRequestBody();
@@ -53,7 +54,7 @@ class TcpSocket
 
 
 		//test
-		const char *getStringToCStr();
+		const char *getBufToCStr();
 		size_t	getBufSzie();
 		void printRequestInfo();
 };
