@@ -74,14 +74,14 @@ void cgi_test(TcpSocket* sock) {
 		setenv("SERVER_PROTOCOL", SERVER_PROTOCOL.c_str(), 1);
 		setenv("PATH_INFO", PATH_INFO.c_str(), 1);
 
-		execv("/Users/minsukan/Desktop/42/webserv/Webserv/hello_cgi.py", 0);
+		execv("/Users/minsukan/Desktop/42/webserv/Webserv/cgi_tester", 0);
 		exit(1);
 	}
 	else {
-		dup2(STDOUT_FILENO, stdoutbackup);
+		dup2(pipefd[1], STDOUT_FILENO);
 		write(STDOUT_FILENO, sock->getBufToCStr(), sock->getBufSzie());
 	}
-	
+	dup2(STDOUT_FILENO, stdoutbackup);
 	wait(0);
 	//std::cout << "프로세스 종료?" << std::endl;
 }
