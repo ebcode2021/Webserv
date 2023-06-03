@@ -12,14 +12,14 @@ HttpResponse::HttpResponse(HttpResponseLine& responseLine, HttpResponseHeader& r
 }
 
 /* setter */
-void	HttpResponse::setBody(const std::string& body)
-{
+void	HttpResponse::setBody(const std::string& body) {
 	this->_httpBody.setBody(body);
 }
 
 /* method */
-HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
+HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, const std::string& clientAddr)
 {
+	std::cout << "ip : " << clientAddr << std::endl;
 	// request
 	HttpRequestLine		requestLine = request.getHttpRequestLine();
 	HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
@@ -35,12 +35,11 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request)
 	LocationBlock	locationBlock = serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
 
 	PathInfo 	pathInfo(locationBlock.getFullPath());
-	std::cout << requestLine.getMethod() << std::endl;
 	pathInfo.printPathInfo();
 	std::cout << "Full Path : " << locationBlock.getFullPath() << std::endl;
 	try
 	{
-		requestLine.validateRequestLine(locationBlock);
+		requestLine.validateRequestLine(locationBlock, clientAddr);
 		requestHeader.validateRequestHeader(locationBlock);
 		std::cout << "---- [success] request-line validate!" << std::endl;
 

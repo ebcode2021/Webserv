@@ -53,6 +53,14 @@ int		KqueueHandler::getKqFd() {
 	return this->kq;
 }
 
+// 은비 추가
+void	KqueueHandler::initialize() {
+	this->eventListReset();
+	this->waitEvent();
+	this->changeListClear();
+}
+
+/* print */
 void	KqueueHandler::printEvent() {
 	std::cout << "\n===============Event List===============\n";
 	for (size_t i = 0; i < this->eventCnt; i++)

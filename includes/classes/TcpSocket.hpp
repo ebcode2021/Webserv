@@ -13,52 +13,41 @@ class TcpSocket
 		HttpResponse	_response;
 		std::string		_buf;
 		int				_readMode;
+		std::string		_clientAddr;
 
 	public :
+		// constructor
 		TcpSocket();
 		TcpSocket(int);
 		
-		void			changeToNonblocking();
-		void			bufJoin(char *);
 		// getter, setter
 		int	 			getSockFd();
 		int	 			getSendByte();
 		size_t 			getRecvByte();
+		int				getReadMode();
 		char*			getBuf();
 		std::string 	getString();
-		void			setBuf(std::string&);
-
-		//
 		HttpRequest&	getRequest();
 		HttpResponse	getResponse();
+		std::string		getClientAddr();
+		void			setBuf(std::string&);
 		void			setRequest(HttpRequest&);
 		void			setResponse(HttpResponse&);
-		
+
+		// method
+		std::string		getClientAddrBySocket();
 		void			setRequestHeader();
 		void			setRequestBody();
-
+		void			changeToNonblocking();
+		void			bufJoin(char *);
 		void			setReadMode(int);
-		//
-		void	bufClear();
+		void			addReadSize(size_t);
+		void			setBufbyIndex(int, char);
+		void			changeReadMode();
+		std::string 	chunkedEncoding();
+		void 			stringClear();
 
-		int		getReadMode();
-
-		void	addReadSize(size_t);
-		
-		void	setBufbyIndex(int, char);
-
-
-		void	changeReadMode();
-
-		std::string chunkedEncoding();
-
-		
-
-
-		//test
-		const char *getStringToCStr();
-		size_t	getStringSzie();
-		void stringClear();
+		// print
 		void printRequestInfo();
 };
 

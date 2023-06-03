@@ -24,9 +24,11 @@ int createSocket()
 
 void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &listenSockFdList) 
 {
-	SocketEventHandler sockEventHandler;
-	std::set<int> listenSockList = config.getListenSockList(); 
-	for (std::set<int>::iterator it = listenSockList.begin(); it != listenSockList.end(); it++)
+	SocketEventHandler		sockEventHandler;
+	std::set<int>			listenSockList = config.getListenSockList(); 
+	std::set<int>::iterator	it;
+
+	for (it = listenSockList.begin(); it != listenSockList.end(); it++)
 	{
 		int listenSockFd = createSocket();
 		if (listenSockFd == INVALID_SOCKET) {
@@ -44,6 +46,21 @@ void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &l
 	}
 }
 
+bool	isListenSocketEvent(std::set<int>&	list, uintptr_t& event)
+{
+	return (list.find(event) != list.end());
+}
+
+bool	isReadEvent(int16_t& event)
+{
+	return (event == EVFILT_READ);
+}
+
+bool	isWriteEvent(int16_t& event)
+{
+	return (event == EVFILT_WRITE);
+}
+
 int main(int argc, char *argv[])
 {
 	(void)argc;
@@ -56,28 +73,26 @@ int main(int argc, char *argv[])
 		SocketEventHandler			sockEventHandler;
 		
 		initListenSocket(kqHandler, config, listenSockFdList);
+
 		while(1)
 		{
-			kqHandler.eventListReset(); // kq = 소켓 이벤트 관리.(감지, 등록, 삭제)
-			kqHandler.waitEvent();
-			kqHandler.changeListClear();
+			kqHandler.initialize();
+
 			for (int i = 0; i < kqHandler.getEventCnt(); i++)
 			{
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
+				
 				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
-
 				sockEventHandler.setSocket(curSock); // 소켓 -> 이벤트 처리
-				if (curEvent.filter == EVFILT_READ)
+
+				if (isReadEvent(curEvent.filter) == true)
 				{
-					// listen socket인가 아닌가. (따로 함수 빼면 좋겠다)
-					if (listenSockFdList.find(curEvent.ident) != listenSockFdList.end()) // listen 소켓이면
+					if (isListenSocketEvent(listenSockFdList, curEvent.ident) == true)
 					{
 						int clientSock = sockEventHandler.socketAccept(); // 새로운 클라이언트
-						if (clientSock == INVALID_SOCKET) {
+						if (clientSock == INVALID_SOCKET)
 							continue ;
-						}
-						TcpSocket *clientSocket = new TcpSocket(clientSock); 
-						clientSocket->changeToNonblocking(); // 소켓 함수를 호출했을 때, 바로 리턴하게 하는거.
+						TcpSocket *clientSocket = new TcpSocket(clientSock);
 						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket); // udata에는 클라이언트 소켓 정보.(udata)
 					}
 					else // client 소켓이면
@@ -96,14 +111,14 @@ int main(int argc, char *argv[])
 							if (curSock->getReadMode() == END)
 							{
 								std::cout << "--------------------------" << std::endl;
-								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
+								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr());
 								curSock->setResponse(response);
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
 						}
 					}
 				}
-				else if (curEvent.filter == EVFILT_WRITE)
+				else if (isWriteEvent(curEvent.filter) == true)
 				{
 					int sendsize = sockEventHandler.dataSend();
 					curSock->setReadMode(HEADER);

@@ -26,7 +26,7 @@ class LocationBlock : public ServerBlock
 		static void blockCheck(std::ifstream&, Validate&);
 
 		// method
-		bool		isValidMethodByLimitExcept(const std::string&);
+		bool		isValidByLimitExcept(const std::string&, const std::string&);
 		std::string	getFullPath() const;
 
 		// print

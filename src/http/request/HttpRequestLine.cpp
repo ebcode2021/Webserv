@@ -26,16 +26,29 @@ void	HttpRequestLine::setVersion(const std::string& version) {
 	this->_version = version;
 }
 
-/* exception */
-void	HttpRequestLine::validateRequestLine(LocationBlock& locationBlock)
+/* method */
+bool	HttpRequestLine::isRecognizedMethod(const std::string& method)
 {
-	(void)locationBlock;
+	for (size_t	i = 0; i < METHODS_SIZE; i++)
+	{
+		if (METHODS[i] == method)
+			return (true);
+	}
+	return (false);
+}
 
+/* exception */
+void	HttpRequestLine::validateRequestLine(LocationBlock& locationBlock, const std::string& clientAddr)
+{
 	// check http-version
 	if (this->_version != HTTP_VERSION)
 		throw ResponseException(505);
 
 	// check Method
-	if ((this->_method == "GET" || this->_method == "DELETE" || this->_method == "POST") == false)
+	if (isRecognizedMethod(this->_method) == false)
+		throw ResponseException(405);
+	
+	// check limit_except
+	if (locationBlock.isValidByLimitExcept(this->_method, clientAddr) == false)
 		throw ResponseException(405);
 }

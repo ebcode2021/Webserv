@@ -115,8 +115,10 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 }
 
 /* method */
-bool	LocationBlock::isValidMethodByLimitExcept(const std::string& method) {
+bool	LocationBlock::isValidByLimitExcept(const std::string& method, const std::string& clientAddr)
+{
 	(void)method;
+	(void)clientAddr; 
 	return (true);
 }
 
