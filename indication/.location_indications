@@ -1,4 +1,4 @@
-limit_except			65535
+limit_except			1
 
 autoindex				65535
 client_max_body_size	65535

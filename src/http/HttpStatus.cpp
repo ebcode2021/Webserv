@@ -56,6 +56,7 @@ std::map<int, std::string>&	HttpStatus::getStatusMap() const
 		httpStatusMap.insert(std::make_pair( 200, "OK" ));
 		httpStatusMap.insert(std::make_pair( 201, "Created" ));
 		httpStatusMap.insert(std::make_pair( 202, "Accepted" ));
+		httpStatusMap.insert(std::make_pair( 204, "No Content" ));
 		httpStatusMap.insert(std::make_pair( 400, "Bad Request" ));
 		httpStatusMap.insert(std::make_pair( 401, "Unauthorized" ));
 		httpStatusMap.insert(std::make_pair( 403, "Forbidden" ));

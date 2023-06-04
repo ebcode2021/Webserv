@@ -32,3 +32,17 @@ std::string	itos(int integer)
 	str << integer;
 	return (str.str());
 }
+
+std::map<std::string, int> create_directivemap() {
+	std::map<std::string, int> ret;
+	std::ifstream server_keywords(KEYWORD_PATH);
+	std::string line;
+	std::vector<std::string> splittedLine;
+	size_t	i = 0;
+	while (std::getline(server_keywords, line))
+	{
+		splittedLine = split(line, WHITESPACE);
+		ret.insert(make_pair(splittedLine[0], i++));
+	}
+	return (ret);
+}

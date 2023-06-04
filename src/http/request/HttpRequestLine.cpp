@@ -30,18 +30,13 @@ void	HttpRequestLine::setVersion(const std::string& version) { this->_version = 
 
 void	HttpRequestLine::validateRequestLine(LocationBlock& locationBlock)
 {
-	try
-	{
-		// check http-version
-		if (this->_version != HTTP_VERSION)
-			throw ResponseException(505);
+	(void)locationBlock;
 
-		// check Method
-		if (METHODS->find(this->_method) == std::string::npos || locationBlock.isValidMethodByLimitExcept(this->_method) == false)
-			throw ResponseException(405);
-	}
-	catch (const ResponseException &ex)
-	{
-		throw ResponseException(ex.statusCode());
-	}
+	// check http-version
+	if (this->_version != HTTP_VERSION)
+		throw ResponseException(505);
+
+	// check Method
+	if ((this->_method == "GET" || this->_method == "DELETE" || this->_method == "POST") == false)
+		throw ResponseException(405);
 }

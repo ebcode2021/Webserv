@@ -2,8 +2,8 @@
 # define HTTPREQUESTLINE_HPP
 
 #include "webserv.hpp"
-#include "ResponseException.hpp"
 #include "LocationBlock.hpp"
+#include "ResponseException.hpp"
 
 class	HttpRequestLine
 {

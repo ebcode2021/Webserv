@@ -13,6 +13,7 @@ class	HttpResponseLine
 	public :
 		// constructor
 		HttpResponseLine();
+		HttpResponseLine(const std::string&);
 		HttpResponseLine(const HttpStatus&);
 
 		// getter, setter

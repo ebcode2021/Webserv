@@ -11,25 +11,26 @@ class LocationBlock : public ServerBlock
 		LimitExcept		_limitExcept;
 
 	public :
-		/* constructor */
-		LocationBlock(){};
+		// constructor
+		LocationBlock();
 		LocationBlock(const ServerBlock &);
 		LocationBlock(const ServerBlock&, const std::vector<std::string>&);
 
-		/* getter, setter */
-		std::string	getPath() { return(this->_path);};
+		// getter, setter
+		std::string	getPath() const;
 		void		setLocationPath(const std::vector<std::string>&);
 		void		setLimitExcept(const std::string&);
 		void		setPath(const std::string&);
 		
-		/* checker */
+		// checker
 		static void blockCheck(std::ifstream&, Validate&);
 
-		/* method */
-		bool	isValidMethodByLimitExcept(const std::string&) {return true;};
+		// method
+		bool		isValidMethodByLimitExcept(const std::string&);
+		std::string	getFullPath() const;
 
-		/* print */
-		void	printLocationBlock();
+		// print
+		void	printInfo();
 };
 
 #endif

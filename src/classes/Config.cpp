@@ -58,7 +58,7 @@ bool Config::fileCheck(int argc, char *argv[])
 		}
 		infile.close();
 		if (mode == test)
-			notice::printMessage(TEST_SUCCESS);
+			std::cout << TEST_SUCCESS << std::endl;
 		else
 			return true;
 	}
@@ -163,7 +163,7 @@ ServerInfo	Config::findServerInfoByHost(const std::string& host)
 	return (findServerInfoByParameter(serverName, port));
 }
 
-ServerInfo	Config::findServerInfoByParameter(std::string& serverName, size_t port)
+ServerInfo	Config::findServerInfoByParameter(const std::string& serverName, const size_t port)
 {
 	// config inform
 	std::vector<ServerInfo>		serverList = this->_serverList;

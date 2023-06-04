@@ -9,14 +9,14 @@ class ErrorPage {
 		std::string			path;
 
 	public :
-		/* constructor */
+		// constructor
 		ErrorPage(std::vector<std::string>&);
 
 		// getter, setter
 		std::vector<int>	getStatusCodeList() const;
 		std::string			getPath() const;
 
-		/* print */
+		// print
 		void PrintInfo();
 };
 

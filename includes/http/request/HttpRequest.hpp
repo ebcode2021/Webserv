@@ -6,11 +6,6 @@
 # include "HttpRequestHeader.hpp"
 # include "HttpBody.hpp"
 
-// Request-Header
-	// Request-Line (Method SP Request-URI SP HTTP-Version CRLF)
-	// Request-Header-Field (FiledName, FiledValue)
-// Request-Body
-
 class TcpSocket;
 
 class	HttpRequest
@@ -21,27 +16,26 @@ class	HttpRequest
 		HttpBody			_httpBody;
 
 	public :
-		/* constructor */
+		// constructor
 		HttpRequest();
 
-		/* getter, setter */
+		// getter, setter
 		HttpRequestLine&			getRequestLine() ;
 		HttpBody&					getBody() ;
 
-		void								setHeader(std::vector<std::string>&);
-		void								setBody(const std::string&);
+		void						setHeader(std::vector<std::string>&);
+		void						setBody(const std::string&);
 
-		void								setRequestLine(std::vector<std::string>);
-		void								setHeaderField(std::map<std::string, std::string>);
+		void						setRequestLine(std::vector<std::string>);
+		void						setHeaderField(std::map<std::string, std::string>);
 
 		// parser
-		static void 						parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
+		static void 				parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
 		
-		
+		// method
 		const HttpRequestLine&		getHttpRequestLine();
 		HttpRequestHeader&			getHttpRequestHeader();
 
-		// static
 		static std::map<std::string, std::string>	createHeaderField(std::vector<std::string>&);
 
 

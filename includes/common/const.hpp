@@ -22,7 +22,7 @@ const std::size_t	CLIENT_BODY_SIZE = 1048576;
 
 /* Related to HTTP */
 static const	std::string METHODS[] = {
-	"GET", "POST", "DELETE"
+	"GET", "POST", "DELETE",
 };
 
 static const	std::string REQUEST_HEADERS[] = {

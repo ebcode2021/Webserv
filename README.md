@@ -1,8 +1,12 @@
 #Webserv
 
-0525(월급날)
--> (은비) 
--> response....언제끝나
+// Request-Header
+	// Request-Line (Method SP Request-URI SP HTTP-Version CRLF)
+	// Request-Header-Field (FiledName, FiledValue)
+// Request-Body
 
--> (민수칸)
--> cgi 공부..?
+// Response-Header
+	// Response-Line
+		// HTTP/1.1 <status code> <reason phrase>
+	// Response-Header-Field
+// Reasponse-Body
