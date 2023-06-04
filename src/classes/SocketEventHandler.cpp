@@ -38,18 +38,25 @@ void SocketEventHandler::closeSocket() {
 }
 
 int SocketEventHandler::dataRecv() {
-    int ret = 0;
-    int recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
-    if (recvByte == -1)
-        return (-1);
-    while (recvByte > 0)
-    {
-        ret += recvByte;
-        this->_socket->setBufbyIndex(recvByte + 1, '\0');
-        this->_socket->bufJoin(this->_socket->getBuf());
-        recvByte = recv(this->_socket->getSockFd(), this->_socket->getBuf(), BUFSIZE, 0);
-    }
-    return (ret);
+	const int	sockFd = this->_socket->getSockFd();
+	int			readByte;
+	char		buf[BUFSIZE];
+
+	std::memset(buf, 0, BUFSIZE);
+	while (true)
+	{
+		readByte = recv(sockFd, buf, BUFSIZE, 0);
+		if (readByte > 0) {
+			this->_socket->addBuf(std::string(buf, readByte));
+			std::memset(buf, 0, BUFSIZE);
+			if (static_cast<size_t>(readByte) < BUFSIZE)
+				return (true);
+		}
+		else if (readByte == 0)
+			return (0);
+		else 
+			return (-1);
+	}
 }
 
 int SocketEventHandler::dataSend() 
@@ -57,13 +64,9 @@ int SocketEventHandler::dataSend()
 	std::string responseMessage = this->_socket->getResponse().getResponseToString();
 
 	int sendByte = send(this->_socket->getSockFd(), responseMessage.c_str(), responseMessage.size(), 0);
-	this->_socket->stringClear();
 	return (sendByte);
 }
 
-void	SocketEventHandler::printSockBuf() {
-	std::cout << this->_socket->getString() << std::endl;
-}
 
 void SocketEventHandler::printSockFd() {
 	std::cout << this->_socket->getSockFd() << std::endl;

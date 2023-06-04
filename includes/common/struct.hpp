@@ -12,7 +12,7 @@ typedef struct errorPage
 typedef struct SocketInfo
 {
 	int		sock;
-	char	buf[BUFSIZE + 1];
+	std::string buf;
 	size_t	sendbyte;
 	size_t	recvbyte;
 }			SocketInfo;
