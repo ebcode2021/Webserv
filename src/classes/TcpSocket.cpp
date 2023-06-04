@@ -2,14 +2,14 @@
 
 
 /* constructor*/
-TcpSocket::TcpSocket(){}
+
+TcpSocket::TcpSocket() {}
 
 TcpSocket::TcpSocket(int socketFd)
 {
 	this->_socketInfo.sock = socketFd;
 	this->_socketInfo.sendbyte = 0;
 	this->_socketInfo.recvbyte = 0;
-	this->_buf = "";
 	this->_readMode = HEADER;
 }
 
@@ -37,37 +37,27 @@ size_t	TcpSocket::getRecvByte()
 	return (this->_socketInfo.recvbyte);
 }
 
-char*	TcpSocket::getBuf()
+void	TcpSocket::setBuf(const std::string& buf)
 {
-	return (this->_socketInfo.buf);
+	this->_socketInfo.buf = buf;
 }
 
-void	TcpSocket::setBuf(std::string& body)
-{
-	this->_buf = body;
+void	TcpSocket::addBuf(const std::string& buf) {
+	this->_socketInfo.buf += buf;
 }
-
-void	TcpSocket::bufClear() {
-	memset(this->_socketInfo.buf, 0, sizeof(BUFSIZE));
-}
-
-
 
 void TcpSocket::printRequestInfo()
 {
 	this->_request.printInfo();
 }
 
-void	TcpSocket::bufJoin(char *str) {
-	this->_buf += str;
+
+std::string TcpSocket::getBuf() {
+	return (this->_socketInfo.buf);
 }
 
-std::string TcpSocket::getString() {
-	return this->_buf;
-}
-
-const char	*TcpSocket::getStringToCStr() {
-	return this->_buf.c_str();
+const char	*TcpSocket::getBufToCStr() {
+	return (this->_socketInfo.buf.c_str());
 }
 
 int	TcpSocket::getReadMode() {
@@ -75,17 +65,16 @@ int	TcpSocket::getReadMode() {
 }
 
 
-size_t	TcpSocket::getStringSzie() {
-	int size = this->_buf.size();
-	return size;
+size_t	TcpSocket::getBufSzie() {
+	return (this->_socketInfo.buf.size());
 }
 
 void	TcpSocket::setBufbyIndex(int idx, char a) {
 	this->_socketInfo.buf[idx] = a;
 }
 
-void TcpSocket::stringClear() {
-	this->_buf.clear();
+void TcpSocket::bufClear() {
+	this->_socketInfo.buf.clear();
 }
 
 void TcpSocket::addReadSize(size_t readSize) {
@@ -113,12 +102,13 @@ void	TcpSocket::setRequestHeader()
 {
 	std::vector<std::string>	header;
 	std::string					body;
-	std::string					request = this->getString();
+	std::string					request = this->getBuf();
 
 	HttpRequest::parseHeaderAndBody(request, header, body);
 
 	this->_request.setHeader(header);
-	this->_buf = body;
+	this->setBuf(body);
+	std::cout << "buf = " << this->_socketInfo.buf << std::endl;
 }
 
 std::string TcpSocket::chunkedEncoding()
@@ -129,11 +119,11 @@ std::string TcpSocket::chunkedEncoding()
 	
 	while (1)
 	{
-		pos = this->_buf.find("\r\n");
+		pos = this->_socketInfo.buf.find("\r\n");
 		std::cout << "pos = " << pos << std::endl;
 		if (pos == std::string::npos)
 			break ;
-		chunkSizeString = this->_buf.substr(0, pos);
+		chunkSizeString = this->_socketInfo.buf.substr(0, pos);
 		int chunkSize = std::stoi(chunkSizeString, nullptr, 16);
 		std::cout << chunkSize << std::endl;
 		if (chunkSize == 0) {
@@ -141,10 +131,10 @@ std::string TcpSocket::chunkedEncoding()
 			this->setReadMode(END);
 			break ;
 		}
-		this->_buf.erase(0, pos + 2);
-		std::cout << _buf.substr(0, chunkSize) << std::endl;
-		body += _buf.substr(0, chunkSize);
-		this->_buf.erase(0, chunkSize + 2);
+		this->_socketInfo.buf.erase(0, pos + 2);
+		std::cout << this->_socketInfo.buf.substr(0, chunkSize) << std::endl;
+		body += this->_socketInfo.buf.substr(0, chunkSize);
+		this->_socketInfo.buf.erase(0, chunkSize + 2);
 	}
 	return (body);
 }
@@ -155,9 +145,12 @@ void	TcpSocket::setRequestBody()
 
 	if (this->getReadMode() == IDENTITY)
 	{
-		encodedBuf = this->getString();
+		std::cout << "IDENTY" << std::endl;
+		encodedBuf = this->getBuf();
+		std::cout << "encodedBuf size = " << encodedBuf.size() << std::endl;
 		this->addReadSize(encodedBuf.size());
 		this->_request.setBody(encodedBuf);
+		std::cout << "recvbyte = " << this->getRecvByte() << "\ncontentlength = " << this->_request.getHttpRequestHeader().getContentLength() << std::endl;
 		if (this->getRecvByte() == this->_request.getHttpRequestHeader().getContentLength())
 			this->setReadMode(END);
 	}
@@ -168,7 +161,7 @@ void	TcpSocket::setRequestBody()
 		this->_request.setBody(encodedBuf);
 	}
 	this->_request.setBody(encodedBuf);
-	std::cout << _request.getBody().getBody() << std::endl;
+	//std::cout << _request.getBody().getBody() << std::endl;
 }
 HttpRequest&	TcpSocket::getRequest() { return(this->_request); }
 

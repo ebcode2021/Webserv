@@ -44,9 +44,52 @@ void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &l
 	}
 }
 
+
+void cgi_test(TcpSocket* sock) {
+	HttpRequest request = sock->getRequest();
+
+	std::string REQUEST_METHOD = request.getHttpRequestLine().getMethod();
+	std::string CONTENT_TYPE = request.getHttpRequestHeader().getContentType();
+	std::string CONTENT_LENGTH = itos(request.getHttpRequestHeader().getContentLength());
+	std::string SERVER_PROTOCOL = "HTTP/1.1";
+	std::string PATH_INFO = "/Users/minsukan/Desktop/42/webserv/Webserv/resources/fileUpLoad";
+	
+	std::cout << CONTENT_LENGTH << std::endl;
+	std::cout << sock->getBufSzie() << std::endl;
+	
+	int pipefd[2];
+	pipe(pipefd);
+
+	//int stdinbackup = dup(STDIN_FILENO);
+	int stdoutbackup = dup(STDOUT_FILENO);
+	
+
+	pid_t pid = fork();
+	if (pid == 0) {
+		dup2(pipefd[0], STDIN_FILENO);
+
+		setenv("REQUEST_METHOD", REQUEST_METHOD.c_str(), 1);
+		setenv("CONTENT_TYPE", CONTENT_TYPE.c_str(), 1);
+		setenv("CONTENT_LENGTH", CONTENT_LENGTH.c_str(), 1);
+		setenv("SERVER_PROTOCOL", SERVER_PROTOCOL.c_str(), 1);
+		setenv("PATH_INFO", PATH_INFO.c_str(), 1);
+
+		execv("/Users/minsukan/Desktop/42/webserv/Webserv/cgi_tester", 0);
+		exit(1);
+	}
+	else {
+		dup2(pipefd[1], STDOUT_FILENO);
+		write(STDOUT_FILENO, sock->getBufToCStr(), sock->getBufSzie());
+	}
+	dup2(STDOUT_FILENO, stdoutbackup);
+	wait(0);
+	//std::cout << "프로세스 종료?" << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
 	(void)argc;
+
 	if (1) //Config::fileCheck(argc, argv))
 	{
 		Config config(argv[1]);
@@ -82,12 +125,14 @@ int main(int argc, char *argv[])
 					}
 					else 
 					{
-						if (sockEventHandler.dataRecv() <= 0) 
+						if (sockEventHandler.dataRecv() <= 0) {
 							sockEventHandler.closeSocket();
+						}
 						else 
 						{
 							if (curSock->getReadMode() == HEADER) 
 							{
+								std::cout << curSock->getBuf() << std::endl;
 								curSock->setRequestHeader();
 								curSock->changeReadMode();
 							}
@@ -95,10 +140,19 @@ int main(int argc, char *argv[])
 								curSock->setRequestBody();
 							if (curSock->getReadMode() == END)
 							{
-								std::cout << "--------------------------" << std::endl;
-								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
-							//	response.printHttpResponse();
-								curSock->setResponse(response);
+
+								// test code
+								if (curSock->getRequest().getHttpRequestLine().getMethod() == "POST") {
+									cgi_test(curSock);
+									//exit(1);
+								}
+								else {
+									HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
+								//	response.printHttpResponse();
+									curSock->setResponse(response);
+								}
+								//
+								
 								//curSock->getResponse().printHttpResponse();
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
@@ -108,6 +162,7 @@ int main(int argc, char *argv[])
 				else if (curEvent.filter == EVFILT_WRITE)
 				{
 					int sendsize = sockEventHandler.dataSend();
+					curSock->bufClear();
 					curSock->setReadMode(HEADER);
 					sendsize = 10;
 					kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
