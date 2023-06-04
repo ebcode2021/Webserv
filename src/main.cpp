@@ -73,7 +73,6 @@ void cgi_test(TcpSocket* sock) {
 		setenv("CONTENT_LENGTH", CONTENT_LENGTH.c_str(), 1);
 		setenv("SERVER_PROTOCOL", SERVER_PROTOCOL.c_str(), 1);
 		setenv("PATH_INFO", PATH_INFO.c_str(), 1);
-		setenv()
 
 		execv("/Users/minsukan/Desktop/42/webserv/Webserv/cgi_tester", 0);
 		exit(1);
