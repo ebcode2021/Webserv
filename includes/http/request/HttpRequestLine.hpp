@@ -25,7 +25,7 @@ class	HttpRequestLine
 		static bool		isRecognizedMethod(const std::string&);
 
 		// exception
-		void		validateRequestLine(LocationBlock& locationBlock, const std::string&);
+		void		validateRequestLine(const LimitExcept&, const std::string&);
 };
 
 #endif

@@ -18,6 +18,35 @@ LimitExcept::LimitExcept(const std::vector<std::string> &exceptBlock) {
 	}
 } 
 
+/* getter, setter */
+std::vector<std::string>	LimitExcept::getMethodList() const {
+	return (this->_methodList);
+}
+
+std::string					LimitExcept::getAllow() const {
+	return (this->_allow);
+}
+
+std::string					LimitExcept::getDeny() const {
+	return (this->_deny);
+}
+
+void	LimitExcept::setMethodList(const std::vector<std::string> &value) {
+	for (size_t i = 1; i < value.size(); i++)
+	{
+		if (value[i].compare("{") == 0)
+			this->_methodList.push_back(value[i]);
+	}
+}
+
+void	LimitExcept::setAllow(const std::vector<std::string> &value) {
+	this->_allow = value[1];
+}
+
+void	LimitExcept::setDeny(const std::vector<std::string> &value) {
+	this->_allow = value[1];
+}
+
 /* block check */
 void	LimitExcept::blockCheck(std::ifstream& infile, Validate& dataset)
 {
@@ -60,21 +89,80 @@ void	LimitExcept::blockCheck(std::ifstream& infile, Validate& dataset)
 	}
 }
 
-/* setter */
-void	LimitExcept::setMethodList(const std::vector<std::string> &value) {
-	for (size_t i = 1; i < value.size(); i++)
+// 나중에 util로 뺄거
+bool	LimitExcept::isMethodInList(const std::string& method) const
+{
+	size_t	size = this->_methodList.size();
+
+	for (size_t i = 0; i < size; i++)
 	{
-		if (value[i].compare("{") == 0)
-			this->_methodList.push_back(value[i]);
+		if (this->_methodList[i] == method)
+			return (true);
 	}
+	return (false);
 }
 
-void	LimitExcept::setAllow(const std::vector<std::string> &value) {
-	this->_allow = value[1];
+bool	LimitExcept::isAllValue(const std::string& value) const
+{
+	return (value == "all");
 }
 
-void	LimitExcept::setDeny(const std::vector<std::string> &value) {
-	this->_allow = value[1];
+bool	LimitExcept::isValidClientAddr(const std::string& value, const std::string& addr) const
+{
+	return (value == addr);
+}
+
+bool	LimitExcept::isValidMethod(const std::string& method, const std::string& clientAddr) const
+{
+	std::map<std::string, std::string>::const_iterator it;
+	
+	bool	hasMethod = this->isMethodInList(method);
+	bool	returnFlag = true;
+	bool	addrFlag = false;
+
+	if (hasMethod == true)
+	{
+		for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
+		{
+			if ((*it).first == "allow")
+			{
+				std::string	value = (*it).second;
+
+				if (isAllValue(value) == true)
+				{
+					if (isValidClientAddr(value, clientAddr) == true)
+					{
+						returnFlag = true;
+						break ;
+					}
+				}
+				else
+					addrFlag = true;
+			}
+		}
+	}
+	else
+	{
+		for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
+		{
+			std::string	value = (*it).second;
+			if ((*it).first == "deny")
+			{
+				if (isAllValue(value) == true || isValidClientAddr(value, clientAddr) == true)
+					break ;
+			}
+			else
+			{
+				if (isAllValue(value) == true)
+				{
+					returnFlag = true;
+					break ;
+				}
+			}
+		}
+	}
+
+	return (returnFlag);
 }
 
 /* print */

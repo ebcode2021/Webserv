@@ -33,9 +33,14 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 }
 
 /* getter, setter */
+LimitExcept	LocationBlock::getLimitExcept() const {
+	return (this->_limitExcept);
+}
+
 std::string	LocationBlock::getPath() const {
 	return (this->_path);
 }
+
 void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
 	if (value.size() < 2)
 		this->_path = "/";
@@ -115,12 +120,6 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 }
 
 /* method */
-bool	LocationBlock::isValidByLimitExcept(const std::string& method, const std::string& clientAddr)
-{
-	(void)method;
-	(void)clientAddr; 
-	return (true);
-}
 
 std::string	LocationBlock::getFullPath() const {
 	if (this->_path != "/")

@@ -38,17 +38,18 @@ bool	HttpRequestLine::isRecognizedMethod(const std::string& method)
 }
 
 /* exception */
-void	HttpRequestLine::validateRequestLine(LocationBlock& locationBlock, const std::string& clientAddr)
+void	HttpRequestLine::validateRequestLine(const LimitExcept& limitExcept, const std::string& clientAddr)
 {
 	// check http-version
 	if (this->_version != HTTP_VERSION)
 		throw ResponseException(505);
 
 	// check Method
-	if (isRecognizedMethod(this->_method) == false)
+	if (this->isRecognizedMethod(this->_method) == false)
 		throw ResponseException(405);
-	
+	std::cout << "hi?" << std::endl;
+
 	// check limit_except
-	if (locationBlock.isValidByLimitExcept(this->_method, clientAddr) == false)
-		throw ResponseException(405);
+	if (limitExcept.isValidMethod(this->_method, clientAddr) == false)
+		throw ResponseException(403);
 }

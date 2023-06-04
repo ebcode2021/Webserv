@@ -17,6 +17,7 @@ class LocationBlock : public ServerBlock
 		LocationBlock(const ServerBlock&, const std::vector<std::string>&);
 
 		// getter, setter
+		LimitExcept	getLimitExcept() const;
 		std::string	getPath() const;
 		void		setLocationPath(const std::vector<std::string>&);
 		void		setLimitExcept(const std::string&);

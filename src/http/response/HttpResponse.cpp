@@ -39,7 +39,7 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, 
 	std::cout << "Full Path : " << locationBlock.getFullPath() << std::endl;
 	try
 	{
-		requestLine.validateRequestLine(locationBlock, clientAddr);
+		requestLine.validateRequestLine(locationBlock.getLimitExcept(), clientAddr);
 		requestHeader.validateRequestHeader(locationBlock);
 		std::cout << "---- [success] request-line validate!" << std::endl;
 
