@@ -20,24 +20,19 @@ class	HttpRequest
 		HttpRequest();
 
 		// getter, setter
-		HttpRequestLine&			getRequestLine() ;
-		HttpBody&					getBody() ;
-
-		void						setHeader(std::vector<std::string>&);
-		void						setBody(const std::string&);
-
-		void						setRequestLine(std::vector<std::string>);
-		void						setHeaderField(std::map<std::string, std::string>);
+		HttpRequestLine			getHttpRequestLine() const;
+		HttpRequestHeader		getHttpRequestHeader() const;
+		HttpBody				getBody() const;
+		void					setRequestLine(std::vector<std::string>);
+		void					setHeaderField(std::map<std::string, std::string>);
+		void					setBody(const std::string&);
 
 		// parser
-		static void 				parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
+		static void 			parseHeaderAndBody(const std::string&, std::vector<std::string>&, std::string&);
 		
 		// method
-		const HttpRequestLine&		getHttpRequestLine();
-		HttpRequestHeader&			getHttpRequestHeader();
-
+		void					splitHeader(std::vector<std::string>&);
 		static std::map<std::string, std::string>	createHeaderField(std::vector<std::string>&);
-
 
 		// print
 		void	printInfo();

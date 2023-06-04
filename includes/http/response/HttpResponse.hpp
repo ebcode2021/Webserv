@@ -28,7 +28,7 @@ class	HttpResponse
 		void						setBody(const std::string&);
 
 		// method
-		static HttpResponse			createResponse(Config&, HttpRequest&);
+		static HttpResponse			createResponse(Config&, HttpRequest&, const std::string&);
 		static HttpBody				makeResponseBody(const PathInfo&, const HttpStatus&);
 		static HttpResponseHeader	makeResponseHeader(const PathInfo&, const size_t);
 		std::string					getResponseToString();

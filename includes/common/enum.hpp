@@ -49,4 +49,10 @@ enum	PathType
 	P_NONE,
 };
 
+enum	AccessDirective
+{
+	ALLOW,
+	DENY,
+};
+
 #endif

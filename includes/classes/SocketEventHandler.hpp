@@ -7,8 +7,10 @@
 class SocketEventHandler
 {
 	private :
-		TcpSocket *_socket;
+		TcpSocket*	_socket;
+
 	public :
+		// constructor
 		SocketEventHandler();
 
 		int socketAccept();
@@ -26,6 +28,9 @@ class SocketEventHandler
 
 		// setter
 		void	setSocket(TcpSocket *);
+
+		// 은비 추가
+		void	setSocketLingerOption(int);
 
 		// test_print
 		void printSockBuf();

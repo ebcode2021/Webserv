@@ -36,7 +36,6 @@ class	HttpResponseHeader
 
 		// method
 		std::string					getResponseHeaderToString();
-
 };
 
 #endif

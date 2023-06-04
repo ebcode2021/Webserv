@@ -4,12 +4,6 @@
 #include "SocketEventHandler.hpp"
 #include "HttpResponse.hpp"
 
-// 요청 라인 분석해서 메서드와 url 확인
-// 요청이 url이 cgi 인지 확인
-// cgi이면 fork()후에 표준출력으로 데이터 전달 표준 입력으로 데이터 받기
-// cgi 프로그램에서는 표준입력으로 body데이터 받아서 html 생성 후 표준출력으로 데이터 전달
-// cgi 에서 받은 데이터를 클라이언트로 전달
-
 int createSocket()
 {
 	int	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -24,9 +18,11 @@ int createSocket()
 
 void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &listenSockFdList) 
 {
-	SocketEventHandler sockEventHandler;
-	std::set<int> listenSockList = config.getListenSockList(); 
-	for (std::set<int>::iterator it = listenSockList.begin(); it != listenSockList.end(); it++)
+	SocketEventHandler		sockEventHandler;
+	std::set<int>			listenSockList = config.getListenSockList(); 
+	std::set<int>::iterator	it;
+
+	for (it = listenSockList.begin(); it != listenSockList.end(); it++)
 	{
 		int listenSockFd = createSocket();
 		if (listenSockFd == INVALID_SOCKET) {
@@ -44,6 +40,20 @@ void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &l
 	}
 }
 
+bool	isListenSocketEvent(std::set<int>&	list, uintptr_t& event)
+{
+	return (list.find(event) != list.end());
+}
+
+bool	isReadEvent(int16_t& event)
+{
+	return (event == EVFILT_READ);
+}
+
+bool	isWriteEvent(int16_t& event)
+{
+	return (event == EVFILT_WRITE);
+}
 
 void cgi_test(TcpSocket* sock) {
 	HttpRequest request = sock->getRequest();
@@ -99,31 +109,29 @@ int main(int argc, char *argv[])
 		SocketEventHandler			sockEventHandler;
 		
 		initListenSocket(kqHandler, config, listenSockFdList);
+
 		while(1)
 		{
-			kqHandler.eventListReset();
-			kqHandler.waitEvent();
-			kqHandler.changeListClear();
+			kqHandler.initialize();
+
 			for (int i = 0; i < kqHandler.getEventCnt(); i++)
 			{
 				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
+				
 				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
+				sockEventHandler.setSocket(curSock); // 소켓 -> 이벤트 처리
 
-				sockEventHandler.setSocket(curSock);
-				if (curEvent.filter == EVFILT_READ)
+				if (isReadEvent(curEvent.filter) == true)
 				{
-					
-					if (listenSockFdList.find(curEvent.ident) != listenSockFdList.end())
+					if (isListenSocketEvent(listenSockFdList, curEvent.ident) == true)
 					{
-						int clientSock = sockEventHandler.socketAccept();
-						if (clientSock == INVALID_SOCKET) {
+						int clientSock = sockEventHandler.socketAccept(); // 새로운 클라이언트
+						if (clientSock == INVALID_SOCKET)
 							continue ;
-						}
 						TcpSocket *clientSocket = new TcpSocket(clientSock);
-						clientSocket->changeToNonblocking();
-						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
+						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket); // udata에는 클라이언트 소켓 정보.(udata)
 					}
-					else 
+					else // client 소켓이면
 					{
 						if (sockEventHandler.dataRecv() <= 0) {
 							sockEventHandler.closeSocket();
@@ -140,6 +148,10 @@ int main(int argc, char *argv[])
 								curSock->setRequestBody();
 							if (curSock->getReadMode() == END)
 							{
+								std::cout << "--------------------------" << std::endl;
+								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr());
+								
+								curSock->setResponse(response);
 
 								// test code
 								if (curSock->getRequest().getHttpRequestLine().getMethod() == "POST") {
@@ -159,7 +171,7 @@ int main(int argc, char *argv[])
 						}
 					}
 				}
-				else if (curEvent.filter == EVFILT_WRITE)
+				else if (isWriteEvent(curEvent.filter) == true)
 				{
 					int sendsize = sockEventHandler.dataSend();
 					curSock->bufClear();

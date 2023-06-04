@@ -21,8 +21,13 @@ const std::size_t	BUFSIZE = 512;
 const std::size_t	CLIENT_BODY_SIZE = 1048576;
 
 /* Related to HTTP */
+const std::string	HTTP_VERSION = "HTTP/1.1";
+
+// const std::vector<std::string> METHODS = {
+// 	"GET", "POST", "DELETE"};
+
 static const	std::string METHODS[] = {
-	"GET", "POST", "DELETE",
+	"GET", "POST", "DELETE"
 };
 
 static const	std::string REQUEST_HEADERS[] = {
@@ -33,7 +38,7 @@ static const	std::string RESPONSE_HEADERS[] = {
 	"Date", "Server", "Content-Length", "Content-Type", "Set-Cookie", "Transfer-Encoding"
 };
 
-const std::string	HTTP_VERSION = "HTTP/1.1";
+const size_t		METHODS_SIZE = sizeof(METHODS) / sizeof(std::string);
 const size_t		REQUEST_HEADER_SIZE = sizeof(REQUEST_HEADERS) / sizeof(std::string);
 const size_t		RESPONSE_HEADER_SIZE = sizeof(RESPONSE_HEADERS) / sizeof(std::string);
 

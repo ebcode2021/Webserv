@@ -10,17 +10,17 @@ class	Config {
 		std::set<int>			_listenSockList;
 
 	public :
-		/* constructor */
+		// constructor
 		Config(std::string);
 
-		/* getter */
+		// getter
 		std::vector<ServerInfo>&	getServerList();
 		std::set<int>				getListenSockList();
 
-		/* checker */
+		// checker
 		static bool	fileCheck(int, char *[]);
 
-		/* method */
+		// method
 		void			addServer(std::ifstream &);
 		ServerInfo		findServerInfoByHost(const std::string&);
 		ServerInfo		findServerInfoByParameter(const std::string&, const size_t);

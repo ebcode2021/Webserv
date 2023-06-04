@@ -1,6 +1,5 @@
 # include "TcpSocket.hpp"
 
-
 /* constructor*/
 
 TcpSocket::TcpSocket() {}
@@ -11,30 +10,45 @@ TcpSocket::TcpSocket(int socketFd)
 	this->_socketInfo.sendbyte = 0;
 	this->_socketInfo.recvbyte = 0;
 	this->_readMode = HEADER;
-}
-
-void	TcpSocket::changeToNonblocking()
-{
-	int flag = fcntl(this->_socketInfo.sock, F_GETFL);
-
-	flag |= O_NONBLOCK;
-	fcntl(this->_socketInfo.sock, F_SETFL, flag);
+	this->_clientAddr = getClientAddrBySocket();
+	this->changeToNonblocking();
 }
 
 /* getter, setter */
-int	TcpSocket::getSockFd()
-{
+std::string		TcpSocket::getClientAddr() {
+	return (this->_clientAddr);
+}
+
+int				TcpSocket::getReadMode() {
+	return this->_readMode;
+}
+
+HttpRequest&	TcpSocket::getRequest() {
+	return(this->_request);
+}
+
+HttpResponse	TcpSocket::getResponse() {
+	return (this->_response);
+}
+
+int				TcpSocket::getSockFd() {
 	return (this->_socketInfo.sock);
 }
 
-int	TcpSocket::getSendByte()
-{
+int				TcpSocket::getSendByte() {
 	return (this->_socketInfo.sendbyte);
 }
 
-size_t	TcpSocket::getRecvByte()
-{
+size_t			TcpSocket::getRecvByte() {
 	return (this->_socketInfo.recvbyte);
+}
+
+void			TcpSocket::setRequest(HttpRequest& httpRequest) {
+	this->_request = httpRequest;
+}
+
+void			TcpSocket::setResponse(HttpResponse& httpResponse) {
+	this->_response = httpResponse;
 }
 
 void	TcpSocket::setBuf(const std::string& buf)
@@ -60,10 +74,11 @@ const char	*TcpSocket::getBufToCStr() {
 	return (this->_socketInfo.buf.c_str());
 }
 
-int	TcpSocket::getReadMode() {
-	return this->_readMode;
+void			TcpSocket::setReadMode(int readMode) {
+	this->_readMode = readMode;
 }
 
+/* method */
 
 size_t	TcpSocket::getBufSzie() {
 	return (this->_socketInfo.buf.size());
@@ -81,8 +96,23 @@ void TcpSocket::addReadSize(size_t readSize) {
 	this->_socketInfo.recvbyte += readSize;
 }
 
-void TcpSocket::setReadMode(int readMode) {
-	this->_readMode = readMode;
+void	TcpSocket::changeToNonblocking()
+{
+	int flag = fcntl(this->_socketInfo.sock, F_GETFL);
+
+	flag |= O_NONBLOCK;
+	fcntl(this->_socketInfo.sock, F_SETFL, flag);
+}
+
+std::string	TcpSocket::getClientAddrBySocket()
+{
+	int 				clientSocketFd = this->_socketInfo.sock;
+	struct sockaddr_in	clientAddress;
+	socklen_t			clientAddressLength = sizeof(clientAddress);
+
+	if (getpeername(clientSocketFd, (struct sockaddr*)&clientAddress, &clientAddressLength) == 0)
+		return (inet_ntoa(clientAddress.sin_addr));
+	return ("");
 }
 
 void TcpSocket::changeReadMode() {
@@ -94,10 +124,6 @@ void TcpSocket::changeReadMode() {
 		this->setReadMode(IDENTITY);
 }
 
-
-///////////////////////////////////////////
-/* 나중에 utils로 뺄거*/
-
 void	TcpSocket::setRequestHeader()
 {
 	std::vector<std::string>	header;
@@ -106,7 +132,7 @@ void	TcpSocket::setRequestHeader()
 
 	HttpRequest::parseHeaderAndBody(request, header, body);
 
-	this->_request.setHeader(header);
+	this->_request.splitHeader(header);
 	this->setBuf(body);
 	std::cout << "buf = " << this->_socketInfo.buf << std::endl;
 }
@@ -163,14 +189,9 @@ void	TcpSocket::setRequestBody()
 	this->_request.setBody(encodedBuf);
 	//std::cout << _request.getBody().getBody() << std::endl;
 }
-HttpRequest&	TcpSocket::getRequest() { return(this->_request); }
 
-void	TcpSocket::setRequest(HttpRequest& httpRequest) { this->_request = httpRequest; }
-
-void	TcpSocket::setResponse(HttpResponse& httpResponse) { 
-	this->_response = httpResponse; 
-}
-
-HttpResponse TcpSocket::getResponse() {
-	return (this->_response);
+/* print */
+void TcpSocket::printRequestInfo()
+{
+	this->_request.printInfo();
 }

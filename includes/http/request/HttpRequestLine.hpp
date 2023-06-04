@@ -17,13 +17,15 @@ class	HttpRequestLine
 		std::string	getMethod() const;
 		std::string	getRequestURI() const;
 		std::string getVersion() const;
-
 		void		setMethod(const std::string&);
 		void		setRequestURI(const std::string&);
 		void		setVersion(const std::string&);
 
+		// method
+		static bool		isRecognizedMethod(const std::string&);
+
 		// exception
-		void		validateRequestLine(LocationBlock& locationBlock);
+		void		validateRequestLine(const LimitExcept&, const std::string&);
 };
 
 #endif

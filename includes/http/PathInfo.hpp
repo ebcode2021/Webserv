@@ -17,7 +17,6 @@ class PathInfo
 		bool			_autoIndex;
 		std::string		_returnPage;
 
-
 	public :
 		// constructor
 		PathInfo();

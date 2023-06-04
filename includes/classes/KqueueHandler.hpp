@@ -27,6 +27,10 @@ class KqueueHandler {
 		void	eventUpdate();
 		int		waitEvent();
 
+		// 은비추가
+		void	initialize();
+
+
 		/* print */
 		void printEvent();
 };

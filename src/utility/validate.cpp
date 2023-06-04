@@ -42,8 +42,8 @@ void	Validate::initBlockType()
 	setLocationType();
 	setLimitExceptType();
 }
-
 /* getter */
+
 serverIndications	Validate::getServerType(const std::string& indication)
 {
 	if (this->_ServerType.count(indication) == 0)
