@@ -78,7 +78,9 @@ static std::vector<std::string> LocationBlockBackup(std::ifstream& confFile, std
 	while (std::getline(confFile, line))
 	{
 		splittedLine = split(line, WHITESPACE);
-		if (splittedLine[0].compare("}") == 0)
+		if (splittedLine.size() == 0)
+			continue;
+		else if (splittedLine[0].compare("}") == 0)
 			break ;
 		else if (splittedLine[0].compare("limit_except") == 0) {
 			backup += line + "\n";
@@ -115,7 +117,9 @@ void	Config::addServer(std::ifstream & confFile) {
 	{
 		std::cout << line << std::endl;
 		splittedLine = split(line, WHITESPACE + ";");
-		if (splittedLine[0].compare("location") == 0)
+		if (splittedLine.size() == 0)
+			continue ;
+		else if (splittedLine[0].compare("location") == 0)
 			locationBlockInfo.push_back(LocationBlockBackup(confFile, line));
 		else if (splittedLine[0].compare("}") == 0)
 			break ;
