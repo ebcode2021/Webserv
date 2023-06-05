@@ -41,13 +41,6 @@ std::string	LocationBlock::getPath() const {
 	return (this->_path);
 }
 
-void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
-	if (value.size() < 2)
-		this->_path = "/";
-	else
-		this->_path = value[1];
-}
-
 void	LocationBlock::setLimitExcept(const std::string &line) {
 	this->_limitExcept = LimitExcept(split(line, "\n"));
 }
@@ -78,7 +71,6 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 			continue ;
 		else if (Validate::braceCheck(splitted, CLOSE_BRACE) == true)
 			break ;
-		//Validate::propertyCntCheck(infile, splitted);
 		// Validate Keyword
 		locationIndications indication = dataset.findLocationIndication(splitted);
 		switch (indication)
@@ -120,11 +112,17 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 }
 
 /* method */
-
 std::string	LocationBlock::getFullPath() const {
 	if (this->_path != "/")
 		return (this->_root + this->_path);
 	return (this->_root);
+}
+
+void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
+	if (value.size() < 2)
+		this->_path = "/";
+	else
+		this->_path = value[1];
 }
 
 /* print */

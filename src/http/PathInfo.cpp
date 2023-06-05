@@ -178,7 +178,6 @@ void	PathInfo::processGetRequest(LocationBlock& block)
 void	PathInfo::processDeleteRequest()
 {
 	std::string		path = this->_path;
-	std::cout << "delete path : " << path << std::endl;
 
 	if (this->_access == false)
 		throw ResponseException(500);

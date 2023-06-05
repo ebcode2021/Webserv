@@ -47,7 +47,6 @@ void	HttpRequestLine::validateRequestLine(const LimitExcept& limitExcept, const 
 	// check Method
 	if (this->isRecognizedMethod(this->_method) == false)
 		throw ResponseException(405);
-	std::cout << "hi?" << std::endl;
 
 	// check limit_except
 	if (limitExcept.isValidMethod(this->_method, clientAddr) == false)

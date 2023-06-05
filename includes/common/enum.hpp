@@ -8,30 +8,10 @@ enum	blockType
 	other,
 };
 
-enum	status
-{
-	off,
-	on,
-};
-
-enum	fileMode
-{
-	fail,
-	success,
-	test,
-};
-
 enum	multiplicityOption
 {
 	single,
 	multiple,
-};
-
-enum	Method
-{
-	GET,
-	POST,
-	DELETE,
 };
 
 enum readMode
@@ -49,10 +29,5 @@ enum	PathType
 	P_NONE,
 };
 
-enum	AccessDirective
-{
-	ALLOW,
-	DENY,
-};
 
 #endif
