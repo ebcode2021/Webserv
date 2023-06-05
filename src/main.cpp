@@ -4,6 +4,13 @@
 #include "SocketEventHandler.hpp"
 #include "HttpResponse.hpp"
 
+/*
+	남은 작업(은비)
+		- 요청 requestURI에서 QueryParameter 분리 할 수 있도록하기.
+		- Cookie parsing 후, HttpSession 생성. SessionStorage 만들기
+		- fileCheck 할 때, enum 사용 대신 create_directivemap() 사용하기
+
+*/
 int createSocket()
 {
 	int	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -61,7 +68,7 @@ void cgi_test(TcpSocket* sock) {
 	std::string REQUEST_METHOD = request.getHttpRequestLine().getMethod();
 	std::string CONTENT_TYPE = request.getHttpRequestHeader().getContentType();
 	std::string CONTENT_LENGTH = itos(request.getHttpRequestHeader().getContentLength());
-	std::string SERVER_PROTOCOL = "HTTP/1.1";
+	std::string SERVER_PROTOCOL = HTTP_VERSION;
 	std::string PATH_INFO = "/Users/minsukan/Desktop/42/webserv/Webserv/resources/fileUpLoad";
 	
 	std::cout << CONTENT_LENGTH << std::endl;
@@ -98,91 +105,88 @@ void cgi_test(TcpSocket* sock) {
 
 int main(int argc, char *argv[])
 {
-	(void)argc;
+	Config::fileCheck(argc, argv);
 
-	if (Config::fileCheck(argc, argv))
+	Config	config(argv[1]);
+	std::vector<struct kevent>	changeList;
+	std::set<int>				listenSockFdList;
+	KqueueHandler				kqHandler;
+	SocketEventHandler			sockEventHandler;
+	
+	initListenSocket(kqHandler, config, listenSockFdList);
+
+	while(1)
 	{
-		Config config(argv[1]);
-		std::vector<struct kevent>	changeList;
-		std::set<int>				listenSockFdList;
-		KqueueHandler				kqHandler;
-		SocketEventHandler			sockEventHandler;
-		
-		initListenSocket(kqHandler, config, listenSockFdList);
+		kqHandler.initialize();
 
-		while(1)
+		for (int i = 0; i < kqHandler.getEventCnt(); i++)
 		{
-			kqHandler.initialize();
+			struct kevent curEvent = kqHandler.getCurEventByIndex(i);
+			
+			TcpSocket *curSock = (TcpSocket *)curEvent.udata;
+			sockEventHandler.setSocket(curSock); // 소켓 -> 이벤트 처리
 
-			for (int i = 0; i < kqHandler.getEventCnt(); i++)
+			if (isReadEvent(curEvent.filter) == true)
 			{
-				struct kevent curEvent = kqHandler.getCurEventByIndex(i);
-				
-				TcpSocket *curSock = (TcpSocket *)curEvent.udata;
-				sockEventHandler.setSocket(curSock); // 소켓 -> 이벤트 처리
-
-				if (isReadEvent(curEvent.filter) == true)
+				if (isListenSocketEvent(listenSockFdList, curEvent.ident) == true)
 				{
-					if (isListenSocketEvent(listenSockFdList, curEvent.ident) == true)
-					{
-						int clientSock = sockEventHandler.socketAccept(); // 새로운 클라이언트
-						if (clientSock == INVALID_SOCKET)
-							continue ;
-						TcpSocket *clientSocket = new TcpSocket(clientSock);
-						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket); // udata에는 클라이언트 소켓 정보.(udata)
-					}
-					else // client 소켓이면
-					{
-						if (sockEventHandler.dataRecv() <= 0) {
-							sockEventHandler.closeSocket();
-						}
-						else 
-						{
-							if (curSock->getReadMode() == HEADER) 
-							{
-								std::cout << curSock->getBuf() << std::endl;
-								curSock->setRequestHeader();
-								curSock->changeReadMode();
-							}
-							if (curSock->getReadMode() != END)
-								curSock->setRequestBody();
-							if (curSock->getReadMode() == END)
-							{
-								std::cout << "--------------------------" << std::endl;
-								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr());
-								
-								curSock->setResponse(response);
-
-								// test code
-								if (curSock->getRequest().getHttpRequestLine().getMethod() == "POST") {
-									cgi_test(curSock);
-									//exit(1);
-								}
-								else {
-									HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr());
-								//	response.printHttpResponse();
-									curSock->setResponse(response);
-								}
-								//
-								
-								//curSock->getResponse().printHttpResponse();
-								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
-							}
-						}
-					}
+					int clientSock = sockEventHandler.socketAccept(); // 새로운 클라이언트
+					if (clientSock == INVALID_SOCKET)
+						continue ;
+					TcpSocket *clientSocket = new TcpSocket(clientSock);
+					kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket); // udata에는 클라이언트 소켓 정보.(udata)
 				}
-				else if (isWriteEvent(curEvent.filter) == true)
+				else // client 소켓이면
 				{
-					int sendsize = sockEventHandler.dataSend();
-					curSock->bufClear();
-					curSock->setReadMode(HEADER);
-					sendsize = 10;
-					kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
-					if (sendsize == -1 || curSock->getRequest().getHttpRequestHeader().getConnection() == "close") 
+					if (sockEventHandler.dataRecv() <= 0) {
 						sockEventHandler.closeSocket();
+					}
+					else 
+					{
+						if (curSock->getReadMode() == HEADER) 
+						{
+							std::cout << curSock->getBuf() << std::endl;
+							curSock->setRequestHeader();
+							curSock->changeReadMode();
+						}
+						if (curSock->getReadMode() != END)
+							curSock->setRequestBody();
+						if (curSock->getReadMode() == END)
+						{
+							std::cout << "--------------------------" << std::endl;
+							HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr());
+							
+							curSock->setResponse(response);
+
+							// test code
+							if (curSock->getRequest().getHttpRequestLine().getMethod() == "POST") {
+								cgi_test(curSock);
+								//exit(1);
+							}
+							else {
+								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr());
+							//	response.printHttpResponse();
+								curSock->setResponse(response);
+							}
+							//
+							
+							//curSock->getResponse().printHttpResponse();
+							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
+						}
+					}
 				}
 			}
+			else if (isWriteEvent(curEvent.filter) == true)
+			{
+				int sendsize = sockEventHandler.dataSend();
+				curSock->bufClear();
+				curSock->setReadMode(HEADER);
+				sendsize = 10;
+				kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
+				if (sendsize == -1 || curSock->getRequest().getHttpRequestHeader().getConnection() == "close") 
+					sockEventHandler.closeSocket();
+			}
 		}
-		return (0);
 	}
+	return (0);
 }

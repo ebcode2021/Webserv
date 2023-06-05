@@ -35,7 +35,7 @@ class	Validate
 		void					setLimitExceptType();
 
 		/* checker */
-		static fileMode			argumentCheck(int, char *[]);
+		static void				argumentCheck(int, char *[]);
 		static bool				braceCheck(std::vector<std::string>, std::string);
 		static void				extensionCheck(char *);
 		static void				propertyCntCheck(std::ifstream&,std::vector<std::string>);

@@ -19,15 +19,14 @@ class LocationBlock : public ServerBlock
 		// getter, setter
 		LimitExcept	getLimitExcept() const;
 		std::string	getPath() const;
-		void		setLocationPath(const std::vector<std::string>&);
-		void		setLimitExcept(const std::string&);
 		void		setPath(const std::string&);
+		void		setLimitExcept(const std::string&);
 		
 		// checker
 		static void blockCheck(std::ifstream&, Validate&);
+		void		setLocationPath(const std::vector<std::string>&);
 
 		// method
-		bool		isValidByLimitExcept(const std::string&, const std::string&);
 		std::string	getFullPath() const;
 
 		// print

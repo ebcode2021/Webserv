@@ -98,21 +98,13 @@ void	Validate::setLimitExceptType()
 
 
 /* checker */
-fileMode	Validate::argumentCheck(int argc, char *argv[])
+void	Validate::argumentCheck(int argc, char *argv[])
 {
-	if (argc == 1)
-		printErrorWithExit(INVALID_ARGC);
-	else if (argc == 2 || (argc == 3 && strcmp(argv[2], "-t") == 0))
-	{
+	if (argc == 2 || (argc == 3 && strcmp(argv[2], "-t") == 0))
 		Validate::extensionCheck(argv[1]);
-		if (argc == 2)
-			return success;
-		else
-			return test;
-	}
 	else
 		printErrorWithExit(INVALID_ARGC);
-	return fail;
+
 }
 
 bool	Validate::braceCheck(std::vector<std::string> data, std::string braceType)

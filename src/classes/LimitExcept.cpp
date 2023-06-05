@@ -5,16 +5,16 @@
 LimitExcept::LimitExcept() {}
 
 LimitExcept::LimitExcept(const std::vector<std::string> &exceptBlock) {
-	std::vector<std::string> splittedLine;
+	std::vector<std::string>	splittedLine;
+	std::string					fieldName;
 	for (size_t i = 0; i < exceptBlock.size(); i++)
 	{
 		splittedLine = split(exceptBlock[i], static_cast<std::string>(WHITESPACE) + ";");
-		if (splittedLine[0].compare("limit_except"))
+		fieldName = splittedLine[0];
+		if (fieldName.compare("limit_except") == 0)
 			this->setMethodList(splittedLine);
-		else if (splittedLine[0].compare("allow"))
-			this->setAllow(splittedLine);
-		else if (splittedLine[0].compare("deny"))
-			this->setDeny(splittedLine);
+		else if (fieldName.compare("allow") == 0 || fieldName.compare("deny") == 0)
+			this->setAccessDirectiveList(splittedLine);
 	}
 } 
 
@@ -23,28 +23,19 @@ std::vector<std::string>	LimitExcept::getMethodList() const {
 	return (this->_methodList);
 }
 
-std::string					LimitExcept::getAllow() const {
-	return (this->_allow);
+std::map<std::string, std::string>	LimitExcept::getAccessDirectiveList() const {
+	return (this->_accessDirectiveList);
 }
 
-std::string					LimitExcept::getDeny() const {
-	return (this->_deny);
+void	LimitExcept::setAccessDirectiveList(const std::vector<std::string>& value) {
+	this->_accessDirectiveList.insert(std::make_pair(value[0], value[1]));
 }
 
 void	LimitExcept::setMethodList(const std::vector<std::string> &value) {
 	for (size_t i = 1; i < value.size(); i++)
 	{
-		if (value[i].compare("{") == 0)
-			this->_methodList.push_back(value[i]);
+		this->_methodList.push_back(value[i]);
 	}
-}
-
-void	LimitExcept::setAllow(const std::vector<std::string> &value) {
-	this->_allow = value[1];
-}
-
-void	LimitExcept::setDeny(const std::vector<std::string> &value) {
-	this->_allow = value[1];
 }
 
 /* block check */
@@ -94,8 +85,10 @@ bool	LimitExcept::isMethodInList(const std::string& method) const
 {
 	size_t	size = this->_methodList.size();
 
+	std::cout << this->_methodList.size() << std::endl;
 	for (size_t i = 0; i < size; i++)
 	{
+		std::cout << "asdf" << std::endl;
 		if (this->_methodList[i] == method)
 			return (true);
 	}
@@ -114,55 +107,31 @@ bool	LimitExcept::isValidClientAddr(const std::string& value, const std::string&
 
 bool	LimitExcept::isValidMethod(const std::string& method, const std::string& clientAddr) const
 {
-	std::map<std::string, std::string>::const_iterator it;
-	
 	bool	hasMethod = this->isMethodInList(method);
-	bool	returnFlag = true;
-	bool	addrFlag = false;
-
-	if (hasMethod == true)
+	std::cout << "hasMethod : " << hasMethod << std::endl;
+	std::cout << "method : " << method << std::endl;
+	
+	std::map<std::string, std::string>::const_iterator it;
+	for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
 	{
-		for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
-		{
-			if ((*it).first == "allow")
-			{
-				std::string	value = (*it).second;
+		std::string	field = (*it).first;
+		std::string	value = (*it).second;
 
-				if (isAllValue(value) == true)
-				{
-					if (isValidClientAddr(value, clientAddr) == true)
-					{
-						returnFlag = true;
-						break ;
-					}
-				}
-				else
-					addrFlag = true;
-			}
+		if (field == "allow" && isAllValue(value) == true)
+			break ;
+
+		if (hasMethod == true)
+		{
+			if (field == "allow" && isValidClientAddr(value, clientAddr) == true)
+				break ;
+		}
+		else
+		{
+			if (field == "deny" && (isAllValue(value) == true || isValidClientAddr(value, clientAddr) == true))
+				return (false);
 		}
 	}
-	else
-	{
-		for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
-		{
-			std::string	value = (*it).second;
-			if ((*it).first == "deny")
-			{
-				if (isAllValue(value) == true || isValidClientAddr(value, clientAddr) == true)
-					break ;
-			}
-			else
-			{
-				if (isAllValue(value) == true)
-				{
-					returnFlag = true;
-					break ;
-				}
-			}
-		}
-	}
-
-	return (returnFlag);
+	return (true);
 }
 
 /* print */
@@ -173,7 +142,13 @@ void	LimitExcept::printInfo()
 		std::cout << "method :" << _methodList[i] << " ";
 	}
 	std::cout << std::endl;
+	std::cout << "[limit_except]" << std::endl;
 
-	std::cout << "allow : " << this->_allow << std::endl;
-	std::cout << "deny : " << this->_deny << std::endl;
+	std::map<std::string, std::string>::iterator	it;
+
+	for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
+	{
+		std::cout << (*it).first << std::endl;
+		std::cout << (*it).second << std::endl;
+	}
 }

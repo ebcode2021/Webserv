@@ -3,6 +3,8 @@
 
 # include "ServerInfo.hpp"
 # include "HttpRequestHeader.hpp"
+# include "indication.hpp"
+# include "enum.hpp"
 
 class	Config {
 	private :
@@ -14,16 +16,16 @@ class	Config {
 		Config(std::string);
 
 		// getter
-		std::vector<ServerInfo>&	getServerList();
-		std::set<int>				getListenSockList();
-
-		// checker
-		static bool	fileCheck(int, char *[]);
+		std::vector<ServerInfo>	getServerList();
+		std::set<int>			getListenSockList();
 
 		// method
-		void			addServer(std::ifstream &);
-		ServerInfo		findServerInfoByHost(const std::string&);
-		ServerInfo		findServerInfoByParameter(const std::string&, const size_t);
+		void					addServer(std::ifstream &);
+		ServerInfo				findServerInfoByHost(const std::string&);
+		ServerInfo				findServerInfoByParameter(const std::string&, const size_t);
+		
+		// checker
+		static void				fileCheck(int, char *[]);
 };
 
 #endif
