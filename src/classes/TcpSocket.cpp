@@ -1,7 +1,6 @@
 # include "TcpSocket.hpp"
 
 /* constructor*/
-
 TcpSocket::TcpSocket() {}
 
 TcpSocket::TcpSocket(int socketFd)
@@ -15,6 +14,10 @@ TcpSocket::TcpSocket(int socketFd)
 }
 
 /* getter, setter */
+std::string		 TcpSocket::getBuf() {
+	return (this->_socketInfo.buf);
+}
+
 std::string		TcpSocket::getClientAddr() {
 	return (this->_clientAddr);
 }
@@ -51,27 +54,12 @@ void			TcpSocket::setResponse(HttpResponse& httpResponse) {
 	this->_response = httpResponse;
 }
 
-void	TcpSocket::setBuf(const std::string& buf)
-{
+void			TcpSocket::setBuf(const std::string& buf) {
 	this->_socketInfo.buf = buf;
 }
 
-void	TcpSocket::addBuf(const std::string& buf) {
+void			TcpSocket::addBuf(const std::string& buf) {
 	this->_socketInfo.buf += buf;
-}
-
-void TcpSocket::printRequestInfo()
-{
-	this->_request.printInfo();
-}
-
-
-std::string TcpSocket::getBuf() {
-	return (this->_socketInfo.buf);
-}
-
-const char	*TcpSocket::getBufToCStr() {
-	return (this->_socketInfo.buf.c_str());
 }
 
 void			TcpSocket::setReadMode(int readMode) {
@@ -80,7 +68,12 @@ void			TcpSocket::setReadMode(int readMode) {
 
 /* method */
 
-size_t	TcpSocket::getBufSzie() {
+const char*		TcpSocket::getBufToCStr() {
+	return (this->_socketInfo.buf.c_str());
+}
+
+
+size_t	TcpSocket::getBufSize() {
 	return (this->_socketInfo.buf.size());
 }
 
