@@ -12,16 +12,16 @@ class LimitExcept {
 		std::string					_deny;
 
 	public :
-		/* constructor */
+		// constructor
 		LimitExcept();
 		LimitExcept(const std::vector<std::string> &);
 
-		/* setter */
+		// setter
 		std::map<std::string, std::string>	getAccessDirectiveList() const;
-		std::vector<std::string>	getMethodList() const;
-		std::string					getAllow() const;
-		std::string					getDeny() const;
-		void					setMethodList(const std::vector<std::string> &);
+		std::vector<std::string>			getMethodList() const;
+		std::string							getAllow() const;
+		std::string							getDeny() const;
+		void		setMethodList(const std::vector<std::string> &);
 		void		setAllow(const std::vector<std::string> &);
 		void		setDeny(const std::vector<std::string> &);
 
@@ -30,12 +30,11 @@ class LimitExcept {
 		bool		isMethodInList(const std::string&) const;
 		bool		isValidClientAddr(const std::string&, const std::string&) const;
 		bool		isAllValue(const std::string&) const;
-		
 
-		// check */
+		// check
 		static void	blockCheck(std::ifstream&, Validate&);
 
-		// print */
+		// print
 		void		printInfo();
 
 };

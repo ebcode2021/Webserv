@@ -30,6 +30,9 @@ std::string					LimitExcept::getAllow() const {
 std::string					LimitExcept::getDeny() const {
 	return (this->_deny);
 }
+std::map<std::string, std::string>	LimitExcept::getAccessDirectiveList() const {
+	return (this->_accessDirectiveList);
+}
 
 void	LimitExcept::setMethodList(const std::vector<std::string> &value) {
 	for (size_t i = 1; i < value.size(); i++)
@@ -114,55 +117,29 @@ bool	LimitExcept::isValidClientAddr(const std::string& value, const std::string&
 
 bool	LimitExcept::isValidMethod(const std::string& method, const std::string& clientAddr) const
 {
-	std::map<std::string, std::string>::const_iterator it;
-	
 	bool	hasMethod = this->isMethodInList(method);
-	bool	returnFlag = true;
-	bool	addrFlag = false;
-
-	if (hasMethod == true)
+	
+	std::map<std::string, std::string>::const_iterator it;
+	for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
 	{
-		for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
-		{
-			if ((*it).first == "allow")
-			{
-				std::string	value = (*it).second;
+		std::string	field = (*it).first;
+		std::string	value = (*it).second;
 
-				if (isAllValue(value) == true)
-				{
-					if (isValidClientAddr(value, clientAddr) == true)
-					{
-						returnFlag = true;
-						break ;
-					}
-				}
-				else
-					addrFlag = true;
-			}
+		if (field == "allow" && isAllValue(value) == true)
+			break ;
+
+		if (hasMethod == true)
+		{
+			if (field == "allow" && isValidClientAddr(value, clientAddr) == true)
+				break ;
+		}
+		else
+		{
+			if (field == "deny" && (isAllValue(value) == true || isValidClientAddr(value, clientAddr) == true))
+				return (false);
 		}
 	}
-	else
-	{
-		for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
-		{
-			std::string	value = (*it).second;
-			if ((*it).first == "deny")
-			{
-				if (isAllValue(value) == true || isValidClientAddr(value, clientAddr) == true)
-					break ;
-			}
-			else
-			{
-				if (isAllValue(value) == true)
-				{
-					returnFlag = true;
-					break ;
-				}
-			}
-		}
-	}
-
-	return (returnFlag);
+	return (true);
 }
 
 /* print */

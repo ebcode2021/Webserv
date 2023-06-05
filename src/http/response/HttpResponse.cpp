@@ -19,7 +19,6 @@ void	HttpResponse::setBody(const std::string& body) {
 /* method */
 HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, const std::string& clientAddr)
 {
-	std::cout << "ip : " << clientAddr << std::endl;
 	// request
 	HttpRequestLine		requestLine = request.getHttpRequestLine();
 	HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
@@ -33,6 +32,10 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, 
 	// 1. find server block and location block
 	ServerInfo		serverInfo    = config.findServerInfoByHost(requestHeader.getHost());
 	LocationBlock	locationBlock = serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
+
+	locationBlock.printInfo();
+	std::cout << "d root  : " << serverInfo.getServerBlock().getRoot() << std::endl;
+	std::cout << "root : " << locationBlock.getRoot() << std::endl;
 
 	PathInfo 	pathInfo(locationBlock.getFullPath());
 	pathInfo.printPathInfo();

@@ -78,7 +78,6 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 			continue ;
 		else if (Validate::braceCheck(splitted, CLOSE_BRACE) == true)
 			break ;
-		//Validate::propertyCntCheck(infile, splitted);
 		// Validate Keyword
 		locationIndications indication = dataset.findLocationIndication(splitted);
 		switch (indication)
@@ -122,6 +121,8 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 /* method */
 
 std::string	LocationBlock::getFullPath() const {
+	std::cout << "tmp root : " << this->_root << std::endl;
+	std::cout << "tmp path : " << this->_path << std::endl;
 	if (this->_path != "/")
 		return (this->_root + this->_path);
 	return (this->_root);
