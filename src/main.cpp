@@ -65,7 +65,7 @@ void cgi_test(TcpSocket* sock) {
 	std::string PATH_INFO = "/Users/minsukan/Desktop/42/webserv/Webserv/resources/fileUpLoad";
 	
 	std::cout << CONTENT_LENGTH << std::endl;
-	std::cout << sock->getBufSzie() << std::endl;
+	std::cout << sock->getBufSize() << std::endl;
 	
 	int pipefd[2];
 	pipe(pipefd);
@@ -89,7 +89,7 @@ void cgi_test(TcpSocket* sock) {
 	}
 	else {
 		dup2(pipefd[1], STDOUT_FILENO);
-		write(STDOUT_FILENO, sock->getBufToCStr(), sock->getBufSzie());
+		write(STDOUT_FILENO, sock->getBufToCStr(), sock->getBufSize());
 	}
 	dup2(STDOUT_FILENO, stdoutbackup);
 	wait(0);
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 									//exit(1);
 								}
 								else {
-									HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest());
+									HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr());
 								//	response.printHttpResponse();
 									curSock->setResponse(response);
 								}

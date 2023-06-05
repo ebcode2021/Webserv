@@ -24,37 +24,31 @@ class TcpSocket
 		int	 			getSendByte();
 		size_t 			getRecvByte();
 		int				getReadMode();
+		std::string		getBuf();
 		void			setBuf(const std::string&);
-
-		//
 		HttpRequest&	getRequest();
 		HttpResponse	getResponse();
 		std::string		getClientAddr();
-		void			setBuf(std::string&);
+		void			setReadMode(int);
+
+		// method
+		void			changeToNonblocking();
 		void			setRequest(HttpRequest&);
 		void			setResponse(HttpResponse&);
-
-		void			changeToNonblocking();
-		// method
-		std::string		getClientAddrBySocket();
-		std::string		getBuf();
 		void			addBuf(const std::string&);
-		
 		void			setRequestHeader();
 		void			setRequestBody();
-		void			changeToNonblocking();
-		void			setReadMode(int);
+		std::string		getClientAddrBySocket();
 		void			addReadSize(size_t);
 		void			setBufbyIndex(int, char);
 		void			changeReadMode();
 		std::string 	chunkedEncoding();
 		void 			bufClear();
+		const char*		getBufToCStr();
+		size_t			getBufSize();
 
 		// print
-		//test
-		const char *getBufToCStr();
-		size_t	getBufSzie();
-		void printRequestInfo();
+		void 			printRequestInfo();
 };
 
 #endif
