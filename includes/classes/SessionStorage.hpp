@@ -7,10 +7,11 @@
 class	SessionStorage
 {
 	private :
-		std::vector<HttpSession>	_sessionList;
-		std::string					_storagePath;
+		std::map<std::string, HttpSession>	_sessionList;
+		std::string							_storagePath;
 
 	public :
+		
 
 };
 #endif

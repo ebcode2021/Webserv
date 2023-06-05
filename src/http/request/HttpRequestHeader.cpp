@@ -77,5 +77,12 @@ std::string	HttpRequestHeader::getServerNameToHost()
 
 std::map<std::string, std::string>	HttpRequestHeader::parseCookie(std::string& cookies)
 {
-	std::vector<std::string>	splittedCookie = 
+	std::vector<std::string>	splittedCookie = split(cookies, ";");
+	size_t	size = splittedCookie.size();
+
+	for (size_t i = 0; i < size; i++)
+	{
+		std::vector<std::string>	splitted = split(splittedCookie[i], "=");
+		this->_cookie.insert(std::make_pair(splitted[0], splitted[1]));
+	}
 }

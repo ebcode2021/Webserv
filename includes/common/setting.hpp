@@ -4,6 +4,7 @@
 #include "webserv.hpp"
 
 /* Default config setting */
+
 const size_t		DEFAULT_PORT = 4242;
 const std::string	SERVER_NAME = "webserv/1.0.0";
 const std::string	DEFAULT_ROOT = ROOT_PATH + "resources/html";
