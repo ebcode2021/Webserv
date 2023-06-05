@@ -34,8 +34,6 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, 
 	LocationBlock	locationBlock = serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
 
 	locationBlock.printInfo();
-	std::cout << "d root  : " << serverInfo.getServerBlock().getRoot() << std::endl;
-	std::cout << "root : " << locationBlock.getRoot() << std::endl;
 
 	PathInfo 	pathInfo(locationBlock.getFullPath());
 	pathInfo.printPathInfo();

@@ -5,23 +5,23 @@
 HttpResponseHeader::HttpResponseHeader(){}
 
 /* getter, setter */
-std::string					HttpResponseHeader::getDate() const {
+std::string		HttpResponseHeader::getDate() const {
 	return(this->_date);
 }
 
-std::string					HttpResponseHeader::getServer() const {
+std::string		HttpResponseHeader::getServer() const {
 	return(this->_server);
 }
 
-std::string					HttpResponseHeader::getContentType()const {
+std::string		HttpResponseHeader::getContentType()const {
 	 return(this->_contentType);
 }
 
-size_t						HttpResponseHeader::getContentLength() const {
+size_t			HttpResponseHeader::getContentLength() const {
 	return(this->_contentLength);
 }
 
-std::string					HttpResponseHeader::getTransferEncoding() const {
+std::string		HttpResponseHeader::getTransferEncoding() const {
 	return(this->_transferEncoding);
 }
 
@@ -29,29 +29,28 @@ std::vector<std::string>	HttpResponseHeader::getSetCookie() const {
 	return(this->_setCookie);
 }
 
-void						HttpResponseHeader::setDate(const std::string& date) {
+void			HttpResponseHeader::setDate(const std::string& date) {
 	this->_date = date;
 }
 
-void						HttpResponseHeader::setServer(const std::string& server) {
+void			HttpResponseHeader::setServer(const std::string& server) {
 	this->_server = server;
 }
 
-void						HttpResponseHeader::setContentType(const std::string& contentType) {
+void			HttpResponseHeader::setContentType(const std::string& contentType) {
 	this->_contentType = contentType;
 }
 
-void						HttpResponseHeader::setContentLength(const size_t contentLength) {
+void			HttpResponseHeader::setContentLength(const size_t contentLength) {
 	this->_contentLength = contentLength;
 }
 
-void						HttpResponseHeader::setTransferEncoding(const std::string& transferEncoding) {
+void			HttpResponseHeader::setTransferEncoding(const std::string& transferEncoding) {
 	this->_transferEncoding = transferEncoding;
 }
 
 /* method */
-
-std::string					HttpResponseHeader::getResponseHeaderToString()
+std::string		HttpResponseHeader::getResponseHeaderToString()
 {
 	std::string	responseHeader;
 

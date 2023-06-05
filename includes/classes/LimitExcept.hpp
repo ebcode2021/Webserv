@@ -8,22 +8,17 @@ class LimitExcept {
 	private :
 		std::vector<std::string>			_methodList;
 		std::map<std::string, std::string>	_accessDirectiveList;
-		std::string					_allow;
-		std::string					_deny;
 
 	public :
 		// constructor
 		LimitExcept();
-		LimitExcept(const std::vector<std::string> &);
+		LimitExcept(const std::vector<std::string>&);
 
-		// setter
+		// getter, setter
 		std::map<std::string, std::string>	getAccessDirectiveList() const;
 		std::vector<std::string>			getMethodList() const;
-		std::string							getAllow() const;
-		std::string							getDeny() const;
-		void		setMethodList(const std::vector<std::string> &);
-		void		setAllow(const std::vector<std::string> &);
-		void		setDeny(const std::vector<std::string> &);
+		void								setMethodList(const std::vector<std::string> &);
+		void								setAccessDirectiveList(const std::vector<std::string>&);
 
 		// method
 		bool		isValidMethod(const std::string&, const std::string&) const;

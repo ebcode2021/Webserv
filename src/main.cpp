@@ -4,6 +4,13 @@
 #include "SocketEventHandler.hpp"
 #include "HttpResponse.hpp"
 
+/*
+	남은 작업(은비)
+		- 요청 requestURI에서 QueryParameter 분리 할 수 있도록하기.
+		- Cookie parsing 후, HttpSession 생성. SessionStorage 만들기
+		- fileCheck 할 때, enum 사용 대신 create_directivemap() 사용하기
+
+*/
 int createSocket()
 {
 	int	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -98,8 +105,6 @@ void cgi_test(TcpSocket* sock) {
 
 int main(int argc, char *argv[])
 {
-	(void)argc;
-
 	Config::fileCheck(argc, argv);
 
 	Config	config(argv[1]);

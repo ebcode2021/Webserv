@@ -16,8 +16,6 @@ class	ResponseException
 
 		HttpStatus	httpStatus() const { return(_httpStatus); }
 		int			statusCode() const { return(_httpStatus.getStatusCode());}
-
-		// method
 };
 
 #endif

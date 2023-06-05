@@ -17,12 +17,14 @@ HttpResponseLine::HttpResponseLine(const HttpStatus& httpStatus) : _version(HTTP
 	this->setHttpStatus(httpStatus);
 }
 
-/* getter */
-std::string	HttpResponseLine::getVersion() const { return(this->_version); }
+/* getter, setter */
+std::string	HttpResponseLine::getVersion() const {
+	return(this->_version);
+}
 
-HttpStatus	HttpResponseLine::getHttpStatus() const { return(this->_httpStatus); }
-
-/* setter */
+HttpStatus	HttpResponseLine::getHttpStatus() const {
+	return(this->_httpStatus);
+}
 
 void	HttpResponseLine::setHttpStatus(const HttpStatus& httpStatus) {
 	this->_httpStatus = HttpStatus(httpStatus);
@@ -32,11 +34,10 @@ void	HttpResponseLine::setHttpResponseLine(HttpStatus& httpStatus) {
 	this->_httpStatus = httpStatus;
 }
 
+/* method */
 std::string	HttpResponseLine::getResponseLineToString()
 {
-	std::string responseLine;
-
-	responseLine = this->_version + SP + itos(this->_httpStatus.getStatusCode()) \
+	std::string responseLine = this->_version + SP + itos(this->_httpStatus.getStatusCode()) \
 								  + SP + this->_httpStatus.getReason() + CRLF;
 
 	return (responseLine);

@@ -41,13 +41,6 @@ std::string	LocationBlock::getPath() const {
 	return (this->_path);
 }
 
-void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
-	if (value.size() < 2)
-		this->_path = "/";
-	else
-		this->_path = value[1];
-}
-
 void	LocationBlock::setLimitExcept(const std::string &line) {
 	this->_limitExcept = LimitExcept(split(line, "\n"));
 }
@@ -119,13 +112,17 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 }
 
 /* method */
-
 std::string	LocationBlock::getFullPath() const {
-	std::cout << "tmp root : " << this->_root << std::endl;
-	std::cout << "tmp path : " << this->_path << std::endl;
 	if (this->_path != "/")
 		return (this->_root + this->_path);
 	return (this->_root);
+}
+
+void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
+	if (value.size() < 2)
+		this->_path = "/";
+	else
+		this->_path = value[1];
 }
 
 /* print */
