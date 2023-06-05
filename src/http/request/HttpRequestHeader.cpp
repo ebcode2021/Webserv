@@ -28,13 +28,6 @@ std::string HttpRequestHeader::getTransferEncoding() const {
 	return(this->_transferEncoding);
 }
 
-std::string HttpRequestHeader::getCookie() const {
-	return(this->_cookie);
-}
-
-std::string HttpRequestHeader::getSessionID() const {
-	return(this->_sessionID);
-}
 
 /* setter */
 void	HttpRequestHeader::setHost(std::string& host) {
@@ -62,8 +55,10 @@ void	HttpRequestHeader::setTransferEncoding(std::string& transferEncoding) {
 }
 
 void	HttpRequestHeader::setCookie(std::string& cookie) {
-	this->_cookie = cookie;
+	this->_cookie = parseCookie(cookie);
 }
+
+
 
 void	HttpRequestHeader::validateRequestHeader(LocationBlock& locationBlock)
 {
