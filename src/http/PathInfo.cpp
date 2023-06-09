@@ -230,6 +230,11 @@ void			PathInfo::setReturnPageByError(const std::vector<ErrorPage>& errorPageLis
 	}
 }
 
+void			PathInfo::setReturnPageBySession(const std::string& storagePath, const std::string& sessionId)
+{
+	this->_returnPage = (storagePath + sessionId);
+}
+
 /* print */
 void	PathInfo::printPathInfo()
 {

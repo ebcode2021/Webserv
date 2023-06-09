@@ -74,6 +74,7 @@
 		"utility": "cpp",
 		"set": "cpp",
 		"filesystem": "cpp",
+		"files.encoding": "utf8",
 		"__functional_03": "cpp",
 		"memory_resource": "cpp"
 	}

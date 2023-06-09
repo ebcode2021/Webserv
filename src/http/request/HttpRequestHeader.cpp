@@ -1,7 +1,10 @@
 #include "HttpRequestHeader.hpp"
 
 /* constructor */
-HttpRequestHeader::HttpRequestHeader() : _contentType("text/html"), _transferEncoding("identity") {}
+HttpRequestHeader::HttpRequestHeader() : _contentType("text/html"), _transferEncoding("identity") 
+{
+	this->_contentLength = 0;
+}
 
 /* getter */
 std::string HttpRequestHeader::getHost() const {
@@ -28,13 +31,6 @@ std::string HttpRequestHeader::getTransferEncoding() const {
 	return(this->_transferEncoding);
 }
 
-std::string HttpRequestHeader::getCookie() const {
-	return(this->_cookie);
-}
-
-std::string HttpRequestHeader::getSessionID() const {
-	return(this->_sessionID);
-}
 
 /* setter */
 void	HttpRequestHeader::setHost(std::string& host) {
@@ -62,11 +58,15 @@ void	HttpRequestHeader::setTransferEncoding(std::string& transferEncoding) {
 }
 
 void	HttpRequestHeader::setCookie(std::string& cookie) {
-	this->_cookie = cookie;
+	this->_cookie = parseCookie(cookie);
 }
+
+
+
 
 void	HttpRequestHeader::validateRequestHeader(LocationBlock& locationBlock)
 {
+
 	if(this->_contentLength > locationBlock.getClientMaxBodySize())
 		throw ResponseException(413);
 }
@@ -78,4 +78,29 @@ std::string	HttpRequestHeader::getServerNameToHost()
 	std::string					serverName   = splittedHost[0];
 
 	return (serverName);
+}
+
+std::map<std::string, std::string>	HttpRequestHeader::parseCookie(std::string& cookies)
+{
+	std::map<std::string, std::string>	cookieMap;
+
+	std::vector<std::string>	splittedCookie = split(cookies, ";");
+	size_t	size = splittedCookie.size();
+
+	for (size_t i = 0; i < size; i++)
+	{
+		std::vector<std::string>	splitted = split(splittedCookie[i], "=");
+		cookieMap.insert(std::make_pair(splitted[0], splitted[1]));
+		//std::cout << "key :" << splitted[0] << std::endl;
+		//std::cout << "value :" << splitted[1] << std::endl;
+	}
+	return (cookieMap);
+}
+
+std::string	HttpRequestHeader::getSessionIdByCookie()
+{
+	
+	if (this->_cookie.find("sessionId") != _cookie.end())
+		return (this->_cookie["sessionId"]);
+	return "";
 }

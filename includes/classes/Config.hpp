@@ -25,7 +25,7 @@ class	Config {
 		ServerInfo				findServerInfoByParameter(const std::string&, const size_t);
 		
 		// checker
-		static void				fileCheck(int, char *[]);
+		static bool				fileCheck(int, char *[]);
 };
 
 #endif

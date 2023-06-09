@@ -42,6 +42,7 @@ class PathInfo
 		bool			isAccess(std::string&);
 		static bool		isFile(std::string&);
 		void			setReturnPageByError(const std::vector<ErrorPage>&, const int);
+		void			setReturnPageBySession(const std::string&, const std::string&);
 
 		// validate
 		void			validatePath();

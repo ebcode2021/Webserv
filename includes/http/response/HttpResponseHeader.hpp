@@ -36,6 +36,10 @@ class	HttpResponseHeader
 
 		// method
 		std::string					getResponseHeaderToString();
+		std::string					getCookieString();
+
+		// print
+		void						printCookie();
 };
 
 #endif

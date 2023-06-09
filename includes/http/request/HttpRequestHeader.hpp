@@ -14,8 +14,7 @@ class	HttpRequestHeader
 		std::string			_contentType;
 		size_t				_contentLength;
 		std::string			_transferEncoding;
-		std::string			_cookie;
-		std::string			_sessionID;
+		std::map<std::string, std::string>	_cookie;
 
 	public :
 		HttpRequestHeader();
@@ -27,8 +26,6 @@ class	HttpRequestHeader
 		std::string			getContentType() const;
 		size_t				getContentLength() const;
 		std::string			getTransferEncoding() const;
-		std::string			getCookie() const;
-		std::string			getSessionID() const;
 
 		void				setHost(std::string&);
 		void				setUserAgent(std::string&);
@@ -40,6 +37,8 @@ class	HttpRequestHeader
 
 		/* method */
 		std::string			getServerNameToHost();
+		std::map<std::string, std::string>	parseCookie(std::string&);
+		std::string			getSessionIdByCookie();
 		
 		/* exception */
 		void				validateRequestHeader(LocationBlock& locationBlock);

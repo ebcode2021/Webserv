@@ -95,4 +95,5 @@ void	HttpBody::createGenericBody(const std::string& path)
 	}
 
 	this->_body = body.str();
+	// std::cout << this->_body << std::endl;
 }

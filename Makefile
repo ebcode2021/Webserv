@@ -21,6 +21,7 @@ SRCS =  main.cpp	\
 		classes/TcpSocket.cpp		\
 		classes/KqueueHandler.cpp	\
 		classes/SocketEventHandler.cpp \
+		classes/SessionStorage.cpp	\
 		http/request/HttpRequest.cpp \
 		http/request/HttpRequestHeader.cpp \
 		http/request/HttpRequestLine.cpp \
@@ -29,7 +30,8 @@ SRCS =  main.cpp	\
 		http/PathInfo.cpp \
 		http/response/HttpResponseLine.cpp \
 		http/response/HttpResponseHeader.cpp \
-		http/HttpBody.cpp
+		http/HttpBody.cpp	\
+		http/HttpSession.cpp
 
 
 SRCS_DIR = src/

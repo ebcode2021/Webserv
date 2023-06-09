@@ -4,7 +4,7 @@
 HttpRequest::HttpRequest(){}
 
 /* getter */
-HttpRequestLine HttpRequest::getHttpRequestLine() const {
+HttpRequestLine& HttpRequest::getHttpRequestLine() {
 	return this->_httpRequestLine;
 }
 
@@ -134,7 +134,7 @@ void	HttpRequest::printInfo()
 								"Content-Type : " + this->_httpRequestHeader.getContentType() + tab + \
 								"Content-Length : " + std::to_string(this->_httpRequestHeader.getContentLength()) + tab + \
 								"Transfer-Encoding : " + this->_httpRequestHeader.getTransferEncoding() + tab + \
-								"Cookie : " + this->_httpRequestHeader.getCookie() + "\n"; 
+								"Cookie : " + this->_httpRequestHeader.getSessionIdByCookie() + tab + "\n";
 	std::string requestBody = "request-body" + tab + this->_httpBody.getBody() + "\n";
 	
 	std::cout << requestLine << requestHeader << requestBody << std::endl;

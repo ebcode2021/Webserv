@@ -85,10 +85,8 @@ bool	LimitExcept::isMethodInList(const std::string& method) const
 {
 	size_t	size = this->_methodList.size();
 
-	std::cout << this->_methodList.size() << std::endl;
 	for (size_t i = 0; i < size; i++)
 	{
-		std::cout << "asdf" << std::endl;
 		if (this->_methodList[i] == method)
 			return (true);
 	}
@@ -108,8 +106,6 @@ bool	LimitExcept::isValidClientAddr(const std::string& value, const std::string&
 bool	LimitExcept::isValidMethod(const std::string& method, const std::string& clientAddr) const
 {
 	bool	hasMethod = this->isMethodInList(method);
-	std::cout << "hasMethod : " << hasMethod << std::endl;
-	std::cout << "method : " << method << std::endl;
 	
 	std::map<std::string, std::string>::const_iterator it;
 	for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)

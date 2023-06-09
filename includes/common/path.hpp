@@ -4,8 +4,7 @@
 # include "webserv.hpp"
 
 /* Path */
-const std::string ROOT_PATH = "/Users/eunson/Desktop/webserv/";
-
+const std::string	ROOT_PATH = "/Users/eunson/Desktop/webserv/";
 /* Indications */
 const std::string INDICATION_PATH = ROOT_PATH + "indication/";
 const std::string KEYWORD_PATH = ROOT_PATH + "keywords/.server_keywords";

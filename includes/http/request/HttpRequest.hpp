@@ -20,7 +20,7 @@ class	HttpRequest
 		HttpRequest();
 
 		// getter, setter
-		HttpRequestLine			getHttpRequestLine() const;
+		HttpRequestLine&			getHttpRequestLine();
 		HttpRequestHeader		getHttpRequestHeader() const;
 		HttpBody				getBody() const;
 		void					setRequestLine(std::vector<std::string>);

@@ -40,7 +40,7 @@ std::vector<ServerInfo>	Config::getServerList() {
 }
 
 /* checker */
-void	Config::fileCheck(int argc, char *argv[])
+bool	Config::fileCheck(int argc, char *argv[])
 {
 	std::ifstream				infile(argv[1]);
 	std::string					line;
@@ -70,10 +70,12 @@ void	Config::fileCheck(int argc, char *argv[])
 	else
 		printErrorWithExit(CHECK_CONFIG_FILE);
 
-	if (argc == 3)
+	if (argc == 2)
+		return (true);
+	else
 	{
 		std::cout << TEST_SUCCESS << std::endl;
-		exit(0);
+		return (false);
 	}
 }
 
