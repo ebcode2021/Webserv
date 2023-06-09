@@ -57,11 +57,15 @@ std::map<int, std::string>&	HttpStatus::getStatusMap() const
 		httpStatusMap.insert(std::make_pair( 201, "Created" ));
 		httpStatusMap.insert(std::make_pair( 202, "Accepted" ));
 		httpStatusMap.insert(std::make_pair( 204, "No Content" ));
+		httpStatusMap.insert(std::make_pair( 301, "Moved Permanently"));
+		httpStatusMap.insert(std::make_pair( 302, "Found" ));
+		httpStatusMap.insert(std::make_pair( 304, "Not Modified" ));
 		httpStatusMap.insert(std::make_pair( 400, "Bad Request" ));
 		httpStatusMap.insert(std::make_pair( 401, "Unauthorized" ));
 		httpStatusMap.insert(std::make_pair( 403, "Forbidden" ));
 		httpStatusMap.insert(std::make_pair( 404, "Not Found" ));
 		httpStatusMap.insert(std::make_pair( 405, "Method Not Allowed" ));
+		httpStatusMap.insert(std::make_pair( 413, "Request Entity Too Large" ));
 		httpStatusMap.insert(std::make_pair( 500, "Internal Server Error" ));
 		httpStatusMap.insert(std::make_pair( 502, "Bad Gateway" ));
 		httpStatusMap.insert(std::make_pair( 503, "Service Unavailable" ));

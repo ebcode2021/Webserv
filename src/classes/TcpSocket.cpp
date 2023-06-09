@@ -127,7 +127,7 @@ void	TcpSocket::setRequestHeader()
 
 	this->_request.splitHeader(header);
 	this->setBuf(body);
-	std::cout << "buf = " << this->_socketInfo.buf << std::endl;
+	//std::cout << "buf = " << this->_socketInfo.buf << std::endl;
 }
 
 std::string TcpSocket::chunkedEncoding()

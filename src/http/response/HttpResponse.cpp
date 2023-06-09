@@ -16,8 +16,16 @@ void	HttpResponse::setBody(const std::string& body) {
 	this->_httpBody.setBody(body);
 }
 
+HttpResponseHeader&	HttpResponse::getResponseHeader() {
+	return (this->_httpResponseHeader);
+}
+
+std::string			HttpResponse::getBody() const {
+	return (this->_httpBody.getBody());
+}
+
 /* method */
-HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, const std::string& clientAddr)
+HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, const std::string& clientAddr, SessionStorage& sessionStorage)
 {
 	// request
 	HttpRequestLine		requestLine = request.getHttpRequestLine();
@@ -33,19 +41,18 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, 
 	ServerInfo		serverInfo    = config.findServerInfoByHost(requestHeader.getHost());
 	LocationBlock	locationBlock = serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
 
-	locationBlock.printInfo();
-
 	PathInfo 	pathInfo(locationBlock.getFullPath());
-	pathInfo.printPathInfo();
-	std::cout << "Full Path : " << locationBlock.getFullPath() << std::endl;
+	std::string	sessionId = requestHeader.getSessionIdByCookie();
+
 	try
 	{
 		requestLine.validateRequestLine(locationBlock.getLimitExcept(), clientAddr);
 		requestHeader.validateRequestHeader(locationBlock);
-		std::cout << "---- [success] request-line validate!" << std::endl;
-
+		
 		pathInfo.validatePath();
-		std::cout << "---- [success] validate path! " << std::endl;
+		//(void)sessionStorage;
+		sessionStorage.validateSession(sessionId, requestLine.getRequestURI());
+
 		if (method == "GET")
 			pathInfo.processGetRequest(locationBlock);
 		else if (method == "DELETE")
@@ -53,24 +60,32 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, 
 	}
 	catch(const ResponseException &ex)
 	{
-		std::cout << "error 발생!" << ex.statusCode() << std::endl;
+		std::cout << "************** error 발생!" << ex.statusCode() << std::endl;
 		responseLine.setHttpStatus(ex.httpStatus());
 		pathInfo.setReturnPageByError(locationBlock.getErrorPage(), ex.statusCode());
 	}
-	if (method == "GET")
+	catch (const SessionException &ex)
+	{
+		std::cout << " ************* 304 발생!" << ex.statusCode() << std::endl;
+		responseLine.setHttpStatus(ex.httpStatus());
+	}
+	// post나 delete일때, body 넘겨줄지?
+	if (method == "GET" && responseLine.getHttpStatus().getStatusCode() != 304)
 		responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
 	responseHeader = makeResponseHeader(pathInfo, responseBody.getBodySize());
-	std::cout << responseBody.getBodySize() << std::endl;
-	std::cout << responseHeader.getContentLength() << std::endl;
+
 	return (HttpResponse(responseLine, responseHeader, responseBody));
 }
+
 
 void	HttpResponse::printHttpResponse()
 {
 	HttpResponseLine line = this->_httpResponseLine;
 	HttpResponseHeader header = this->_httpResponseHeader;
 	HttpBody body = this->_httpBody;
+	std::string	cookieString = header.getCookieString();
 
+	std::cout << "\n---- [response 출력] ----" << std::endl;
 	std::cout << "\n---- [response 출력] ----" << std::endl;
 	std::cout << " -- response-line" << std::endl;
 	std::cout << "\t httpStatus : " << line.getHttpStatus().getStatusCode() << " " << line.getHttpStatus().getReason() << std::endl;
@@ -81,10 +96,11 @@ void	HttpResponse::printHttpResponse()
 	std::cout << "\t transfer-encoding : " << header.getTransferEncoding() << std::endl;
 	std::cout << "\t content-length : " << header.getContentLength() << std::endl;
 	std::cout << "\t content-type : " << header.getContentType() << std::endl;
+	std::cout << "\t set-cookie : " << cookieString << std::endl;
 	std::cout << " -- response-body" << std::endl;
 	std::cout << body.getBody() << std::endl;
 
-	std::cout << "---- [response 출력 끝] ----\n" << std::endl;
+	std::cout << "---- response 출력 끝 ----\n" << std::endl;
 }
 
 
@@ -113,13 +129,14 @@ std::string		getCurrentTime()
 HttpResponseHeader	HttpResponse::makeResponseHeader(const PathInfo& pathInfo, const size_t bodySize)
 {
 	HttpResponseHeader	header;
-
+	(void)pathInfo;
 	header.setDate(getCurrentTime());
 	header.setServer(SERVER_NAME);
-	header.setContentType(pathInfo.getFileType());
+	header.setContentType("text/html");
+	//header.setContentType(pathInfo.getFileType());
 	header.setTransferEncoding("identity");
 	header.setContentLength(bodySize);
-
+	
 	return (header); 
 }
 
@@ -127,6 +144,8 @@ HttpBody	HttpResponse::makeResponseBody(const PathInfo& pathInfo, const HttpStat
 {
 	HttpBody	httpBody;
 	std::string	path = pathInfo.getReturnPage();
+
+	//std::cout << "return path : " << path << std::endl;
 
 	if (path.empty() == true)// 1. Return error page
 		httpBody.createErrorBody(httpStatus);
@@ -136,4 +155,9 @@ HttpBody	HttpResponse::makeResponseBody(const PathInfo& pathInfo, const HttpStat
 		httpBody.createGenericBody(path);
 
 	return (httpBody);
+}
+
+int		HttpResponse::getStatusCode()
+{
+	return (this->_httpResponseLine.getHttpStatus().getStatusCode());
 }

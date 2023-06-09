@@ -13,8 +13,12 @@ const std::string	DEFAULT_INDEX = "index.html";
 /* Default response file type */
 const std::string	DEFAULT_FILE_TYPE = "application/octet-stream";
 
+/* Cache folder */
+const std::string	CACHE_ROOT = ROOT_PATH + ".caches/";
+
 /* Extension */
-const std::string EXTENSION = ".conf";
+const std::string	EXTENSION = ".conf";
+const std::string	CACHE_FILE_EXTENSION = ".txt";
 
 
 #endif

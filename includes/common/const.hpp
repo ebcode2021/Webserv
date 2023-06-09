@@ -23,9 +23,6 @@ const std::size_t	CLIENT_BODY_SIZE = 1048576;
 /* Related to HTTP */
 const std::string	HTTP_VERSION = "HTTP/1.1";
 
-// const std::vector<std::string> METHODS = {
-// 	"GET", "POST", "DELETE"};
-
 static const	std::string METHODS[] = {
 	"GET", "POST", "DELETE"
 };
@@ -41,5 +38,11 @@ static const	std::string RESPONSE_HEADERS[] = {
 const size_t		METHODS_SIZE = sizeof(METHODS) / sizeof(std::string);
 const size_t		REQUEST_HEADER_SIZE = sizeof(REQUEST_HEADERS) / sizeof(std::string);
 const size_t		RESPONSE_HEADER_SIZE = sizeof(RESPONSE_HEADERS) / sizeof(std::string);
+
+/* Session */
+static const size_t			SESSION_ID_LENGTH = 16;
+static const std::string	SESSION_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+static const size_t			SESSION_CHARS_LENGTH = SESSION_CHARS.size();
+static const size_t			DEFAULT_SESSION_DURATION = 3600;
 
 #endif

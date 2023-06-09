@@ -3,14 +3,9 @@
 #include "KqueueHandler.hpp"
 #include "SocketEventHandler.hpp"
 #include "HttpResponse.hpp"
+#include "SessionStorage.hpp"
 
-/*
-	남은 작업(은비)
-		- 요청 requestURI에서 QueryParameter 분리 할 수 있도록하기.
-		- Cookie parsing 후, HttpSession 생성. SessionStorage 만들기
-		- fileCheck 할 때, enum 사용 대신 create_directivemap() 사용하기
 
-*/
 int createSocket()
 {
 	int	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -37,10 +32,13 @@ void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &l
 		}
 		TcpSocket *listenSock = new TcpSocket(listenSockFd);
 		sockEventHandler.setSocket(listenSock);
+
 		if (sockEventHandler.sockBind(*it) < 0)
 			printErrorWithExit(strerror(errno));
+		
 		if (sockEventHandler.sockListen())
 			printErrorWithExit(strerror(errno));
+		
 		listenSock->changeToNonblocking();
 		kqHandler.changeEvent(listenSockFd, EVFILT_READ, EV_ADD, 0, 0, listenSock);
 		listenSockFdList.insert(listenSockFd);
@@ -100,7 +98,6 @@ void cgi_test(TcpSocket* sock) {
 	}
 	dup2(STDOUT_FILENO, stdoutbackup);
 	wait(0);
-	//std::cout << "프로세스 종료?" << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -108,10 +105,11 @@ int main(int argc, char *argv[])
 	Config::fileCheck(argc, argv);
 
 	Config	config(argv[1]);
-	std::vector<struct kevent>	changeList;
+
 	std::set<int>				listenSockFdList;
 	KqueueHandler				kqHandler;
 	SocketEventHandler			sockEventHandler;
+	SessionStorage				sessionStorage;
 	
 	initListenSocket(kqHandler, config, listenSockFdList);
 
@@ -138,14 +136,14 @@ int main(int argc, char *argv[])
 				}
 				else // client 소켓이면
 				{
-					if (sockEventHandler.dataRecv() <= 0) {
+					if (sockEventHandler.dataRecv() <= 0)
+					{
 						sockEventHandler.closeSocket();
 					}
 					else 
 					{
 						if (curSock->getReadMode() == HEADER) 
 						{
-							std::cout << curSock->getBuf() << std::endl;
 							curSock->setRequestHeader();
 							curSock->changeReadMode();
 						}
@@ -154,21 +152,35 @@ int main(int argc, char *argv[])
 						if (curSock->getReadMode() == END)
 						{
 							std::cout << "--------------------------" << std::endl;
-							HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr());
-							
-							curSock->setResponse(response);
 
 							// test code
 							if (curSock->getRequest().getHttpRequestLine().getMethod() == "POST") {
 								cgi_test(curSock);
 								//exit(1);
 							}
-							else {
-								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr());
-							//	response.printHttpResponse();
+							else
+							{
+								HttpResponse response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr(), sessionStorage);
+								std::string reqURL = curSock->getRequest().getHttpRequestLine().getRequestURI();
+								std::string sessionId = curSock->getRequest().getHttpRequestHeader().getSessionIdByCookie();
+
+								if (reqURL != "/favicon.ico")
+								{
+									if (sessionStorage.isSession(sessionId) == true)
+										response.getResponseHeader().setSetCookie("sessionId=" + sessionId);
+									else
+									{
+										HttpSession	session(reqURL);
+										sessionStorage.addSession(session);
+										response.getResponseHeader().setSetCookie("sessionId=" + session.getSessionId());
+										//session.printInfo();
+									}
+								}
+					
+								//response.printHttpResponse();
 								curSock->setResponse(response);
+		
 							}
-							//
 							
 							//curSock->getResponse().printHttpResponse();
 							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
@@ -178,7 +190,9 @@ int main(int argc, char *argv[])
 			}
 			else if (isWriteEvent(curEvent.filter) == true)
 			{
+				//curSock->getResponse().printHttpResponse();
 				int sendsize = sockEventHandler.dataSend();
+				//std::cout << "sendsize :  " << sendsize << std::endl;
 				curSock->bufClear();
 				curSock->setReadMode(HEADER);
 				sendsize = 10;

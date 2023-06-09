@@ -11,6 +11,8 @@
 # include "ServerInfo.hpp"
 # include "PathInfo.hpp"
 
+# include "SessionStorage.hpp"
+
 
 class	HttpResponse
 {
@@ -26,12 +28,16 @@ class	HttpResponse
 
 		// setter
 		void						setBody(const std::string&);
+		std::string					getBody() const;
+		HttpResponseHeader&			getResponseHeader();
 
 		// method
-		static HttpResponse			createResponse(Config&, HttpRequest&, const std::string&);
+		static HttpResponse			createResponse(Config&, HttpRequest&, const std::string&, SessionStorage&);
 		static HttpBody				makeResponseBody(const PathInfo&, const HttpStatus&);
 		static HttpResponseHeader	makeResponseHeader(const PathInfo&, const size_t);
 		std::string					getResponseToString();
+		int							getStatusCode();
+
 
 		// print
 		void						printHttpResponse();

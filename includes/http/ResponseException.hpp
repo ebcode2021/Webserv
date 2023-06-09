@@ -18,4 +18,18 @@ class	ResponseException
 		int			statusCode() const { return(_httpStatus.getStatusCode());}
 };
 
+class	SessionException
+{
+	private :
+		HttpStatus	_httpStatus;
+		
+
+	public :
+		explicit	SessionException(const int statusCode)
+			:_httpStatus(statusCode){}
+
+		HttpStatus	httpStatus() const { return(_httpStatus); }
+		int			statusCode() const { return(_httpStatus.getStatusCode());}
+};
+
 #endif

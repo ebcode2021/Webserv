@@ -1,5 +1,5 @@
-#ifndef SERVER_HPP
-# define SERVER_HPP
+#ifndef SERVER_BLOCK_HPP
+# define SERVER_BLOCK_HPP
 
 # include "ErrorPage.hpp"
 # include "validate.hpp"
