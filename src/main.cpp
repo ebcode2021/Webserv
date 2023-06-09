@@ -67,7 +67,7 @@ void cgi_test(TcpSocket* sock) {
 	std::string CONTENT_TYPE = request.getHttpRequestHeader().getContentType();
 	std::string CONTENT_LENGTH = itos(request.getHttpRequestHeader().getContentLength());
 	std::string SERVER_PROTOCOL = HTTP_VERSION;
-	std::string PATH_INFO = "/Users/minsukan/Desktop/42/webserv/Webserv/resources/fileUpLoad";
+	std::string PATH_INFO = "/Users/minsukan/Desktop/42/webserv/Webserv/resources/html/cgi-bin/upload.py";
 	
 	std::cout << CONTENT_LENGTH << std::endl;
 	std::cout << sock->getBufSize() << std::endl;
@@ -102,7 +102,8 @@ void cgi_test(TcpSocket* sock) {
 
 int main(int argc, char *argv[])
 {
-	Config::fileCheck(argc, argv);
+	(void)argc;
+	//Config::fileCheck(argc, argv);
 
 	Config	config(argv[1]);
 
