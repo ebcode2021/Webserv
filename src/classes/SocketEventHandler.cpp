@@ -45,23 +45,30 @@ int SocketEventHandler::dataRecv() {
 	std::memset(buf, 0, BUFSIZE);
 	while (true)
 	{
-		readByte = recv(sockFd, buf, BUFSIZE, 0);
+		if ((readByte = recv(sockFd, buf, BUFSIZE, 0)) == -1)
+			return (-1);
+		std::cout << "\n" << "readbyte = " << readByte << std::endl;
 		if (readByte > 0) {
+			std::cout << std::string(buf, readByte) << std::endl;
 			this->_socket->addBuf(std::string(buf, readByte));
 			std::memset(buf, 0, BUFSIZE);
-			if (static_cast<size_t>(readByte) < BUFSIZE)
+			if (readByte < static_cast<int>(BUFSIZE))
 				return (true);
 		}
 		else if (readByte == 0)
 			return (0);
-		else 
+		else  {
+			std::cout << "-1" << std::endl;
 			return (-1);
+		}
 	}
 }
 
 int SocketEventHandler::dataSend() 
 {
+	std::cout << "asdf" << std::endl;
 	std::string responseMessage = this->_socket->getResponse().getResponseToString();
+	std::cout << "asdasdff" << std::endl;
 
 	int sendByte = send(this->_socket->getSockFd(), responseMessage.c_str(), responseMessage.size(), 0);
 	return (sendByte);

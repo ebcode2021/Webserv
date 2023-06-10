@@ -6,6 +6,14 @@
 #include "SessionStorage.hpp"
 
 
+/*
+	https일경우 리퀘스트 요청이 암호화되서 전송되기때문에 header파싱 부분에서 segfault에러
+	send데이터가 큰경우 처리
+	send udata확인해서 cgi에 데이터보내기
+	포트 적용잘안되는거 확인
+	썬더브라우저에서 connection 요청 보냈을경우
+*/
+
 int createSocket()
 {
 	int	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -26,6 +34,7 @@ void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &l
 
 	for (it = listenSockList.begin(); it != listenSockList.end(); it++)
 	{
+		std::cout << *it << std::endl;
 		int listenSockFd = createSocket();
 		if (listenSockFd == INVALID_SOCKET) {
 			printErrorWithExit(strerror(errno));
@@ -67,7 +76,7 @@ void cgi_test(TcpSocket* sock) {
 	std::string CONTENT_TYPE = request.getHttpRequestHeader().getContentType();
 	std::string CONTENT_LENGTH = itos(request.getHttpRequestHeader().getContentLength());
 	std::string SERVER_PROTOCOL = HTTP_VERSION;
-	std::string PATH_INFO = "/Users/minsukan/Desktop/42/webserv/Webserv/resources/html/cgi-bin/upload.py";
+	std::string PATH_INFO = "/Users/minsukan/Desktop/42/webserv/Webserv/upload.php";
 	
 	std::cout << CONTENT_LENGTH << std::endl;
 	std::cout << sock->getBufSize() << std::endl;
@@ -76,7 +85,8 @@ void cgi_test(TcpSocket* sock) {
 	pipe(pipefd);
 
 	//int stdinbackup = dup(STDIN_FILENO);
-	int stdoutbackup = dup(STDOUT_FILENO);
+	//int stdoutbackup = dup(STDOUT_FILENO);
+	//int stdinbackup = dup(STDIN_FILENO);
 	
 
 	pid_t pid = fork();
@@ -87,16 +97,24 @@ void cgi_test(TcpSocket* sock) {
 		setenv("CONTENT_TYPE", CONTENT_TYPE.c_str(), 1);
 		setenv("CONTENT_LENGTH", CONTENT_LENGTH.c_str(), 1);
 		setenv("SERVER_PROTOCOL", SERVER_PROTOCOL.c_str(), 1);
-		setenv("PATH_INFO", PATH_INFO.c_str(), 1);
+		setenv("PATH_INFO", "/Users/minsukan/Desktop/42/webserv/Webserv/", 1);
+		setenv("SCRIPT_NAME", "upload.php", 1);
 
-		execv("/Users/minsukan/Desktop/42/webserv/Webserv/cgi_tester", 0);
+
+		// setenv("DOCUMENT_ROOT", DEFAULT_ROOT.c_str(), 1);
+		// setenv("SCRIPT_NAME", "upload.php", 1);
+		setenv("SCRIPT_FILENAME", "upload.php", 1);
+		setenv("REDIRECT_STATUS", "200", 1);
+		
+		execv("/Users/minsukan/Desktop/42/webserv/Webserv/php-cgi", 0);
+		
 		exit(1);
 	}
 	else {
 		dup2(pipefd[1], STDOUT_FILENO);
-		write(STDOUT_FILENO, sock->getBufToCStr(), sock->getBufSize());
+		write(1, sock->getBufToCStr(), sock->getBufSize());
 	}
-	dup2(STDOUT_FILENO, stdoutbackup);
+	//dup2(STDOUT_FILENO, stdoutbackup);
 	wait(0);
 }
 
@@ -147,6 +165,7 @@ int main(int argc, char *argv[])
 						{
 							curSock->setRequestHeader();
 							curSock->changeReadMode();
+							curSock->getRequest().printInfo();
 						}
 						if (curSock->getReadMode() != END)
 							curSock->setRequestBody();
@@ -197,9 +216,10 @@ int main(int argc, char *argv[])
 				curSock->bufClear();
 				curSock->setReadMode(HEADER);
 				sendsize = 10;
-				kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
-				if (sendsize == -1 || curSock->getRequest().getHttpRequestHeader().getConnection() == "close") 
+				if (sendsize == -1 || curSock->getRequest().getHttpRequestHeader().getConnection() != "keep-alive") 
 					sockEventHandler.closeSocket();
+				else
+					kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
 			}
 		}
 	}
