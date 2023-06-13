@@ -1,9 +1,31 @@
-print("Content-Type: text/html")  # HTML 헤더 출력
-print()  # 헤더와 본문을 구분하는 빈 줄 출력
+#!/usr/bin/env python
+import cgi
+import os
+# CGI 환경 변수 설정
+UPLOAD_DIR = '/Users/minsu/Desktop/42seoul/webserv/resources'  # 파일을 저장할 디렉토리 설정
 
-print("<html>")
-print("<head><title>Hello</title></head>")
-print("<body>")
-print("<h1>Hello, World!</h1>")
-print("</body>")
-print("</html>")
+# 폼 데이터 가져오기
+form = cgi.FieldStorage()
+
+print(form)
+
+# 업로드된 파일 처리
+if 'file' in form:
+    fileitem = form['file']
+
+    # 파일 경로와 이름 설정
+    filename = os.path.basename(fileitem.filename)
+    filepath = os.path.join(UPLOAD_DIR, filename)
+
+    # 파일 저장
+    with open(filepath, 'wb') as f:
+        f.write(fileitem.file.read())
+
+    print("Content-Type: text/html")
+    print()
+    print("<h1>파일 업로드 완료</h1>")
+    print("<p>업로드된 파일: {}</p>".format(filename))
+else:
+    print("Content-Type: text/html")
+    print()
+    print("<h1>파일을 선택하세요.</h1>")

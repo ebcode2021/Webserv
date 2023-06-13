@@ -44,6 +44,8 @@ void	HttpRequest::setHeaderField(std::map<std::string, std::string> headerMap)
 		std::string fieldName = it->first;
 		std::string fieldValue = it->second;
 
+		std::cout << fieldName << ": " << fieldValue << std::endl;
+
 		for (size_t idx = 0; idx < REQUEST_HEADER_SIZE; idx++)
 		{
 			if (REQUEST_HEADERS[idx] == fieldName)
@@ -54,7 +56,7 @@ void	HttpRequest::setHeaderField(std::map<std::string, std::string> headerMap)
 					this->_httpRequestHeader.setUserAgent(fieldValue);
 				else if (fieldName == "Connection")
 					this->_httpRequestHeader.setConnection(fieldValue);
-				else if (fieldName == "Conetent-Type")
+				else if (fieldName == "Content-Type")
 					this->_httpRequestHeader.setContentType(fieldValue);
 				else if (fieldName == "Content-Length")
 					this->_httpRequestHeader.setContentLength(std::atoi(fieldValue.c_str()));

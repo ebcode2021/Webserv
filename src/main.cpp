@@ -12,6 +12,7 @@
 	send udata확인해서 cgi에 데이터보내기
 	포트 적용잘안되는거 확인
 	썬더브라우저에서 connection 요청 보냈을경우
+	content type 파싱 다시
 */
 
 int createSocket()
@@ -76,7 +77,7 @@ void cgi_test(TcpSocket* sock) {
 	std::string CONTENT_TYPE = request.getHttpRequestHeader().getContentType();
 	std::string CONTENT_LENGTH = itos(request.getHttpRequestHeader().getContentLength());
 	std::string SERVER_PROTOCOL = HTTP_VERSION;
-	std::string PATH_INFO = "/Users/minsukan/Desktop/42/webserv/Webserv/upload.php";
+	std::string PATH_INFO = "/Users/minsu/Desktop/42seoul/webserv/";
 	
 	std::cout << CONTENT_LENGTH << std::endl;
 	std::cout << sock->getBufSize() << std::endl;
@@ -97,25 +98,42 @@ void cgi_test(TcpSocket* sock) {
 		setenv("CONTENT_TYPE", CONTENT_TYPE.c_str(), 1);
 		setenv("CONTENT_LENGTH", CONTENT_LENGTH.c_str(), 1);
 		setenv("SERVER_PROTOCOL", SERVER_PROTOCOL.c_str(), 1);
-		setenv("PATH_INFO", "/Users/minsukan/Desktop/42/webserv/Webserv/", 1);
-		setenv("SCRIPT_NAME", "upload.php", 1);
+		setenv("PATH_INFO", PATH_INFO.c_str(), 1);
+	//	setenv("SCRIPT_NAME", "hello_cgi.py", 1);
 
+		std::cout << CONTENT_TYPE << std::endl;
 
 		// setenv("DOCUMENT_ROOT", DEFAULT_ROOT.c_str(), 1);
-		// setenv("SCRIPT_NAME", "upload.php", 1);
-		setenv("SCRIPT_FILENAME", "upload.php", 1);
+		setenv("SCRIPT_NAME", "uploadtest.php", 1);
+		setenv("SCRIPT_FILENAME", "uploadtest.php", 1);
 		setenv("REDIRECT_STATUS", "200", 1);
 		
-		execv("/Users/minsukan/Desktop/42/webserv/Webserv/php-cgi", 0);
+		//const char *argv[3] = {"/usr/bin/python3", "/Users/minsu/Desktop/42seoul/webserv/hello_cgi.py", NULL};
+
+		//execv("/usr/bin/python3", (char**)argv);
+
+		execv("/Users/minsu/Desktop/42seoul/webserv/php-cgi", NULL);
 		
 		exit(1);
 	}
 	else {
 		dup2(pipefd[1], STDOUT_FILENO);
-		write(1, sock->getBufToCStr(), sock->getBufSize());
+		int sendbyte = 0;
+		while (true)
+		{
+		 	int readbyte = write(pipefd[1], sock->getBufToCStr() + sendbyte, sock->getBufSize() - sendbyte);
+			std::cerr << "readbyte = " << readbyte << std::endl;
+			if (readbyte == -1)
+				continue ;
+			else if (readbyte == 0)
+				break ;
+			else
+				sendbyte += readbyte;
+		}
+		
 	}
 	//dup2(STDOUT_FILENO, stdoutbackup);
-	wait(0);
+	
 }
 
 int main(int argc, char *argv[])

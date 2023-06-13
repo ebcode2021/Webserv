@@ -1,0 +1,141 @@
+make fclean
+rm -rf src/main.o src/utility/error.o src/utility/utils.o src/utility/validate.o src/utility/validateUtils.o src/classes/Config.o src/classes/LocationBlock.o src/classes/ServerBlock.o src/classes/ErrorPage.o src/classes/LimitExcept.o src/classes/ServerInfo.o src/classes/TcpSocket.o src/classes/KqueueHandler.o src/classes/SocketEventHandler.o src/classes/SessionStorage.o src/http/request/HttpRequest.o src/http/request/HttpRequestHeader.o src/http/request/HttpRequestLine.o src/http/response/HttpResponse.o src/http/HttpStatus.o src/http/PathInfo.o src/http/response/HttpResponseLine.o src/http/response/HttpResponseHeader.o src/http/HttpBody.o src/http/HttpSession.o
+[1;31m *** Deleteing Objects Done! *** [0m
+rm -rf webserv
+[1;31m *** Delete Program Done! *** [0m
+make all
+[1;33m *** Generating push_swap objects... *** [0m
+[1;33m *** Generating push_swap objects... *** [0m
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/utility/validate.cpp -o src/utility/validate.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+[1;33m *** Generating push_swap objects... *** [0m
+[1;33m *** Generating push_swap objects... *** [0m
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/ServerBlock.cpp -o src/classes/ServerBlock.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+[1;33m *** Generating push_swap objects... *** [0m
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/ErrorPage.cpp -o src/classes/ErrorPage.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/LimitExcept.cpp -o src/classes/LimitExcept.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/LocationBlock.cpp -o src/classes/LocationBlock.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/ServerInfo.cpp -o src/classes/ServerInfo.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+c++ -Wall -Wextra -Werror -std=c++98 -c src/utility/validateUtils.cpp -o src/utility/validateUtils.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/Config.cpp -o src/classes/Config.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+c++ -Wall -Wextra -Werror -std=c++98 -c src/utility/utils.cpp -o src/utility/utils.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+c++ -Wall -Wextra -Werror -std=c++98 -c src/utility/error.cpp -o src/utility/error.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+c++ -Wall -Wextra -Werror -std=c++98 -c src/main.cpp -o src/main.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/TcpSocket.cpp -o src/classes/TcpSocket.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/SessionStorage.cpp -o src/classes/SessionStorage.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/SocketEventHandler.cpp -o src/classes/SocketEventHandler.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+c++ -Wall -Wextra -Werror -std=c++98 -c src/classes/KqueueHandler.cpp -o src/classes/KqueueHandler.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/request/HttpRequest.cpp -o src/http/request/HttpRequest.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/request/HttpRequestHeader.cpp -o src/http/request/HttpRequestHeader.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/request/HttpRequestLine.cpp -o src/http/request/HttpRequestLine.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/response/HttpResponse.cpp -o src/http/response/HttpResponse.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/HttpStatus.cpp -o src/http/HttpStatus.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/PathInfo.cpp -o src/http/PathInfo.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/response/HttpResponseLine.cpp -o src/http/response/HttpResponseLine.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/response/HttpResponseHeader.cpp -o src/http/response/HttpResponseHeader.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/HttpBody.cpp -o src/http/HttpBody.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;33m *** Generating push_swap objects... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -c src/http/HttpSession.cpp -o src/http/HttpSession.o -I includes/ -I includes/classes/ -I includes/common/ -I includes/utility/ -I includes/http/ -I includes/http/common/ -I includes/http/request/ -I includes/http/response/
+[1;32m *** Compiling philo ... *** [0m
+c++ -Wall -Wextra -Werror -std=c++98 -o webserv src/main.o src/utility/error.o src/utility/utils.o src/utility/validate.o src/utility/validateUtils.o src/classes/Config.o src/classes/LocationBlock.o src/classes/ServerBlock.o src/classes/ErrorPage.o src/classes/LimitExcept.o src/classes/ServerInfo.o src/classes/TcpSocket.o src/classes/KqueueHandler.o src/classes/SocketEventHandler.o src/classes/SessionStorage.o src/http/request/HttpRequest.o src/http/request/HttpRequestHeader.o src/http/request/HttpRequestLine.o src/http/response/HttpResponse.o src/http/HttpStatus.o src/http/PathInfo.o src/http/response/HttpResponseLine.o src/http/response/HttpResponseHeader.o src/http/HttpBody.o src/http/HttpSession.o
+make clean
+rm -rf src/main.o src/utility/error.o src/utility/utils.o src/utility/validate.o src/utility/validateUtils.o src/classes/Config.o src/classes/LocationBlock.o src/classes/ServerBlock.o src/classes/ErrorPage.o src/classes/LimitExcept.o src/classes/ServerInfo.o src/classes/TcpSocket.o src/classes/KqueueHandler.o src/classes/SocketEventHandler.o src/classes/SessionStorage.o src/http/request/HttpRequest.o src/http/request/HttpRequestHeader.o src/http/request/HttpRequestLine.o src/http/response/HttpResponse.o src/http/HttpStatus.o src/http/PathInfo.o src/http/response/HttpResponseLine.o src/http/response/HttpResponseHeader.o src/http/HttpBody.o src/http/HttpSession.o
+[1;31m *** Deleteing Objects Done! *** [0m
+[1;32m *** Compile Done!! *** [0m
+[1;32m *** Project Ready! *** [0m
+make clean
+rm -rf src/main.o src/utility/error.o src/utility/utils.o src/utility/validate.o src/utility/validateUtils.o src/classes/Config.o src/classes/LocationBlock.o src/classes/ServerBlock.o src/classes/ErrorPage.o src/classes/LimitExcept.o src/classes/ServerInfo.o src/classes/TcpSocket.o src/classes/KqueueHandler.o src/classes/SocketEventHandler.o src/classes/SessionStorage.o src/http/request/HttpRequest.o src/http/request/HttpRequestHeader.o src/http/request/HttpRequestLine.o src/http/response/HttpResponse.o src/http/HttpStatus.o src/http/PathInfo.o src/http/response/HttpResponseLine.o src/http/response/HttpResponseHeader.o src/http/HttpBody.o src/http/HttpSession.o
+[1;31m *** Deleteing Objects Done! *** [0m
+
+서버 클래스 저장 시작
+{
+    listen    4444;
+    server_name localhost;
+
+
+    error_page  404 /asdf.html;
+    location /
+    location /test
+}
+서버 클래스 저장 완료
+
+로케이션 클래스 저장 시작
+0 =     location /
+1 =         autoindex on;
+2 =         index abcd.html;
+출력 끝
+0 =     location /test
+출력 끝
+로케이션 클래스 저장 완료
+
+서버 클래스 저장 시작
+{
+    listen      4242;
+    server_name  localhost;
+
+    location /
+
+
+    location /asdf
+    listen      8090;
+    error_page  401 /index.html;
+    error_page  402 /index2.html;
+}
+서버 클래스 저장 완료
+
+로케이션 클래스 저장 시작
+0 =     location /
+1 =         index  test.html index.htm;
+2 =         error_page 402 /index.html;
+3 =         index  test.html index.html;
+4 =         error_page 401 /index.html;
+5 =         limit_except GET 
+        {
+            deny all;
+
+출력 끝
+0 =     location /asdf
+1 =         index   40x.html;
+출력 끝
+로케이션 클래스 저장 완료
+
+서버 클래스 저장 시작
+{
+    listen    9999;
+    server_name localhost;
+
+    root    /Users/eunson/Desktop/webserv/resources/html/test/;
+    error_page  404 /asdf.html;
+    location /
+    location /test
+}
+서버 클래스 저장 완료
+
+로케이션 클래스 저장 시작
+0 =     location /
+1 =         index index.html;
+출력 끝
+0 =     location /test
+출력 끝
+로케이션 클래스 저장 완료
+설정 끝
+0
+4242
