@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <meta name="description" content="Portfolio for practice">
+    <meta name="author" content="Kim Tae Heon">
+    <!-- favicon 적용 
+        href 끝에 ? 붙여야 사용 가능 but 이유는 못 찾음-->
+    <link rel="icon" type="image/png" href="/imgs/favicon.png?">
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/7943045324.js" crossorigin="anonymous"></script>
+    <!-- Open Sans -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="animation.css">
+    <script src="main.js" defer></script>
+    <!-- Ipone smooth scroll -->
+    <script src="smoothscroll.js" defer></script>
+    <!-- defer
+        1. Html파일 parsing되는 동안 JS파일을 동시에 다운받음 다만 Html의 Parsing이 완료된 다음 JS파일 실행-->
+    <!-- async 
+        1. Bolean type의 속성 값이므로 선언만으로 True로 설정
+        2. Html파일 pursuing되는 동안 JS파일을 동시에 다운받음 다만 JS의 다운이 완료되면 JS파일 실행 후 나머지 HTML 파일 parsing을 계속
+        3. 여러가지 JS 불러올 때 다운이 끝나는 순서로 실행되기 때문에 순서에 의존적인 JS들이라면 사용하기 힘듬 -->
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav id="navbar">
+        <div class="navbar__logo">
+            <img src="imgs/logo.png" alt="logo">
+            <a href="#">Kim Tae Heon</a>
+        </div>
+        <ul class="navbar__menu">
+            <li class="navbar__menu__item" data-link="#home">01 Home</li>
+            <li class="navbar__menu__item" data-link="#about">02 About</li>
+            <li class="navbar__menu__item" data-link="#skills">03 Skills</li>
+            <li class="navbar__menu__item" data-link="#work">04 My Work</li>
+            <li class="navbar__menu__item" data-link="#testimonials">05 Testimonial</li>
+            <li class="navbar__menu__item" data-link="#contact">06 Contact</li>
+        </ul>
+
+        <!-- Toogle button -->
+        <div class="navbar__toggle-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Home -->
+    <section id="home">
+        <div class="home__container">
+            <img src="imgs/profile.png" alt="Profile Photo" class="home__avatar">
+            <div class="home__title-bg">
+                <h1 class="home__title">
+                    Hello, </br>
+                    I am Program Artist
+                </h1>
+            </div>
+            <h2 class="home__description">A Programmers who want to make life easier</h2>
+            <button class="home__contact">Contact Me</button>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section section__container">
+        <h1>About Me</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsa illo, excepturi ullam odio eos culpa
+            illum, quisquam commodi ratione similique doloremque veniam atque fuga expedita quae unde, incidunt
+            voluptatem.
+        </p>
+        <div class="about__majors">
+            <div class="major">
+                <div class="major__icon">
+                    <i class="fab fa-html5"></i>
+                </div>
+                <h2 class="major__title">HTML, CSS</h2>
+                <!-- <div class="major__description"></div> -->
+            </div>
+            <div class="major">
+                <div class="major__icon">
+                    <i class="fab fa-js"></i>
+                </div>
+                <h2 class="major__title">JavaScript</h2>
+                <!-- <div class="major__description"></div> -->
+            </div>
+            <div class="major">
+                <div class="major__icon">
+                    <i class="fab fa-node-js"></i>
+                </div>
+                <h2 class="major__title">Node JS</h2>
+                <!-- <div class="major__description"></div> -->
+            </div>
+        </div>
+        <div class="about__study">
+            <div class="study__description">
+                <p class="study__name">Front-End, Back-End</p>
+                <p class="study__period">2020 july ~ </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="section">
+        <div class="section__container">
+            <h1>Skills</h1>
+            <h2>Skills & Attribute</h2>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, ipsum facilis inventore nesciunt
+                commodi
+                nisi labore voluptas consequatur cupiditate ratione, quos velit dolorum expedita dolor ipsam quas
+                assumenda,
+                accusamus molestias!
+            </p>
+            <div class="skillset">
+                <div class="skillset__left">
+                    <h3 class="skillset__title">Skills</h3>
+                    <div class="skill">
+                        <div class="skill__bar">
+                            <div class="skill__description">
+                                <span>HTML</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill__value" style="width : 85%;" data-percent="85%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill">
+                        <div class="skill__bar">
+                            <div class="skill__description">
+                                <span>CSS</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill__value" style="width : 80%;" data-percent="80%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill">
+                        <div class="skill__bar">
+                            <div class="skill__description">
+                                <span>JAVASCRIPT</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill__value" style="width : 85%;" data-percent="85%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill">
+                        <div class="skill__bar">
+                            <div class="skill__description">
+                                <span>NODE JS</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="skill__value" style="width : 60%;" data-percent="60%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skillset__right">
+                    <div class="tools">
+                        <h3 class="skillset__title">Tools</h3>
+                        <ul class="tools__list">
+                            <li><span>Visual Studio Code</span></li>
+                        </ul>
+                    </div>
+                    <div class="etc">
+                        <h3 class="skillset__title">Etc</h3>
+                        <ul class="etc__list">
+                            <li><span>Git</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work -->
+    <section id="work" class="section section__container">
+        <h1>My Work</h1>
+        <h2>Projects</h2>
+        <div class="work__categories">
+            <button class="category__btn selected" data-filter="*">
+                All<span class="category__count">4</span>
+            </button>
+            <button class="category__btn" data-filter="css">
+                HTML, CSS<span class="category__count">1</span>
+            </button>
+            <button class="category__btn" data-filter="javascript">
+                JavaScript<span class="category__count">2</span>
+            </button>
+            <button class="category__btn" data-filter="nodejs">
+                Node JS<span class="category__count">1</span>
+            </button>
+        </div>
+
+        <div class="work__projects">
+            <a href="" class="project" target="blnak" data-type="javascript">
+                <img src="imgs/proejects/calendar.png" alt="" class="project__img">
+                <div class="project__description">
+                    <h3>Calendar</h3>
+                    <span>HTML, CSS, JavaScript</span>
+                </div>
+            </a>
+
+            <a href="" class="project" target="blnak" data-type="javascript">
+                <img src="imgs/proejects/photo-list.png" alt="" class="project__img">
+                <div class="project__description">
+                    <h3>Photo List</h3>
+                    <span>HTML, CSS, JavaScript</span>
+                </div>
+            </a>
+
+            <a href="" class="project" target="blnak" data-type="nodejs">
+                <img src="imgs/proejects/to-do-list.png" alt="" class="project__img">
+                <div class="project__description">
+                    <h3>To Do List</h3>
+                    <span>HTML, CSS, JavaScript, Node JS</span>
+                </div>
+            </a>
+
+            <a href="" class="project" target="blnak" data-type="css">
+                <img src="imgs/proejects/responsible-navbar.png" alt="" class="project__img">
+                <div class="project__description">
+                    <h3>Responsible Navbar</h3>
+                    <span>HTML, CSS</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="section">
+        <div class="section__container">
+            <h1>Testimonials</h1>
+            <h2>See what they say about me</h2>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <img src="imgs/testimonial/avatar1.png" alt="" class="testimonial__avatar">
+                    <div class="testimonial__speach-bubble">
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum corporis minus, molestiae
+                            officia
+                            fuga error praesentium? Nulla vitae nobis consectetur inventore, cum, dolorem repellendus
+                            ratione adipisci molestias explicabo sit est.
+                        </p>
+                        <p class="name"><a href="">Kim Tae Heon</a></p>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    <img src="imgs/testimonial/avatar2.png" alt="" class="testimonial__avatar">
+                    <div class="testimonial__speach-bubble">
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum corporis minus, molestiae
+                            officia
+                            fuga error praesentium? Nulla vitae nobis consectetur inventore, cum, dolorem repellendus
+                            ratione adipisci molestias explicabo sit est.
+                        </p>
+                        <p class="name"><a href="">Kim Tae Heon</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+        <h1 class="contact__title">Let's Talk</h1>
+        <h2 class="contact__email">xbox1720@naver.com</h2>
+        <div class="contact__links">
+            <a href="" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+        <p class="contact__rights">2021 program Artist Kim Tae Heon - All rights reserved</p>
+    </section>
+
+    <!-- Arrow up -->
+    <div class="arrow-up">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <div class="dark-mode">
+        <i class="fas fa-moon"></i>
+    </div>
+    <div class="light-mode">
+        <i class="fas fa-sun"></i>
+    </div>
+
+</body>
+
+</html>

@@ -48,7 +48,6 @@ int SocketEventHandler::dataRecv() {
 		if ((readByte = recv(sockFd, buf, BUFSIZE, 0)) == -1)
 			return (-1);
 		if (readByte > 0) {
-			//std::cout << std::string(buf, readByte) << std::endl;
 			this->_socket->addBuf(std::string(buf, readByte));
 			std::memset(buf, 0, BUFSIZE);
 			if (readByte < static_cast<int>(BUFSIZE))
@@ -56,20 +55,14 @@ int SocketEventHandler::dataRecv() {
 		}
 		else if (readByte == 0)
 			return (0);
-		else  {
-			std::cout << "-1" << std::endl;
+		else
 			return (-1);
-		}
 	}
 }
 
 int SocketEventHandler::dataSend() 
 {
-	std::cout << "asdf" << std::endl;
-	std::string responseMessage = this->_socket->getResponse().getResponseToString();
-	std::cout << "asdasdff" << std::endl;
-
-	int sendByte = send(this->_socket->getSockFd(), responseMessage.c_str(), responseMessage.size(), 0);
+	int sendByte = send(this->_socket->getSockFd(), this->_socket->getBufToCStr(), this->_socket->getBufSize(), 0);
 	return (sendByte);
 }
 
@@ -94,10 +87,8 @@ int SocketEventHandler::sockListen() {
 }
 
 int	SocketEventHandler::sockAccept() {
-	std::cout << "접속 수용 이벤트 발생" << std::endl;
 	sockaddr_in clientAddress;
 	socklen_t clientAddressSize = sizeof(clientAddress);
-	std::cout << "accept 전" << std::endl;
 
 	char addr[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr));

@@ -12,6 +12,7 @@ class TcpSocket
 		HttpRequest		_request;
 		HttpResponse	_response;
 		int				_readMode;
+		int				_sendMode;
 		std::string		_clientAddr;
 
 	public :
@@ -30,6 +31,8 @@ class TcpSocket
 		HttpResponse	getResponse();
 		std::string		getClientAddr();
 		void			setReadMode(int);
+		int				getSendMode();
+		void			setSendMode(int);
 
 		// method
 		void			changeToNonblocking();
@@ -46,6 +49,9 @@ class TcpSocket
 		void 			bufClear();
 		const char*		getBufToCStr();
 		size_t			getBufSize();
+		void			addSendByte(int);
+		void			bufTrim(int);
+		void			resetInfo();
 
 		// print
 		void 			printRequestInfo();

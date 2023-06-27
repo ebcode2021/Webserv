@@ -73,7 +73,6 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, 
 	if (method == "GET" && responseLine.getHttpStatus().getStatusCode() != 304)
 		responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
 	responseHeader = makeResponseHeader(pathInfo, responseBody.getBodySize());
-
 	return (HttpResponse(responseLine, responseHeader, responseBody));
 }
 
@@ -98,7 +97,7 @@ void	HttpResponse::printHttpResponse()
 	std::cout << "\t content-type : " << header.getContentType() << std::endl;
 	std::cout << "\t set-cookie : " << cookieString << std::endl;
 	std::cout << " -- response-body" << std::endl;
-	std::cout << body.getBody() << std::endl;
+	//std::cout << body.getBody() << std::endl;
 
 	std::cout << "---- response 출력 끝 ----\n" << std::endl;
 }
@@ -129,11 +128,10 @@ std::string		getCurrentTime()
 HttpResponseHeader	HttpResponse::makeResponseHeader(const PathInfo& pathInfo, const size_t bodySize)
 {
 	HttpResponseHeader	header;
-	(void)pathInfo;
+	
 	header.setDate(getCurrentTime());
 	header.setServer(SERVER_NAME);
-	header.setContentType("text/html");
-	//header.setContentType(pathInfo.getFileType());
+	header.setContentType(pathInfo.getFileType());
 	header.setTransferEncoding("identity");
 	header.setContentLength(bodySize);
 	

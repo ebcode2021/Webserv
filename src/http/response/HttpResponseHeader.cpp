@@ -87,8 +87,8 @@ std::string		HttpResponseHeader::getResponseHeaderToString()
 
 	responseHeader += ("Server:" + SP + this->_server + CRLF);
 	responseHeader += ("Date:" + SP + this->_date + CRLF);
-	responseHeader += "Content-Type: text/html; charset=utf-8" + CRLF;
-	//responseHeader += ("Content-Type:" + SP + this->_contentType + CRLF);
+	//responseHeader += "Content-Type: text/html; charset=utf-8" + CRLF;
+	responseHeader += ("Content-Type:" + SP + this->_contentType + CRLF);
 	responseHeader += ("Transfer-Encoding:" + SP + this->_transferEncoding + CRLF);
 	if (this->_contentLength > 0)
 		responseHeader += ("Content-Length:" + SP + itos(this->_contentLength) + CRLF);

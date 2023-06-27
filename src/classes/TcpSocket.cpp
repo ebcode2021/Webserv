@@ -9,6 +9,7 @@ TcpSocket::TcpSocket(int socketFd)
 	this->_socketInfo.sendbyte = 0;
 	this->_socketInfo.recvbyte = 0;
 	this->_readMode = HEADER;
+	this->_sendMode = SOCKET;
 	this->_clientAddr = getClientAddrBySocket();
 	this->changeToNonblocking();
 }
@@ -127,7 +128,6 @@ void	TcpSocket::setRequestHeader()
 
 	this->_request.splitHeader(header);
 	this->setBuf(body);
-	//std::cout << "buf = " << this->_socketInfo.buf << std::endl;
 }
 
 std::string TcpSocket::chunkedEncoding()
@@ -181,6 +181,30 @@ void	TcpSocket::setRequestBody()
 	}
 	this->_request.setBody(encodedBuf);
 	//std::cout << _request.getBody().getBody() << std::endl;
+}
+
+void	TcpSocket::addSendByte(int sendByte)
+{
+	this->_socketInfo.sendbyte += sendByte;
+}
+
+void	TcpSocket::bufTrim(int index) {
+	this->_socketInfo.buf.erase(0, index);
+}
+
+void	TcpSocket::resetInfo() {
+	this->bufClear();
+	this->_socketInfo.recvbyte = 0;
+	this->_socketInfo.sendbyte = 0;
+	this->setReadMode(HEADER);
+}
+
+int	TcpSocket::getSendMode() {
+	return this->_sendMode;
+}
+
+void TcpSocket::setSendMode(int mode) {
+	this->_sendMode = mode;
 }
 
 /* print */

@@ -20,10 +20,10 @@ int createSocket()
 	int	sock = socket(AF_INET, SOCK_STREAM, 0);
 	int option = 1;
     if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option)) < 0) {
-        std::cout << "setsockopt error" << std::endl;
+        printErrorWithExit(strerror(errno));
     }
 	if (sock == INVALID_SOCKET)
-		printErrorWithExit("배고파");
+		printErrorWithExit(strerror(errno));
 	return (sock);
 }
 
@@ -35,7 +35,6 @@ void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &l
 
 	for (it = listenSockList.begin(); it != listenSockList.end(); it++)
 	{
-		std::cout << *it << std::endl;
 		int listenSockFd = createSocket();
 		if (listenSockFd == INVALID_SOCKET) {
 			printErrorWithExit(strerror(errno));
@@ -70,70 +69,64 @@ bool	isWriteEvent(int16_t& event)
 	return (event == EVFILT_WRITE);
 }
 
-void cgi_test(TcpSocket* sock) {
+bool	isProcEvent(int16_t& event)
+{
+	return (event == EVFILT_PROC);
+}
+
+
+
+void cgi_test(TcpSocket* sock, KqueueHandler &kq) {
 	HttpRequest request = sock->getRequest();
 
+	///
 	std::string REQUEST_METHOD = request.getHttpRequestLine().getMethod();
 	std::string CONTENT_TYPE = request.getHttpRequestHeader().getContentType();
 	std::string CONTENT_LENGTH = itos(request.getHttpRequestHeader().getContentLength());
 	std::string SERVER_PROTOCOL = HTTP_VERSION;
 	std::string PATH_INFO = "/Users/minsu/Desktop/42seoul/webserv/";
-	
-	std::cout << CONTENT_LENGTH << std::endl;
-	std::cout << sock->getBufSize() << std::endl;
-	
+	///
 	int pipefd[2];
 	pipe(pipefd);
-
-	//int stdinbackup = dup(STDIN_FILENO);
-	//int stdoutbackup = dup(STDOUT_FILENO);
-	//int stdinbackup = dup(STDIN_FILENO);
-	
-
 	pid_t pid = fork();
+
 	if (pid == 0) {
 		dup2(pipefd[0], STDIN_FILENO);
-
 		setenv("REQUEST_METHOD", REQUEST_METHOD.c_str(), 1);
 		setenv("CONTENT_TYPE", CONTENT_TYPE.c_str(), 1);
 		setenv("CONTENT_LENGTH", CONTENT_LENGTH.c_str(), 1);
 		setenv("SERVER_PROTOCOL", SERVER_PROTOCOL.c_str(), 1);
 		setenv("PATH_INFO", PATH_INFO.c_str(), 1);
-	//	setenv("SCRIPT_NAME", "hello_cgi.py", 1);
 
-		std::cout << CONTENT_TYPE << std::endl;
-
-		// setenv("DOCUMENT_ROOT", DEFAULT_ROOT.c_str(), 1);
-		setenv("SCRIPT_NAME", "uploadtest.php", 1);
-		setenv("SCRIPT_FILENAME", "uploadtest.php", 1);
+		setenv("SCRIPT_NAME", "upload.php", 1);
+		setenv("SCRIPT_FILENAME", "upload.php", 1);
 		setenv("REDIRECT_STATUS", "200", 1);
 		
 		//const char *argv[3] = {"/usr/bin/python3", "/Users/minsu/Desktop/42seoul/webserv/hello_cgi.py", NULL};
-
 		//execv("/usr/bin/python3", (char**)argv);
-
 		execv("/Users/minsu/Desktop/42seoul/webserv/php-cgi", NULL);
-		
 		exit(1);
 	}
 	else {
-		dup2(pipefd[1], STDOUT_FILENO);
-		int sendbyte = 0;
-		while (true)
-		{
-		 	int readbyte = write(pipefd[1], sock->getBufToCStr() + sendbyte, sock->getBufSize() - sendbyte);
-			std::cerr << "readbyte = " << readbyte << std::endl;
-			if (readbyte == -1)
-				continue ;
-			else if (readbyte == 0)
-				break ;
-			else
-				sendbyte += readbyte;
-		}
-		
+		// int sendbyte = 0;
+		// while (true)
+		// {
+		//  	int readbyte = write(pipefd[1], sock->getBufToCStr() + sendbyte, sock->getBufSize() - sendbyte);
+		// 	std::cerr << "readbyte = " << readbyte << std::endl;
+		// 	if (readbyte == -1)
+		// 		continue ;
+		// 	else if (readbyte == 0)
+		// 		break ;
+		// 	else
+		// 		sendbyte += readbyte;
+		// }
+		TcpSocket *newSock = new TcpSocket(pipefd[1]);
+		newSock->setBuf(sock->getBuf());
+		newSock->setSendMode(CGI);
+		sock->bufClear();
+		kq.changeEvent(pipefd[1], EVFILT_WRITE, EV_ADD, 0, 0, newSock);
+		kq.changeEvent(pid, EVFILT_PROC, EV_ADD, NOTE_EXIT, 0, sock);
 	}
-	//dup2(STDOUT_FILENO, stdoutbackup);
-	
 }
 
 int main(int argc, char *argv[])
@@ -142,6 +135,8 @@ int main(int argc, char *argv[])
 	//Config::fileCheck(argc, argv);
 
 	Config	config(argv[1]);
+
+	std::cout << "server start" << std::endl;
 
 	std::set<int>				listenSockFdList;
 	KqueueHandler				kqHandler;
@@ -165,7 +160,7 @@ int main(int argc, char *argv[])
 			{
 				if (isListenSocketEvent(listenSockFdList, curEvent.ident) == true)
 				{
-					int clientSock = sockEventHandler.socketAccept(); // 새로운 클라이언트
+					int clientSock = sockEventHandler.sockAccept(); // 새로운 클라이언트
 					if (clientSock == INVALID_SOCKET)
 						continue ;
 					TcpSocket *clientSocket = new TcpSocket(clientSock);
@@ -174,27 +169,21 @@ int main(int argc, char *argv[])
 				else // client 소켓이면
 				{
 					if (sockEventHandler.dataRecv() <= 0)
-					{
 						sockEventHandler.closeSocket();
-					}
 					else 
 					{
 						if (curSock->getReadMode() == HEADER) 
 						{
 							curSock->setRequestHeader();
 							curSock->changeReadMode();
-							curSock->getRequest().printInfo();
+							//curSock->getRequest().printInfo();
 						}
 						if (curSock->getReadMode() != END)
 							curSock->setRequestBody();
 						if (curSock->getReadMode() == END)
 						{
-							std::cout << "--------------------------" << std::endl;
-
-							// test code
 							if (curSock->getRequest().getHttpRequestLine().getMethod() == "POST") {
-								cgi_test(curSock);
-								//exit(1);
+								cgi_test(curSock, kqHandler);
 							}
 							else
 							{
@@ -214,14 +203,10 @@ int main(int argc, char *argv[])
 										//session.printInfo();
 									}
 								}
-					
-								//response.printHttpResponse();
 								curSock->setResponse(response);
-		
+								curSock->setBuf(curSock->getResponse().getResponseToString());
+								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
-							
-							//curSock->getResponse().printHttpResponse();
-							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 						}
 					}
 				}
@@ -229,15 +214,27 @@ int main(int argc, char *argv[])
 			else if (isWriteEvent(curEvent.filter) == true)
 			{
 				//curSock->getResponse().printHttpResponse();
-				int sendsize = sockEventHandler.dataSend();
-				//std::cout << "sendsize :  " << sendsize << std::endl;
-				curSock->bufClear();
-				curSock->setReadMode(HEADER);
-				sendsize = 10;
-				if (sendsize == -1 || curSock->getRequest().getHttpRequestHeader().getConnection() != "keep-alive") 
-					sockEventHandler.closeSocket();
+				int sendbyte;
+				if (curSock->getSendMode() == SOCKET)
+					sendbyte = sockEventHandler.dataSend();
 				else
-					kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
+					sendbyte = write(curSock->getSockFd(), curSock->getBufToCStr(), curSock->getBufSize());
+				if (sendbyte == -1) 
+					sockEventHandler.closeSocket();
+				else if (curSock->getBufSize() > static_cast<size_t>(sendbyte)) 
+					curSock->bufTrim(sendbyte);
+				else {
+					if (curSock->getRequest().getHttpRequestHeader().getConnection() != "keep-alive")
+						sockEventHandler.closeSocket();
+					else {
+						curSock->resetInfo();
+						kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
+					}
+				}
+			}
+			else if (isProcEvent(curEvent.filter) == true)
+			{
+				std::cout << "자식 종료 감지 성공" << std::endl;
 			}
 		}
 	}

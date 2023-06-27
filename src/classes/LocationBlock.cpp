@@ -13,12 +13,6 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 
 	for (size_t i = 0; i < locationBlock.size(); i++)
 	{
-		std::cout << i << " = " << locationBlock[i] << std::endl;
-	}
-	std::cout << "출력 끝" << std::endl;
-
-	for (size_t i = 0; i < locationBlock.size(); i++)
-	{
 		splittedLine = split(locationBlock[i], static_cast<std::string>(WHITESPACE) + ";");
 		if (splittedLine[0].compare("location") == 0) {
 			setLocationPath(splittedLine);

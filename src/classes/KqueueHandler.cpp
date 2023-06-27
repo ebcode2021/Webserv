@@ -39,7 +39,7 @@ void	KqueueHandler::eventListReset() {
 void	KqueueHandler::eventUpdate() {
 	int ret = kevent(this->kq, &this->changeList[0], this->changeList.size(), NULL, 0, NULL);
 	if (ret == -1) {
-		std::cout << "등록 실패" << std::endl;
+	//	std::cout << "등록 실패" << std::endl;
 		printErrorWithExit(strerror(errno));
 	}
 	this->changeListClear();

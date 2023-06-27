@@ -22,6 +22,12 @@ enum readMode
 	END,
 };
 
+enum sendMode
+{
+	SOCKET,
+	CGI,
+};
+
 enum	PathType
 {
 	P_FILE,

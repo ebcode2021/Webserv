@@ -44,7 +44,6 @@ void	HttpRequest::setHeaderField(std::map<std::string, std::string> headerMap)
 		std::string fieldName = it->first;
 		std::string fieldValue = it->second;
 
-		std::cout << fieldName << ": " << fieldValue << std::endl;
 
 		for (size_t idx = 0; idx < REQUEST_HEADER_SIZE; idx++)
 		{

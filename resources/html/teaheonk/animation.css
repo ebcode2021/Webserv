@@ -1,0 +1,83 @@
+@keyframes bounce {
+  0% {
+    transform: translateY(-50%);
+    animation-timing-function: cubic-bezier(0.51, 0.01, 0.79, 0.02);
+  }
+  15% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.19, 1, 0.7, 1);
+  }
+  25% {
+    transform: translateY(-20%);
+    animation-timing-function: cubic-bezier(0.51, 0.01, 0.79, 0.02);
+  }
+  32.5% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.19, 1, 0.7, 1);
+  }
+  40% {
+    transform: translateY(-10%);
+    animation-timing-function: cubic-bezier(0.51, 0.01, 0.79, 0.02);
+  }
+  45% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.19, 1, 0.7, 1);
+  }
+  50% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0.51, 0.01, 0.79, 0.02);
+  }
+  56% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.19, 1, 0.7, 1);
+  }
+  60% {
+    transform: translateY(-2%);
+    animation-timing-function: cubic-bezier(0.51, 0.01, 0.79, 0.02);
+  }
+  64% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.19, 1, 0.7, 1);
+  }
+  66% {
+    transform: translateY(-0.5%);
+    animation-timing-function: cubic-bezier(0.51, 0.01, 0.79, 0.02);
+  }
+  70%,
+  100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.19, 1, 0.7, 1);
+  }
+}
+
+@keyframes move-left {
+  0% {
+    transform: translateX(-8%);
+    opacity: 0;
+  }
+  25% {
+    transform: translateX(-8%);
+    animation-timing-function: cubic-bezier(1, -1.92, 0.95, 0.89);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes move-right {
+  0% {
+    transform: translateX(8%);
+    opacity: 0;
+  }
+  25% {
+    transform: translateX(8%);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(1, -1.92, 0.95, 0.89);
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

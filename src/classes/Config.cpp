@@ -24,10 +24,11 @@ Config::Config(std::string fileName)
 		ServerBlock server = this->_serverList[i].getServerBlock();
 		std::vector<int> listenSockList = server.getListenList();
 
-		for (size_t j = 0; j < listenSockList.size(); j++)
-			this->_listenSockList.insert(listenSockList[i]);
+		for (size_t j = 0; j < listenSockList.size(); j++) {
+			this->_listenSockList.insert(listenSockList[j]);
+		}
 	}
-	std::cout << "설정 끝" << std::endl;
+	
 }
 
 /* getter, setter */
@@ -74,7 +75,6 @@ bool	Config::fileCheck(int argc, char *argv[])
 		return (true);
 	else
 	{
-		std::cout << TEST_SUCCESS << std::endl;
 		return (false);
 	}
 }
@@ -89,12 +89,8 @@ void	Config::addServer(std::ifstream & confFile)
 	
 	ServerBlock	serverBlock;
 	
-	std::cout << "\n";
-	std::cout << "서버 클래스 저장 시작" << std::endl;
-
 	while (std::getline(confFile, line))
 	{
-		std::cout << line << std::endl;
 		splittedLine = split(line, WHITESPACE + ";");
 		if (splittedLine.size() == 0)
 			continue ;
@@ -105,18 +101,11 @@ void	Config::addServer(std::ifstream & confFile)
 		else
 			serverBlock.configsetting(splittedLine);
 	}
-
-	std::cout << "서버 클래스 저장 완료" << std::endl;
-
-	std::cout << "\n";
-	std::cout << "로케이션 클래스 저장 시작" << std::endl;
 	
 	locationBlock.push_back(LocationBlock(serverBlock));
-	
 	for (size_t i = 0; i < locationBlockInfo.size(); i++)
 		locationBlock.push_back(LocationBlock(serverBlock, locationBlockInfo[i]));
 
-	std::cout << "로케이션 클래스 저장 완료" << std::endl;
 	this->_serverList.push_back(ServerInfo(serverBlock, locationBlock));
 }
 
