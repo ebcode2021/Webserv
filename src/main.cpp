@@ -4,6 +4,7 @@
 #include "SocketEventHandler.hpp"
 #include "HttpResponse.hpp"
 #include "SessionStorage.hpp"
+#include "CgiMetadata.hpp"
 
 
 /*
@@ -74,58 +75,39 @@ bool	isProcEvent(int16_t& event)
 	return (event == EVFILT_PROC);
 }
 
-
+void	changeOpt(int fd, int option) {
+	int flags = fcntl(fd, F_GETFL, 0);
+	flags |= option;
+	fcntl(fd, F_SETFL, flags);
+}
 
 void cgi_test(TcpSocket* sock, KqueueHandler &kq) {
-	HttpRequest request = sock->getRequest();
 
-	///
-	std::string REQUEST_METHOD = request.getHttpRequestLine().getMethod();
-	std::string CONTENT_TYPE = request.getHttpRequestHeader().getContentType();
-	std::string CONTENT_LENGTH = itos(request.getHttpRequestHeader().getContentLength());
-	std::string SERVER_PROTOCOL = HTTP_VERSION;
-	std::string PATH_INFO = "/Users/minsu/Desktop/42seoul/webserv/";
-	///
+	HttpRequest request = sock->getRequest();
+	CgiMetadata data(request);
+	//char **envp = data.createEnvp();
+
 	int pipefd[2];
 	pipe(pipefd);
 	pid_t pid = fork();
 
 	if (pid == 0) {
 		dup2(pipefd[0], STDIN_FILENO);
-		setenv("REQUEST_METHOD", REQUEST_METHOD.c_str(), 1);
-		setenv("CONTENT_TYPE", CONTENT_TYPE.c_str(), 1);
-		setenv("CONTENT_LENGTH", CONTENT_LENGTH.c_str(), 1);
-		setenv("SERVER_PROTOCOL", SERVER_PROTOCOL.c_str(), 1);
-		setenv("PATH_INFO", PATH_INFO.c_str(), 1);
-
-		setenv("SCRIPT_NAME", "upload.php", 1);
-		setenv("SCRIPT_FILENAME", "upload.php", 1);
-		setenv("REDIRECT_STATUS", "200", 1);
-		
-		//const char *argv[3] = {"/usr/bin/python3", "/Users/minsu/Desktop/42seoul/webserv/hello_cgi.py", NULL};
-		//execv("/usr/bin/python3", (char**)argv);
-		execv("/Users/minsu/Desktop/42seoul/webserv/php-cgi", NULL);
+		//dup2(pipefd[1], STDOUT_FILENO);
+		std::string requestUrl = request.getHttpRequestLine().getRequestURI();
+		std::string path = ROOT_PATH + requestUrl.substr(1, requestUrl.size());
+		char *argv[] = {strdup(path.c_str()), NULL};
+		execve(CGI_PATH.c_str(), argv, data.createEnvp());
+		std::cout << path << std::endl;
 		exit(1);
 	}
 	else {
-		// int sendbyte = 0;
-		// while (true)
-		// {
-		//  	int readbyte = write(pipefd[1], sock->getBufToCStr() + sendbyte, sock->getBufSize() - sendbyte);
-		// 	std::cerr << "readbyte = " << readbyte << std::endl;
-		// 	if (readbyte == -1)
-		// 		continue ;
-		// 	else if (readbyte == 0)
-		// 		break ;
-		// 	else
-		// 		sendbyte += readbyte;
-		// }
-		TcpSocket *newSock = new TcpSocket(pipefd[1]);
-		newSock->setBuf(sock->getBuf());
-		newSock->setSendMode(CGI);
-		sock->bufClear();
-		kq.changeEvent(pipefd[1], EVFILT_WRITE, EV_ADD, 0, 0, newSock);
-		kq.changeEvent(pid, EVFILT_PROC, EV_ADD, NOTE_EXIT, 0, sock);
+		changeOpt(pipefd[0], O_NONBLOCK);
+		changeOpt(pipefd[1], O_NONBLOCK);
+		sock->setCgiInfo(new CgiInfo(pid, pipefd[0], pipefd[1]));
+		sock->setSendMode(CGI);
+		kq.changeEvent(sock->getCgiInfo()->getWriteFd(), EVFILT_WRITE, EV_ADD, 0, 0, sock);
+		kq.changeEvent(sock->getCgiInfo()->getPid(), EVFILT_PROC, EV_ADD, NOTE_EXIT, 0, sock);
 	}
 }
 
@@ -214,21 +196,26 @@ int main(int argc, char *argv[])
 			else if (isWriteEvent(curEvent.filter) == true)
 			{
 				//curSock->getResponse().printHttpResponse();
-				int sendbyte;
+				int sendbyte = 0;
 				if (curSock->getSendMode() == SOCKET)
 					sendbyte = sockEventHandler.dataSend();
-				else
-					sendbyte = write(curSock->getSockFd(), curSock->getBufToCStr(), curSock->getBufSize());
+				else if (curSock->getSendMode() == CGI)
+					sendbyte = write(curSock->getCgiInfo()->getWriteFd(), curSock->getBufToCStr(), curSock->getBufSize());
 				if (sendbyte == -1) 
 					sockEventHandler.closeSocket();
 				else if (curSock->getBufSize() > static_cast<size_t>(sendbyte)) 
 					curSock->bufTrim(sendbyte);
 				else {
-					if (curSock->getRequest().getHttpRequestHeader().getConnection() != "keep-alive")
-						sockEventHandler.closeSocket();
-					else {
-						curSock->resetInfo();
-						kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
+					if (curSock->getSendMode() == SOCKET) {
+						if (curSock->getRequest().getHttpRequestHeader().getConnection() != "keep-alive")
+							sockEventHandler.closeSocket();
+						else {
+							curSock->resetInfo();
+							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
+						}
+					}
+					else if (curSock->getSendMode() == CGI) {
+						close(curSock->getCgiInfo()->getWriteFd());
 					}
 				}
 			}

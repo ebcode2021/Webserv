@@ -22,6 +22,8 @@ SRCS =  main.cpp	\
 		classes/KqueueHandler.cpp	\
 		classes/SocketEventHandler.cpp \
 		classes/SessionStorage.cpp	\
+		classes/CgiInfo.cpp			\
+		classes/CgiMetadata.cpp		\
 		http/request/HttpRequest.cpp \
 		http/request/HttpRequestHeader.cpp \
 		http/request/HttpRequestLine.cpp \

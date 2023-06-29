@@ -10,6 +10,7 @@ TcpSocket::TcpSocket(int socketFd)
 	this->_socketInfo.recvbyte = 0;
 	this->_readMode = HEADER;
 	this->_sendMode = SOCKET;
+	this->_cgiInfo = NULL;
 	this->_clientAddr = getClientAddrBySocket();
 	this->changeToNonblocking();
 }
@@ -27,7 +28,7 @@ int				TcpSocket::getReadMode() {
 	return this->_readMode;
 }
 
-HttpRequest&	TcpSocket::getRequest() {
+HttpRequest	&TcpSocket::getRequest() {
 	return(this->_request);
 }
 
@@ -205,6 +206,14 @@ int	TcpSocket::getSendMode() {
 
 void TcpSocket::setSendMode(int mode) {
 	this->_sendMode = mode;
+}
+
+void TcpSocket::setCgiInfo(CgiInfo *cgiInfo) {
+	this->_cgiInfo = cgiInfo;
+}
+
+CgiInfo	*TcpSocket::getCgiInfo() {
+	return this->_cgiInfo;
 }
 
 /* print */

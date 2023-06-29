@@ -2,6 +2,7 @@
 # define TCPSOCKET_HPP
 
 # include "webserv.hpp"
+# include "CgiInfo.hpp"
 # include "HttpRequest.hpp"
 # include "HttpResponse.hpp"
 
@@ -13,42 +14,48 @@ class TcpSocket
 		HttpResponse	_response;
 		int				_readMode;
 		int				_sendMode;
+		CgiInfo			*_cgiInfo;
 		std::string		_clientAddr;
+		
 
 	public :
 		// constructor
 		TcpSocket();
 		TcpSocket(int);
 		
-		// getter, setter
+		// getter
 		int	 			getSockFd();
 		int	 			getSendByte();
 		size_t 			getRecvByte();
 		int				getReadMode();
 		std::string		getBuf();
-		void			setBuf(const std::string&);
-		HttpRequest&	getRequest();
+		HttpRequest&		getRequest();
 		HttpResponse	getResponse();
 		std::string		getClientAddr();
-		void			setReadMode(int);
 		int				getSendMode();
-		void			setSendMode(int);
+		std::string		getClientAddrBySocket();
+		const char*		getBufToCStr();
+		size_t			getBufSize();
+		CgiInfo			*getCgiInfo();
 
-		// method
-		void			changeToNonblocking();
+		// setter
+		void			setBuf(const std::string&);
+		void			setReadMode(int);
+		void			setSendMode(int);
 		void			setRequest(HttpRequest&);
 		void			setResponse(HttpResponse&);
-		void			addBuf(const std::string&);
 		void			setRequestHeader();
 		void			setRequestBody();
-		std::string		getClientAddrBySocket();
-		void			addReadSize(size_t);
 		void			setBufbyIndex(int, char);
+		void			setCgiInfo(CgiInfo *);
+		
+		// method
+		void			changeToNonblocking();
+		void			addBuf(const std::string&);
+		void			addReadSize(size_t);
 		void			changeReadMode();
 		std::string 	chunkedEncoding();
 		void 			bufClear();
-		const char*		getBufToCStr();
-		size_t			getBufSize();
 		void			addSendByte(int);
 		void			bufTrim(int);
 		void			resetInfo();

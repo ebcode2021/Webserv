@@ -2,7 +2,6 @@
 // 업로드된 파일 정보 확인
 $uploadedFile = $_FILES['file'];
 
-echo "$uploadedFile";
 
 // 업로드된 파일의 임시 경로
 $tempFilePath = $uploadedFile['tmp_name'];
@@ -11,7 +10,7 @@ $tempFilePath = $uploadedFile['tmp_name'];
 $originalFileName = $uploadedFile['name'];
 
 // 저장할 파일 경로
-$destinationPath = '/Users/minsu/Desktop/42seoul/webserv/resources/upload/' . $originalFileName;
+$destinationPath = '/Users/minsukan/Desktop/42/webserv/Webserv/resources/uplod/' . $originalFileName;
 
 // 파일을 원하는 경로로 이동
 if (move_uploaded_file($tempFilePath, $destinationPath)) {

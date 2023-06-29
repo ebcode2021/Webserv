@@ -4,7 +4,7 @@
 HttpRequest::HttpRequest(){}
 
 /* getter */
-HttpRequestLine& HttpRequest::getHttpRequestLine() {
+HttpRequestLine HttpRequest::getHttpRequestLine() const {
 	return this->_httpRequestLine;
 }
 

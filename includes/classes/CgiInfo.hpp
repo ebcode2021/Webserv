@@ -1,23 +1,25 @@
 #ifndef CGIINFO_HPP
 # define CGIINFO_HPP
 
-# 
+# include "webserv.hpp"
 
 class CgiInfo
 {
 	private :
-		int pid;
-		int readFd;
-		int writeFd;
+		int _pid;
+		int _readFd;
+		int _writeFd;
 	public :
 		CgiInfo(int, int, int);
 
-		// getter, setter
+		// getter
 		int		getReadFd();
-		void	SetReadFd(int);
 		int		getWriteFd();
-		void	SetWriteFd(int);
 		int		getPid();
+		
+		// setter
+		void	SetReadFd(int);
+		void	SetWriteFd(int);
 		void	SetPid(int);
 
 };
