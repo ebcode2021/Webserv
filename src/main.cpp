@@ -105,7 +105,7 @@ void cgi_test(TcpSocket* sock, KqueueHandler &kq) {
 		changeOpt(pipefd[0], O_NONBLOCK);
 		changeOpt(pipefd[1], O_NONBLOCK);
 		sock->setCgiInfo(new CgiInfo(pid, pipefd[0], pipefd[1]));
-		sock->setSendMode(CGI);
+		sock->setSendMode(PROCESS);
 		kq.changeEvent(sock->getCgiInfo()->getWriteFd(), EVFILT_WRITE, EV_ADD, 0, 0, sock);
 		kq.changeEvent(sock->getCgiInfo()->getPid(), EVFILT_PROC, EV_ADD, NOTE_EXIT, 0, sock);
 	}
@@ -146,6 +146,7 @@ int main(int argc, char *argv[])
 					if (clientSock == INVALID_SOCKET)
 						continue ;
 					TcpSocket *clientSocket = new TcpSocket(clientSock);
+					// kq에 sock을 read-event로 등록
 					kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket); // udata에는 클라이언트 소켓 정보.(udata)
 				}
 				else // client 소켓이면
@@ -187,6 +188,7 @@ int main(int argc, char *argv[])
 								}
 								curSock->setResponse(response);
 								curSock->setBuf(curSock->getResponse().getResponseToString());
+								// kq에 write event로 등록
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							}
 						}
@@ -196,17 +198,21 @@ int main(int argc, char *argv[])
 			else if (isWriteEvent(curEvent.filter) == true)
 			{
 				//curSock->getResponse().printHttpResponse();
+				// response 재료는. 만드는거고.
+				
 				int sendbyte = 0;
-				if (curSock->getSendMode() == SOCKET)
+				if (curSock->getSendMode() == CLIENT)
 					sendbyte = sockEventHandler.dataSend();
-				else if (curSock->getSendMode() == CGI)
+				else if (curSock->getSendMode() == PROCESS)
 					sendbyte = write(curSock->getCgiInfo()->getWriteFd(), curSock->getBufToCStr(), curSock->getBufSize());
+	// wait.
 				if (sendbyte == -1) 
 					sockEventHandler.closeSocket();
-				else if (curSock->getBufSize() > static_cast<size_t>(sendbyte)) 
+				else if (curSock->getBufSize() > static_cast<size_t>(sendbyte))
 					curSock->bufTrim(sendbyte);
 				else {
-					if (curSock->getSendMode() == SOCKET) {
+					
+					if (curSock->getSendMode() == CLIENT) {
 						if (curSock->getRequest().getHttpRequestHeader().getConnection() != "keep-alive")
 							sockEventHandler.closeSocket();
 						else {
@@ -214,14 +220,16 @@ int main(int argc, char *argv[])
 							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, curSock);
 						}
 					}
-					else if (curSock->getSendMode() == CGI) {
+					else if (curSock->getSendMode() == PROCESS) {
 						close(curSock->getCgiInfo()->getWriteFd());
 					}
+
 				}
 			}
 			else if (isProcEvent(curEvent.filter) == true)
 			{
 				std::cout << "자식 종료 감지 성공" << std::endl;
+
 			}
 		}
 	}
