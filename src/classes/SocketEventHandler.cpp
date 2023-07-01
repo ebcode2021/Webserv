@@ -47,6 +47,8 @@ int SocketEventHandler::dataRecv() {
 	{
 		if ((readByte = recv(sockFd, buf, BUFSIZE, 0)) == -1)
 			return (-1);
+		//std::cout << std::string(buf, readByte);
+		//std::cout << "끝-----------------------------" << std::endl;
 		if (readByte > 0) {
 			this->_socket->addBuf(std::string(buf, readByte));
 			std::memset(buf, 0, BUFSIZE);

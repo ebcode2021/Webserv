@@ -129,6 +129,7 @@ void	TcpSocket::setRequestHeader()
 
 	this->_request.splitHeader(header);
 	this->setBuf(body);
+	this->changeReadMode();
 }
 
 std::string TcpSocket::chunkedEncoding()
@@ -171,6 +172,7 @@ void	TcpSocket::setRequestBody()
 		this->addReadSize(encodedBuf.size());
 		this->_request.setBody(encodedBuf);
 		std::cout << "recvbyte = " << this->getRecvByte() << "\ncontentlength = " << this->_request.getHttpRequestHeader().getContentLength() << std::endl;
+		
 		if (this->getRecvByte() == this->_request.getHttpRequestHeader().getContentLength())
 			this->setReadMode(END);
 	}
@@ -181,7 +183,6 @@ void	TcpSocket::setRequestBody()
 		this->_request.setBody(encodedBuf);
 	}
 	this->_request.setBody(encodedBuf);
-	//std::cout << _request.getBody().getBody() << std::endl;
 }
 
 void	TcpSocket::addSendByte(int sendByte)
@@ -198,6 +199,7 @@ void	TcpSocket::resetInfo() {
 	this->_socketInfo.recvbyte = 0;
 	this->_socketInfo.sendbyte = 0;
 	this->setReadMode(HEADER);
+	this->setSendMode(WAIT);
 }
 
 int	TcpSocket::getSendMode() {
@@ -214,6 +216,15 @@ void TcpSocket::setCgiInfo(CgiInfo *cgiInfo) {
 
 CgiInfo	*TcpSocket::getCgiInfo() {
 	return this->_cgiInfo;
+}
+
+bool	TcpSocket::isHttpRequest() {
+	std::string	request = this->getBuf();
+	size_t		doubleCRLFIndex = request.find(DOUBLE_CRLF);
+
+	if (doubleCRLFIndex != std::string::npos)
+		return (true);
+	return (false);
 }
 
 /* print */

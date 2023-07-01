@@ -29,7 +29,7 @@ class TcpSocket
 		size_t 			getRecvByte();
 		int				getReadMode();
 		std::string		getBuf();
-		HttpRequest&		getRequest();
+		HttpRequest&	getRequest();
 		HttpResponse	getResponse();
 		std::string		getClientAddr();
 		int				getSendMode();
@@ -59,6 +59,9 @@ class TcpSocket
 		void			addSendByte(int);
 		void			bufTrim(int);
 		void			resetInfo();
+
+		// new 추가
+		bool			isHttpRequest();
 
 		// print
 		void 			printRequestInfo();

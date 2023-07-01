@@ -6,7 +6,7 @@ std::string	HttpRequestLine::getMethod() const {
 }
 
 std::string	HttpRequestLine::getRequestURI() const {
-	return(this->_requestURI);
+	return(this->extractURL());
 }
 
 std::string	HttpRequestLine::getVersion() const {
@@ -35,6 +35,25 @@ bool	HttpRequestLine::isRecognizedMethod(const std::string& method)
 			return (true);
 	}
 	return (false);
+}
+
+std::string	HttpRequestLine::getQueryString() const
+{
+	size_t	pos = this->_requestURI.find('?');
+
+	if (pos == std::string::npos)
+		return "";
+	return (this->_requestURI.substr(pos + 1));
+}
+
+std::string	HttpRequestLine::extractURL() const
+{
+	size_t	pos = this->_requestURI.find('?');
+	
+	if (pos != std::string::npos)
+		return (this->_requestURI.substr(0, pos));
+	else
+		return (this->_requestURI);
 }
 
 /* exception */

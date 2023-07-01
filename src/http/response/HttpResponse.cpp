@@ -55,6 +55,7 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, 
 
 		if (method == "GET")
 			pathInfo.processGetRequest(locationBlock);
+
 		else if (method == "DELETE")
 			pathInfo.processDeleteRequest();
 	}
