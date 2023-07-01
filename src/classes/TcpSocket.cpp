@@ -166,12 +166,9 @@ void	TcpSocket::setRequestBody()
 
 	if (this->getReadMode() == IDENTITY)
 	{
-		std::cout << "IDENTY" << std::endl;
 		encodedBuf = this->getBuf();
-		std::cout << "encodedBuf size = " << encodedBuf.size() << std::endl;
 		this->addReadSize(encodedBuf.size());
 		this->_request.setBody(encodedBuf);
-		std::cout << "recvbyte = " << this->getRecvByte() << "\ncontentlength = " << this->_request.getHttpRequestHeader().getContentLength() << std::endl;
 		
 		if (this->getRecvByte() == this->_request.getHttpRequestHeader().getContentLength())
 			this->setReadMode(END);

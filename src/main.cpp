@@ -93,19 +93,20 @@ void cgi_test(TcpSocket* sock, KqueueHandler &kq) {
 
 	if (pid == 0) {
 		dup2(pipefd[0], STDIN_FILENO);
-		dup2(pipefd[1], STDOUT_FILENO);
+		//dup2(pipefd[1], STDOUT_FILENO);
 		std::string requestUrl = request.getHttpRequestLine().getRequestURI();
 		std::string path = DEFAULT_ROOT + requestUrl;
-		char *argv[] = {strdup(path.c_str()), NULL};
+		//std::string path = "/Users/minsu/Desktop/42seoul/webserv/test.py";
+		char *argv[] = {strdup(CGI_PATH.c_str()), strdup(path.c_str()), NULL};
 		std::cout << "execve 직전" << std::endl;
-		execve(CGI_PATH.c_str(), argv, data.createEnvp());
+		execve(argv[0], argv, data.createEnvp());
 		std::cout << "실패하면 뜨는 경로 : path "<< std::endl;
 		exit(1);
 	}
 	else {
 		// waitpid로 병렬. 다시 끝날때까지 다시.
-		//changeOpt(pipefd[0], O_NONBLOCK);
-		//changeOpt(pipefd[1], O_NONBLOCK);
+		changeOpt(pipefd[0], O_NONBLOCK);
+		changeOpt(pipefd[1], O_NONBLOCK);
 		sock->setCgiInfo(new CgiInfo(pid, pipefd[0], pipefd[1]));
 		sock->setSendMode(PROCESS);
 		kq.changeEvent(pipefd[1] , EVFILT_WRITE, EV_ADD, 0, 0, sock);
@@ -184,7 +185,8 @@ int main(int argc, char *argv[])
 			else if (isProcEvent(curEvent.filter) == true)
 			{
 				std::cout << "자식 종료 감지 성공" << std::endl;
-				kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
+				//kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
+				kqHandler.changeEvent(curSock->getCgiInfo()->getReadFd(), EVFILT_READ, EV_ADD, NULL, NULL, curSock);
 				curSock->setSendMode(WAIT);
 			}
 			else if (isWriteEvent(curEvent.filter) == true)
@@ -193,6 +195,7 @@ int main(int argc, char *argv[])
 				if (curSock->getSendMode() == WAIT)
 				{
 					HttpResponse	response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr(), sessionStorage);
+					response.printHttpResponse();
 					std::string		reqURL = curSock->getRequest().getHttpRequestLine().getRequestURI();
 					std::string		sessionId = curSock->getRequest().getHttpRequestHeader().getSessionIdByCookie();
 					if (reqURL != FAVICON_URL)
@@ -242,7 +245,6 @@ int main(int argc, char *argv[])
 						}
 					}
 					else if (curSock->getSendMode() == PROCESS) {
-						std::cout << curSock->getBuf() << std::endl;
 						close(curSock->getCgiInfo()->getWriteFd());
 					}
 
