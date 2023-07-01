@@ -22,6 +22,7 @@ const std::size_t	CLIENT_BODY_SIZE = 1048576;
 
 /* Related to HTTP */
 const std::string	HTTP_VERSION = "HTTP/1.1";
+const std::string	FAVICON_URL = "/favicon.ico";
 
 static const	std::string METHODS[] = {
 	"GET", "POST", "DELETE"

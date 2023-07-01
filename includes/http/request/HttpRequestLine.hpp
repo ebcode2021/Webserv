@@ -23,6 +23,8 @@ class	HttpRequestLine
 
 		// method
 		static bool		isRecognizedMethod(const std::string&);
+		std::string		getQueryString() const;
+		std::string		extractURL() const;
 
 		// exception
 		void		validateRequestLine(const LimitExcept&, const std::string&);

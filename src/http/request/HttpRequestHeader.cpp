@@ -66,8 +66,7 @@ void	HttpRequestHeader::setCookie(std::string& cookie) {
 
 void	HttpRequestHeader::validateRequestHeader(LocationBlock& locationBlock)
 {
-
-	if(this->_contentLength > locationBlock.getClientMaxBodySize())
+	if (this->_contentLength > locationBlock.getClientMaxBodySize())
 		throw ResponseException(413);
 }
 
