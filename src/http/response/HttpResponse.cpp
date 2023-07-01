@@ -71,8 +71,6 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, 
 		responseLine.setHttpStatus(ex.httpStatus());
 	}
 	// post나 delete일때, body 넘겨줄지?
-	if ()
-	return;
 	if (method == "GET" && responseLine.getHttpStatus().getStatusCode() != 304)
 		responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
 	responseHeader = makeResponseHeader(pathInfo, responseBody.getBodySize());
