@@ -14,7 +14,21 @@ PathInfo::PathInfo(const std::string &path)
 	this->_returnPage = "";
 }
 
+PathInfo::PathInfo(const LocationBlock& locationBlock)
+{
+	this->_locationBlock = locationBlock;
+	this->_path = locationBlock.getFullPath();
+	this->_pathType = determinePathType();
+	this->_fileType = determineFileType();
+	this->_access = isAccess();
+	this->_autoIndex = false;
+	this->_returnPage = "";
+}
+
 /* getter, setter */
+LocationBlock	PathInfo::getLocationBlock() const {
+	return(this->_locationBlock);
+}
 PathType	PathInfo::getPathType() const {
 	return(this->_pathType);
 }
@@ -45,6 +59,10 @@ void		PathInfo::setAutoIndex(bool value) {
 
 void	PathInfo::setReturnPage(const std::string& path) {
 	this->_returnPage = path;
+}
+
+void	PathInfo::setPostFileType() {
+	this->_fileType = "multipart/form-data";
 }
 
 /* method */

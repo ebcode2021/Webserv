@@ -9,7 +9,7 @@ TcpSocket::TcpSocket(int socketFd)
 	this->_socketInfo.sendbyte = 0;
 	this->_socketInfo.recvbyte = 0;
 	this->_readMode = HEADER;
-	this->_sendMode = WAIT;
+	this->_sendMode = CLIENT;
 	this->_cgiInfo = NULL;
 	this->_clientAddr = getClientAddrBySocket();
 	this->changeToNonblocking();

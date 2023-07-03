@@ -99,3 +99,18 @@ std::string		HttpResponseHeader::getResponseHeaderToString()
 
 	return (responseHeader);
 }
+
+void	HttpResponseHeader::handleSession(SessionStorage& sessionStorage, std::string& reqURL, const std::string& sessionId)
+{
+	if (reqURL != FAVICON_URL)
+	{
+		if (sessionStorage.isSession(sessionId) == true)
+			setSetCookie("sessionId=" + sessionId);
+		else
+		{
+			HttpSession	session(reqURL);
+			sessionStorage.addSession(session);
+			setSetCookie("sessionId=" + session.getSessionId());
+		}
+	}
+}

@@ -96,7 +96,7 @@ void cgi_test(TcpSocket* sock, KqueueHandler &kq) {
 		//dup2(pipefd[1], STDOUT_FILENO);
 		std::string requestUrl = request.getHttpRequestLine().getRequestURI();
 		std::string path = DEFAULT_ROOT + requestUrl;
-		//std::string path = "/Users/minsu/Desktop/42seoul/webserv/test.py";
+
 		char *argv[] = {strdup(CGI_PATH.c_str()), strdup(path.c_str()), NULL};
 		std::cout << "execve 직전" << std::endl;
 		execve(argv[0], argv, data.createEnvp());
@@ -147,11 +147,10 @@ int main(int argc, char *argv[])
 				{
 					int clientSock = sockEventHandler.sockAccept();
 			
-					if (clientSock != INVALID_SOCKET)
-					{
-						TcpSocket *clientSocket = new TcpSocket(clientSock);
-						kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
-					}
+					if (clientSock == INVALID_SOCKET)
+						continue;
+					TcpSocket *clientSocket = new TcpSocket(clientSock);
+					kqHandler.changeEvent(clientSock, EVFILT_READ, EV_ADD, 0, 0, clientSocket);
 				}
 				else
 				{
@@ -162,69 +161,84 @@ int main(int argc, char *argv[])
 							if (curSock->isHttpRequest() == true)
 							{
 								curSock->setRequestHeader();
-								curSock->getRequest().printInfo();
 							}
 							else
+							{
 								sockEventHandler.closeSocket();
+							}
 						}
 
-						if (curSock->getReadMode() != END)
+						if (curSock->getReadMode() != END){
 							curSock->setRequestBody();
+						}
 						if (curSock->getReadMode() == END)
 						{
+							HttpRequest	request = curSock->getRequest();
+
+							// find Server block and define PathInfo
+							ServerInfo		serverInfo = config.findServerInfoByHost(request.getHttpRequestHeader().getHost());
+							PathInfo		pathInfo(serverInfo.findLocationBlockByURL(request.getHttpRequestLine().getRequestURI()));
+							
 							if (curSock->getRequest().getHttpRequestLine().getMethod() == "POST")
+							{
 								cgi_test(curSock, kqHandler);
+							}
 							else
 								kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
+							
+							// response 만들기
+							// 함수 분리 (validate)
+							// curSock->pathInfo
+							// response(errorStatus) + pathInfo.
+							HttpResponse response = HttpResponse::createResponse(pathInfo, request, curSock->getClientAddr(), sessionStorage);
+							response.printHttpResponse();
+							
+							std::string		reqURL = request.getHttpRequestLine().getRequestURI();
+							std::string		sessionId = request.getHttpRequestHeader().getSessionIdByCookie();
+					
+							response.getResponseHeader().handleSession(sessionStorage, reqURL, sessionId);
+							
+							curSock->setResponse(response);
+							curSock->setBuf(curSock->getResponse().getResponseToString());
 						}
 					}
 					else
+					{
+						std::cout << "설마 여기 들어오나? "<< std::endl;
 						sockEventHandler.closeSocket();
+						std::cout << "흠냐" << std::endl;
+
+					}
 				}
 			}
 			else if (isProcEvent(curEvent.filter) == true)
 			{
 				std::cout << "자식 종료 감지 성공" << std::endl;
 				//kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
-				kqHandler.changeEvent(curSock->getCgiInfo()->getReadFd(), EVFILT_READ, EV_ADD, NULL, NULL, curSock);
+				kqHandler.changeEvent(curSock->getCgiInfo()->getReadFd(), EVFILT_READ, EV_ADD, 0, 0, curSock);
+				
 				curSock->setSendMode(WAIT);
 			}
 			else if (isWriteEvent(curEvent.filter) == true)
 			{
 				std::cout << "Write event 입장 " << std::endl;
+
 				if (curSock->getSendMode() == WAIT)
 				{
-					HttpResponse	response = HttpResponse::createResponse(config, curSock->getRequest(), curSock->getClientAddr(), sessionStorage);
-					response.printHttpResponse();
-					std::string		reqURL = curSock->getRequest().getHttpRequestLine().getRequestURI();
-					std::string		sessionId = curSock->getRequest().getHttpRequestHeader().getSessionIdByCookie();
-					if (reqURL != FAVICON_URL)
-					{
-						if (sessionStorage.isSession(sessionId) == true)
-							response.getResponseHeader().setSetCookie("sessionId=" + sessionId);
-						else
-						{
-							HttpSession	session(reqURL);
-							sessionStorage.addSession(session);
-							response.getResponseHeader().setSetCookie("sessionId=" + session.getSessionId());
-							//session.printInfo();
-						}
-					}
-					std::cout << "response set 이전" << std::endl;
-					curSock->setResponse(response);
-					curSock->setBuf(curSock->getResponse().getResponseToString());
+					// createResponse 생성
 					curSock->setSendMode(CLIENT);
-					std::cout << "response 생성완료" << std::endl;
-				}
-				
-				///////////////
+				}	
 
 				int sendbyte = 0;
 				if (curSock->getSendMode() == CLIENT)
 					sendbyte = sockEventHandler.dataSend();
-				else if (curSock->getSendMode() == PROCESS)
+				else if (curSock->getSendMode() == PROCESS) {
 					sendbyte = write(curSock->getCgiInfo()->getWriteFd(), curSock->getBufToCStr(), curSock->getBufSize());
-			
+					std::cout << sendbyte << std::endl;
+					// cgi -> pipe
+					// cgi -> header, body
+					std::cout << "여기서 read event로 바꾸면 되지? " << std::endl;
+				}
 			// wait.
 				if (sendbyte == -1) {
 					//std::cout << "error?" << std::endl;
@@ -235,7 +249,7 @@ int main(int argc, char *argv[])
 					curSock->bufTrim(sendbyte);
 				}
 				else {
-					//std::cout << "여기저기" << std::endl;
+					std::cout << "여기저기" << std::endl;
 					if (curSock->getSendMode() == CLIENT) {
 						if (curSock->getRequest().getHttpRequestHeader().getConnection() != "keep-alive")
 							sockEventHandler.closeSocket();

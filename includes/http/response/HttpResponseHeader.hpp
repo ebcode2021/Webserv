@@ -4,6 +4,7 @@
 # include "webserv.hpp"
 # include "HttpRequest.hpp"
 # include "PathInfo.hpp"
+# include "SessionStorage.hpp"
 
 class	HttpResponseHeader
 {
@@ -37,6 +38,7 @@ class	HttpResponseHeader
 		// method
 		std::string					getResponseHeaderToString();
 		std::string					getCookieString();
+		void						handleSession(SessionStorage&, std::string&, const std::string&);
 
 		// print
 		void						printCookie();
