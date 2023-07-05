@@ -30,8 +30,10 @@ class	HttpResponse
 		void						setBody(const std::string&);
 		std::string					getBody() const;
 		HttpResponseHeader&			getResponseHeader();
+		HttpResponseLine&			getResponseLine();
 
 		// method
+		static HttpResponse			createResponse(PathInfo&, HttpRequest&, const std::string&, SessionStorage&);
 		static HttpResponse			createResponse(Config&, HttpRequest&, const std::string&, SessionStorage&);
 		static HttpBody				makeResponseBody(const PathInfo&, const HttpStatus&);
 		static HttpResponseHeader	makeResponseHeader(const PathInfo&, const size_t);

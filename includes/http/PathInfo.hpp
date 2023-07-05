@@ -3,6 +3,7 @@
 
 # include "webserv.hpp"
 # include "ResponseException.hpp"
+# include "LocationBlock.hpp"
 
 class LocationBlock;
 class ErrorPage;
@@ -10,19 +11,22 @@ class ErrorPage;
 class PathInfo
 {
 	private :
+		LocationBlock	_locationBlock;
 		PathType		_pathType;
-		std::string		_fileType;
+		std::string		_fileType;  //*
 		std::string		_path;
 		bool			_access;
-		bool			_autoIndex;
-		std::string		_returnPage;
+		bool			_autoIndex; //*
+		std::string		_returnPage; //*
 
 	public :
 		// constructor
 		PathInfo();
+		PathInfo(const LocationBlock&);
 		PathInfo(const std::string&);
 
 		// getter, setter
+		LocationBlock	getLocationBlock() const;
 		PathType		getPathType() const;
 		std::string		getFileType() const;
 		std::string		getPath() const;
@@ -31,6 +35,7 @@ class PathInfo
 		bool			getAutoIndex() const;
 		void			setAutoIndex(bool);
 		void			setReturnPage(const std::string&);
+		void			setPostFileType();
 
 		// method
 		void			processGetRequest(LocationBlock&);

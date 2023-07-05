@@ -24,8 +24,9 @@ enum readMode
 
 enum sendMode
 {
-	SOCKET,
-	CGI,
+	WAIT,
+	CLIENT,// client
+	PROCESS, // process
 };
 
 enum	PathType

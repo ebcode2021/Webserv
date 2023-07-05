@@ -5,6 +5,7 @@
 # include "CgiInfo.hpp"
 # include "HttpRequest.hpp"
 # include "HttpResponse.hpp"
+# include "PathInfo.hpp"
 
 class TcpSocket
 {
@@ -12,6 +13,7 @@ class TcpSocket
 		SocketInfo		_socketInfo;
 		HttpRequest		_request;
 		HttpResponse	_response;
+		PathInfo		_pathInfo;
 		int				_readMode;
 		int				_sendMode;
 		CgiInfo			*_cgiInfo;
@@ -29,7 +31,7 @@ class TcpSocket
 		size_t 			getRecvByte();
 		int				getReadMode();
 		std::string		getBuf();
-		HttpRequest&		getRequest();
+		HttpRequest&	getRequest();
 		HttpResponse	getResponse();
 		std::string		getClientAddr();
 		int				getSendMode();
@@ -37,6 +39,7 @@ class TcpSocket
 		const char*		getBufToCStr();
 		size_t			getBufSize();
 		CgiInfo			*getCgiInfo();
+		PathInfo		&getPathInfo() const;
 
 		// setter
 		void			setBuf(const std::string&);
@@ -48,6 +51,7 @@ class TcpSocket
 		void			setRequestBody();
 		void			setBufbyIndex(int, char);
 		void			setCgiInfo(CgiInfo *);
+		void			setPathInfo(PathInfo &);
 		
 		// method
 		void			changeToNonblocking();
@@ -59,6 +63,9 @@ class TcpSocket
 		void			addSendByte(int);
 		void			bufTrim(int);
 		void			resetInfo();
+
+		// new 추가
+		bool			isHttpRequest();
 
 		// print
 		void 			printRequestInfo();

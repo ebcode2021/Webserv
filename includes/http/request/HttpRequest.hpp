@@ -33,7 +33,7 @@ class	HttpRequest
 		// method
 		void					splitHeader(std::vector<std::string>&);
 		static std::map<std::string, std::string>	createHeaderField(std::vector<std::string>&);
-
+		
 		// print
 		void	printInfo();
 };

@@ -39,9 +39,10 @@ class	HttpRequestHeader
 		std::string			getServerNameToHost();
 		std::map<std::string, std::string>	parseCookie(std::string&);
 		std::string			getSessionIdByCookie();
+		std::string			getQueryString();
 		
 		/* exception */
-		void				validateRequestHeader(LocationBlock& locationBlock);
+		void				validateRequestHeader(LocationBlock locationBlock);
 };
 
 #endif

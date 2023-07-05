@@ -65,7 +65,7 @@ void	SessionStorage::validateSession(const std::string& id, const std::string& u
 	if (it != this->_sessionList.end())
 	{
 		if ((*it).second.getExpiration() > std::time(nullptr) && (*it).second.getPreviousURL() == url)
-			throw SessionException(304);
+			throw ResponseException(304);
 		else
 			deleteSession(id);
 	}

@@ -14,6 +14,7 @@ const std::string	SEMICOLON = ";";
 const std::string	OPEN_BRACE = "{";
 const std::string	CLOSE_BRACE = "}";
 const std::string	WHITESPACE = " \t\n\v\f\r";
+const std::string	KEEPALIVE = "keep-alive";
 
 /* Size */
 const std::size_t	EVENT_SIZE = 256;
@@ -22,6 +23,7 @@ const std::size_t	CLIENT_BODY_SIZE = 1048576;
 
 /* Related to HTTP */
 const std::string	HTTP_VERSION = "HTTP/1.1";
+const std::string	FAVICON_URL = "/favicon.ico";
 
 static const	std::string METHODS[] = {
 	"GET", "POST", "DELETE"

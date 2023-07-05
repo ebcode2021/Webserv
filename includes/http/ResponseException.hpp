@@ -11,25 +11,9 @@ class	ResponseException
 		
 
 	public :
-		explicit	ResponseException(const int statusCode)
-			:_httpStatus(statusCode){}
+		explicit	ResponseException(const int statusCode);
 
-		HttpStatus	httpStatus() const { return(_httpStatus); }
-		int			statusCode() const { return(_httpStatus.getStatusCode());}
-};
-
-class	SessionException
-{
-	private :
-		HttpStatus	_httpStatus;
-		
-
-	public :
-		explicit	SessionException(const int statusCode)
-			:_httpStatus(statusCode){}
-
-		HttpStatus	httpStatus() const { return(_httpStatus); }
-		int			statusCode() const { return(_httpStatus.getStatusCode());}
+		HttpStatus	getHttpStatus() const;
 };
 
 #endif

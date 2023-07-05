@@ -9,7 +9,7 @@ TcpSocket::TcpSocket(int socketFd)
 	this->_socketInfo.sendbyte = 0;
 	this->_socketInfo.recvbyte = 0;
 	this->_readMode = HEADER;
-	this->_sendMode = SOCKET;
+	this->_sendMode = CLIENT;
 	this->_cgiInfo = NULL;
 	this->_clientAddr = getClientAddrBySocket();
 	this->changeToNonblocking();
@@ -129,6 +129,7 @@ void	TcpSocket::setRequestHeader()
 
 	this->_request.splitHeader(header);
 	this->setBuf(body);
+	this->changeReadMode();
 }
 
 std::string TcpSocket::chunkedEncoding()
@@ -165,12 +166,10 @@ void	TcpSocket::setRequestBody()
 
 	if (this->getReadMode() == IDENTITY)
 	{
-		std::cout << "IDENTY" << std::endl;
 		encodedBuf = this->getBuf();
-		std::cout << "encodedBuf size = " << encodedBuf.size() << std::endl;
 		this->addReadSize(encodedBuf.size());
 		this->_request.setBody(encodedBuf);
-		std::cout << "recvbyte = " << this->getRecvByte() << "\ncontentlength = " << this->_request.getHttpRequestHeader().getContentLength() << std::endl;
+		
 		if (this->getRecvByte() == this->_request.getHttpRequestHeader().getContentLength())
 			this->setReadMode(END);
 	}
@@ -181,7 +180,6 @@ void	TcpSocket::setRequestBody()
 		this->_request.setBody(encodedBuf);
 	}
 	this->_request.setBody(encodedBuf);
-	//std::cout << _request.getBody().getBody() << std::endl;
 }
 
 void	TcpSocket::addSendByte(int sendByte)
@@ -198,6 +196,7 @@ void	TcpSocket::resetInfo() {
 	this->_socketInfo.recvbyte = 0;
 	this->_socketInfo.sendbyte = 0;
 	this->setReadMode(HEADER);
+	this->setSendMode(WAIT);
 }
 
 int	TcpSocket::getSendMode() {
@@ -214,6 +213,23 @@ void TcpSocket::setCgiInfo(CgiInfo *cgiInfo) {
 
 CgiInfo	*TcpSocket::getCgiInfo() {
 	return this->_cgiInfo;
+}
+
+bool	TcpSocket::isHttpRequest() {
+	std::string	request = this->getBuf();
+	size_t		doubleCRLFIndex = request.find(DOUBLE_CRLF);
+
+	if (doubleCRLFIndex != std::string::npos)
+		return (true);
+	return (false);
+}
+
+void	TcpSocket::setPathInfo(PathInfo &pathInfo) {
+	this->_pathInfo = pathInfo;
+}
+
+PathInfo	&TcpSocket::getPathInfo() const {
+	return (this->_pathInfo);
 }
 
 /* print */

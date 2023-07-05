@@ -25,38 +25,26 @@ std::string			HttpResponse::getBody() const {
 }
 
 /* method */
-HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, const std::string& clientAddr, SessionStorage& sessionStorage)
+HttpResponse HttpResponse::createResponse(PathInfo& pathInfo, HttpRequest& request, const std::string& clientAddr, SessionStorage& sessionStorage)
 {
 	// request
 	HttpRequestLine		requestLine = request.getHttpRequestLine();
 	HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
 	std::string			method = requestLine.getMethod();
 
+	request.printInfo();
+	pathInfo.printPathInfo();
 	// response
 	HttpResponseLine	responseLine(method);
 	HttpResponseHeader	responseHeader;
 	HttpBody			responseBody;
 
-	// 1. find server block and location block
-	ServerInfo		serverInfo    = config.findServerInfoByHost(requestHeader.getHost());
-	LocationBlock	locationBlock = serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
-
-	PathInfo 	pathInfo(locationBlock.getFullPath());
-	std::string	sessionId = requestHeader.getSessionIdByCookie();
+	LocationBlock		locationBlock = pathInfo.getLocationBlock();
+	std::string			sessionId = requestHeader.getSessionIdByCookie();
 
 	try
 	{
-		requestLine.validateRequestLine(locationBlock.getLimitExcept(), clientAddr);
-		requestHeader.validateRequestHeader(locationBlock);
 		
-		pathInfo.validatePath();
-		//(void)sessionStorage;
-		sessionStorage.validateSession(sessionId, requestLine.getRequestURI());
-
-		if (method == "GET")
-			pathInfo.processGetRequest(locationBlock);
-		else if (method == "DELETE")
-			pathInfo.processDeleteRequest();
 	}
 	catch(const ResponseException &ex)
 	{
@@ -64,17 +52,67 @@ HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, 
 		responseLine.setHttpStatus(ex.httpStatus());
 		pathInfo.setReturnPageByError(locationBlock.getErrorPage(), ex.statusCode());
 	}
-	catch (const SessionException &ex)
-	{
-		std::cout << " ************* 304 발생!" << ex.statusCode() << std::endl;
-		responseLine.setHttpStatus(ex.httpStatus());
-	}
+
 	// post나 delete일때, body 넘겨줄지?
 	if (method == "GET" && responseLine.getHttpStatus().getStatusCode() != 304)
 		responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
+	if (method == "POST")
+		pathInfo.setPostFileType();
+	// else if (method == "POST")
+	// 	responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
 	responseHeader = makeResponseHeader(pathInfo, responseBody.getBodySize());
 	return (HttpResponse(responseLine, responseHeader, responseBody));
 }
+// HttpResponse HttpResponse::createResponse(Config& config, HttpRequest& request, const std::string& clientAddr, SessionStorage& sessionStorage)
+// {
+// 	// request
+// 	HttpRequestLine		requestLine = request.getHttpRequestLine();
+// 	HttpRequestHeader	requestHeader = request.getHttpRequestHeader();
+// 	std::string			method = requestLine.getMethod();
+
+// 	// response
+// 	HttpResponseLine	responseLine(method);
+// 	HttpResponseHeader	responseHeader;
+// 	HttpBody			responseBody;
+
+// 	// 1. find server block and location block
+// 	ServerInfo		serverInfo    = config.findServerInfoByHost(requestHeader.getHost());
+// 	LocationBlock	locationBlock = serverInfo.findLocationBlockByURL(requestLine.getRequestURI());
+
+// 	PathInfo 	pathInfo(locationBlock.getFullPath());
+// 	std::string	sessionId = requestHeader.getSessionIdByCookie();
+
+// 	try
+// 	{
+// 		requestLine.validateRequestLine(locationBlock.getLimitExcept(), clientAddr);
+// 		requestHeader.validateRequestHeader(locationBlock);
+		
+// 		pathInfo.validatePath();
+// 		//(void)sessionStorage;
+// 		sessionStorage.validateSession(sessionId, requestLine.getRequestURI());
+
+// 		if (method == "GET")
+// 			pathInfo.processGetRequest(locationBlock);
+// 		else if (method == "DELETE")
+// 			pathInfo.processDeleteRequest();
+// 	}
+// 	catch(const ResponseException &ex)
+// 	{
+// 		std::cout << "************** error 발생!" << ex.statusCode() << std::endl;
+// 		responseLine.setHttpStatus(ex.httpStatus());
+// 		pathInfo.setReturnPageByError(locationBlock.getErrorPage(), ex.statusCode());
+// 	}
+// 	catch (const SessionException &ex)
+// 	{
+// 		std::cout << " ************* 304 발생!" << ex.statusCode() << std::endl;
+// 		responseLine.setHttpStatus(ex.httpStatus());
+// 	}
+// 	// post나 delete일때, body 넘겨줄지?
+// 	if (method == "GET" && responseLine.getHttpStatus().getStatusCode() != 304)
+// 		responseBody = makeResponseBody(pathInfo, responseLine.getHttpStatus());
+// 	responseHeader = makeResponseHeader(pathInfo, responseBody.getBodySize());
+// 	return (HttpResponse(responseLine, responseHeader, responseBody));
+// }
 
 
 void	HttpResponse::printHttpResponse()
@@ -84,7 +122,6 @@ void	HttpResponse::printHttpResponse()
 	HttpBody body = this->_httpBody;
 	std::string	cookieString = header.getCookieString();
 
-	std::cout << "\n---- [response 출력] ----" << std::endl;
 	std::cout << "\n---- [response 출력] ----" << std::endl;
 	std::cout << " -- response-line" << std::endl;
 	std::cout << "\t httpStatus : " << line.getHttpStatus().getStatusCode() << " " << line.getHttpStatus().getReason() << std::endl;
@@ -158,4 +195,9 @@ HttpBody	HttpResponse::makeResponseBody(const PathInfo& pathInfo, const HttpStat
 int		HttpResponse::getStatusCode()
 {
 	return (this->_httpResponseLine.getHttpStatus().getStatusCode());
+}
+
+HttpResponseLine	&HttpResponse::getResponseLine()
+{
+	return (this->_httpResponseLine);
 }
