@@ -30,7 +30,7 @@ class LimitExcept {
 		static void	blockCheck(std::ifstream&, Validate&);
 
 		// print
-		void		printInfo();
+		void		printInfo() const;
 
 };
 

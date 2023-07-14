@@ -39,7 +39,7 @@ class TcpSocket
 		const char*		getBufToCStr();
 		size_t			getBufSize();
 		CgiInfo			*getCgiInfo();
-		PathInfo		&getPathInfo() const;
+		const PathInfo		&getPathInfo() const;
 
 		// setter
 		void			setBuf(const std::string&);

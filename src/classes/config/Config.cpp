@@ -1,9 +1,8 @@
 #include "Config.hpp"
 
-static std::vector<std::string> LocationBlockBackup(std::ifstream& confFile, std::string line);
 
 /* constructor */
-Config::Config(std::string fileName)
+Config::Config(const std::string &fileName)
 {
 	std::string					line;
 	std::ifstream				confFile(fileName);
@@ -16,27 +15,27 @@ Config::Config(std::string fileName)
 	{
 		splitedLine = split(line, WHITESPACE);
 		if (splitedLine.size() && splitedLine[0].compare("server") == 0)
-			addServer(confFile);
+			addServer(ServerInfo(confFile));
 	}
 	
 	for (size_t i = 0; i < this->_serverList.size(); i++)
 	{
 		ServerBlock server = this->_serverList[i].getServerBlock();
-		std::vector<int> listenSockList = server.getListenList();
+		std::vector<int> listenSockList = server.getListenPortList();
 
 		for (size_t j = 0; j < listenSockList.size(); j++) {
-			this->_listenSockList.insert(listenSockList[j]);
+			this->_serverPortList.insert(listenSockList[j]);
 		}
 	}
 	
 }
 
 /* getter, setter */
-std::set<int>	Config::getListenSockList() {
-	return (this->_listenSockList);
+const std::set<int>	&Config::getServerPortList() const {
+	return (this->_serverPortList);
 }
 
-std::vector<ServerInfo>	Config::getServerList() {
+const std::vector<ServerInfo>	&Config::getServerList() const {
 	return(this->_serverList);
 }
 
@@ -80,33 +79,9 @@ bool	Config::fileCheck(int argc, char *argv[])
 }
 
 /* method */
-void	Config::addServer(std::ifstream & confFile)
+void	Config::addServer(const ServerInfo &serverInfo)
 {
-	std::string 							line;
-	std::vector<std::string>				splittedLine;
-	std::vector<std::vector<std::string> >	locationBlockInfo;
-	std::vector<LocationBlock>				locationBlock;
-	
-	ServerBlock	serverBlock;
-	
-	while (std::getline(confFile, line))
-	{
-		splittedLine = split(line, WHITESPACE + ";");
-		if (splittedLine.size() == 0)
-			continue ;
-		else if (splittedLine[0].compare("location") == 0)
-			locationBlockInfo.push_back(LocationBlockBackup(confFile, line));
-		else if (splittedLine[0].compare("}") == 0)
-			break ;
-		else
-			serverBlock.configsetting(splittedLine);
-	}
-	
-	locationBlock.push_back(LocationBlock(serverBlock));
-	for (size_t i = 0; i < locationBlockInfo.size(); i++)
-		locationBlock.push_back(LocationBlock(serverBlock, locationBlockInfo[i]));
-
-	this->_serverList.push_back(ServerInfo(serverBlock, locationBlock));
+	this->_serverList.push_back(serverInfo);
 }
 
 ServerInfo	Config::findServerInfoByHost(const std::string& host)
@@ -136,7 +111,7 @@ ServerInfo	Config::findServerInfoByParameter(const std::string& serverName, cons
 	{
 		ServerBlock serverBlock = serverList[i].getServerBlock();
 
-		listenList = serverBlock.getListenList();
+		listenList = serverBlock.getListenPortList();
 		listenListeSize = listenList.size();
 
 		for (size_t j = 1; j < listenListeSize; j++)
@@ -170,32 +145,19 @@ ServerInfo	Config::findServerInfoByParameter(const std::string& serverName, cons
 	return (portList[0]);
 }
 
-static std::vector<std::string> LocationBlockBackup(std::ifstream& confFile, std::string line)
+void	Config::printConfig() const
 {
-	std::vector<std::string>	locationBlock;
-	std::vector<std::string>	splittedLine;
-	std::string					backup;
-	
-	locationBlock.push_back(line);
-	while (std::getline(confFile, line))
+	std::cout << "---------Port List----------";
+	auto it = this->_serverPortList.begin();
+	for (it; it != _serverPortList.end(); it++)
 	{
-		splittedLine = split(line, WHITESPACE);
-		if (splittedLine[0].compare("}") == 0)
-			break ;
-		else if (splittedLine[0].compare("limit_except") == 0) {
-			backup += line + "\n";
-			while (std::getline(confFile, line))
-			{
-				splittedLine = split(line, WHITESPACE);
-				if (splittedLine[0] == "}")
-					break;
-				backup += line + "\n";
-			}
-			locationBlock.push_back(backup);
-			backup = "";
-		}
-		else if (splittedLine[0].compare("{") != 0)
-			locationBlock.push_back(line);
+		std::cout << *it << std::endl;
 	}
-	return (locationBlock);
+
+	for (size_t i = 0; i < this->_serverList.size(); i++)
+	{
+		std::cout << "-----server " << i << "----------" << std::endl;
+		_serverList[i].printServerInfo();
+	}
+	
 }

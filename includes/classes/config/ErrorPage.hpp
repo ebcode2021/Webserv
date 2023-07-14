@@ -17,7 +17,7 @@ class ErrorPage {
 		std::string			getPath() const;
 
 		// print
-		void PrintInfo();
+		void PrintInfo() const;
 };
 
 # endif

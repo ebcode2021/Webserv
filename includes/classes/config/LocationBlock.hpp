@@ -9,6 +9,7 @@ class LocationBlock : public ServerBlock
 	private :
 		std::string		_path;
 		LimitExcept		_limitExcept;
+		std::string		_cgi_pass;
 
 	public :
 		// constructor
@@ -16,11 +17,15 @@ class LocationBlock : public ServerBlock
 		LocationBlock(const ServerBlock &);
 		LocationBlock(const ServerBlock&, const std::vector<std::string>&);
 
-		// getter, setter
+		// getter
 		LimitExcept	getLimitExcept() const;
 		std::string	getPath() const;
+		std::string getCgiPass() const;
+
+		// setter
 		void		setPath(const std::string&);
 		void		setLimitExcept(const std::string&);
+		void		setCgiPass(const std::string&);
 		
 		// checker
 		static void blockCheck(std::ifstream&, Validate&);
@@ -30,7 +35,7 @@ class LocationBlock : public ServerBlock
 		std::string	getFullPath() const;
 
 		// print
-		void	printInfo();
+		void	printInfo() const;
 };
 
 #endif

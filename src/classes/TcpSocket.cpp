@@ -228,7 +228,7 @@ void	TcpSocket::setPathInfo(PathInfo &pathInfo) {
 	this->_pathInfo = pathInfo;
 }
 
-PathInfo	&TcpSocket::getPathInfo() const {
+const PathInfo	&TcpSocket::getPathInfo() const {
 	return (this->_pathInfo);
 }
 

@@ -12,6 +12,7 @@ class ServerInfo {
 
 	public :
 		// constructor
+		ServerInfo(std::ifstream &);
 		ServerInfo(ServerBlock&, std::vector<LocationBlock>&);
 
 		// getter, setter
@@ -22,7 +23,7 @@ class ServerInfo {
 		LocationBlock		findLocationBlockByURL(const std::string&);
 
 		// print
-		void printServerInfo();
+		void printServerInfo() const;
 
 };
 

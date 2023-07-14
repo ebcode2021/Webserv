@@ -20,6 +20,9 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 		else if (splittedLine[0].compare("limit_except") == 0) {
 			setLimitExcept(locationBlock[i]);
 		}
+		else if (splittedLine[0].compare("cgi_pass") == 0) {
+			setCgiPass(locationBlock[i]);
+		}
 		else {
 			this->configsetting(splittedLine);
 		}
@@ -42,6 +45,15 @@ void	LocationBlock::setLimitExcept(const std::string &line) {
 void	LocationBlock::setPath(const std::string& path) { 
 	this->_path = path; 
 }
+
+void	LocationBlock::setCgiPass(const std::string& cgiPass) {
+	this->_cgi_pass = cgiPass;
+}
+
+std::string LocationBlock::getCgiPass() const {
+	return (this->_cgi_pass);
+}
+
 
 /* checker */
 void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
@@ -120,7 +132,7 @@ void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
 }
 
 /* print */
-void	LocationBlock::printInfo() {
+void	LocationBlock::printInfo() const {
 	std::cout << "path : " << this->_path << std::endl;
 	this->_limitExcept.printInfo();
 }

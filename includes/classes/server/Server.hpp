@@ -7,21 +7,21 @@
 # include "SessionStorage.hpp"
 # include "TcpSocket.hpp"
 # include "Config.hpp"
-#include "KqueueHandler.hpp"
-#include "SocketEventHandler.hpp"
-#include "HttpResponse.hpp"
+# include "KqueueHandler.hpp"
+# include "SocketEventHandler.hpp"
+# include "HttpResponse.hpp"
 
 class	Server
 {
 	private :
-		std::vector<ServerInfo>	_serverList;
+		const std::vector<ServerInfo>	_serverList;
+		std::set<int>			_listenportList;
 		std::set<int>			_listenSockList;
-		std::set<int>			_listenSockFdList;
 		SessionStorage			_sessionStorage;
 
 	public :
 		// constructor
-		Server(const std::string&);
+		Server(const Config &);
 
 		// method
 		void	run();

@@ -19,7 +19,7 @@ std::string			ErrorPage::getPath() const {
 }
 
 /* print */
-void ErrorPage::PrintInfo() {
+void ErrorPage::PrintInfo() const {
 	std::cout << "error_page : ";
 	for(size_t i = 0; i < this->statusCode.size(); i++) {
 		std::cout << statusCode[i] << " ";

@@ -7,7 +7,7 @@
 /* constructor */
 ServerBlock::ServerBlock() {
 	this->_clientMaxBodySize = 1000000; //1MB
-	this->_listenList.push_back(DEFAULT_PORT);
+	this->_listenPortList.push_back(DEFAULT_PORT);
 	this->_root = DEFAULT_ROOT;
 	this->_index.push_back(DEFAULT_INDEX);
 }
@@ -21,8 +21,8 @@ std::vector<std::string>	ServerBlock::getServerNameList() const {
 	return (this->_serverNameList);
 }
 
-std::vector<int>			ServerBlock::getListenList() const {
-	return (this->_listenList);
+std::vector<int>			ServerBlock::getListenPortList() const {
+	return (this->_listenPortList);
 }
 
 std::string					ServerBlock::getRoot() const {
@@ -43,7 +43,7 @@ unsigned int				ServerBlock::getClientMaxBodySize() const {
 
 void	ServerBlock::setListenPort(std::vector<std::string>& value) {
 	for (size_t i = 1; i < value.size(); i++) {
-		this->_listenList.push_back(std::atoi(value[i].c_str()));
+		this->_listenPortList.push_back(std::atoi(value[i].c_str()));
 	}
 }
 
@@ -153,22 +153,23 @@ void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 }
 
 void	ServerBlock::configsetting(std::vector<std::string>& config) {
-	static std::map<std::string, int> directivemap = create_directivemap();
+	static std::map<std::string, int> directivemap = create_directivemap(INDICATION_PATH + SERVER);
 	static void (ServerBlock::*setFunc[])(std::vector<std::string>&) = {
 		&ServerBlock::setListenPort,
 		&ServerBlock::setServerName,
 		&ServerBlock::setErrorPage,
+		NULL,
 		&ServerBlock::setClientMaxBodySize,
+		&ServerBlock::setClientBodyTempPath,
 		&ServerBlock::setAutoIndex,
 		&ServerBlock::setIndex,
-		&ServerBlock::setClientBodyTempPath,
 		&ServerBlock::setRoot
 	};
 	(this->*setFunc[directivemap[config[0]]])(config);
 }
 
 /* print */
-void	ServerBlock::printInfo() {
+void	ServerBlock::printInfo() const {
 	std::cout << "root : " << this->_root << std::endl;
 
 	std::cout << "server_name : ";
@@ -178,8 +179,8 @@ void	ServerBlock::printInfo() {
 	std::cout << "\n";
 
 	std::cout << "listen : ";
-	for(size_t i = 0; i < this->_listenList.size(); i++) {
-		std::cout << _listenList[i] << " ";
+	for(size_t i = 0; i < this->_listenPortList.size(); i++) {
+		std::cout << _listenPortList[i] << " ";
 	}
 	std::cout << "\n";
 

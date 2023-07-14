@@ -10,7 +10,7 @@ class ServerBlock {
 	protected :
 		unsigned int					_clientMaxBodySize;
 		std::vector<std::string>		_serverNameList;
-		std::vector<int>				_listenList;
+		std::vector<int>				_listenPortList;
 		std::vector<ErrorPage>			_errorPage;
 		bool							_autoindex;
 		std::vector<std::string>		_index;
@@ -21,14 +21,16 @@ class ServerBlock {
 		// constructor
 		ServerBlock();
 
-		// getter, setter
+		// getter
 		std::vector<ErrorPage>		getErrorPage() const;
-		std::vector<int>			getListenList() const;
+		std::vector<int>			getListenPortList() const;
 		std::string					getRoot() const;
 		std::vector<std::string>	getServerNameList() const;
 		std::vector<std::string>	getIndexList() const;
 		bool						getAutoIndex() const;
 		unsigned int				getClientMaxBodySize() const;
+
+		// setter
 		void						setListenPort(std::vector<std::string>&);
 		void						setServerName(std::vector<std::string>&);
 		void						setErrorPage(std::vector<std::string>&);
@@ -43,7 +45,7 @@ class ServerBlock {
 		void		configsetting(std::vector<std::string>&);
 
 		// print
-		void		printInfo();
+		void		printInfo() const;
 
 };
 

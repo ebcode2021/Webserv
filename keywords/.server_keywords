@@ -1,8 +1,0 @@
-listen					65535
-server_name				65535
-error_page 				1
-client_max_body_size	1
-autoindex				1
-index					1
-client_body_temp_size	1
-root					1

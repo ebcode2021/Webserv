@@ -9,23 +9,26 @@
 class	Config {
 	private :
 		std::vector<ServerInfo>	_serverList;
-		std::set<int>			_listenSockList;
+		std::set<int>			_serverPortList;
 
 	public :
 		// constructor
-		Config(std::string);
+		Config(const std::string &);
 
 		// getter
-		std::vector<ServerInfo>	getServerList();
-		std::set<int>			getListenSockList();
+		const std::vector<ServerInfo>	&getServerList() const;
+		const std::set<int>				&getServerPortList() const;
 
 		// method
-		void					addServer(std::ifstream &);
+		void					addServer(const ServerInfo &);
 		ServerInfo				findServerInfoByHost(const std::string&);
 		ServerInfo				findServerInfoByParameter(const std::string&, const size_t);
 		
 		// checker
 		static bool				fileCheck(int, char *[]);
+
+		// print
+		void	printConfig() const;
 };
 
 #endif

@@ -5,6 +5,10 @@
 #include "HttpResponse.hpp"
 #include "SessionStorage.hpp"
 #include "CgiMetadata.hpp"
+#include "utils.hpp"
+
+
+#include "server.hpp"
 
 
 /*
@@ -16,17 +20,7 @@
 	content type 파싱 다시
 */
 
-int createSocket()
-{
-	int	sock = socket(AF_INET, SOCK_STREAM, 0);
-	int option = 1;
-    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option)) < 0) {
-        printErrorWithExit(strerror(errno));
-    }
-	if (sock == INVALID_SOCKET)
-		printErrorWithExit(strerror(errno));
-	return (sock);
-}
+
 
 void initListenSocket(KqueueHandler &kqHandler, Config &config, std::set<int> &listenSockFdList) 
 {
@@ -114,6 +108,18 @@ void cgi_test(TcpSocket* sock, KqueueHandler &kq) {
 	}
 }
 
+bool	isCgiRequest(LocationBlock &locationBlock)
+{
+	if (locationBlock.getCgiPass() == "")
+		return (false);
+	return (true);
+}
+
+void	processGetRequest(PathInfo &pathInfo, LocationBlock& block)
+{
+	
+}
+
 void	validate(TcpSocket *curSock, SessionStorage &sessionStorage, KqueueHandler &kqueue)
 {
 	HttpRequest 		request = curSock->getRequest();
@@ -130,7 +136,10 @@ void	validate(TcpSocket *curSock, SessionStorage &sessionStorage, KqueueHandler 
 	
 		pathInfo.validatePath();
 		sessionStorage.validateSession(requestHeader.getSessionIdByCookie(), requestLine.getRequestURI());
+		if (isCgiRequest(locationBlock))
+			//processCgiRequest();
 		if (method == "GET")
+			//processGetRequest();
 			pathInfo.processGetRequest(locationBlock);
 		else if (method == "DELETE")
 			pathInfo.processDeleteRequest();
@@ -153,7 +162,10 @@ int main(int argc, char *argv[])
 
 	Config	config(argv[1]);
 
+	
 	std::cout << "server start" << std::endl;
+
+
 
 	std::set<int>				listenSockFdList;
 	KqueueHandler				kqHandler;
@@ -179,7 +191,6 @@ int main(int argc, char *argv[])
 				if (isListenSocketEvent(listenSockFdList, curEvent.ident) == true)
 				{
 					int clientSock = sockEventHandler.sockAccept();
-			
 					if (clientSock == INVALID_SOCKET)
 						continue;
 					TcpSocket *clientSocket = new TcpSocket(clientSock);
@@ -255,7 +266,6 @@ int main(int argc, char *argv[])
 					curSock->setBuf(curSock->getResponse().getResponseToString());
 					curSock->setSendMode(CLIENT);
 				}	
-
 				int sendbyte = 0;
 				if (curSock->getSendMode() == CLIENT)
 					sendbyte = sockEventHandler.dataSend();

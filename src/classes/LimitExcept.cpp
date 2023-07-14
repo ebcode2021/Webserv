@@ -131,7 +131,7 @@ bool	LimitExcept::isValidMethod(const std::string& method, const std::string& cl
 }
 
 /* print */
-void	LimitExcept::printInfo()
+void	LimitExcept::printInfo() const
 {
 	for (size_t i = 0; i < this->_methodList.size(); i++)
 	{
@@ -140,9 +140,9 @@ void	LimitExcept::printInfo()
 	std::cout << std::endl;
 	std::cout << "[limit_except]" << std::endl;
 
-	std::map<std::string, std::string>::iterator	it;
+	auto it = this->_accessDirectiveList.begin();
 
-	for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
+	for (it; it != this->_accessDirectiveList.end(); it++)
 	{
 		std::cout << (*it).first << std::endl;
 		std::cout << (*it).second << std::endl;
