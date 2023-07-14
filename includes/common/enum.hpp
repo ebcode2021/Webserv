@@ -14,19 +14,19 @@ enum	multiplicityOption
 	multiple,
 };
 
-enum readMode
+enum ReadMode
 {
-	HEADER,
-	IDENTITY,
-	CHUNKED,
+	R_HEADER,
+	R_IDENTITY,
+	R_CHUNKED,
 	END,
 };
 
-enum sendMode
+enum SendMode
 {
-	WAIT,
-	CLIENT,// client
-	PROCESS, // process
+	S_WAIT,
+	S_CLIENT,// client
+	S_PROCESS, // process
 };
 
 enum	PathType
@@ -34,6 +34,12 @@ enum	PathType
 	P_FILE,
 	P_DIR,
 	P_NONE,
+};
+
+enum	SockMode
+{
+	SERVER,
+	CLIENT
 };
 
 

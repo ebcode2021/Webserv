@@ -14,12 +14,15 @@ ServerInfo::ServerInfo(std::ifstream &file)
 		splittedLine = split(line, WHITESPACE + ";");
 		if (splittedLine.size() == 0)
 			continue ;
-		else if (splittedLine[0].compare("location"))
+		else if (splittedLine[0].compare("location") == 0)
+		{	
 			backupLocation.push_back(locationBlockBackup(file, line));
+		}
 		else if (splittedLine[0].compare("}") == 0)
 			break ;
-		else
+		else {
 			this->_serverBlock.configsetting(splittedLine);
+		}
 	}
 	this->_locationList.push_back(LocationBlock(this->_serverBlock));
 	for (size_t i = 0; i < backupLocation.size(); i++)

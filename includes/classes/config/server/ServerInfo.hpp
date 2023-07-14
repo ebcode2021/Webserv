@@ -3,7 +3,7 @@
 
 # include "LocationBlock.hpp"
 # include "ServerBlock.hpp"
-# include "HttpRequestHeader.hpp"
+//# include "HttpRequestHeader.hpp"
 
 class ServerInfo {
 	private :
@@ -13,7 +13,6 @@ class ServerInfo {
 	public :
 		// constructor
 		ServerInfo(std::ifstream &);
-		ServerInfo(ServerBlock&, std::vector<LocationBlock>&);
 
 		// getter, setter
 		ServerBlock&				getServerBlock();

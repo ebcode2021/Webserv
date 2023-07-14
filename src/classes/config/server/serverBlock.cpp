@@ -2,7 +2,7 @@
 #include "ServerBlock.hpp"
 #include "webserv.hpp"
 #include "map"
-#include "PathInfo.hpp"
+//#include "PathInfo.hpp"
 
 /* constructor */
 ServerBlock::ServerBlock() {
@@ -157,8 +157,8 @@ void	ServerBlock::configsetting(std::vector<std::string>& config) {
 	static void (ServerBlock::*setFunc[])(std::vector<std::string>&) = {
 		&ServerBlock::setListenPort,
 		&ServerBlock::setServerName,
-		&ServerBlock::setErrorPage,
 		NULL,
+		&ServerBlock::setErrorPage,
 		&ServerBlock::setClientMaxBodySize,
 		&ServerBlock::setClientBodyTempPath,
 		&ServerBlock::setAutoIndex,

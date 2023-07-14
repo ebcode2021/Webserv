@@ -3,6 +3,11 @@
 
 # include "webserv.hpp"
 
+
+// sockUtils.cpp
 int createSocket();
+
+// serverUtils.cpp
+
 
 #endif

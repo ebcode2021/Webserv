@@ -147,9 +147,9 @@ ServerInfo	Config::findServerInfoByParameter(const std::string& serverName, cons
 
 void	Config::printConfig() const
 {
-	std::cout << "---------Port List----------";
-	auto it = this->_serverPortList.begin();
-	for (it; it != _serverPortList.end(); it++)
+	std::cout << "---------Port List----------" << std::endl;
+
+	for (std::set<int>::const_iterator it = this->_serverPortList.begin(); it != _serverPortList.end(); it++)
 	{
 		std::cout << *it << std::endl;
 	}

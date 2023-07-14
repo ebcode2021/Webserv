@@ -35,8 +35,7 @@ std::string	itos(int integer)
 
 std::map<std::string, int> create_directivemap(const std::string &path) {
 	std::map<std::string, int> ret;
-	std::cout << path;
-	std::ifstream server_keywords(KEYWORD_PATH);
+	std::ifstream server_keywords(path);
 	std::string line;
 	std::vector<std::string> splittedLine;
 	size_t	i = 0;

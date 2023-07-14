@@ -1,33 +1,33 @@
-#ifndef SOCKETEVENTHANDLER_HPP
-# define SOCKETEVENTHANDLER_HPP
+#ifndef SOCKHANDLER_HPP
+# define SOCKHANDLER_HPP
 
 # include "webserv.hpp"
-# include "TcpSocket.hpp"
+# include "SockInfo.hpp"
 
-class SocketEventHandler
+class SockHandler
 {
 	private :
-		TcpSocket*	_socket;
+		SockInfo*	_socket;
 
 	public :
 		// constructor
-		SocketEventHandler();
+		//SocketHandler();
 
-		int socketAccept();
 		//socketConnect
 
 		// socketFunction
+		int		socketAccept();
 		int		sockAccept();
 		int		sockBind(int);
 		int		sockListen();
-
-		// Event Processing
 		int		dataRecv();
 		int		dataSend();
 		void	closeSocket();
 
+		
+
 		// setter
-		void	setSocket(TcpSocket *);
+		void	setSocket(SockInfo *);
 
 		// 은비 추가
 		void	setSocketLingerOption(int);

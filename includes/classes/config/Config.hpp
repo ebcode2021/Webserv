@@ -2,7 +2,7 @@
 # define CONFIG_HPP
 
 # include "ServerInfo.hpp"
-# include "HttpRequestHeader.hpp"
+//# include "HttpRequestHeader.hpp"
 # include "indication.hpp"
 # include "enum.hpp"
 

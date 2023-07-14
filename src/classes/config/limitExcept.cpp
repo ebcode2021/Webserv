@@ -139,10 +139,9 @@ void	LimitExcept::printInfo() const
 	}
 	std::cout << std::endl;
 	std::cout << "[limit_except]" << std::endl;
+	
 
-	auto it = this->_accessDirectiveList.begin();
-
-	for (it; it != this->_accessDirectiveList.end(); it++)
+	for (std::map<std::string, std::string>::const_iterator it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
 	{
 		std::cout << (*it).first << std::endl;
 		std::cout << (*it).second << std::endl;

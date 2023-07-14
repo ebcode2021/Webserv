@@ -11,3 +11,8 @@ int createSocket()
 		printErrorWithExit(strerror(errno));
 	return (sock);
 }
+
+int	sockBind()
+{
+	
+}

@@ -8,21 +8,32 @@ RM = rm -rf
 
 # PHILOSOPHERS_SRC
 SRCS =  main3.cpp	\
+		classes/config/config.cpp	\
+		classes/config/errorPage.cpp	\
+		classes/config/limitExcept.cpp	\
+		\
+		classes/config/location/locationBlock.cpp	\
+		\
+		classes/config/server/serverBlock.cpp	\
+		classes/config/server/serverInfo.cpp	\
+		\
+		classes/validate/validate.cpp			\
+		\
+		classes/server/server.cpp				\
+		classes/server/serverSock.cpp			\
+		\
+		classes/socket/sockData.cpp		\
+		classes/socket/sockHandler.cpp	\
+		classes/socket/SockInfo.cpp		\
+		classes/socket/ModeInfo.cpp		\
+		\
 		utility/error.cpp	\
 		utility/utils.cpp	\
-		utility/validate.cpp	\
-		utility/validateUtils.cpp\
-		classes/Config.cpp	\
-		classes/LocationBlock.cpp	\
-		classes/ServerBlock.cpp		\
-		classes/ErrorPage.cpp		\
-		classes/LimitExcept.cpp		\
-		classes/ServerInfo.cpp		\
-		classes/TcpSocket.cpp		\
-		classes/KqueueHandler.cpp	\
-		classes/SocketEventHandler.cpp \
-		classes/SessionStorage.cpp	\
-		server/server.cpp
+		utility/validateUtils.cpp	\
+		utility/sockUtils.cpp		\
+		utility/serverUtils.cpp
+		
+
 
 
 SRCS_DIR = src/
@@ -33,6 +44,11 @@ INCLUDE_DIRS = includes/				\
 			   includes/utility/		\
 			   includes/classes/server/	\
 			   includes/classes/config/	\
+			   includes/classes/config/location/	\
+			   includes/classes/config/server/		\
+			   includes/classes/validate/			\
+			   includes/classes/server				\
+			   includes/classes/socket
 
 
 

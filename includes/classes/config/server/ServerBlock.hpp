@@ -4,7 +4,6 @@
 # include "ErrorPage.hpp"
 # include "validate.hpp"
 # include "webserv.hpp"
-# include "HttpStatus.hpp"
 
 class ServerBlock {
 	protected :

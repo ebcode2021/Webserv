@@ -1,19 +1,11 @@
-# include "TcpSocket.hpp"
+# include "SockInfo.hpp"
 
 /* constructor*/
-TcpSocket::TcpSocket() {}
-
-TcpSocket::TcpSocket(int socketFd)
-{
-	this->_socketInfo.sock = socketFd;
-	this->_socketInfo.sendbyte = 0;
-	this->_socketInfo.recvbyte = 0;
-	this->_readMode = HEADER;
-	this->_sendMode = CLIENT;
-	this->_cgiInfo = NULL;
-	this->_clientAddr = getClientAddrBySocket();
-	this->changeToNonblocking();
+SockInfo::SockInfo(int fd, SockMode SockMode): _modeInfo(ModeInfo(SockMode)) {
+	this->_sockFd = fd;
 }
+
+
 
 /* getter, setter */
 std::string		 TcpSocket::getBuf() {
