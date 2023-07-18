@@ -1,8 +1,8 @@
 #include "webserv.hpp"
 #include "utils.hpp"
-#include "KqueueHandler.hpp"
+#include "event.hpp"
 
-std::set<int> createListenSocketForPorts(const std::set<int> & serverPortList)
+void	createListenSocketForPorts(const std::set<int> & serverPortList, KqHandler &kq)
 {
 	std::set<int> serverSockList;
 	std::set<int>::const_iterator constIt;
@@ -13,7 +13,11 @@ std::set<int> createListenSocketForPorts(const std::set<int> & serverPortList)
 		if (serverSockfd == INVALID_SOCKET) {
 			printErrorWithExit(strerror(errno));
 		}
+		
+		SockInfo	*serverSock = new SockInfo(serverSockfd, M_SERVER);
+		sockBindAndListen(serverSockfd, *constIt);
+		changeFdOpt(serverSockfd, O_NONBLOCK);
+		kq.changeEvent(serverSockfd, EVFILT_READ, EV_ADD, 0, 0, serverSock);
 	}
-	
 }
 

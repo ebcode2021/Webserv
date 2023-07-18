@@ -16,10 +16,10 @@ enum	multiplicityOption
 
 enum ReadMode
 {
+	R_LINE,
 	R_HEADER,
-	R_IDENTITY,
-	R_CHUNKED,
-	END,
+	R_BODY,
+	R_END,
 };
 
 enum SendMode
@@ -38,8 +38,8 @@ enum	PathType
 
 enum	SockMode
 {
-	SERVER,
-	CLIENT
+	M_SERVER,
+	M_CLIENT
 };
 
 

@@ -14,10 +14,10 @@ class SockData
 		SockData();
 
 		// operator
-		void	operator+(const std::string &);
+		void	operator+=(const char *);
 
 		// getter
-		const std::string	&getBuf() const;
+		std::string			&getBuf();
 		int					getRecvByte() const;
 		int					getSendByte() const;
 
@@ -29,6 +29,9 @@ class SockData
 		// method
 		void	updateSendByte(int);
 		void	updateRecvByte(int);
+
+		// test
+		void	printBuf();
 };
 
 #endif

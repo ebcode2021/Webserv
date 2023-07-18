@@ -4,22 +4,22 @@
 ModeInfo::ModeInfo(SockMode sockMode)
 {
 	this->_sockMode = sockMode;
-	this->_readMode = R_HEADER;
+	this->_readMode = R_LINE;
 	this->_sendMode = S_CLIENT;
 }
 
 // getter
-SockMode	ModeInfo::getSockMode()
+SockMode	&ModeInfo::getSockMode()
 {
 	return (this->_sockMode);
 }
 
-ReadMode	ModeInfo::getReadMode()
+ReadMode	&ModeInfo::getReadMode()
 {
 	return (this->_readMode);
 }
 
-SendMode	ModeInfo::getSendMode()
+SendMode	&ModeInfo::getSendMode()
 {
 	return (this->_sendMode);
 }

@@ -3,7 +3,6 @@
 
 #include "webserv.hpp"
 #include "LocationBlock.hpp"
-#include "ResponseException.hpp"
 
 class	HttpRequestHeader
 {

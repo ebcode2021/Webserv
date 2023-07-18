@@ -20,18 +20,25 @@ SRCS =  main3.cpp	\
 		classes/validate/validate.cpp			\
 		\
 		classes/server/server.cpp				\
-		classes/server/serverSock.cpp			\
 		\
 		classes/socket/sockData.cpp		\
-		classes/socket/sockHandler.cpp	\
 		classes/socket/SockInfo.cpp		\
-		classes/socket/ModeInfo.cpp		\
+		classes/socket/modeInfo.cpp		\
+		\
+		classes/http/request/httpRequest.cpp		\
+		classes/http/request/httpRequestLine.cpp	\
 		\
 		utility/error.cpp	\
 		utility/utils.cpp	\
 		utility/validateUtils.cpp	\
 		utility/sockUtils.cpp		\
-		utility/serverUtils.cpp
+		utility/serverUtils.cpp		\
+		utility/eventUtils.cpp		\
+		utility/parseUtils.cpp		\
+		\
+		classes/kq/kqHandler.cpp	\
+		\
+		event/processEvent.cpp		\
 		
 
 
@@ -40,6 +47,7 @@ SRCS_DIR = src/
 SRCS_PATH = $(addprefix $(SRCS_DIR), $(SRCS))
 
 INCLUDE_DIRS = includes/				\
+			   includes/event/			\
 			   includes/common/			\
 			   includes/utility/		\
 			   includes/classes/server/	\
@@ -47,8 +55,10 @@ INCLUDE_DIRS = includes/				\
 			   includes/classes/config/location/	\
 			   includes/classes/config/server/		\
 			   includes/classes/validate/			\
-			   includes/classes/server				\
-			   includes/classes/socket
+			   includes/classes/server/				\
+			   includes/classes/socket/				\
+			   includes/classes/kq/					\
+			   includes/classes/http/request/	
 
 
 

@@ -1,17 +1,26 @@
-#include "webserv.hpp"
-#include "Config.hpp"
-#include "KqueueHandler.hpp"
-#include "SocketEventHandler.hpp"
-#include "HttpResponse.hpp"
-#include "SessionStorage.hpp"
-#include "Server.hpp"
+# include "iostream"
+# include "map"
+
+const std::string CRLF = "\r\n";
+
+
+
+std::string	extractHeaderField(std::string &data)
+{
+	const std::string	delim = CRLF;
+	std::size_t			pos = 0;
+	std::string			ret;
+
+	while (true)
+	{
+		pos = delim.
+	}
+	
+	
+	
+}
 
 int	main(int argc, char *argv[])
 {
-	if (Config::fileCheck(argc, argv) == true)
-	{
-		Server server(argv[1]);
-		server.run();
-	}
-	return (0);
+	
 }

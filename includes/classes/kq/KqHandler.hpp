@@ -1,21 +1,21 @@
-#ifndef KQUEUEHANDLER_HPP
-# define KQUEUEHANDLER_HPP
+#ifndef KQHANDLER_HPP
+# define KQHANDLER_HPP
 
 # include "webserv.hpp"
 
-class KqueueHandler {
+class KqHandler {
 	private :
-		int							kq;
-		size_t						eventCnt;
-		std::vector<struct kevent>	changeList;
-		struct kevent				eventList[EVENT_SIZE];
+		int							_kq;
+		size_t						_eventCnt;
+		std::vector<struct kevent>	_changeList;
+		struct kevent				_eventList[EVENT_SIZE];
 
 	public :
 		/* constructor */
-		KqueueHandler();
+		KqHandler();
 
 		/* getter */
-		const struct kevent	*getEventList();
+		struct kevent		*getEventList();
 		struct kevent		getCurEventByIndex(int);
 		int					getEventCnt();
 		int					getKqFd();
@@ -23,13 +23,8 @@ class KqueueHandler {
 		/* method */
 		void	changeEvent(uintptr_t ident, short filter, unsigned short flags, unsigned int fflags, intptr_t data, void *udata);
 		void	changeListClear();
-		void	eventListReset();
+		void	eventListClear();
 		void	eventUpdate();
-		int		waitEvent();
-
-		// 은비추가
-		void	initialize();
-
 
 		/* print */
 		void printEvent();

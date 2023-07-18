@@ -7,16 +7,17 @@ SockData::SockData()
 	this->_sendByte = 0;
 }
 
-void	SockData::operator+(const std::string &data)
+void	SockData::operator+=(const char *data)
 {
 	this->_buf += data;
 }
 
 // getter
-const std::string	&SockData::getBuf() const 
+std::string	&SockData::getBuf() 
 {
 	return (this->_buf);
 }
+
 
 int	SockData::getRecvByte() const
 {
@@ -55,4 +56,9 @@ void	SockData::updateRecvByte(int recvByte)
 	this->_recvByte += recvByte;
 }
 
+// test
+void	SockData::printBuf()
+{
+	std::cout << this->_buf << std::endl;
+}
 

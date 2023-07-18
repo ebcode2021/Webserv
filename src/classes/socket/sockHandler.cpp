@@ -1,44 +1,39 @@
-# include "SocketEventHandler.hpp"
+#include "EventHandler.hpp"
 
 /* constructor */
-SocketEventHandler::SocketEventHandler() {}
-
-void	SocketEventHandler::setSocket(TcpSocket *socket) {
-	this->_socket = socket;
-}
-
-void	SocketEventHandler::setSocketLingerOption(int clientSock)
+SockHandler::SockHandler()
 {
-	struct linger lingerOpt;
-
-	lingerOpt.l_onoff = 1; //1이면 TIME_WAIT 사용
-	lingerOpt.l_linger = 0; // TIME_WAIT 상태를 0초로 설정
-
-	if (setsockopt(clientSock, SOL_SOCKET, SO_LINGER, &lingerOpt, sizeof(lingerOpt)) < 0)
-		std::cout << "setsockopt error" << std::endl;
+	this->_sockInfo = NULL;
 }
 
+/* setter */
+void	SockHandler::setSockInfo(SockInfo *sockInfo)
+{
+	this->_sockInfo = sockInfo;
+}
 
-int SocketEventHandler::socketAccept() {
-	int 		clientSock; //반환할 클라이언트 sock fd
-	sockaddr_in clientAddress;
-	socklen_t	clientAddressSize = sizeof(clientAddress); // client의 정보를 담는 구조체의 크기
+/* socketFunction */
 
-	clientSock = accept(this->_socket->getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize);
+// int SockHandler::sockAccept() {
+// 	int 		clientSock; //반환할 클라이언트 sock fd
+// 	sockaddr_in clientAddress;
+// 	socklen_t	clientAddressSize = sizeof(clientAddress); // client의 정보를 담는 구조체의 크기
+
+// 	clientSock = accept(this->_sockInfo->getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize);
 	
-	setSocketLingerOption(clientSock);
+// 	setSocketLingerOption(clientSock);
 
-	return (clientSock);
+// 	return (clientSock);
+// }
+
+void SockHandler::closeSock() {
+	std::cout << "closeSocket = " << this->_sockInfo->getSockFd() << std::endl;
+	close(this->_sockInfo->getSockFd());
+	delete (this->_sockInfo);
 }
 
-void SocketEventHandler::closeSocket() {
-	std::cout << "closeSocket = " << this->_socket->getSockFd() << std::endl;
-	close(this->_socket->getSockFd());
-	delete (this->_socket);
-}
-
-int SocketEventHandler::dataRecv() {
-	const int	sockFd = this->_socket->getSockFd();
+int SockHandler::sockRecv() {
+	const int	sockFd = this->_sockInfo->getSockFd();
 	int			readByte;
 	char		buf[BUFSIZE];
 
@@ -48,7 +43,7 @@ int SocketEventHandler::dataRecv() {
 		if ((readByte = recv(sockFd, buf, BUFSIZE, 0)) == -1)
 			return (-1);
 		if (readByte > 0) {
-			this->_socket->addBuf(std::string(buf, readByte));
+			this->_sockInfo->addBuf(std::string(buf, readByte));
 			std::memset(buf, 0, BUFSIZE);
 			if (readByte < static_cast<int>(BUFSIZE))
 				return (true);
@@ -60,18 +55,13 @@ int SocketEventHandler::dataRecv() {
 	}
 }
 
-int SocketEventHandler::dataSend() 
-{
-	int sendByte = send(this->_socket->getSockFd(), this->_socket->getBufToCStr(), this->_socket->getBufSize(), 0);
-	return (sendByte);
-}
+// int SockHandler::sockSend() 
+// {
+// 	int sendByte = send(this->_sockInfo->getSockFd(), this->_sockInfo->getBufToCStr(), this->_sockInfo->getBufSize(), 0);
+// 	return (sendByte);
+// }
 
-
-void SocketEventHandler::printSockFd() {
-	std::cout << this->_socket->getSockFd() << std::endl;
-}
-
-int SocketEventHandler::sockBind(int port) {
+int SockHandler::sockBind(int port) {
 	struct sockaddr_in	serverAddr;
 
 	memset(&serverAddr, 0, sizeof(serverAddr));
@@ -79,14 +69,14 @@ int SocketEventHandler::sockBind(int port) {
 	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	serverAddr.sin_port = htons(port);
 
-	return (bind(this->_socket->getSockFd(), (struct sockaddr *)&serverAddr, sizeof(serverAddr)));
+	return (bind(this->_sockInfo->getSockFd(), (struct sockaddr *)&serverAddr, sizeof(serverAddr)));
 }
 
-int SocketEventHandler::sockListen() {
-	return (listen(this->_socket->getSockFd(), FD_SETSIZE));
+int SockHandler::sockListen() {
+	return (listen(this->_sockInfo->getSockFd(), FD_SETSIZE));
 }
 
-int	SocketEventHandler::sockAccept() {
+int	SockHandler::sockAccept() {
 	sockaddr_in clientAddress;
 	socklen_t clientAddressSize = sizeof(clientAddress);
 
@@ -94,5 +84,5 @@ int	SocketEventHandler::sockAccept() {
 	inet_ntop(AF_INET, &clientAddress.sin_addr, addr, sizeof(addr));
 	std::cout << "클라이언트 접속: IP = " << addr << " 포트 = " << ntohs(clientAddress.sin_port) << std::endl;
 
-	return (accept(this->_socket->getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize));
+	return (accept(this->_sockInfo->getSockFd(), (struct sockaddr *)&clientAddress, &clientAddressSize));
 }

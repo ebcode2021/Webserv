@@ -14,9 +14,9 @@ class ModeInfo
 		ModeInfo(SockMode);
 
 		// getter
-		SockMode	getSockMode();
-		ReadMode	getReadMode();
-		SendMode	getSendMode();
+		SockMode&	getSockMode();
+		ReadMode&	getReadMode();
+		SendMode&	getSendMode();
 		
 		// setter
 		void	setSockMode(SockMode);

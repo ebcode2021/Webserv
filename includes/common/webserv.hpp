@@ -28,6 +28,8 @@
 # include "setting.hpp"
 # include "struct.hpp"
 
+/* utils hpp*/
+
 /* src */
 void		printErrorWithExit(std::string msg);
 int			getErrorLine(std::ifstream& file);
