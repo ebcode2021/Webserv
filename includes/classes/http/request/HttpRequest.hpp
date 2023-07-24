@@ -3,16 +3,16 @@
 
 # include "webserv.hpp"
 # include "HttpRequestLine.hpp"
-//# include "HttpRequestHeader.hpp"
-//# include "HttpBody.hpp"
+# include "HttpRequestHeader.hpp"
+# include "HttpBody.hpp"
 
 
 class	HttpRequest
 {
 	private :
 		HttpRequestLine		_httpRequestLine;
-		//HttpRequestHeader	_httpRequestHeader;
-		//HttpBody			_httpBody;
+		HttpRequestHeader	_httpRequestHeader;
+		HttpBody			_httpBody;
 
 	public :
 		// constructor
@@ -20,8 +20,8 @@ class	HttpRequest
 
 		// getter, setter
 		HttpRequestLine			&getHttpRequestLine();
-		//HttpRequestHeader		getHttpRequestHeader() const;
-		//HttpBody				getBody() const;
+		HttpRequestHeader		&getHttpRequestHeader();
+		HttpBody				&getHttpBody();
 		//void					setRequestLine(std::vector<std::string>);
 		//void					setHeaderField(std::map<std::string, std::string>);
 		//void					setBody(const std::string&);
@@ -36,7 +36,7 @@ class	HttpRequest
 		//static std::map<std::string, std::string>	createHeaderField(std::vector<std::string>&);
 		
 		// print
-		void	printInfo();
+		void	print();
 };
 
 #endif

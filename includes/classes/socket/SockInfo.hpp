@@ -60,7 +60,6 @@ class SockInfo
 		// new 추가
 
 		// print
-		void 			printRequestInfo();
 };
 
 #endif

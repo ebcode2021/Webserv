@@ -12,9 +12,12 @@ class	HttpBody
 		// constructor
 		HttpBody();
 
-		// getter, setter
-		std::string	getBody() const;
+		// getter
+		std::string	&getBody();
+		// setter
 		void		setBody(const std::string&);
+		// operator
+		void		operator+=(const std::string &);
 
 		// method
 		size_t						getBodySize() const;
@@ -22,6 +25,9 @@ class	HttpBody
 		//void						createAutoIndexBody(const std::string&);
 		//void 						createGenericBody(const std::string&);
 		//std::vector<std::string>	getFileNameByPath(const std::string&);
+
+		// test
+		void		print();
 };
 
 #endif

@@ -1,0 +1,44 @@
+# include "utils.hpp"
+
+std::string identityEncoding(std::string &data)
+{
+	return (data);
+}
+
+std::string chunkedEncoding(std::string &data, ReadMode &mode)
+{
+	std::string body;
+	std::string chunkSizeString;
+	int			chunkSize;
+	size_t		pos;
+	
+	while (1)
+	{
+		pos = data.find("\r\n");
+		if (pos == std::string::npos)
+			break ;
+		chunkSizeString = data.substr(0, pos);
+		chunkSize = std::stoi(chunkSizeString, nullptr, 16);
+		std::cout << chunkSize << std::endl;
+		if (chunkSize == 0) {
+			std::cout << "데이터 끝" << std::endl;
+			mode = R_END;
+		}
+		data.erase(0, pos + 2);
+		std::cout << data.substr(0, chunkSize) << std::endl;
+		body += data.substr(0, chunkSize);
+		data.erase(0, chunkSize + 2);
+	}
+	return (body);
+}
+
+std::string encodingData(std::string &data, std::string encoding, ReadMode &mode)
+{
+	std::string backUp;
+
+	if (encoding == "chunked")
+		backUp = identityEncoding(data);
+	else
+		backUp = chunkedEncoding(data, mode);
+	return (backUp);
+}

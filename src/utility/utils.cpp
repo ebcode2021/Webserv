@@ -47,3 +47,10 @@ std::map<std::string, int> create_directivemap(const std::string &path) {
 	}
 	return (ret);
 }
+
+bool compareContentLengthAndBodySize(const std::string& contentLength, size_t bodySize)
+{
+	size_t expectedSize = std::atoi(contentLength.c_str());
+
+    return (expectedSize == bodySize);
+}

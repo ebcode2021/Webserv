@@ -6,12 +6,11 @@ bool	clientReadEvent(SockInfo *sockInfo, KqHandler &kq)
 	(void)kq;
 	int	recvRef = recvData(sockInfo->getSockFd(), sockInfo->getSockData());
 
-	if (recvRef == -1)
+	if (recvRef <= 0)
 	{
 		closeSock(sockInfo);
 		return (false);
 	}
-	//sockInfo->getSockData().printBuf();
 	return (true);
 }
 
@@ -33,7 +32,7 @@ static void	processReadEvent(SockInfo *sockInfo, KqHandler &kq)
 			if (clientReadEvent(sockInfo, kq))
 			{
 				sockInfo->getRequest().createRequest(sockInfo->getSockData().getBuf(), sockInfo->getModeInfo().getReadMode());
-				sockInfo->getRequest().getHttpRequestLine().print();
+				
 			}
 			break;
 	}

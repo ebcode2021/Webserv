@@ -37,6 +37,8 @@ void	SockInfo::setErrorCode(int code)
 	this->_errorCode = code;
 }
 
+// print
+
 // /* getter, setter */
 // std::string		 TcpSocket::getBuf() {
 // 	return (this->_socketInfo.buf);

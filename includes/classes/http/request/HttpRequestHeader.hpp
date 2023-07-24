@@ -1,0 +1,28 @@
+#ifndef HTTPREQUESTHEADER_HPP
+# define HTTPREQUESTHEADER_HPP
+
+#include "webserv.hpp"
+
+class	HttpRequestHeader
+{
+	private :
+		std::map<std::string, std::string> _requestHeader;
+
+	public :
+		HttpRequestHeader();
+
+		// getter
+		std::string getHeaderByKey(std::string);
+		//setter
+		void	setRequestHeader(std::map<std::string, std::string>);
+		
+		/* method */
+		
+
+		/* exception */
+
+		// test
+		void	print();
+};
+
+#endif

@@ -8,7 +8,8 @@ RM = rm -rf
 
 # PHILOSOPHERS_SRC
 SRCS =  main3.cpp	\
-		classes/config/config.cpp	\
+		\
+		classes/config/config.cpp		\
 		classes/config/errorPage.cpp	\
 		classes/config/limitExcept.cpp	\
 		\
@@ -25,8 +26,11 @@ SRCS =  main3.cpp	\
 		classes/socket/SockInfo.cpp		\
 		classes/socket/modeInfo.cpp		\
 		\
+		classes/http/httpBody.cpp		\
+		\
 		classes/http/request/httpRequest.cpp		\
 		classes/http/request/httpRequestLine.cpp	\
+		classes/http/request/httpRequestHeader.cpp	\
 		\
 		utility/error.cpp	\
 		utility/utils.cpp	\
@@ -46,19 +50,20 @@ SRCS =  main3.cpp	\
 SRCS_DIR = src/
 SRCS_PATH = $(addprefix $(SRCS_DIR), $(SRCS))
 
-INCLUDE_DIRS = includes/				\
-			   includes/event/			\
-			   includes/common/			\
-			   includes/utility/		\
-			   includes/classes/server/	\
-			   includes/classes/config/	\
+INCLUDE_DIRS = includes/							\
+			   includes/event/						\
+			   includes/common/						\
+			   includes/utility/					\
+			   includes/classes/server/				\
+			   includes/classes/config/				\
 			   includes/classes/config/location/	\
 			   includes/classes/config/server/		\
 			   includes/classes/validate/			\
 			   includes/classes/server/				\
 			   includes/classes/socket/				\
 			   includes/classes/kq/					\
-			   includes/classes/http/request/	
+			   includes/classes/http/				\
+			   includes/classes/http/request/		\
 
 
 

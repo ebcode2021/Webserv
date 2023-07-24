@@ -27,22 +27,41 @@ std::string extractQueryString(std::string &data)
 	return (ret);
 }
 
-std::string	extractHeaderField(std::string &data)
+std::map<std::string, std::string>	extractHeaderField(std::string &data)
 {
+	std::map<std::string, std::string> headers;
+	std::vector<std::string> splittedLine;
 	const std::string	delim = CRLF;
 	std::size_t			pos = 0;
-	std::string			ret;
 	std::string			line;
 
 	while (true)
 	{
 		pos = data.find(delim);
 		if (pos == std::string::npos)
-			return "400";
+			throw 400;
 		line = data.substr(0, pos);
+		std::cout << line << std::endl;
 		data.erase(0, pos + delim.length());
 		if (line == "")
 			break ;
+		
+		std::string::size_type colonPos = line.find(":");
+        if (colonPos != std::string::npos) {
+            std::string key = line.substr(0, colonPos);
+            std::string value = trimString(line.substr(colonPos + 1), " ");
+            headers[key] = value;
+        }
+		else
+			throw 400;
 	}
-	return ret;
+	return (headers);
+}
+
+std::string trimString(const std::string &str, const std::string &delim) {
+    size_t first = str.find_first_not_of(delim);
+    if (first == std::string::npos)
+        return "";
+    size_t last = str.find_last_not_of(delim);
+    return str.substr(first, (last - first + 1));
 }

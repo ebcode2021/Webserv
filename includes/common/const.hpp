@@ -37,6 +37,10 @@ static const	std::string RESPONSE_HEADERS[] = {
 	"Date", "Server", "Content-Length", "Content-Type", "Set-Cookie", "Transfer-Encoding"
 };
 
+/* Request Headers */
+const std::string CONTENT_LENGTH = "Content-Length";
+const std::string TRANSFER_ENCODING = "Transfer-Encoding";
+
 const size_t		METHODS_SIZE = sizeof(METHODS) / sizeof(std::string);
 const size_t		REQUEST_HEADER_SIZE = sizeof(REQUEST_HEADERS) / sizeof(std::string);
 const size_t		RESPONSE_HEADER_SIZE = sizeof(RESPONSE_HEADERS) / sizeof(std::string);

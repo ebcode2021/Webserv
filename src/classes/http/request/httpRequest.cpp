@@ -11,6 +11,16 @@ HttpRequestLine	&HttpRequest::getHttpRequestLine()
 	return (this->_httpRequestLine);
 }
 
+HttpRequestHeader	&HttpRequest::getHttpRequestHeader()
+{
+	return (this->_httpRequestHeader);
+}
+
+HttpBody	&HttpRequest::getHttpBody()
+{
+	return (this->_httpBody);
+}
+
 // method
 int	HttpRequest::createRequest(std::string &data, ReadMode &mode)
 {
@@ -20,12 +30,18 @@ int	HttpRequest::createRequest(std::string &data, ReadMode &mode)
 		{
 			case R_LINE:
 				this->_httpRequestLine.initRequestLine(extractRequestLine(data));
+				mode = R_HEADER;
 			case R_HEADER:
-				std::cout << "나야나!" << std::endl;
+				this->_httpRequestHeader.setRequestHeader(extractHeaderField(data));
+				mode = R_BODY;
 			case R_BODY:
-				std::cout << "나야나!!" << std::endl;
+				this->_httpBody += encodingData(data, this->_httpRequestHeader.getHeaderByKey(TRANSFER_ENCODING), mode);
+				data.clear();
+				if (compareContentLengthAndBodySize(_httpRequestHeader.getHeaderByKey(CONTENT_LENGTH), this->_httpBody.getBodySize())) {
+					mode = R_END;
+				}
 			case R_END:
-				std::cout << "나야나!!!" << std::endl;
+				break ;
 		}
 	}
 	catch(const int code)
@@ -36,7 +52,12 @@ int	HttpRequest::createRequest(std::string &data, ReadMode &mode)
 	return (0);
 }
 
-
+void	HttpRequest::print()
+{
+	this->_httpRequestLine.print();
+	this->_httpRequestHeader.print();
+	this->_httpBody.print();
+}
 
 
 /* getter */

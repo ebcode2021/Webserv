@@ -61,3 +61,4 @@ bool	isErrorPageForm(std::vector<std::string> data)
 	}
 	return true;
 }
+
