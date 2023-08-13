@@ -8,6 +8,14 @@ enum	blockType
 	other,
 };
 
+enum MethodType
+{
+	GET,
+	POST,
+	DELETE,
+	OTHER,
+};
+
 enum	multiplicityOption
 {
 	single,

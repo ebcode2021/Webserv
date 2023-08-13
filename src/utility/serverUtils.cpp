@@ -13,8 +13,7 @@ void	createListenSocketForPorts(const std::set<int> & serverPortList, KqHandler 
 		if (serverSockfd == INVALID_SOCKET) {
 			printErrorWithExit(strerror(errno));
 		}
-		
-		SockInfo	*serverSock = new SockInfo(serverSockfd, M_SERVER);
+		SockInfo	*serverSock = new SockInfo(serverSockfd, *constIt, M_SERVER);
 		sockBindAndListen(serverSockfd, *constIt);
 		changeFdOpt(serverSockfd, O_NONBLOCK);
 		kq.changeEvent(serverSockfd, EVFILT_READ, EV_ADD, 0, 0, serverSock);

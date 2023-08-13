@@ -1,5 +1,4 @@
 # include "event.hpp"
-# include "HttpRequest.hpp"
 
 bool	clientReadEvent(SockInfo *sockInfo, KqHandler &kq)
 {
@@ -7,10 +6,7 @@ bool	clientReadEvent(SockInfo *sockInfo, KqHandler &kq)
 	int	recvRef = recvData(sockInfo->getSockFd(), sockInfo->getSockData());
 
 	if (recvRef <= 0)
-	{
-		closeSock(sockInfo);
 		return (false);
-	}
 	return (true);
 }
 
@@ -19,44 +15,45 @@ bool	clientReadEvent(SockInfo *sockInfo, KqHandler &kq)
 	
 // }
 
-static void	processReadEvent(SockInfo *sockInfo, KqHandler &kq)
-{
-	const SockMode sockMode = sockInfo->getModeInfo().getSockMode();
+// static void	processReadEvent(SockInfo *sockInfo, KqHandler &kq)
+// {
+// 	const SockMode sockMode = sockInfo->getModeInfo().getSockMode();
 
-	switch (sockMode)
-	{
-		case M_SERVER:
-			acceptConnection(sockInfo, kq);
-			break;
-		case M_CLIENT:
-			if (clientReadEvent(sockInfo, kq))
-			{
-				sockInfo->getRequest().createRequest(sockInfo->getSockData().getBuf(), sockInfo->getModeInfo().getReadMode());
-				
-			}
-			break;
-	}
-}
+// 	switch (sockMode)
+// 	{
+// 		case M_SERVER:
+// 			acceptConnection(sockInfo, kq);
+// 			break;
+// 		case M_CLIENT:
+// 			if (clientReadEvent(sockInfo, kq))
+// 			{
+// 				sockInfo->getRequest().createRequest(sockInfo->getSockData().getBuf(), sockInfo->getModeInfo().getReadMode());
+// 				// 리스폰스 만들기전에 확인
+// 			}
+// 			break;
+// 	}
+// }
 
-void	processEvent(KqHandler &kq)
-{
-	struct kevent	curEvent;
-	SockInfo		*sockInfo;
+// void	processEvent(KqHandler &kq, Config	&serverConfig)
+// {
+// 	struct kevent	curEvent;
+// 	SockInfo		*sockInfo;
 
-	for (int i = 0; i < kq.getEventCnt(); i++)
-	{
-		curEvent = kq.getCurEventByIndex(i);
-		sockInfo = (SockInfo *)curEvent.udata;
+// 	for (int i = 0; i < kq.getEventCnt(); i++)
+// 	{
+// 		curEvent = kq.getCurEventByIndex(i);
+// 		sockInfo = (SockInfo *)curEvent.udata;
 
-		switch (curEvent.filter)
-		{
-			case EVFILT_READ:
-				processReadEvent(sockInfo, kq);
-			case EVFILT_WRITE:
-				break;
-			case EVFILT_PROC:
-				break;
-		}
-	}
+// 		switch (curEvent.filter)
+// 		{
+// 			case EVFILT_READ:
+// 				processReadEvent(sockInfo, kq);
+// 			case EVFILT_WRITE:
+// 				// processWriteEvent(sockInfo, kq);
+// 				break;
+// 			case EVFILT_PROC:
+// 				break;
+// 		}
+// 	}
 	
-}
+// }

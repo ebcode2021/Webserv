@@ -3,6 +3,9 @@
 static std::vector<std::string> locationBlockBackup(std::ifstream& confFile, std::string line);
 
 /* constructor */
+
+ServerInfo::ServerInfo() {}
+
 ServerInfo::ServerInfo(std::ifstream &file)
 {
 	std::string								line;
@@ -24,9 +27,11 @@ ServerInfo::ServerInfo(std::ifstream &file)
 			this->_serverBlock.configsetting(splittedLine);
 		}
 	}
-	this->_locationList.push_back(LocationBlock(this->_serverBlock));
-	for (size_t i = 0; i < backupLocation.size(); i++)
-		this->_locationList.push_back(LocationBlock(this->_serverBlock, backupLocation[i]));
+	this->_locationMap.insert(std::make_pair("default", LocationBlock(this->_serverBlock)));
+	for (size_t i = 0; i < backupLocation.size(); i++) {
+		LocationBlock locationBlock(this->_serverBlock, backupLocation[i]);
+		this->_locationMap.insert(std::make_pair(locationBlock.getPath(), locationBlock));
+	}
 }
 
 /* getter, setter */
@@ -35,26 +40,19 @@ ServerBlock&	ServerInfo::getServerBlock() {
 	return(this->_serverBlock);
 }
 
-std::vector<LocationBlock>	ServerInfo::getLocationList() {
-	return(this->_locationList);
+std::map<std::string, LocationBlock>	ServerInfo::getLocationMap() {
+	return (this->_locationMap);
 }
 
 /* method */
-LocationBlock	ServerInfo::findLocationBlockByURL(const std::string& requestURL)
+LocationBlock	ServerInfo::getLocationBlockByURL(const std::string& requestURL)
 {
-	std::vector<LocationBlock>	locationList = this->_locationList;
-	size_t						locationListSize = locationList.size();
-	//std::cout << "input url : " << requestURL << std::endl;
-	for (size_t i = 1; i < locationListSize; i++)
-	{
-		LocationBlock	locationBlock = locationList[i];
-		//std::cout << "--- location : " << locationBlock.getPath() << std::endl;
-		if (locationBlock.getPath() == requestURL)
-			return (locationBlock);
-	}
-	std::cout << "default location setting " << std::endl;
-	locationList[0].setPath(requestURL);
-	return (locationList[0]);
+	std::map<std::string, LocationBlock>::iterator it;
+
+	it = this->_locationMap.find(requestURL);
+	if (it == _locationMap.end())
+		return (this->_locationMap["default"]);
+	return it->second;
 }
 
 static std::vector<std::string> locationBlockBackup(std::ifstream& confFile, std::string line)
@@ -89,11 +87,15 @@ static std::vector<std::string> locationBlockBackup(std::ifstream& confFile, std
 
 /* print */
 void	ServerInfo::printServerInfo() const {
+
+	std::map<std::string, LocationBlock>::const_iterator it;
+
 	this->_serverBlock.printInfo();
+	
 	std::cout << "\n";
-	for (size_t i = 0; i < this->_locationList.size(); i++)
+	for (it = this->_locationMap.begin(); it != this->_locationMap.end(); it++)
 	{
-		this->_locationList[i].printInfo();
+		it->second.printInfo();
 	}
 	std::cout << "------------------------" << std::endl;
 }

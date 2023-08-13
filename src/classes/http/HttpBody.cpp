@@ -77,17 +77,3 @@ void	HttpBody::print()
 // 	this->_body = body.str();
 // }
 
-// void	HttpBody::createGenericBody(const std::string& path)
-// {
-// 	std::ifstream		file(path);
-// 	std::stringstream	body;
-
-// 	if (file.is_open())
-// 	{
-// 		body << file.rdbuf();
-// 		file.close();
-// 	}
-
-// 	this->_body = body.str();
-// 	// std::cout << this->_body << std::endl;
-// }

@@ -19,9 +19,9 @@ class	HttpRequest
 		HttpRequest();
 
 		// getter, setter
-		HttpRequestLine			&getHttpRequestLine();
-		HttpRequestHeader		&getHttpRequestHeader();
-		HttpBody				&getHttpBody();
+		HttpRequestLine				&getHttpRequestLine();
+		const HttpRequestHeader		&getHttpRequestHeader() const;
+		HttpBody					&getHttpBody();
 		//void					setRequestLine(std::vector<std::string>);
 		//void					setHeaderField(std::map<std::string, std::string>);
 		//void					setBody(const std::string&);

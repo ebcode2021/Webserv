@@ -1,5 +1,17 @@
 # include "utils.hpp"
 
+MethodType	findMethodType(std::string method)
+{
+	if (method == "GET")
+		return (GET);
+	else if (method == "POST")
+		return (POST);
+	else if (method == "DELETE")
+		return (DELETE);
+	else
+		return (OTHER);
+}
+
 std::string	extractRequestLine(std::string &data)
 {
 	const std::string	delim = CRLF;
@@ -41,7 +53,6 @@ std::map<std::string, std::string>	extractHeaderField(std::string &data)
 		if (pos == std::string::npos)
 			throw 400;
 		line = data.substr(0, pos);
-		std::cout << line << std::endl;
 		data.erase(0, pos + delim.length());
 		if (line == "")
 			break ;

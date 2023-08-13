@@ -3,8 +3,6 @@
 
 # include "webserv.hpp"
 # include "HttpRequest.hpp"
-# include "PathInfo.hpp"
-# include "SessionStorage.hpp"
 
 class	HttpResponseHeader
 {
@@ -13,8 +11,8 @@ class	HttpResponseHeader
 		std::string					_server;
 		std::string					_contentType;
 		size_t						_contentLength;
-		std::string					_transferEncoding;
-		std::vector<std::string>	_setCookie;
+		//std::string					_transferEncoding;
+		//std::vector<std::string>	_setCookie;
 
 	public :
 		// constructor
@@ -38,7 +36,7 @@ class	HttpResponseHeader
 		// method
 		std::string					getResponseHeaderToString();
 		std::string					getCookieString();
-		void						handleSession(SessionStorage&, std::string&, const std::string&);
+		//void						handleSession(SessionStorage&, std::string&, const std::string&);
 
 		// print
 		void						printCookie();

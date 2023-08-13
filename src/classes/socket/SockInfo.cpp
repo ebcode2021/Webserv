@@ -1,9 +1,19 @@
 # include "SockInfo.hpp"
 
 /* constructor*/
-SockInfo::SockInfo(int fd, SockMode SockMode): _modeInfo(ModeInfo(SockMode)) {
+SockInfo::SockInfo(int fd, std::string ip, int clientport, int serverPort, SockMode sockMode): _modeInfo(ModeInfo(sockMode)) {
 	this->_sockFd = fd;
-	this->_errorCode = 0;
+	this->_clientport = clientport;
+	this->_serverPort = serverPort;
+	this->_ip = ip;
+}
+
+SockInfo::SockInfo(int fd, int serverPort, SockMode sockMode): _modeInfo(ModeInfo(sockMode))
+{
+	this->_sockFd = fd;
+	this->_clientport = 0;
+	this->_serverPort = serverPort;
+	this->_ip = "";
 }
 
 int	SockInfo::getSockFd() const
@@ -11,9 +21,9 @@ int	SockInfo::getSockFd() const
 	return (this->_sockFd);
 }
 
-int	SockInfo::getErrorCode()
+HttpStatus	&SockInfo::getStatus()
 {
-	return (this->_errorCode);
+	return (this->_status);
 }
 
 ModeInfo	&SockInfo::getModeInfo()
@@ -31,11 +41,28 @@ HttpRequest	&SockInfo::getRequest()
 	return (this->_request);
 }
 
-// setter
-void	SockInfo::setErrorCode(int code)
+int	SockInfo::getClientPort()
 {
-	this->_errorCode = code;
+	return (this->_clientport);
 }
+
+int	SockInfo::getServerPort()
+{
+	return (this->_serverPort);
+}
+
+std::string	SockInfo::getClientIp()
+{
+	return (this->_ip);
+}
+
+HttpResponse	&SockInfo::getResponse()
+{
+	return (this->_response);
+}
+
+// setter
+
 
 // print
 

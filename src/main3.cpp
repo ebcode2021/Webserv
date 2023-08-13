@@ -9,7 +9,9 @@ int main(int argc, char **argv)
 	//Config::fileCheck(argc, argv);
 
 	Config	config(argv[1]);
-	config.printConfig();
+
+	//test print
+	//config.printConfig();
 
 	Server	server(config);
 	std::cout << "========Server Start==========" << std::endl;

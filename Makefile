@@ -21,6 +21,7 @@ SRCS =  main3.cpp	\
 		classes/validate/validate.cpp			\
 		\
 		classes/server/server.cpp				\
+		classes/server/serverInfoList.cpp		\
 		\
 		classes/socket/sockData.cpp		\
 		classes/socket/SockInfo.cpp		\
@@ -39,10 +40,12 @@ SRCS =  main3.cpp	\
 		utility/serverUtils.cpp		\
 		utility/eventUtils.cpp		\
 		utility/parseUtils.cpp		\
+		utility/encoding.cpp		\
 		\
 		classes/kq/kqHandler.cpp	\
 		\
 		event/processEvent.cpp		\
+		event/processRequest.cpp	\
 		
 
 
@@ -64,6 +67,7 @@ INCLUDE_DIRS = includes/							\
 			   includes/classes/kq/					\
 			   includes/classes/http/				\
 			   includes/classes/http/request/		\
+			   includes/classes/http/response/		
 
 
 

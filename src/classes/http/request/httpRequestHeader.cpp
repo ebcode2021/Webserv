@@ -5,9 +5,9 @@
 HttpRequestHeader::HttpRequestHeader() {};
 
 // getter
-std::string HttpRequestHeader::getHeaderByKey(std::string key)
+std::string HttpRequestHeader::getHeaderByKey(std::string key) const
 {
-	std::map<std::string, std::string>::iterator it;
+	std::map<std::string, std::string>::const_iterator it;
 
 	it = this->_requestHeader.find(key);
 	if (it == this->_requestHeader.end())

@@ -7,19 +7,21 @@
 
 class ServerInfo {
 	private :
-		ServerBlock					_serverBlock;
-		std::vector<LocationBlock>	_locationList;
+		ServerBlock								_serverBlock;
+		std::map<std::string, LocationBlock>	_locationMap;
 
 	public :
 		// constructor
+		ServerInfo();
 		ServerInfo(std::ifstream &);
 
 		// getter, setter
-		ServerBlock&				getServerBlock();
-		std::vector<LocationBlock>	getLocationList();
+		ServerBlock&							getServerBlock();
+		std::map<std::string, LocationBlock>	getLocationMap();
+		
 		
 		// method
-		LocationBlock		findLocationBlockByURL(const std::string&);
+		LocationBlock		getLocationBlockByURL(const std::string&);
 
 		// print
 		void printServerInfo() const;

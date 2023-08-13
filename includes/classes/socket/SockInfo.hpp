@@ -5,6 +5,7 @@
 # include "SockData.hpp"
 # include "ModeInfo.hpp"
 # include "HttpRequest.hpp"
+# include "HttpResponse.hpp"
 //# include "CgiInfo.hpp"
 //# include "HttpResponse.hpp"
 //# include "PathInfo.hpp"
@@ -13,10 +14,14 @@ class SockInfo
 {
 	private :
 		int				_sockFd;
-		bool			_errorCode;
+		HttpStatus		_status;
+		int				_clientport;
+		int				_serverPort;
+		std::string		_ip;
 		ModeInfo		_modeInfo;
 		SockData		_sockData;
 		HttpRequest		_request;
+		HttpResponse	_response;
 		//HttpResponse	_response;
 		//CgiInfo			*_cgiInfo;
 		//PathInfo		_pathInfo;
@@ -27,17 +32,21 @@ class SockInfo
 
 	public :
 		// constructor
-		SockInfo(int, SockMode);
+		SockInfo(int, std::string, int, int, SockMode);
+		SockInfo(int, int, SockMode);
 
 		// getter
-		int	 		getSockFd() const;
-		int			getErrorCode();
-		ModeInfo	&getModeInfo();
-		SockData	&getSockData();
-		HttpRequest	&getRequest();
+		int	 			getSockFd() const;
+		HttpStatus		&getStatus();
+		ModeInfo		&getModeInfo();
+		SockData		&getSockData();
+		HttpRequest		&getRequest();
+		HttpResponse	&getResponse();
+		int				getClientPort();
+		int				getServerPort();
+		std::string		getClientIp();
 
 		// setter
-		void		setErrorCode(int);
 		
 		// getter
 		//HttpRequest&	getRequest();

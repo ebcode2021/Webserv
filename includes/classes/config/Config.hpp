@@ -2,13 +2,14 @@
 # define CONFIG_HPP
 
 # include "ServerInfo.hpp"
+# include "ServerInfoList.hpp"
 //# include "HttpRequestHeader.hpp"
 # include "indication.hpp"
 # include "enum.hpp"
 
 class	Config {
 	private :
-		std::vector<ServerInfo>	_serverList;
+		ServerInfoList			_serverInfoList;
 		std::set<int>			_serverPortList;
 
 	public :
@@ -16,19 +17,18 @@ class	Config {
 		Config(const std::string &);
 
 		// getter
-		const std::vector<ServerInfo>	&getServerList() const;
-		const std::set<int>				&getServerPortList() const;
+		const ServerInfoList	&getServerInfoList() const;
+		const std::set<int>		&getServerPortList() const;
 
 		// method
-		void					addServer(const ServerInfo &);
 		ServerInfo				findServerInfoByHost(const std::string&);
-		ServerInfo				findServerInfoByParameter(const std::string&, const size_t);
+		//ServerInfo				findServerInfoByParameter(const std::string&, const size_t);
 		
 		// checker
 		static bool				fileCheck(int, char *[]);
 
 		// print
-		void	printConfig() const;
+		void	printConfig();
 };
 
 #endif

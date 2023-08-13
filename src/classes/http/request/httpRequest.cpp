@@ -11,7 +11,7 @@ HttpRequestLine	&HttpRequest::getHttpRequestLine()
 	return (this->_httpRequestLine);
 }
 
-HttpRequestHeader	&HttpRequest::getHttpRequestHeader()
+const HttpRequestHeader	&HttpRequest::getHttpRequestHeader() const
 {
 	return (this->_httpRequestHeader);
 }

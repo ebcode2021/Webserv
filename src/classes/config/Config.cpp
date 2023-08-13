@@ -15,12 +15,12 @@ Config::Config(const std::string &fileName)
 	{
 		splitedLine = split(line, WHITESPACE);
 		if (splitedLine.size() && splitedLine[0].compare("server") == 0)
-			addServer(ServerInfo(confFile));
+			this->_serverInfoList.insert(ServerInfo(confFile));
 	}
 	
-	for (size_t i = 0; i < this->_serverList.size(); i++)
+	for (size_t i = 0; i < this->_serverInfoList.size(); i++)
 	{
-		ServerBlock server = this->_serverList[i].getServerBlock();
+		ServerBlock server = this->_serverInfoList[i].getServerBlock();
 		std::vector<int> listenSockList = server.getListenPortList();
 
 		for (size_t j = 0; j < listenSockList.size(); j++) {
@@ -35,8 +35,8 @@ const std::set<int>	&Config::getServerPortList() const {
 	return (this->_serverPortList);
 }
 
-const std::vector<ServerInfo>	&Config::getServerList() const {
-	return(this->_serverList);
+const ServerInfoList	&Config::getServerInfoList() const {
+	return(this->_serverInfoList);
 }
 
 /* checker */
@@ -79,73 +79,68 @@ bool	Config::fileCheck(int argc, char *argv[])
 }
 
 /* method */
-void	Config::addServer(const ServerInfo &serverInfo)
-{
-	this->_serverList.push_back(serverInfo);
-}
+// ServerInfo	Config::findServerInfoByHost(const std::string& host)
+// {
+// 	// request inform
+// 	std::vector<std::string>	splittedHost = split(host, ":");
+// 	std::string					serverName   = splittedHost[0];
+// 	size_t						port         = std::atoi(splittedHost[1].c_str());
 
-ServerInfo	Config::findServerInfoByHost(const std::string& host)
-{
-	// request inform
-	std::vector<std::string>	splittedHost = split(host, ":");
-	std::string					serverName   = splittedHost[0];
-	size_t						port         = std::atoi(splittedHost[1].c_str());
+// 	return (findServerInfoByParameter(serverName, port));
+// }
 
-	return (findServerInfoByParameter(serverName, port));
-}
+// ServerInfo	Config::findServerInfoByParameter(const std::string& serverName, const size_t port)
+// {
+// 	// config inform
+// 	std::vector<ServerInfo>		serverList = this->_serverList;
+// 	size_t						serverListSize = this->_serverList.size();
+// 	ServerInfo					defaultServer = serverList[0];
 
-ServerInfo	Config::findServerInfoByParameter(const std::string& serverName, const size_t port)
-{
-	// config inform
-	std::vector<ServerInfo>		serverList = this->_serverList;
-	size_t						serverListSize = this->_serverList.size();
-	ServerInfo					defaultServer = serverList[0];
+// 	// each data from ServerInfo
+// 	std::vector<int>			listenList;
+// 	size_t			 			listenListeSize;
 
-	// each data from ServerInfo
-	std::vector<int>			listenList;
-	size_t			 			listenListeSize;
+// 	// 1. save ServerInfo matching port
+// 	std::vector<ServerInfo>	 portList;
+// 	for (size_t i = 0; i < serverListSize; i++)
+// 	{
+// 		ServerBlock serverBlock = serverList[i].getServerBlock();
 
-	// 1. save ServerInfo matching port
-	std::vector<ServerInfo>	 portList;
-	for (size_t i = 0; i < serverListSize; i++)
-	{
-		ServerBlock serverBlock = serverList[i].getServerBlock();
+// 		listenList = serverBlock.getListenPortList();
+// 		listenListeSize = listenList.size();
 
-		listenList = serverBlock.getListenPortList();
-		listenListeSize = listenList.size();
+// 		for (size_t j = 1; j < listenListeSize; j++)
+// 		{
+// 			if ((size_t)listenList[j] == port)
+// 			 portList.push_back(serverList[i]);
+// 		}
+// 	}
 
-		for (size_t j = 1; j < listenListeSize; j++)
-		{
-			if ((size_t)listenList[j] == port)
-			 portList.push_back(serverList[i]);
-		}
-	}
-
-	if (portList.empty())
-		return (defaultServer);
+// 	if (portList.empty())
+// 		return (defaultServer);
 
 
-	// 2. compare server_name
-	std::vector<std::string>	serverNameList;
-	size_t						serverNameListSize;
+// 	// 2. compare server_name
+// 	std::vector<std::string>	serverNameList;
+// 	size_t						serverNameListSize;
 
-	size_t	portListSize = portList.size();
-	for (size_t i = 0; i < portListSize; i++)
-	{
-		ServerBlock serverBlock  = portList[i].getServerBlock();
+// 	size_t	portListSize = portList.size();
+// 	for (size_t i = 0; i < portListSize; i++)
+// 	{
+// 		ServerBlock serverBlock  = portList[i].getServerBlock();
 
-		serverNameList = serverBlock.getServerNameList();
-		serverNameListSize = serverNameList.size();
-		for (size_t j = 0; j < serverNameListSize; j++)
-		{
-			if (serverNameList[j] == serverName)
-				return (portList[i]);
-		}
-	}
-	return (portList[0]);
-}
+// 		serverNameList = serverBlock.getServerNameList();
+// 		serverNameListSize = serverNameList.size();
+// 		for (size_t j = 0; j < serverNameListSize; j++)
+// 		{
+// 			if (serverNameList[j] == serverName)
+// 				return (portList[i]);
+// 		}
+// 	}
+// 	return (portList[0]);
+// }
 
-void	Config::printConfig() const
+void	Config::printConfig()
 {
 	std::cout << "---------Port List----------" << std::endl;
 
@@ -154,10 +149,10 @@ void	Config::printConfig() const
 		std::cout << *it << std::endl;
 	}
 
-	for (size_t i = 0; i < this->_serverList.size(); i++)
+	for (size_t i = 0; i < this->_serverInfoList.size(); i++)
 	{
 		std::cout << "-----server " << i << "----------" << std::endl;
-		_serverList[i].printServerInfo();
+		_serverInfoList[i].printServerInfo();
 	}
 	
 }
