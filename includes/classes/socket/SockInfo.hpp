@@ -22,7 +22,6 @@ class SockInfo
 		SockData		_sockData;
 		HttpRequest		_request;
 		HttpResponse	_response;
-		//HttpResponse	_response;
 		//CgiInfo			*_cgiInfo;
 		//PathInfo		_pathInfo;
 		//std::string		_clientAddr;
@@ -64,7 +63,6 @@ class SockInfo
 		//void			setPathInfo(PathInfo &);
 		
 		// method
-		std::string 	chunkedEncoding();
 
 		// new 추가
 

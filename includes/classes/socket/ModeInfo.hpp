@@ -7,21 +7,24 @@ class ModeInfo
 {
 	private:
 		SockMode	_sockMode;
-		ReadMode	_readMode;
 		SendMode	_sendMode;
+		ReadPhase	_readPhase;
+		SendPhase	_sendPhase;
 
 	public:
 		ModeInfo(SockMode);
 
 		// getter
 		SockMode&	getSockMode();
-		ReadMode&	getReadMode();
+		ReadPhase&	getReadPhase();
 		SendMode&	getSendMode();
+		SendPhase&	getSendPhase();
 		
 		// setter
 		void	setSockMode(SockMode);
-		void	setReadMode(ReadMode);
+		void	setReadPhase(ReadPhase);
 		void	setSendMode(SendMode);
+		void	setSendPhase(SendPhase);
 
 		// method
 		void	initialization();

@@ -11,7 +11,7 @@ class	HttpResponseHeader
 		std::string					_server;
 		std::string					_contentType;
 		size_t						_contentLength;
-		//std::string					_transferEncoding;
+		std::string					_transferEncoding;
 		//std::vector<std::string>	_setCookie;
 
 	public :
@@ -24,22 +24,22 @@ class	HttpResponseHeader
 		std::string					getContentType() const;
 		size_t						getContentLength() const;
 		std::string					getTransferEncoding() const;
-		std::vector<std::string>	getSetCookie() const;
+// 		std::vector<std::string>	getSetCookie() const;
 
 		void						setDate(const std::string&);
 		void						setServer(const std::string&);
 		void						setContentType(const std::string&);
 		void						setContentLength(const size_t);
 		void						setTransferEncoding(const std::string&);
-		void						setSetCookie(const std::string&);
+// 		void						setSetCookie(const std::string&);
 
-		// method
+// 		// method
 		std::string					getResponseHeaderToString();
-		std::string					getCookieString();
-		//void						handleSession(SessionStorage&, std::string&, const std::string&);
+// 		std::string					getCookieString();
+// 		//void						handleSession(SessionStorage&, std::string&, const std::string&);
 
-		// print
-		void						printCookie();
+// 		// print
+// 		void						printCookie();
 };
 
 #endif

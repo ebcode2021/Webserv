@@ -10,6 +10,50 @@ bool	clientReadEvent(SockInfo *sockInfo, KqHandler &kq)
 	return (true);
 }
 
+bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq)
+{
+	SendPhase		phase = sockInfo->getModeInfo().getSendPhase();
+	int				clientFd = sockInfo->getSockFd();
+	HttpResponse	&response = sockInfo->getResponse();
+
+	switch (phase)
+	{
+		int ret;
+		case S_LINE: 
+		{
+			std::string line = response.getResponseLine().getResponseLineToString();
+			ret = send(clientFd, line.c_str(), line.size(), 0);
+			phase = S_HEADER;
+			break;
+		}
+		case S_HEADER:
+		{
+			std::string header = response.getResponseHeader().getResponseHeaderToString();
+			ret = send(clientFd, header.c_str(), header.size(), 0);
+			phase = S_END;
+			break;
+		}
+		case S_BODY:
+		{
+			HttpBody &body = response.getBody();
+			ret = send(clientFd, body.getBody().c_str(), body.getBodySize(), 0);
+			if (ret < (int)body.getBodySize())
+				body.trimBody(ret);
+			else {
+				kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, sockInfo);
+				if (sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("connection") != KEEPALIVE)
+					closeSock(sockInfo);
+			}
+			break;
+		}
+		case S_END:
+		{
+			break;
+		}
+	}
+	return (true);
+}
+
 // void	parseData(SockInfo *sockInfo)
 // {
 	

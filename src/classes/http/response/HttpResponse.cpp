@@ -3,6 +3,22 @@
 /* constructor */
 HttpResponse::HttpResponse(){}
 
+HttpBody	&HttpResponse::getBody()
+{
+	return (this->_httpBody);
+}
+
+HttpResponseLine	&HttpResponse::getResponseLine()
+{
+	return (this->_httpResponseLine);
+}
+
+HttpResponseHeader	&HttpResponse::getResponseHeader()
+{
+	return (this->_httpResponseHeader);
+}
+
+
 // HttpResponse::HttpResponse(HttpResponseLine& responseLine, HttpResponseHeader& responseHeader, HttpBody& responseBody)
 // {
 // 	this->_httpResponseLine = responseLine;
@@ -114,29 +130,29 @@ HttpResponse::HttpResponse(){}
 // }
 
 
-void	HttpResponse::printHttpResponse()
-{
-	HttpResponseLine line = this->_httpResponseLine;
-	HttpResponseHeader header = this->_httpResponseHeader;
-	HttpBody body = this->_httpBody;
-	std::string	cookieString = header.getCookieString();
+// void	HttpResponse::printHttpResponse()
+// {
+// 	HttpResponseLine line = this->_httpResponseLine;
+// 	HttpResponseHeader header = this->_httpResponseHeader;
+// 	HttpBody body = this->_httpBody;
+// 	std::string	cookieString = header.getCookieString();
 
-	std::cout << "\n---- [response 출력] ----" << std::endl;
-	std::cout << " -- response-line" << std::endl;
-	std::cout << "\t httpStatus : " << line.getHttpStatus().getStatusCode() << " " << line.getHttpStatus().getReason() << std::endl;
-	std::cout << "\t version : " << line.getVersion() << std::endl;
-	std::cout << " -- response-header" << std::endl;
-	std::cout << "\t date : " << header.getDate() << std::endl;
-	std::cout << "\t server : " << header.getServer() << std::endl;
-	std::cout << "\t transfer-encoding : " << header.getTransferEncoding() << std::endl;
-	std::cout << "\t content-length : " << header.getContentLength() << std::endl;
-	std::cout << "\t content-type : " << header.getContentType() << std::endl;
-	std::cout << "\t set-cookie : " << cookieString << std::endl;
-	std::cout << " -- response-body" << std::endl;
-	//std::cout << body.getBody() << std::endl;
+// 	std::cout << "\n---- [response 출력] ----" << std::endl;
+// 	std::cout << " -- response-line" << std::endl;
+// 	std::cout << "\t httpStatus : " << line.getHttpStatus().getStatusCode() << " " << line.getHttpStatus().getReason() << std::endl;
+// 	std::cout << "\t version : " << line.getVersion() << std::endl;
+// 	std::cout << " -- response-header" << std::endl;
+// 	std::cout << "\t date : " << header.getDate() << std::endl;
+// 	std::cout << "\t server : " << header.getServer() << std::endl;
+// 	std::cout << "\t transfer-encoding : " << header.getTransferEncoding() << std::endl;
+// 	std::cout << "\t content-length : " << header.getContentLength() << std::endl;
+// 	std::cout << "\t content-type : " << header.getContentType() << std::endl;
+// 	std::cout << "\t set-cookie : " << cookieString << std::endl;
+// 	std::cout << " -- response-body" << std::endl;
+// 	//std::cout << body.getBody() << std::endl;
 
-	std::cout << "---- response 출력 끝 ----\n" << std::endl;
-}
+// 	std::cout << "---- response 출력 끝 ----\n" << std::endl;
+// }
 
 
 // std::string	HttpResponse::getResponseToString() {

@@ -4,8 +4,9 @@
 ModeInfo::ModeInfo(SockMode sockMode)
 {
 	this->_sockMode = sockMode;
-	this->_readMode = R_LINE;
+	this->_readPhase = R_LINE;
 	this->_sendMode = S_CLIENT;
+	this->_sendPhase = S_LINE;
 }
 
 // getter
@@ -14,14 +15,19 @@ SockMode	&ModeInfo::getSockMode()
 	return (this->_sockMode);
 }
 
-ReadMode	&ModeInfo::getReadMode()
+ReadPhase	&ModeInfo::getReadPhase()
 {
-	return (this->_readMode);
+	return (this->_readPhase);
 }
 
 SendMode	&ModeInfo::getSendMode()
 {
 	return (this->_sendMode);
+}
+
+SendPhase	&ModeInfo::getSendPhase()
+{
+	return (this->_sendPhase);
 }
 
 // setter
@@ -30,9 +36,9 @@ void	ModeInfo::setSockMode(SockMode mode)
 	this->_sockMode = mode;
 }
 
-void	ModeInfo::setReadMode(ReadMode mode)
+void	ModeInfo::setReadPhase(ReadPhase phase)
 {
-	this->_readMode = mode;
+	this->_readPhase = phase;
 }
 
 void	ModeInfo::setSendMode(SendMode mode)
@@ -40,9 +46,15 @@ void	ModeInfo::setSendMode(SendMode mode)
 	this->_sendMode = mode;
 }
 
+void	ModeInfo::setSendPhase(SendPhase phase)
+{
+	this->_sendPhase = phase;
+}
+
 // method
 void	ModeInfo::initialization()
 {
-	this->_readMode = R_HEADER;
+	this->_readPhase = R_LINE;
+	this->_sendPhase = S_LINE;
 	this->_sendMode = S_CLIENT;
 }

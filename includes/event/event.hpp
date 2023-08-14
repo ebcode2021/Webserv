@@ -12,6 +12,7 @@
 /* event */
 void	processEvent(KqHandler &, Config &);
 bool	clientReadEvent(SockInfo *sockInfo, KqHandler &kq);
+bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq);
 
 /* eventUtils */
 void		acceptConnection(SockInfo *, KqHandler &);

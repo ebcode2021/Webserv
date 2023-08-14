@@ -22,7 +22,7 @@ HttpBody	&HttpRequest::getHttpBody()
 }
 
 // method
-int	HttpRequest::createRequest(std::string &data, ReadMode &mode)
+int	HttpRequest::createRequest(std::string &data, ReadPhase &mode)
 {
 	try
 	{

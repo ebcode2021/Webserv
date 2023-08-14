@@ -19,7 +19,7 @@ void	Server::processReadEvent(SockInfo *sockInfo)
 		case M_CLIENT:
 			if (clientReadEvent(sockInfo, kq))
 			{
-				int status = sockInfo->getRequest().createRequest(sockInfo->getSockData().getBuf(), sockInfo->getModeInfo().getReadMode());
+				int status = sockInfo->getRequest().createRequest(sockInfo->getSockData().getBuf(), sockInfo->getModeInfo().getReadPhase());
 				sockInfo->getStatus().setHttpStatus(status);
 				processRequest(sockInfo, this->_serverInfoList, this->kq);
 			}
@@ -28,6 +28,18 @@ void	Server::processReadEvent(SockInfo *sockInfo)
 			}
 			break;
 	}
+}
+
+
+
+void	processWriteEvent(SockInfo *sockInfo, KqHandler &kq)
+{
+	SendMode sendMode = sockInfo->getModeInfo().getSendMode();
+
+	if (sendMode == S_CLIENT) {
+		clientWriteEvent(sockInfo, kq);
+	}
+	//sendToChild();
 }
 
 void	Server::processEvent()
@@ -45,7 +57,7 @@ void	Server::processEvent()
 			case EVFILT_READ:
 				processReadEvent(sockInfo);
 			case EVFILT_WRITE:
-				// processWriteEvent(sockInfo, kq);
+				processWriteEvent(sockInfo, kq);
 				break;
 			case EVFILT_PROC:
 				break;

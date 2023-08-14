@@ -7,7 +7,6 @@
 # include "HttpBody.hpp"
 
 
-
 class	HttpResponse
 {
 	private :
@@ -18,19 +17,20 @@ class	HttpResponse
 	public :
 		// constructor
 		HttpResponse();
-		HttpResponse(int, HttpBody &);
+		HttpResponse(HttpStatus);
 
 		// getter
 
 
 		// setter
-		std::string					getBody() const;
-		HttpResponseHeader&			getResponseHeader();
-		HttpResponseLine&			getResponseLine();
+		HttpBody			&getBody();
+		HttpResponseLine	&getResponseLine();
+		HttpResponseHeader	&getResponseHeader();
 
 
 
 		// print
 		void						printHttpResponse();
 };
+
 #endif

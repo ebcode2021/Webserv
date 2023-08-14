@@ -22,12 +22,20 @@ enum	multiplicityOption
 	multiple,
 };
 
-enum ReadMode
+enum ReadPhase
 {
 	R_LINE,
 	R_HEADER,
 	R_BODY,
 	R_END,
+};
+
+enum SendPhase
+{
+	S_LINE,
+	S_HEADER,
+	S_BODY,
+	S_END,
 };
 
 enum SendMode

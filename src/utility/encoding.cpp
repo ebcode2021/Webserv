@@ -5,7 +5,7 @@ std::string identityEncoding(std::string &data)
 	return (data);
 }
 
-std::string chunkedEncoding(std::string &data, ReadMode &mode)
+std::string chunkedEncoding(std::string &data, ReadPhase &phase)
 {
 	std::string body;
 	std::string chunkSizeString;
@@ -22,7 +22,7 @@ std::string chunkedEncoding(std::string &data, ReadMode &mode)
 		std::cout << chunkSize << std::endl;
 		if (chunkSize == 0) {
 			std::cout << "데이터 끝" << std::endl;
-			mode = R_END;
+			phase = R_END;
 		}
 		data.erase(0, pos + 2);
 		std::cout << data.substr(0, chunkSize) << std::endl;
@@ -32,13 +32,13 @@ std::string chunkedEncoding(std::string &data, ReadMode &mode)
 	return (body);
 }
 
-std::string encodingData(std::string &data, std::string encoding, ReadMode &mode)
+std::string encodingData(std::string &data, std::string encoding, ReadPhase &phase)
 {
 	std::string backUp;
 
 	if (encoding == "chunked")
 		backUp = identityEncoding(data);
 	else
-		backUp = chunkedEncoding(data, mode);
+		backUp = chunkedEncoding(data, phase);
 	return (backUp);
 }

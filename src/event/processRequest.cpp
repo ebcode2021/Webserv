@@ -41,7 +41,7 @@ std::string	createGenericBody(const std::string& path)
 	return (std::string(body.str()));
 }
 
-static void processGetRequest(SockInfo *sockInfo, LocationBlock &locationBlock)
+static HttpBody	processGetRequest(SockInfo *sockInfo, LocationBlock &locationBlock)
 {
 	// limit except확인 걸리면 403
 	// if (checkBlocked(sockInfo->getClientIp(), locationBlock.getLimitExcept())) {
@@ -50,21 +50,21 @@ static void processGetRequest(SockInfo *sockInfo, LocationBlock &locationBlock)
 	HttpBody responsBody;
 	std::string path = createPath(sockInfo->getRequest().getHttpRequestLine(), locationBlock.getRoot());
 	PathType pathType = determinePathType(path);
-	if (pathType == P_NONE)
-		sockInfo->getResponse().createResponse(404);
+	
 	switch (pathType)
 	{
 		case P_FILE:
 			if (!isAccess(path))
 				throw 403;
-			responsBody.setBody(createGenericBody(path));
-			
+			return (HttpBody(createGenericBody(path)));
 			break;
 		case P_DIR:
+			
 			break;
 		case P_NONE:
 			throw 404;
 	}
+	return (responsBody);
 }
 
 int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler &kq)
@@ -77,18 +77,19 @@ int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler 
 	LocationBlock		curLocation = curServerInfo.getLocationBlockByURL(requestLine.getRequestURI());
 
 	if (sockInfo->getStatus().getStatusCode() != 0) {
-		
+		return (false);
 	}
-		return false;
 	// location 블록에 return 지시어가 있으면 redirect
 	try
 	{
 		MethodType type = findMethodType(requestLine.getMethod());
+		HttpBody	responseBody;
 		std::cout << type << std::endl;
 		switch (type)
 		{
 			case GET:
-				processGetRequest(sockInfo, curLocation);
+				responseBody = processGetRequest(sockInfo, curLocation);
+				kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, sockInfo);
 				break;
 			case POST:
 				break;
@@ -100,7 +101,8 @@ int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler 
 	}
 	catch(int code)
 	{
-
+		std::cout << code << std::endl;
+		sockInfo->getStatus().setHttpStatus(code);
 	}
 	
 	

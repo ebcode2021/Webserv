@@ -5,6 +5,10 @@ HttpBody::HttpBody() {
 	this->_body = "";
 }
 
+HttpBody::HttpBody(std::string body) {
+	this->_body = body;
+}
+
 /* getter, setter */
 std::string	&HttpBody::getBody() {
 	return (this->_body);
@@ -25,6 +29,9 @@ size_t	HttpBody::getBodySize() const {
 	return (this->_body.size());
 }
 
+void	HttpBody::trimBody(int index) {
+	this->_body.erase(0, index);
+}
 
 // test
 void	HttpBody::print()

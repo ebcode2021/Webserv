@@ -24,6 +24,6 @@ std::map<std::string, std::string>	extractHeaderField(std::string &);
 std::string							trimString(const std::string &, const std::string &);
 
 /* encodingData.cpp */
-std::string encodingData(std::string &, std::string, ReadMode &);
+std::string encodingData(std::string &, std::string, ReadPhase &);
 
 #endif
