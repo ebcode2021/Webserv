@@ -23,13 +23,16 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 		else if (splittedLine[0].compare("cgi_pass") == 0) {
 			setCgiPass(locationBlock[i]);
 		}
+		else if (splittedLine[0].compare("return") == 0) {
+			this->_return = splittedLine[1];
+		}
 		else {
 			this->configsetting(splittedLine);
 		}
 	}
 }
 
-/* getter, setter */
+/* getter */
 LimitExcept	LocationBlock::getLimitExcept() const {
 	return (this->_limitExcept);
 }
@@ -38,6 +41,12 @@ std::string	LocationBlock::getPath() const {
 	return (this->_path);
 }
 
+std::string LocationBlock::getReturn() const {
+	return (this->_return);
+}
+
+
+/* setter */
 void	LocationBlock::setLimitExcept(const std::string &line) {
 	this->_limitExcept = LimitExcept(split(line, "\n"));
 }
@@ -49,6 +58,10 @@ void	LocationBlock::setPath(const std::string& path) {
 void	LocationBlock::setCgiPass(const std::string& cgiPass) {
 	this->_cgi_pass = cgiPass;
 }
+
+void	LocationBlock::setReturn(const std::string& value) {
+	this->_return = value;
+} 
 
 std::string LocationBlock::getCgiPass() const {
 	return (this->_cgi_pass);

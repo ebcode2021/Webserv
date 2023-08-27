@@ -24,10 +24,6 @@ size_t			HttpResponseHeader::getContentLength() const {
 	return(this->_contentLength);
 }
 
-std::string		HttpResponseHeader::getTransferEncoding() const {
-	return(this->_transferEncoding);
-}
-
 // std::vector<std::string>	HttpResponseHeader::getSetCookie() const {
 // 	return(this->_setCookie);
 // }
@@ -54,8 +50,30 @@ void			HttpResponseHeader::setContentLength(const size_t contentLength) {
 	this->_contentLength = contentLength;
 }
 
-void			HttpResponseHeader::setTransferEncoding(const std::string& transferEncoding) {
-	this->_transferEncoding = transferEncoding;
+
+std::string Date()
+{
+	std::time_t currentTime;
+    std::time(&currentTime); // 현재 시간을 얻어옴
+	std::string timeString = std::ctime(&currentTime);
+	timeString.resize(timeString.length() - 1);
+	return (timeString);
+}
+
+void	HttpResponseHeader::setHeader(HttpBody &body)
+{
+	this->_date = Date();
+	this->_server = SERVER_NAME;
+	this->_contentType = HTML;
+	this->_contentLength = body.getBodySize(); 
+}
+
+void	HttpResponseHeader::setHeader(PathInfo &pathInfo, HttpBody &body)
+{
+	this->_date = Date();
+	this->_server = SERVER_NAME;
+	this->_contentType = pathInfo.getFileType();
+	this->_contentLength = body.getBodySize();
 }
 
 
@@ -91,7 +109,6 @@ std::string		HttpResponseHeader::getResponseHeaderToString()
 	responseHeader += ("Date:" + SP + this->_date + CRLF);
 	//responseHeader += "Content-Type: text/html; charset=utf-8" + CRLF;
 	responseHeader += ("Content-Type:" + SP + this->_contentType + CRLF);
-	responseHeader += ("Transfer-Encoding:" + SP + this->_transferEncoding + CRLF);
 	if (this->_contentLength > 0)
 		responseHeader += ("Content-Length:" + SP + itos(this->_contentLength) + CRLF);
 	// if (cookieHeader.empty() == false)

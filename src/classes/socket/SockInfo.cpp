@@ -6,6 +6,7 @@ SockInfo::SockInfo(int fd, std::string ip, int clientport, int serverPort, SockM
 	this->_clientport = clientport;
 	this->_serverPort = serverPort;
 	this->_ip = ip;
+	this->_cgiInfo = NULL;
 }
 
 SockInfo::SockInfo(int fd, int serverPort, SockMode sockMode): _modeInfo(ModeInfo(sockMode))
@@ -14,6 +15,7 @@ SockInfo::SockInfo(int fd, int serverPort, SockMode sockMode): _modeInfo(ModeInf
 	this->_clientport = 0;
 	this->_serverPort = serverPort;
 	this->_ip = "";
+	this->_cgiInfo = NULL;
 }
 
 int	SockInfo::getSockFd() const
@@ -61,7 +63,22 @@ HttpResponse	&SockInfo::getResponse()
 	return (this->_response);
 }
 
+CgiInfo	*SockInfo::getCgiInfo()
+{
+	return (this->_cgiInfo);
+}
+
 // setter
+void	SockInfo::setResponse(HttpResponse response)
+{
+	this->_response = response;
+}
+
+void	SockInfo::setCgiInfo(CgiInfo *cgiInfo)
+{
+	this->_cgiInfo = cgiInfo;
+}
+
 
 
 // print

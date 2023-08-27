@@ -10,7 +10,9 @@
                 "${workspaceFolder}/includes/utility",
                 "${workspaceFolder}/includes/classes/config/server",
                 "${workspaceFolder}/includes/classes/config/location",
-                "${workspaceFolder}/includes/classes/validate"
+                "${workspaceFolder}/includes/classes/validate",
+                "${workspaceFolder}/includes/classes/http/request",
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk/usr/include/mach-o"
             ],
             "defines": [],
             "macFrameworkPath": [

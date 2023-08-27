@@ -23,6 +23,7 @@ class	HttpStatus
 
 		// method
 		std::map<int, std::string>& getStatusMap() const;
+		std::string	getString();
 
 		// print
 		void						printStatus();

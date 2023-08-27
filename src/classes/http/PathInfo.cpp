@@ -1,44 +1,39 @@
 #include "PathInfo.hpp"
 #include "LocationBlock.hpp"
+#include "utils.hpp"
 
 /* constructor */
 PathInfo::PathInfo(){}
 
-PathInfo::PathInfo(const std::string &path)
+PathInfo::PathInfo(std::string url, LocationBlock& locationBlock)
 {
-	this->_path = path;
-	this->_pathType = determinePathType();
-	this->_fileType = determineFileType();
-	this->_access = isAccess();
-	this->_autoIndex = false;
-	this->_returnPage = "";
+	this->_path = createPath(url, locationBlock.getRoot());
+	this->_pathType = determinePathType(this->_path);
+	this->_autoIndex = locationBlock.getAutoIndex();
+	this->_fileType = searchFileType(this->_path);
+	this->_access = isAccess(this->_path);
 }
 
-PathInfo::PathInfo(const LocationBlock& locationBlock)
+PathInfo::PathInfo(std::string path)
 {
-	this->_locationBlock = locationBlock;
-	this->_path = locationBlock.getFullPath();
-	this->_pathType = determinePathType();
-	this->_fileType = determineFileType();
-	this->_access = isAccess();
+	this->_path = path;
+	this->_pathType = determinePathType(path);
 	this->_autoIndex = false;
-	this->_returnPage = "";
+	this->_fileType = searchFileType(path);
+	this->_access = isAccess(path);
 }
 
 /* getter, setter */
-LocationBlock	PathInfo::getLocationBlock() const {
-	return(this->_locationBlock);
+std::string	PathInfo::getPath() const {
+	return(this->_path);
 }
+
 PathType	PathInfo::getPathType() const {
 	return(this->_pathType);
 }
 
 std::string	PathInfo::getFileType() const {
 	return(this->_fileType);
-}
-
-std::string	PathInfo::getPath() const {
-	return(this->_path);
 }
 
 bool		PathInfo::getAccess() const {
@@ -49,226 +44,40 @@ bool		PathInfo::getAutoIndex() const {
 	return (this->_autoIndex);
 }
 
-std::string	PathInfo::getReturnPage() const {
-	return (this->_returnPage);
-}
 
 void		PathInfo::setAutoIndex(bool value) {
 	this->_autoIndex = value;
 }
 
-void	PathInfo::setReturnPage(const std::string& path) {
-	this->_returnPage = path;
-}
-
-void	PathInfo::setPostFileType() {
-	this->_fileType = "multipart/form-data";
-}
-
-/* method */
-PathType	PathInfo::determinePathType()
-{
-	struct stat pathStat;
-
-	if (stat(this->_path.c_str(), &pathStat) == 0)
-	{
-		if (S_ISREG(pathStat.st_mode))
-			return P_FILE;
-		else if (S_ISDIR(pathStat.st_mode))
-			return P_DIR;
-	}
-	return P_NONE;
-}
-
-std::map<std::string, std::string> createTypeTable()
-{
-	std::map<std::string, std::string>	typeTable;
-	std::vector<std::string> 			splittedLine;
-
-	std::ifstream						file(FILE_TYPE_PATH);
-	std::string							line;
-
-	while (std::getline(file, line, ';'))
-	{
-		splittedLine = split(line, WHITESPACE);
-		if (splittedLine.size() > 0)
-		{
-			for (size_t i = 1; i < splittedLine.size(); i++)
-				typeTable.insert(make_pair(splittedLine[i], splittedLine[0]));
-		}
-	}
-	return (typeTable);
-}
-
-std::string getFileExtension(const std::string &path)
-{
-	size_t dotIndex = path.find_last_of(".");
-
-	if (dotIndex != std::string::npos && dotIndex < path.length() - 1)
-		return path.substr(dotIndex + 1);
-
-	return "";
-}
-
-std::string searchFileType(const std::string &path)
-{
-	static std::map<std::string, std::string> typeTable = createTypeTable();
-	std::string fileExtension = getFileExtension(path);
-	std::map<std::string, std::string>::iterator iter = typeTable.find(fileExtension);
-	std::cout << iter->second << std::endl;
-	if (iter == typeTable.end())
-		return (DEFAULT_FILE_TYPE);
-	else
-		return (iter->second);
-	
-}
-
-std::string	PathInfo::determineFileType()
-{
-	if (this->_pathType != P_FILE)
-		return "";
-	return (searchFileType(this->_path));
-}
-
-bool		PathInfo::isAccess()
-{
-	if (access(this->_path.c_str(), R_OK | W_OK) == 0)
-		return (true);
-	return (false);
-}
-
-bool		PathInfo::isFile(std::string& path)
-{
-	struct stat fileStat;
-
-	return (stat(path.c_str(), &fileStat) == 0);
-}
-
-/* method */
-bool	PathInfo::isAccess(std::string&	path)
-{
-	if (access(path.c_str(), R_OK | W_OK) == 0)
-		return (true);
-	return (false);
-}
-
-void	PathInfo::processGetRequest(LocationBlock& block)
-{
-	std::vector<std::string>	indexList = block.getIndexList();
-	size_t						indexListSize = indexList.size();
-	std::string					addIndexPath;
-
-	if (this->_access == false)
-		throw ResponseException(403);
-
-	if (this->_pathType == P_FILE)
-		this->_returnPage = this->_path;
-	else
-	{
-		if (indexListSize > 1)
-		{
-			for (size_t i = 1; i < indexListSize; i++)
-			{
-				addIndexPath = this->_path + "/" + indexList[i];
-				if (this->isFile(addIndexPath) == true)
-				{
-					if (this->isAccess(addIndexPath) == false)
-						break ;
-					this->_returnPage = addIndexPath;
-					return ;
-				}
-			}
-			if (block.getAutoIndex() == false)
-				throw ResponseException(403);
-			this->_returnPage = this->_path;
-			this->setAutoIndex(true);
-		}
-		else
-		{
-			addIndexPath = this->_path + indexList[0];
-			if (this->isAccess(addIndexPath) == false)
-				throw ResponseException(403);
-			this->_returnPage = addIndexPath;
-		}
-	}
-}
-
-void	PathInfo::processDeleteRequest()
-{
-	std::string		path = this->_path;
-
-	if (this->_access == false)
-		throw ResponseException(500);
-
-	if (this->_pathType == P_FILE)
-		std::remove(path.c_str());
-	else if (this->_pathType == P_DIR)
-	{
-		DIR* dir = opendir(path.c_str());
-
-		if (dir)
-		{
-			dirent*	entry;
-
-			while ((entry = readdir(dir)) != NULL)
-			{
-				if (entry->d_type == DT_REG)
-				{
-					std::string	filePath = path + "/" + entry->d_name;
-					if (remove(filePath.c_str()) != 0)
-						throw ResponseException(403);
-				}
-			}
-			closedir(dir);
-			if (rmdir(path.c_str()) != 0)
-				throw ResponseException(403);
-		}
-	}
-
-}
-
-void			PathInfo::setReturnPageByError(const std::vector<ErrorPage>& errorPageList, const int statusCode)
-{
-	size_t	errorPageListSize	= errorPageList.size();
-
-	for (size_t i = 0; i < errorPageListSize; i++)
-	{
-		std::string			errorPagepath = this->_path + errorPageList[i].getPath();
-		std::vector<int>	statusCodeList = errorPageList[i].getStatusCodeList();
-		size_t				statusCodeListSize = statusCodeList.size();
-
-		for (size_t j = 0; j < statusCodeListSize; j++)
-		{
-			if (statusCode == statusCodeList[j] && PathInfo::isFile(errorPagepath) == true)
-			{
-				this->_returnPage = errorPagepath;
-				break ;
-			}
-		}
-	}
-}
-
-void			PathInfo::setReturnPageBySession(const std::string& storagePath, const std::string& sessionId)
-{
-	this->_returnPage = (storagePath + sessionId);
-}
-
 /* print */
-void	PathInfo::printPathInfo()
+void	PathInfo::print()
 {
+	
 	std::cout << "\n---- [PathInfo] ----" << std::endl;
 	std::cout << "- path : " << this->_path << std::endl;
-	std::cout << "- pathType : " << this->_pathType << std::endl;
+	std::cout << "- pathType : ";
+	switch (_pathType)
+	{
+		case P_FILE:
+			std::cout << "file\n";
+			break;
+		case P_DIR:
+			std::cout << "directory\n";
+			break;
+		case P_NONE:
+			std::cout << "NONE\n";
+			break;
+	}
 	std::cout << "- fileType : " << this->_fileType << std::endl;
-	std::cout << "- access : " << this->_access << std::endl;
-	std::cout << "- autoIndex : " << this->_autoIndex << std::endl;
-	std::cout << "- returnPage : " << this->_returnPage << std::endl;
+	std::cout << "- access : ";
+	if (this->_access)
+		std::cout << "allow\n";
+	else 
+		std::cout << "deny\n";
+	std::cout << "- autoIndex : ";
+	if (this->_autoIndex)
+		std::cout << "on\n";
+	else
+		std::cout << "off\n";
 	std::cout << "--------------------\n" << std::endl;
-}
-
-// validate
-void	PathInfo::validatePath()
-{
-	if (this->_pathType == P_NONE)
-		throw ResponseException(404);
 }

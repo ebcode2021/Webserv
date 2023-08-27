@@ -5,7 +5,9 @@
 # include "HttpResponseLine.hpp"
 # include "HttpResponseHeader.hpp"
 # include "HttpBody.hpp"
+# include "PathInfo.hpp"
 
+class SockInfo;
 
 class	HttpResponse
 {
@@ -20,17 +22,19 @@ class	HttpResponse
 		HttpResponse(HttpStatus);
 
 		// getter
-
-
-		// setter
 		HttpBody			&getBody();
 		HttpResponseLine	&getResponseLine();
 		HttpResponseHeader	&getResponseHeader();
 
+		// setter
 
+		// method
+		void	createResponse(HttpStatus &, PathInfo &);
+		void	createResponse(HttpStatus &, PathInfo &, std::string &);
+		void	createErrorPage(HttpStatus &, LocationBlock &);
 
 		// print
-		void						printHttpResponse();
+		void	printHttpResponse();
 };
 
 #endif

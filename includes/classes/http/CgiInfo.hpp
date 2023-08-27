@@ -2,20 +2,23 @@
 # define CGIINFO_HPP
 
 # include "webserv.hpp"
+# include "HttpBody.hpp"
 
 class CgiInfo
 {
 	private :
-		int _pid;
-		int _readFd;
-		int _writeFd;
+		int 		_pid;
+		int 		_readFd;
+		int 		_writeFd;
+		HttpBody	_data;
 	public :
 		CgiInfo(int, int, int);
 
 		// getter
-		int		getReadFd();
-		int		getWriteFd();
-		int		getPid();
+		int			getReadFd();
+		int			getWriteFd();
+		int			getPid();
+		HttpBody	&getData();
 		
 		// setter
 		void	SetReadFd(int);

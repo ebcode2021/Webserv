@@ -12,9 +12,14 @@ class ErrorPage {
 		// constructor
 		ErrorPage(std::vector<std::string>&);
 
-		// getter, setter
+		// getter
 		std::vector<int>	getStatusCodeList() const;
 		std::string			getPath() const;
+
+		// setter
+
+		// method
+		bool				compareCode(int);
 
 		// print
 		void PrintInfo() const;

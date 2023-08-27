@@ -3,6 +3,7 @@
 
 # include "iostream"
 # include "HttpRequest.hpp"
+# include "PathInfo.hpp"
 
 class CgiMetadata {
 	private :
@@ -15,9 +16,10 @@ class CgiMetadata {
 		std::string _queryString;
 		std::string _serverProtocol;
 	public :
-		CgiMetadata(HttpRequest &);
-		char **createEnvp();
-		std::string getServerProtocol;
+		/* constructor */
+		CgiMetadata(HttpRequest &, PathInfo &);
+		char	**createEnvp();
+		void	print();
 
 };
 

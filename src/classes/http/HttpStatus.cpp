@@ -74,6 +74,11 @@ std::map<int, std::string>&	HttpStatus::getStatusMap() const
 	return (httpStatusMap);
 }
 
+std::string	HttpStatus::getString()
+{
+	return (itos(this->_statusCode) + " " + this->_reason); 
+}
+
 /* print */
 void	HttpStatus::printStatus()
 {

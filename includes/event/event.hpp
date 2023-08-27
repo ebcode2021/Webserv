@@ -7,6 +7,7 @@
 # include "ServerInfo.hpp"
 # include "HttpRequest.hpp"
 # include "Config.hpp"
+# include "PathInfo.hpp"
 
 
 /* event */

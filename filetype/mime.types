@@ -6,6 +6,7 @@
     application/javascript                           js;
     application/atom+xml                             atom;
     application/rss+xml                              rss;
+    cgi                                              py;
 
     text/mathml                                      mml;
     text/plain                                       txt;

@@ -3,6 +3,7 @@
 
 # include "webserv.hpp"
 # include "HttpRequest.hpp"
+# include "PathInfo.hpp"
 
 class	HttpResponseHeader
 {
@@ -11,7 +12,6 @@ class	HttpResponseHeader
 		std::string					_server;
 		std::string					_contentType;
 		size_t						_contentLength;
-		std::string					_transferEncoding;
 		//std::vector<std::string>	_setCookie;
 
 	public :
@@ -23,14 +23,14 @@ class	HttpResponseHeader
 		std::string					getServer() const;
 		std::string					getContentType() const;
 		size_t						getContentLength() const;
-		std::string					getTransferEncoding() const;
 // 		std::vector<std::string>	getSetCookie() const;
 
 		void						setDate(const std::string&);
 		void						setServer(const std::string&);
 		void						setContentType(const std::string&);
 		void						setContentLength(const size_t);
-		void						setTransferEncoding(const std::string&);
+		void						setHeader(HttpBody	&);
+		void						setHeader(PathInfo &, HttpBody &);
 // 		void						setSetCookie(const std::string&);
 
 // 		// method

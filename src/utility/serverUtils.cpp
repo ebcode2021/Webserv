@@ -20,3 +20,9 @@ void	createListenSocketForPorts(const std::set<int> & serverPortList, KqHandler 
 	}
 }
 
+bool	isReturn(LocationBlock &block)
+{
+	if (block.getReturn().size() != 0)
+		return (true);
+	return (false);
+}

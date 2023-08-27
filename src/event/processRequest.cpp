@@ -1,37 +1,13 @@
 # include "event.hpp"
+# include "CgiMetadata.hpp"
 
-PathType	determinePathType(std::string path)
-{
-	struct stat pathStat;
-	std::cout << path << std::endl;
-	if (stat(path.c_str(), &pathStat) == 0)
-	{
-		if (S_ISREG(pathStat.st_mode))
-			return P_FILE;
-		else if (S_ISDIR(pathStat.st_mode))
-			return P_DIR;
-	}
-	return P_NONE;
-}
-
-bool	isAccess(std::string&	path)
-{
-	if (access(path.c_str(), R_OK | W_OK) == 0)
-		return (true);
-	return (false);
-}
-
-std::string createPath(HttpRequestLine line, std::string root)
-{
-	return (root + line.getRequestURI());
-}
-
-
-std::string	createGenericBody(const std::string& path)
+std::string	createGenericBody(std::string path)
 {
 	std::ifstream		file(path);
 	std::stringstream	body;
 
+	if (!isAccess(path))
+		throw 304;
 	if (file.is_open())
 	{
 		body << file.rdbuf();
@@ -41,55 +17,112 @@ std::string	createGenericBody(const std::string& path)
 	return (std::string(body.str()));
 }
 
-static HttpBody	processGetRequest(SockInfo *sockInfo, LocationBlock &locationBlock)
+
+std::string	dirType(PathInfo &pathInfo, LocationBlock &location)
 {
+	std::vector<std::string> indexList = location.getIndexList();
+
+	if (!pathInfo.getAccess())
+		throw 304;
+	for (size_t i = 0; i < indexList.size(); i++)
+	{
+		std::string path = createPath(indexList[i], pathInfo.getPath());
+		PathInfo newPathInfo(path);
+		if (newPathInfo.getPathType() == P_FILE)
+		{
+			pathInfo = newPathInfo;
+			return createGenericBody(path);
+		}
+	}
+	if (pathInfo.getAutoIndex())
+		return createAutoIndexBody(pathInfo.getPath());
+	throw 403;
+}
+
+void	processCgi(SockInfo *sockInfo, PathInfo &pathInfo, LocationBlock &location, KqHandler &kq)
+{
+	(void)location;
+	(void)kq;
+	CgiMetadata data(sockInfo->getRequest(), pathInfo);
+
+	int pipefd[2];
+	pipe(pipefd);
+	pid_t pid = fork();
+	if (pid == 0) {
+		dup2(pipefd[0], STDIN_FILENO);
+		dup2(pipefd[1], STDOUT_FILENO);
+		std::string path = pathInfo.getPath();
+
+		char *argv[] = {strdup(CGI_PATH.c_str()), strdup(path.c_str()), NULL};
+		execve(argv[0], argv, data.createEnvp());
+		std::cout << "실패하면 뜨는 경로 : path "<< std::endl;
+		exit(1);
+	}
+	else {
+		//waitpid로 병렬. 다시 끝날때까지 다시.
+		changeFdOpt(pipefd[0], O_NONBLOCK);
+		changeFdOpt(pipefd[1], O_NONBLOCK);
+		sockInfo->setCgiInfo(new CgiInfo(pid, pipefd[0], pipefd[1]));
+		sockInfo->getModeInfo().setSendMode(S_PROCESS);
+		sockInfo->getModeInfo().setSockMode(M_CGI);
+		kq.changeEvent(pipefd[1] , EVFILT_WRITE, EV_ADD, 0, 0, sockInfo);
+		kq.changeEvent(pid, EVFILT_PROC, EV_ADD, NOTE_EXIT, 0, sockInfo);
+	}
+}
+
+
+static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locationBlock, KqHandler &kq)
+{
+	HttpResponse	respons;
+	std::string		body;
+	PathInfo 		pathInfo(sockInfo->getRequest().getHttpRequestLine().getRequestURI(), locationBlock);
+
 	// limit except확인 걸리면 403
 	// if (checkBlocked(sockInfo->getClientIp(), locationBlock.getLimitExcept())) {
-	// 	sockInfo->setErrorCode(); 
-	// }
-	HttpBody responsBody;
-	std::string path = createPath(sockInfo->getRequest().getHttpRequestLine(), locationBlock.getRoot());
-	PathType pathType = determinePathType(path);
-	
-	switch (pathType)
+	// 	throw 403 
+	// } 
+
+	if (pathInfo.getFileType() == "cgi")
+	{
+		processCgi(sockInfo, pathInfo, locationBlock, kq);
+		return HttpResponse();
+	}
+	switch (pathInfo.getPathType())
 	{
 		case P_FILE:
-			if (!isAccess(path))
-				throw 403;
-			return (HttpBody(createGenericBody(path)));
+			body = createGenericBody(pathInfo.getPath());
 			break;
 		case P_DIR:
-			
+			body = dirType(pathInfo, locationBlock);
 			break;
 		case P_NONE:
 			throw 404;
 	}
-	return (responsBody);
+	sockInfo->getStatus().setHttpStatus(200);
+	kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, sockInfo);
+	respons.createResponse(sockInfo->getStatus(), pathInfo, body);
+	return (respons);
 }
 
 int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler &kq)
 {
-	(void)kq;
-	//request info
 	HttpRequestLine		requestLine = sockInfo->getRequest().getHttpRequestLine() ;
 	HttpRequestHeader	requestHeader = sockInfo->getRequest().getHttpRequestHeader();
 	ServerInfo			curServerInfo = serverInfoList.getServerInfoByPortAndHost(sockInfo->getServerPort(), requestHeader.getHeaderByKey("Host"));
 	LocationBlock		curLocation = curServerInfo.getLocationBlockByURL(requestLine.getRequestURI());
-
-	if (sockInfo->getStatus().getStatusCode() != 0) {
-		return (false);
-	}
-	// location 블록에 return 지시어가 있으면 redirect
+	HttpResponse		response;
+	
 	try
 	{
+		if (isReturn(curLocation))
+			throw 301;
+		if (sockInfo->getStatus().getStatusCode() != 0)
+			throw sockInfo->getStatus().getStatusCode();
 		MethodType type = findMethodType(requestLine.getMethod());
-		HttpBody	responseBody;
-		std::cout << type << std::endl;
 		switch (type)
 		{
 			case GET:
-				responseBody = processGetRequest(sockInfo, curLocation);
-				kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, sockInfo);
+				response = processGetRequest(sockInfo, curLocation, kq);
 				break;
 			case POST:
 				break;
@@ -101,10 +134,13 @@ int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler 
 	}
 	catch(int code)
 	{
-		std::cout << code << std::endl;
+		if (code == 301) {
+			response.createRedirectMessage(curLocation.getReturn());
+		}
 		sockInfo->getStatus().setHttpStatus(code);
+		response.createErrorPage(sockInfo->getStatus(), curLocation);
+		kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, sockInfo);
 	}
-	
-	
+	sockInfo->setResponse(response);
 	return (true);
 }

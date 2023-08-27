@@ -23,14 +23,14 @@ bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 		{
 			std::string line = response.getResponseLine().getResponseLineToString();
 			ret = send(clientFd, line.c_str(), line.size(), 0);
-			phase = S_HEADER;
+			sockInfo->getModeInfo().setSendPhase(S_HEADER);
 			break;
 		}
 		case S_HEADER:
 		{
 			std::string header = response.getResponseHeader().getResponseHeaderToString();
 			ret = send(clientFd, header.c_str(), header.size(), 0);
-			phase = S_END;
+			sockInfo->getModeInfo().setSendPhase(S_BODY);
 			break;
 		}
 		case S_BODY:
@@ -41,15 +41,14 @@ bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 				body.trimBody(ret);
 			else {
 				kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, sockInfo);
-				if (sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("connection") != KEEPALIVE)
+				if (sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("connection") != KEEPALIVE) {
 					closeSock(sockInfo);
+				}
 			}
 			break;
 		}
 		case S_END:
-		{
 			break;
-		}
 	}
 	return (true);
 }

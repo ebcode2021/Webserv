@@ -42,3 +42,11 @@ std::string	HttpResponseLine::getResponseLineToString()
 
 	return (responseLine);
 }
+
+/* test */
+void	HttpResponseLine::print()
+{
+	std::cout << this->_version << " " 
+		<< this->getHttpStatus().getStatusCode() << " "
+		<< this->getHttpStatus().getReason() << std::endl;
+}

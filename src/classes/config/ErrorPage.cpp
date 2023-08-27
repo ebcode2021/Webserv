@@ -9,13 +9,26 @@ ErrorPage::ErrorPage(std::vector<std::string>& value) {
 	this->path = value[value.size() - 1];
 }
 
-/* getter, setter */
+/* getter */
 std::vector<int>	ErrorPage::getStatusCodeList() const {
 	return (this->statusCode);
 }
 
 std::string			ErrorPage::getPath() const {
 	return (this->path);
+}
+
+/* setter */
+
+/* method*/
+bool	ErrorPage::compareCode(int code)
+{
+	for (size_t i = 0; i < this->statusCode.size(); i++)
+	{
+		if (code == this->statusCode[i])
+			return (true);
+	}
+	return (false);
 }
 
 /* print */

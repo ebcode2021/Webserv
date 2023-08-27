@@ -18,6 +18,10 @@ int CgiInfo::getPid() {
 	return (this->_pid);
 }
 
+HttpBody	&CgiInfo::getData() {
+	return (this->_data);
+}
+
 void CgiInfo::SetPid(int pid) {
 	this->_pid = pid;
 }

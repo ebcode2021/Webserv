@@ -40,9 +40,9 @@ enum SendPhase
 
 enum SendMode
 {
-	S_WAIT,
 	S_CLIENT,// client
 	S_PROCESS, // process
+	S_CGI,
 };
 
 enum	PathType
@@ -55,7 +55,8 @@ enum	PathType
 enum	SockMode
 {
 	M_SERVER,
-	M_CLIENT
+	M_CLIENT,
+	M_CGI,
 };
 
 

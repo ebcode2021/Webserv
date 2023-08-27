@@ -24,14 +24,22 @@ SRCS =  main3.cpp	\
 		classes/server/serverInfoList.cpp		\
 		\
 		classes/socket/sockData.cpp		\
-		classes/socket/SockInfo.cpp		\
+		classes/socket/sockInfo.cpp		\
 		classes/socket/modeInfo.cpp		\
 		\
 		classes/http/httpBody.cpp		\
+		classes/http/pathInfo.cpp		\
+		classes/http/httpStatus.cpp		\
+		classes/http/cgiMetadata.cpp	\
+		classes/http/cgiInfo.cpp		\
 		\
 		classes/http/request/httpRequest.cpp		\
 		classes/http/request/httpRequestLine.cpp	\
 		classes/http/request/httpRequestHeader.cpp	\
+		\
+		classes/http/response/httpResponse.cpp		\
+		classes/http/response/httpResponseHeader.cpp	\
+		classes/http/response/httpResponseLine.cpp		\
 		\
 		utility/error.cpp	\
 		utility/utils.cpp	\
@@ -41,11 +49,14 @@ SRCS =  main3.cpp	\
 		utility/eventUtils.cpp		\
 		utility/parseUtils.cpp		\
 		utility/encoding.cpp		\
+		utility/pathUtils.cpp		\
+		utility/autoIndexUtils.cpp	\
 		\
 		classes/kq/kqHandler.cpp	\
 		\
 		event/processEvent.cpp		\
 		event/processRequest.cpp	\
+		
 		
 
 
@@ -67,7 +78,7 @@ INCLUDE_DIRS = includes/							\
 			   includes/classes/kq/					\
 			   includes/classes/http/				\
 			   includes/classes/http/request/		\
-			   includes/classes/http/response/		
+			   includes/classes/http/response/
 
 
 

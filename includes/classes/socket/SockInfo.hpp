@@ -6,7 +6,7 @@
 # include "ModeInfo.hpp"
 # include "HttpRequest.hpp"
 # include "HttpResponse.hpp"
-//# include "CgiInfo.hpp"
+# include "CgiInfo.hpp"
 //# include "HttpResponse.hpp"
 //# include "PathInfo.hpp"
 
@@ -22,7 +22,7 @@ class SockInfo
 		SockData		_sockData;
 		HttpRequest		_request;
 		HttpResponse	_response;
-		//CgiInfo			*_cgiInfo;
+		CgiInfo			*_cgiInfo;
 		//PathInfo		_pathInfo;
 		//std::string		_clientAddr;
 		//int				_readMode;
@@ -44,8 +44,12 @@ class SockInfo
 		int				getClientPort();
 		int				getServerPort();
 		std::string		getClientIp();
+		CgiInfo			*getCgiInfo();
 
 		// setter
+		void			setResponse(HttpResponse);
+		void			setCgiInfo(CgiInfo	*cgiInfo);
+
 		
 		// getter
 		//HttpRequest&	getRequest();
