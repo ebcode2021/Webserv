@@ -3,6 +3,7 @@
 
 # include "webserv.hpp"
 # include "KqHandler.hpp"
+# include "LocationBlock.hpp"
 //# include "SockInfo.hpp"
 
 /* utils */

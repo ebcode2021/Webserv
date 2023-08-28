@@ -20,6 +20,8 @@ HttpResponseHeader	&HttpResponse::getResponseHeader()
 
 // method
 
+
+
 static	std::string	errorPageGenerator(HttpStatus &status)
 {
 	std::stringstream page;
@@ -88,6 +90,11 @@ void	HttpResponse::createErrorPage(HttpStatus &status, LocationBlock &locationBl
 	this->_httpResponseLine.setHttpStatus(status);
 	this->_httpBody = body;
 	this->_httpResponseHeader.setHeader(this->_httpBody);
+}
+
+void	createRedirect(std::string &path)
+{
+	
 }
 
 void	HttpResponse::createResponse(HttpStatus &status, PathInfo &pathInfo)

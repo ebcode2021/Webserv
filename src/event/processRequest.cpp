@@ -135,7 +135,7 @@ int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler 
 	catch(int code)
 	{
 		if (code == 301) {
-			response.createRedirectMessage(curLocation.getReturn());
+			response.createRedirect(curLocation.getReturn());
 		}
 		sockInfo->getStatus().setHttpStatus(code);
 		response.createErrorPage(sockInfo->getStatus(), curLocation);
