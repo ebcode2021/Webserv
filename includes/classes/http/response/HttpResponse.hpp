@@ -32,7 +32,7 @@ class	HttpResponse
 		void	createResponse(HttpStatus &, PathInfo &);
 		void	createResponse(HttpStatus &, PathInfo &, std::string &);
 		void	createErrorPage(HttpStatus &, LocationBlock &);
-		void	createRedirect(std::string &path);
+		void	createRedirect(const std::string &path);
 
 		// print
 		void	printHttpResponse();
