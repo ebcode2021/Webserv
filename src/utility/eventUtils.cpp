@@ -26,19 +26,14 @@ int	recvData(int sockFd, SockData &curData)
 	char		buf[BUFSIZE + 1];
 
 	std::memset(buf, 0, BUFSIZE);
-	while (true)
-	{
-		readByte = recv(sockFd, buf, BUFSIZE, 0);
-		if (readByte > 0) {
-			curData += buf;
-			curData.updateRecvByte(readByte);
-			std::memset(buf, 0, BUFSIZE);
-			if (readByte < (int)BUFSIZE)
-				return (1);
-		}
-		else
-			return (readByte);
+	readByte = recv(sockFd, buf, BUFSIZE, 0);
+	if (readByte > 0) {
+		buf[readByte] = 0;
+		curData += std::string(buf, readByte);
+		curData.updateRecvByte(readByte);
+		std::memset(buf, 0, BUFSIZE);
 	}
+	return (readByte);
 }
 
 void	sockBindAndListen(int fd, int port)

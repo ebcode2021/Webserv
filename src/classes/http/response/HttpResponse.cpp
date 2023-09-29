@@ -92,9 +92,10 @@ void	HttpResponse::createErrorPage(HttpStatus &status, LocationBlock &locationBl
 	this->_httpResponseHeader.setHeader(this->_httpBody);
 }
 
-void	HttpResponse::create
+void	HttpResponse::createRedirect(const std::string &path)
 {
-	c
+	this->_httpResponseLine.setHttpStatus(HttpStatus(301));
+	this->_httpResponseHeader.setLocation(path);
 }
 
 void	HttpResponse::createResponse(HttpStatus &status, PathInfo &pathInfo)

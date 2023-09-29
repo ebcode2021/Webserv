@@ -13,7 +13,6 @@ std::string	createGenericBody(std::string path)
 		body << file.rdbuf();
 		file.close();
 	}
-
 	return (std::string(body.str()));
 }
 
@@ -44,7 +43,8 @@ void	processCgi(SockInfo *sockInfo, PathInfo &pathInfo, LocationBlock &location,
 	(void)location;
 	(void)kq;
 	CgiMetadata data(sockInfo->getRequest(), pathInfo);
-
+	if (!pathInfo.getAccess())
+		throw 304;
 	int pipefd[2];
 	pipe(pipefd);
 	pid_t pid = fork();
@@ -55,7 +55,6 @@ void	processCgi(SockInfo *sockInfo, PathInfo &pathInfo, LocationBlock &location,
 
 		char *argv[] = {strdup(CGI_PATH.c_str()), strdup(path.c_str()), NULL};
 		execve(argv[0], argv, data.createEnvp());
-		std::cout << "실패하면 뜨는 경로 : path "<< std::endl;
 		exit(1);
 	}
 	else {
@@ -70,6 +69,12 @@ void	processCgi(SockInfo *sockInfo, PathInfo &pathInfo, LocationBlock &location,
 	}
 }
 
+bool isCgi(std::string cgiPath)
+{
+	if (cgiPath.size() != 0)
+		return (true);
+	return (false);
+}
 
 static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locationBlock, KqHandler &kq)
 {
@@ -80,9 +85,9 @@ static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locatio
 	// limit except확인 걸리면 403
 	// if (checkBlocked(sockInfo->getClientIp(), locationBlock.getLimitExcept())) {
 	// 	throw 403 
-	// } 
+	// } 34
 
-	if (pathInfo.getFileType() == "cgi")
+	if (isCgi(locationBlock.getCgiPass()))
 	{
 		processCgi(sockInfo, pathInfo, locationBlock, kq);
 		return HttpResponse();
@@ -102,6 +107,54 @@ static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locatio
 	kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, sockInfo);
 	respons.createResponse(sockInfo->getStatus(), pathInfo, body);
 	return (respons);
+}
+
+void	processPostRequest(SockInfo *sockInfo, LocationBlock &location, KqHandler &kq)
+{
+	PathInfo 	pathInfo(sockInfo->getRequest().getHttpRequestLine().getRequestURI(), location);
+
+	if (!isCgi(location.getCgiPass()))
+		throw 304;
+	if (sockInfo->getRequest().getHttpBody().getBodySize() > location.getClientMaxBodySize())
+		throw 413;
+	if (pathInfo.getPathType() == P_NONE)
+		throw 404;
+	processCgi(sockInfo, pathInfo, location, kq);
+}
+
+std::string	deletesuccessBody()
+{
+	std::stringstream body;
+
+	body << "<html>";
+	body << "<head><meta charset=\"UTF-8\"><title>CGI Example</title></head>";
+	body << "<body>";
+	body << "<h1>파일 삭제 완료</h1>";
+    body << "</body>";
+	body << "</html>";
+
+	return (body.str());
+}
+
+HttpResponse	processDeleteRequest(SockInfo *sockInfo, LocationBlock &location, KqHandler &kq)
+{
+	PathInfo		pathInfo(sockInfo->getRequest().getHttpRequestLine().getRequestURI(), location);
+	HttpResponse	response;
+
+	(void)kq;
+	if (pathInfo.getPathType() == P_NONE)
+		throw 404;
+	if (!pathInfo.getAccess())
+		throw 304; 
+	int ret = remove(pathInfo.getPath().c_str());
+	if (!ret) {
+		sockInfo->getStatus().setHttpStatus(204);
+		std::string body = deletesuccessBody();
+		response.createResponse(sockInfo->getStatus(), pathInfo, body);
+	}
+	else
+		throw 500;
+	return (response);
 }
 
 int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler &kq)
@@ -125,8 +178,10 @@ int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler 
 				response = processGetRequest(sockInfo, curLocation, kq);
 				break;
 			case POST:
+				processPostRequest(sockInfo, curLocation, kq);
 				break;
 			case DELETE:
+				response = processDeleteRequest(sockInfo, curLocation, kq);
 				break;
 			case OTHER:
 				throw 405;
@@ -134,6 +189,7 @@ int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler 
 	}
 	catch(int code)
 	{
+		std::cout << code << std::endl;
 		if (code == 301) {
 			response.createRedirect(curLocation.getReturn());
 		}

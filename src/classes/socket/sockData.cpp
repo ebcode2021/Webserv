@@ -7,7 +7,7 @@ SockData::SockData()
 	this->_sendByte = 0;
 }
 
-void	SockData::operator+=(const char *data)
+void	SockData::operator+=(std::string data)
 {
 	this->_buf += data;
 }

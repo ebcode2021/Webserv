@@ -3,10 +3,7 @@
 /* constructor */
 HttpStatus::HttpStatus()
 {
-	std::map<int, std::string>::const_iterator it = getStatusMap().find(200);
-
-	this->_statusCode = it->first;
-	this->_reason = it->second;
+	this->_statusCode = 0;
 }
 
 HttpStatus::HttpStatus(const HttpStatus& httpStatus)
@@ -53,6 +50,7 @@ std::map<int, std::string>&	HttpStatus::getStatusMap() const
 
 	if (httpStatusMap.empty())
 	{
+		httpStatusMap.insert(std::make_pair( 0, "DEFAULT"));
 		httpStatusMap.insert(std::make_pair( 200, "OK" ));
 		httpStatusMap.insert(std::make_pair( 201, "Created" ));
 		httpStatusMap.insert(std::make_pair( 202, "Accepted" ));

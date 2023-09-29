@@ -6,7 +6,6 @@ CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -rf
 
-# PHILOSOPHERS_SRC
 SRCS =  main3.cpp	\
 		\
 		classes/config/config.cpp		\

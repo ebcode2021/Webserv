@@ -3,16 +3,11 @@ import cgi
 import os
 
 # CGI 환경 변수 설정
-print("cgi 스크립트 시작")
-UPLOAD_DIR = '/Users/minsu/Desktop/42seoul/webserv/resources/upload/'  # 파일을 저장할 디렉토리 설정
+UPLOAD_DIR = '/Users/minsukan/Desktop/42/webserv/Webserv/resources/upload'  # 파일을 저장할 디렉토리 설정
 
 # 폼 데이터 가져오기
 form = cgi.FieldStorage()
-
-print("cgi 스크립트 끝")
-
-# print(form)
-
+print("abc")
 # 업로드된 파일 처리
 if 'file' in form:
     fileitem = form['file']
@@ -25,11 +20,14 @@ if 'file' in form:
     with open(filepath, 'wb') as f:
         f.write(fileitem.file.read())
 
-    print("Content-Type: text/html")
-    print()
+    print("HTTP/1.1 201 Created")
+
+# 헤더 출력
+    print("Content-Type: text/html\n")
+# HTML 문서 시작
+    print("<html>")
+    print("<head><meta charset=\"UTF-8\"><title>CGI Example</title></head>")
+    print("<body>")
     print("<h1>파일 업로드 완료</h1>")
     print("<p>업로드된 파일: {}</p>".format(filename))
-else:
-    print("Content-Type: text/html")
-    print()
-    print("<h1>파일을 선택하세요.</h1>")
+    print("</body>")

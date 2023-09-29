@@ -50,27 +50,7 @@ class SockInfo
 		void			setResponse(HttpResponse);
 		void			setCgiInfo(CgiInfo	*cgiInfo);
 
-		
-		// getter
-		//HttpRequest&	getRequest();
-		//HttpResponse	getResponse();
-		//std::string		getClientAddr();
-		//CgiInfo			*getCgiInfo();
-		//const PathInfo		&getPathInfo() const;
-
-		// setter
-		//void			setRequest(HttpRequest&);
-		//void			setResponse(HttpResponse&);
-		//void			setRequestHeader();
-		//void			setRequestBody();
-		//void			setCgiInfo(CgiInfo *);
-		//void			setPathInfo(PathInfo &);
-		
-		// method
-
-		// new 추가
-
-		// print
+		void			reset();
 };
 
 #endif

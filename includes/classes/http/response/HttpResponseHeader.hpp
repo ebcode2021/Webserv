@@ -11,6 +11,7 @@ class	HttpResponseHeader
 		std::string					_date;
 		std::string					_server;
 		std::string					_contentType;
+		std::string					_loaction;
 		size_t						_contentLength;
 		//std::vector<std::string>	_setCookie;
 
@@ -22,6 +23,7 @@ class	HttpResponseHeader
 		std::string					getDate() const;
 		std::string					getServer() const;
 		std::string					getContentType() const;
+		std::string					getLocation() const;
 		size_t						getContentLength() const;
 // 		std::vector<std::string>	getSetCookie() const;
 
@@ -29,6 +31,7 @@ class	HttpResponseHeader
 		void						setServer(const std::string&);
 		void						setContentType(const std::string&);
 		void						setContentLength(const size_t);
+		void						setLocation(const std::string&);
 		void						setHeader(HttpBody	&);
 		void						setHeader(PathInfo &, HttpBody &);
 // 		void						setSetCookie(const std::string&);

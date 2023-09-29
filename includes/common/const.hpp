@@ -18,7 +18,7 @@ const std::string	KEEPALIVE = "keep-alive";
 
 /* Size */
 const std::size_t	EVENT_SIZE = 256;
-const std::size_t	BUFSIZE = 512;
+const std::size_t	BUFSIZE = 1024;
 const std::size_t	CLIENT_BODY_SIZE = 1048576;
 
 /* Related to HTTP */

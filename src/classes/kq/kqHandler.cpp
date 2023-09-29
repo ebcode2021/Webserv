@@ -15,7 +15,11 @@ void	KqHandler::changeEvent(uintptr_t ident, short filter, unsigned short flags,
 }
 
 void	KqHandler::eventUpdate() {
-	int eventCnt = kevent(this->_kq, &this->_changeList[0], this->_changeList.size(), this->_eventList, EVENT_SIZE, 0);
+	struct timespec timeout;
+    timeout.tv_sec = 5;  // 타임아웃 시간 (초)
+    timeout.tv_nsec = 0;
+
+	int eventCnt = kevent(this->_kq, &this->_changeList[0], this->_changeList.size(), this->_eventList, EVENT_SIZE, &timeout);
 	this->_eventCnt = eventCnt;
 }
 

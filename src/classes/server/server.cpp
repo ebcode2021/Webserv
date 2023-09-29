@@ -9,7 +9,6 @@ Server::Server(const Config &config) :
 
 void	cgiReadEvent(SockInfo *sockInfo, KqHandler &kq)
 {
-	(void)kq;
 	char save[BUFSIZE];
 	CgiInfo *cgiInfo = sockInfo->getCgiInfo();
 	int ret = read(cgiInfo->getReadFd(), save, BUFSIZ);
@@ -28,7 +27,7 @@ void	cgiReadEvent(SockInfo *sockInfo, KqHandler &kq)
 
 void	Server::processReadEvent(SockInfo *sockInfo)
 {
-	const SockMode sockMode = sockInfo->getModeInfo().getSockMode();
+	SockMode sockMode = sockInfo->getModeInfo().getSockMode();
 
 	switch (sockMode)
 	{
@@ -39,12 +38,13 @@ void	Server::processReadEvent(SockInfo *sockInfo)
 			if (clientReadEvent(sockInfo, kq))
 			{
 				int status = sockInfo->getRequest().createRequest(sockInfo->getSockData().getBuf(), sockInfo->getModeInfo().getReadPhase());
-				sockInfo->getStatus().setHttpStatus(status);
-				processRequest(sockInfo, this->_serverInfoList, this->kq);
+				if (sockInfo->getModeInfo().getReadPhase() == R_END) {
+					sockInfo->getStatus().setHttpStatus(status);
+					processRequest(sockInfo, this->_serverInfoList, this->kq);
+				}
 			}
-			else {
+			else 
 				closeSock(sockInfo);
-			}
 			break;
 		case M_CGI:
 			cgiReadEvent(sockInfo, kq);
@@ -55,9 +55,9 @@ void	Server::processReadEvent(SockInfo *sockInfo)
 void	cgiWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 {
 	CgiInfo *cgiInfo = sockInfo->getCgiInfo();
-	HttpBody	body = sockInfo->getRequest().getHttpBody();
+	HttpBody	&body = sockInfo->getRequest().getHttpBody();
 	(void)kq;
-	int ret = send(cgiInfo->getWriteFd(), body.getBody().c_str(), body.getBodySize(), 0);
+	int ret = write(cgiInfo->getWriteFd(), body.getBody().c_str(), body.getBodySize());
 	if (ret < 0)
 	{
 		close(cgiInfo->getWriteFd());
@@ -78,8 +78,11 @@ void cgiDataSend(SockInfo *sockInfo, KqHandler &kq)
 	else {
 		kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, sockInfo);
 		delete sockInfo->getCgiInfo();
-		if (sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("connection") != KEEPALIVE)
+		if (sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("connection") == KEEPALIVE)
+			sockInfo->reset();
+		else
 			closeSock(sockInfo);
+
 	}
 }
 
@@ -91,19 +94,19 @@ void	processWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 	{
 		case S_PROCESS:
 			cgiWriteEvent(sockInfo, kq);
-			break;
+			break ;
 		case S_CLIENT:
 			clientWriteEvent(sockInfo, kq);
-			break;
+			break ;
 		case S_CGI:
 			cgiDataSend(sockInfo, kq);
+			break ;
 	}
 	//sendToChild();
 }
 
 void	processTerminated(SockInfo *sockInfo, KqHandler &kq)
 {	
-	std::cout << "자식 종료" << std::endl;
 	kq.changeEvent(sockInfo->getCgiInfo()->getReadFd() , EVFILT_READ, EV_ADD, 0, 0, sockInfo);
 }
 
@@ -121,6 +124,7 @@ void	Server::processEvent()
 		{
 			case EVFILT_READ:
 				processReadEvent(sockInfo);
+				break ;
 			case EVFILT_WRITE:
 				processWriteEvent(sockInfo, kq);
 				break;

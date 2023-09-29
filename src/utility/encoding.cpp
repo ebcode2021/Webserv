@@ -37,8 +37,8 @@ std::string encodingData(std::string &data, std::string encoding, ReadPhase &pha
 	std::string backUp;
 
 	if (encoding == "chunked")
-		backUp = identityEncoding(data);
-	else
 		backUp = chunkedEncoding(data, phase);
+	else
+		backUp = identityEncoding(data);
 	return (backUp);
 }

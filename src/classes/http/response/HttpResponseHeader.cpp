@@ -9,19 +9,23 @@ HttpResponseHeader::HttpResponseHeader()
 
 /* getter */
 std::string		HttpResponseHeader::getDate() const {
-	return(this->_date);
+	return (this->_date);
 }
 
 std::string		HttpResponseHeader::getServer() const {
-	return(this->_server);
+	return (this->_server);
 }
 
 std::string		HttpResponseHeader::getContentType()const {
-	 return(this->_contentType);
+	 return( this->_contentType);
 }
 
 size_t			HttpResponseHeader::getContentLength() const {
-	return(this->_contentLength);
+	return (this->_contentLength);
+}
+
+std::string	HttpResponseHeader::getLocation() const {
+	return (this->_loaction);
 }
 
 // std::vector<std::string>	HttpResponseHeader::getSetCookie() const {
@@ -48,6 +52,11 @@ void			HttpResponseHeader::setContentType(const std::string& contentType) {
 
 void			HttpResponseHeader::setContentLength(const size_t contentLength) {
 	this->_contentLength = contentLength;
+}
+
+void	HttpResponseHeader::setLocation(const std::string &path)
+{
+	this->_loaction = path;
 }
 
 
@@ -111,6 +120,8 @@ std::string		HttpResponseHeader::getResponseHeaderToString()
 	responseHeader += ("Content-Type:" + SP + this->_contentType + CRLF);
 	if (this->_contentLength > 0)
 		responseHeader += ("Content-Length:" + SP + itos(this->_contentLength) + CRLF);
+	if (this->_loaction.length() > 0)
+		responseHeader += ("Location:" + SP + this->_loaction + CRLF);
 	// if (cookieHeader.empty() == false)
 	// 	responseHeader += ("Set-Cookie:" + SP + cookieHeader + CRLF);
 	// responseHeader += ("Cache-Control: max-age=3600" + CRLF);

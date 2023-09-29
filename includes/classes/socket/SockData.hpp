@@ -14,7 +14,7 @@ class SockData
 		SockData();
 
 		// operator
-		void	operator+=(const char *);
+		void	operator+=(std::string);
 
 		// getter
 		std::string			&getBuf();
