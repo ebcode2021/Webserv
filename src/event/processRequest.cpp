@@ -46,8 +46,10 @@ std::string	dirType(PathInfo &pathInfo, LocationBlock &location)
 			return createGenericBody(path);
 		}
 	}
-	if (pathInfo.getAutoIndex())
+	if (pathInfo.getAutoIndex()) {
+		pathInfo.setFileType(HTML);
 		return createAutoIndexBody(pathInfo.getPath());
+	}
 	throw 403;
 }
 

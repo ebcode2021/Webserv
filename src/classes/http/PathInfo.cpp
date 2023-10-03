@@ -49,6 +49,10 @@ void		PathInfo::setAutoIndex(bool value) {
 	this->_autoIndex = value;
 }
 
+void	PathInfo::setFileType(std::string type) {
+	this->_fileType = type;
+}
+
 /* print */
 void	PathInfo::print()
 {

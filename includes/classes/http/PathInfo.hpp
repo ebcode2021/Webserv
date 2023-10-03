@@ -31,6 +31,7 @@ class PathInfo
 
 		// setter
 		void			setAutoIndex(bool);
+		void			setFileType(std::string type);
 
 
 		// print

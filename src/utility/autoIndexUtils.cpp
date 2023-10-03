@@ -25,7 +25,6 @@ std::string	createAutoIndexBody(std::string path)
 	std::stringstream	body;
 	std::vector<std::string> fileName = getFileNameByPath(path);
 
-
 	body << "<!DOCTYPE html>\n";
 	body << "<html>\n";
 	body << "<title>" << path << "</title>\n";
