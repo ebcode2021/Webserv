@@ -1,5 +1,5 @@
-#include "LimitExcept.hpp"
 #include "validate.hpp"
+#include "LimitExcept.hpp"
 
 /* constructor */
 LimitExcept::LimitExcept() {}
@@ -81,9 +81,12 @@ void	LimitExcept::blockCheck(std::ifstream& infile, Validate& dataset)
 }
 
 // 나중에 util로 뺄거
-bool	LimitExcept::isMethodInList(const std::string& method) const
+bool	LimitExcept::isValidMethod(const std::string& method) const
 {
 	size_t	size = this->_methodList.size();
+
+	if (size == 0)
+		return (true);
 
 	for (size_t i = 0; i < size; i++)
 	{
@@ -93,42 +96,49 @@ bool	LimitExcept::isMethodInList(const std::string& method) const
 	return (false);
 }
 
-bool	LimitExcept::isAllValue(const std::string& value) const
-{
-	return (value == "all");
-}
+//bool	LimitExcept::isAllValue(const std::string& value) const
+//{
+//	return (value == "all");
+//}
 
-bool	LimitExcept::isValidClientAddr(const std::string& value, const std::string& addr) const
-{
-	return (value == addr);
-}
+//bool	LimitExcept::isValidClientAddr(const std::string& value, const std::string& addr) const
+//{
+//	return (value == addr);
+//}
 
-bool	LimitExcept::isValidMethod(const std::string& method, const std::string& clientAddr) const
-{
-	bool	hasMethod = this->isMethodInList(method);
+//bool LimitExcept::isValidMethod(const std::string& method) const
+//{
+//	bool hasMethod = this->isMethodInList(method);
+
+//	return ();
+//}
+
+//bool	LimitExcept::isValidMethod(const std::string& method, const std::string& clientAddr) const
+//{
+//	bool	hasMethod = this->isMethodInList(method);
 	
-	std::map<std::string, std::string>::const_iterator it;
-	for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
-	{
-		std::string	field = (*it).first;
-		std::string	value = (*it).second;
+//	std::map<std::string, std::string>::const_iterator it;
+//	for (it = this->_accessDirectiveList.begin(); it != this->_accessDirectiveList.end(); it++)
+//	{
+//		std::string	field = (*it).first;
+//		std::string	value = (*it).second;
 
-		if (field == "allow" && isAllValue(value) == true)
-			break ;
+//		if (field == "allow" && isAllValue(value) == true)
+//			break ;
 
-		if (hasMethod == true)
-		{
-			if (field == "allow" && isValidClientAddr(value, clientAddr) == true)
-				break ;
-		}
-		else
-		{
-			if (field == "deny" && (isAllValue(value) == true || isValidClientAddr(value, clientAddr) == true))
-				return (false);
-		}
-	}
-	return (true);
-}
+//		if (hasMethod == true)
+//		{
+//			if (field == "allow" && isValidClientAddr(value, clientAddr) == true)
+//				break ;
+//		}
+//		else
+//		{
+//			if (field == "deny" && (isAllValue(value) == true || isValidClientAddr(value, clientAddr) == true))
+//				return (false);
+//		}
+//	}
+//	return (true);
+//}
 
 /* print */
 void	LimitExcept::printInfo() const

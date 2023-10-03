@@ -76,6 +76,7 @@
 		"filesystem": "cpp",
 		"files.encoding": "utf8",
 		"__functional_03": "cpp",
-		"memory_resource": "cpp"
+		"memory_resource": "cpp",
+		"__verbose_abort": "cpp"
 	}
 }

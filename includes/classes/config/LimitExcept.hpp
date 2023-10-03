@@ -21,10 +21,10 @@ class LimitExcept {
 		void								setAccessDirectiveList(const std::vector<std::string>&);
 
 		// method
-		bool		isValidMethod(const std::string&, const std::string&) const;
-		bool		isMethodInList(const std::string&) const;
-		bool		isValidClientAddr(const std::string&, const std::string&) const;
-		bool		isAllValue(const std::string&) const;
+		//bool		isValidMethod(const std::string&) const;
+		bool		isValidMethod(const std::string&) const;
+		//bool		isValidClientAddr(const std::string&, const std::string&) const;
+		//bool		isAllValue(const std::string&) const;
 
 		// check
 		static void	blockCheck(std::ifstream&, Validate&);

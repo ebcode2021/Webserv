@@ -92,13 +92,13 @@ void	processWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 
 	switch (sendMode)
 	{
-		case S_PROCESS:
+		case S_PROCESS: /// 부모 -> 자식 process 데이터 전송
 			cgiWriteEvent(sockInfo, kq);
 			break ;
-		case S_CLIENT:
+		case S_CLIENT: // 클라이언트로 response 전송
 			clientWriteEvent(sockInfo, kq);
 			break ;
-		case S_CGI:
+		case S_CGI: // 클라이언트로 CGI 전송
 			cgiDataSend(sockInfo, kq);
 			break ;
 	}

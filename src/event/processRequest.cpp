@@ -1,13 +1,26 @@
 # include "event.hpp"
 # include "CgiMetadata.hpp"
+# include "LimitExcept.hpp"
 
 std::string	createGenericBody(std::string path)
 {
 	std::ifstream		file(path);
 	std::stringstream	body;
 
+	//std::cout << "렌더링 할 페이지 경로 : " <<  path << std::endl;
 	if (!isAccess(path))
-		throw 304;
+		throw 403;
+
+	// 은비
+	//std::vector<std::string>
+	// 만약 index 
+	//std::vector<std::string> indexList = locationBlock.getIndexList();
+	//if (indexList.size() > 0)
+	//{
+
+	//}
+
+
 	if (file.is_open())
 	{
 		body << file.rdbuf();
@@ -22,8 +35,8 @@ std::string	dirType(PathInfo &pathInfo, LocationBlock &location)
 	std::vector<std::string> indexList = location.getIndexList();
 
 	if (!pathInfo.getAccess())
-		throw 304;
-	for (size_t i = 0; i < indexList.size(); i++)
+		throw 403;
+	for (size_t i = 1; i < indexList.size(); i++)
 	{
 		std::string path = createPath(indexList[i], pathInfo.getPath());
 		PathInfo newPathInfo(path);
@@ -44,7 +57,7 @@ void	processCgi(SockInfo *sockInfo, PathInfo &pathInfo, LocationBlock &location,
 	(void)kq;
 	CgiMetadata data(sockInfo->getRequest(), pathInfo);
 	if (!pathInfo.getAccess())
-		throw 304;
+		throw 403;
 	int pipefd[2];
 	pipe(pipefd);
 	pid_t pid = fork();
@@ -78,15 +91,14 @@ bool isCgi(std::string cgiPath)
 
 static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locationBlock, KqHandler &kq)
 {
-	HttpResponse	respons;
+	HttpResponse	response;
+	HttpRequestLine	requestLine = sockInfo->getRequest().getHttpRequestLine();
+	PathInfo 		pathInfo(requestLine.getRequestURI(), locationBlock);
 	std::string		body;
-	PathInfo 		pathInfo(sockInfo->getRequest().getHttpRequestLine().getRequestURI(), locationBlock);
-
-	// limit except확인 걸리면 403
-	// if (checkBlocked(sockInfo->getClientIp(), locationBlock.getLimitExcept())) {
-	// 	throw 403 
-	// } 34
-
+	
+	// 은비 추가 코드
+	if (locationBlock.getLimitExcept().isValidMethod(requestLine.getMethod()) == false)
+		throw 403;
 	if (isCgi(locationBlock.getCgiPass()))
 	{
 		processCgi(sockInfo, pathInfo, locationBlock, kq);
@@ -94,6 +106,7 @@ static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locatio
 	}
 	switch (pathInfo.getPathType())
 	{
+		// 은비.
 		case P_FILE:
 			body = createGenericBody(pathInfo.getPath());
 			break;
@@ -105,8 +118,8 @@ static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locatio
 	}
 	sockInfo->getStatus().setHttpStatus(200);
 	kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, sockInfo);
-	respons.createResponse(sockInfo->getStatus(), pathInfo, body);
-	return (respons);
+	response.createResponse(sockInfo->getStatus(), pathInfo, body);
+	return (response);
 }
 
 void	processPostRequest(SockInfo *sockInfo, LocationBlock &location, KqHandler &kq)
@@ -114,11 +127,14 @@ void	processPostRequest(SockInfo *sockInfo, LocationBlock &location, KqHandler &
 	PathInfo 	pathInfo(sockInfo->getRequest().getHttpRequestLine().getRequestURI(), location);
 
 	if (!isCgi(location.getCgiPass()))
-		throw 304;
+		throw 403;
 	if (sockInfo->getRequest().getHttpBody().getBodySize() > location.getClientMaxBodySize())
 		throw 413;
 	if (pathInfo.getPathType() == P_NONE)
+	{
+		std::cout << "여기들어오니?" << std::endl;
 		throw 404;
+	}
 	processCgi(sockInfo, pathInfo, location, kq);
 }
 
@@ -145,7 +161,7 @@ HttpResponse	processDeleteRequest(SockInfo *sockInfo, LocationBlock &location, K
 	if (pathInfo.getPathType() == P_NONE)
 		throw 404;
 	if (!pathInfo.getAccess())
-		throw 304; 
+		throw 403; 
 	int ret = remove(pathInfo.getPath().c_str());
 	if (!ret) {
 		sockInfo->getStatus().setHttpStatus(204);

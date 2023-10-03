@@ -5,7 +5,8 @@
 
 /* Path */
 //const std::string	ROOT_PATH = "/Users/eunson/Desktop/webserv/";
-const std::string	ROOT_PATH = "/Users/minsukan/Desktop/42/webserv/Webserv/";  
+//const std::string	ROOT_PATH = "/Users/eunson/Desktop/webserv/";
+const std::string	ROOT_PATH = "/Users/eunbison/Desktop/42seoul/webserv/";  
 //const std::string	ROOT_PATH = "/Users/minsu/Desktop/42seoul/webserv/";  
 /* Indications */
 const std::string INDICATION_PATH = ROOT_PATH + "indication/";
