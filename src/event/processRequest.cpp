@@ -128,13 +128,12 @@ void	processPostRequest(SockInfo *sockInfo, LocationBlock &location, KqHandler &
 {
 	PathInfo 	pathInfo(sockInfo->getRequest().getHttpRequestLine().getRequestURI(), location);
 
-	if (!isCgi(location.getCgiPass()))
+	if (!isCgi(location.getCgiPass())) 
 		throw 403;
 	if (sockInfo->getRequest().getHttpBody().getBodySize() > location.getClientMaxBodySize())
 		throw 413;
 	if (pathInfo.getPathType() == P_NONE)
 	{
-		std::cout << "여기들어오니?" << std::endl;
 		throw 404;
 	}
 	processCgi(sockInfo, pathInfo, location, kq);

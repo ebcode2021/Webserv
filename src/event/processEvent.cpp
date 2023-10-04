@@ -21,7 +21,6 @@ bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 		case S_LINE: 
 		{
 			std::string line = response.getResponseLine().getResponseLineToString();
-			std::cout << line << std::endl;
 			ret = send(clientFd, line.c_str(), line.size(), 0);
 			sockInfo->getModeInfo().setSendPhase(S_HEADER);
 			break;
@@ -29,7 +28,6 @@ bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 		case S_HEADER:
 		{
 			std::string header = response.getResponseHeader().getResponseHeaderToString();
-			std::cout << header << std::endl;
 			ret = send(clientFd, header.c_str(), header.size(), 0);
 			sockInfo->getModeInfo().setSendPhase(S_BODY);
 			break;
@@ -37,7 +35,6 @@ bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 		case S_BODY:
 		{
 			HttpBody &body = response.getBody();
-			std::cout << body.getBody() << std::endl;
 			ret = send(clientFd, body.getBody().c_str(), body.getBodySize(), 0);
 			if ((ret > 0) && (ret < (int)body.getBodySize()))
 				body.trimBody(ret);

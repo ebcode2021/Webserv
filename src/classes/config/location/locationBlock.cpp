@@ -21,7 +21,7 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 			setLimitExcept(locationBlock[i]);
 		}
 		else if (splittedLine[0].compare("cgi_pass") == 0) {
-			setCgiPass(locationBlock[i]);
+			setCgiPass(splittedLine[i]);
 		}
 		else if (splittedLine[0].compare("return") == 0) {
 			this->_return = splittedLine[1];
