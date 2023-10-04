@@ -40,7 +40,9 @@ void	Server::processReadEvent(SockInfo *sockInfo)
 				int status = sockInfo->getRequest().createRequest(sockInfo->getSockData().getBuf(), sockInfo->getModeInfo().getReadPhase());
 				if (sockInfo->getModeInfo().getReadPhase() == R_END) {
 					sockInfo->getStatus().setHttpStatus(status);
+					// req 만들기전
 					processRequest(sockInfo, this->_serverInfoList, this->kq);
+					// req 만들고난 후
 				}
 			}
 			else 
