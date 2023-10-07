@@ -114,7 +114,6 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 				break ;
 			case l_autoindex :
 				if (isStatus(splitted) == false) {
-					std::cout << "여기?" << std::endl;
 					fileErrorWithExit(I_PROPERTIES, infile);
 				}
 				break ;
