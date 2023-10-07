@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 	(void)argc;
 
 	// config파일 체크
-	//Config::fileCheck(argc, argv);
+	Config::fileCheck(argc, argv);
 
 	Config	config(argv[1]);
 

@@ -90,6 +90,8 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 			continue ;
 		else if (Validate::braceCheck(splitted, CLOSE_BRACE) == true)
 			break ;
+		if (endsWithSemicolon(splitted.back()) == false)
+			fileErrorWithExit(I_SEMICOLON, infile);
 		// Validate Keyword
 		locationIndications indication = dataset.findLocationIndication(splitted);
 		switch (indication)
@@ -111,20 +113,26 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 					fileErrorWithExit(I_PROPERTIES, infile);
 				break ;
 			case l_autoindex :
-				if (isStatus(splitted) == false)
+				if (isStatus(splitted) == false) {
+					std::cout << "여기?" << std::endl;
 					fileErrorWithExit(I_PROPERTIES, infile);
+				}
 				break ;
 			case l_error_page :
 				if (isErrorPageForm(splitted) == false)
 					fileErrorWithExit(I_PROPERTIES, infile);
 				break ;
+			case l_return :
+				if (splitted.size() != 2)
+					fileErrorWithExit(I_PROPERTIES, infile);
+			case l_cgi_pass :
+
 			case l_none :
 				break ;
 			default :
 				fileErrorWithExit(NO_INDICATION, infile);
 		}
-		if (indication != l_limit_except && endsWithSemicolon(splitted.back()) == false)
-			fileErrorWithExit(I_SEMICOLON, infile);
+		
 		if (dataset.decrementLocationCounter(splitted[0]) == false)
 			fileErrorWithExit(I_NO_SPACE, infile);
 	}

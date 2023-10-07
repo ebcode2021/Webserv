@@ -14,7 +14,7 @@ Config::Config(const std::string &fileName)
 	{
 		splitedLine = split(line, WHITESPACE);
 		if (splitedLine.size() == 0)
-			continue;
+			continue ;
 		if (splitedLine.size() && splitedLine[0].compare("server") == 0)
 			this->_serverInfoList.insert(ServerInfo(confFile));
 	}
@@ -49,7 +49,6 @@ bool	Config::fileCheck(int argc, char *argv[])
 
 	Validate::argumentCheck(argc, argv);
 	Validate dataset;
-	
 	if (infile.is_open())
 	{
 		while (std::getline(infile, line))

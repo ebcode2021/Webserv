@@ -15,6 +15,8 @@ enum locationIndications
 	l_error_page,
 	l_index,
 	l_root,
+	l_cgi_pass,
+	l_return,
 	l_none,
 };
 

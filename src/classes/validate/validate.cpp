@@ -87,6 +87,8 @@ void	Validate::setLocationType()
 	this->_LocationType.insert(std::make_pair("client_body_temp_path", l_client_body_temp_path));
 	this->_LocationType.insert(std::make_pair("error_page", l_error_page));
 	this->_LocationType.insert(std::make_pair("index", l_index));
+	this->_LocationType.insert(std::make_pair("cgi_pass", l_cgi_pass));
+	this->_LocationType.insert(std::make_pair("return", l_return));
 	this->_LocationType.insert(std::make_pair("root", l_root));
 }
 
@@ -100,7 +102,7 @@ void	Validate::setLimitExceptType()
 /* checker */
 void	Validate::argumentCheck(int argc, char *argv[])
 {
-	if (argc == 2 || (argc == 3 && strcmp(argv[2], "-t") == 0))
+	if (argc == 2)
 		Validate::extensionCheck(argv[1]);
 	else
 		printErrorWithExit(INVALID_ARGC);

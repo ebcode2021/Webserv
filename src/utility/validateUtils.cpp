@@ -47,8 +47,10 @@ bool	isStatus(std::vector<std::string> data)
 {
 	if (data.size() != 2)
 		return false;
-	else if (!(data[1].compare("off") == 0  || data[1].compare("on") == 0))
+	else if (!(data[1].compare("off") == 0  || data[1].compare("on") == 0)) {
+		std::cout << data[1] << std::endl;
 		return false;
+	}
 	return true;
 }
 

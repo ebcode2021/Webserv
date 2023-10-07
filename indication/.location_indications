@@ -5,5 +5,6 @@ client_max_body_size	65535
 client_body_temp_path	65535
 error_page				65535
 index					65535
+cgi_pass				1
 return					1
 root					1

@@ -16,12 +16,13 @@ std::vector<std::string> split(const std::string& str, const std::string& delims
 	return (tokens);
 }
 
-bool	endsWithSemicolon(std::string str)
+bool	endsWithSemicolon(std::string &str)
 {
 	char	lastChar = str.back();
 
 	if (lastChar != ';')
 		return false;
+	str.erase(str.size() - 1);
 	return true;
 }
 

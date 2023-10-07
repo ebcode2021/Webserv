@@ -38,7 +38,7 @@ void		endsWithSemicolon(std::ifstream&, std::string);
 
 /* src - [utils] */
 std::vector<std::string> split(const std::string& str, const std::string& delims);
-bool	endsWithSemicolon(std::string str);
+bool	endsWithSemicolon(std::string &str);
 std::string	itos(int);
 std::map<std::string, int> create_directivemap(const std::string &);
 

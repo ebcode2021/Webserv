@@ -108,7 +108,7 @@ void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 			continue ;
 		else if (Validate::braceCheck(splitted, CLOSE_BRACE) == true)
 			break ;
-		Validate::propertyCntCheck(infile, splitted);
+		// Validate::propertyCntCheck(infile, splitted); //이게 무슨 기능인지 모르겠어용
 		// Validate Keyword
 		serverIndications indication = dataset.findServerIndication(splitted);
 		switch(indication)
@@ -117,6 +117,13 @@ void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 				LocationBlock::blockCheck(infile, dataset);
 				break ;
 			case s_listen :
+				if (splitted.size() < 2)
+					fileErrorWithExit(I_NUMERIC_ERROR, infile);
+				for (size_t i = 1; i < splitted.size(); i++)
+				{
+					if (!isNumber(splitted[i]))
+						fileErrorWithExit(I_NUMERIC_ERROR, infile);
+				}
 			case s_client_max_body_size :
 				if (isNumeric(splitted) == false)
 					fileErrorWithExit(I_NUMERIC_ERROR, infile);
