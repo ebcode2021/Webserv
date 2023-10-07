@@ -35,7 +35,7 @@ static bool compareHost(std::string &host, ServerBlock& serverBlock)
 // getter
 ServerInfo ServerInfoList::getServerInfoByPortAndHost(int port, std::string host)
 {
-	std::vector<ServerInfo> tempServerInfo;
+	std::vector<ServerInfo> tempServerInfo;// ㅎㅎ 나 잠깐만 시간연장좀!!!
 	// 포트 번호 맞는거 싹다 리스트로 저장하고
 
 	for (size_t i = 1; i < this->_serverInfoList.size(); i++)

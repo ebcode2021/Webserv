@@ -9,24 +9,32 @@ bool	clientReadEvent(SockInfo *sockInfo, KqHandler &kq)
 	return (true);
 }
 
-bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq)
+bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq, SessionStorage &sessionStorage)
 {
 	SendPhase		phase = sockInfo->getModeInfo().getSendPhase();
 	int				clientFd = sockInfo->getSockFd();
+	HttpRequest		&request = sockInfo->getRequest();
 	HttpResponse	&response = sockInfo->getResponse();
 
+// 여기에서의 response랑 무슨차이야? 그럼 여기는 출력을 위한 로직이네??
 	switch (phase)
 	{
 		int ret;
 		case S_LINE: 
 		{
+			std::cout << response.getResponseLine().getHttpStatus().getStatusCode() << std::endl;
 			std::string line = response.getResponseLine().getResponseLineToString();
 			ret = send(clientFd, line.c_str(), line.size(), 0);
 			sockInfo->getModeInfo().setSendPhase(S_HEADER);
 			break;
 		}
-		case S_HEADER:
+		case S_HEADER: //근데 궁금한거 있어 
 		{
+			//여기가 문제
+			
+			response.getResponseHeader().handleSession(sessionStorage, request.getHttpRequestLine().getRequestURI(), request.getHttpRequestHeader().getHeaderByKey("sessionId"));
+			std::cout << "문제 지점" << std::endl;
+			sessionStorage.printInfo();
 			std::string header = response.getResponseHeader().getResponseHeaderToString();
 			ret = send(clientFd, header.c_str(), header.size(), 0);
 			sockInfo->getModeInfo().setSendPhase(S_BODY);

@@ -13,7 +13,7 @@
 /* event */
 void	processEvent(KqHandler &, Config &);
 bool	clientReadEvent(SockInfo *sockInfo, KqHandler &kq);
-bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq);
+bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq, SessionStorage&);
 
 /* eventUtils */
 void		acceptConnection(SockInfo *, KqHandler &);
@@ -23,6 +23,6 @@ void		sockBindAndListen(int , int);
 MethodType	findMethodType(std::string);
 
 /* request */
-int		processRequest(SockInfo *, ServerInfoList, KqHandler &);
+int		processRequest(SockInfo *, SessionStorage&, ServerInfoList, KqHandler &);
 
 #endif

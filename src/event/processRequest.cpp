@@ -7,19 +7,8 @@ std::string	createGenericBody(std::string path)
 	std::ifstream		file(path);
 	std::stringstream	body;
 
-	//std::cout << "렌더링 할 페이지 경로 : " <<  path << std::endl;
 	if (!isAccess(path))
 		throw 403;
-
-	// 은비
-	//std::vector<std::string>
-	// 만약 index 
-	//std::vector<std::string> indexList = locationBlock.getIndexList();
-	//if (indexList.size() > 0)
-	//{
-
-	//}
-
 
 	if (file.is_open())
 	{
@@ -73,7 +62,6 @@ void	processCgi(SockInfo *sockInfo, PathInfo &pathInfo, LocationBlock &location,
 		exit(1);
 	}
 	else {
-		//waitpid로 병렬. 다시 끝날때까지 다시.
 		changeFdOpt(pipefd[0], O_NONBLOCK);
 		changeFdOpt(pipefd[1], O_NONBLOCK);
 		sockInfo->setCgiInfo(new CgiInfo(pid, pipefd[0], pipefd[1]));
@@ -98,7 +86,6 @@ static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locatio
 	PathInfo 		pathInfo(requestLine.getRequestURI(), locationBlock);
 	std::string		body;
 	
-	// 은비 추가 코드
 	if (locationBlock.getLimitExcept().isValidMethod(requestLine.getMethod()) == false)
 		throw 403;
 	if (isCgi(locationBlock.getCgiPass()))
@@ -108,7 +95,6 @@ static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locatio
 	}
 	switch (pathInfo.getPathType())
 	{
-		// 은비.
 		case P_FILE:
 			body = createGenericBody(pathInfo.getPath());
 			break;
@@ -174,7 +160,7 @@ HttpResponse	processDeleteRequest(SockInfo *sockInfo, LocationBlock &location, K
 	return (response);
 }
 
-int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler &kq)
+int	processRequest(SockInfo *sockInfo, SessionStorage& sessionStorage, ServerInfoList serverInfoList, KqHandler &kq)
 {
 	HttpRequestLine		requestLine = sockInfo->getRequest().getHttpRequestLine() ;
 	HttpRequestHeader	requestHeader = sockInfo->getRequest().getHttpRequestHeader();
@@ -188,10 +174,19 @@ int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler 
 			throw 301;
 		if (sockInfo->getStatus().getStatusCode() != 0)
 			throw sockInfo->getStatus().getStatusCode();
+		//요기! session말고 sessionStorage??
+		
+		if (sessionStorage.validateSession(requestHeader.getHeaderByKey("Cookie"), requestLine.getRequestURI()) == true)
+		{
+			std::cout << requestLine.getRequestURI() << std::endl;
+			throw 304;
+		}
 		MethodType type = findMethodType(requestLine.getMethod());
+		// 처음에는 무조건 여기서 저장해야되자나
 		switch (type)
 		{
 			case GET:
+			// 여기서 세팅하는 response랑 . 
 				response = processGetRequest(sockInfo, curLocation, kq);
 				break;
 			case POST:
@@ -206,12 +201,16 @@ int	processRequest(SockInfo *sockInfo, ServerInfoList serverInfoList, KqHandler 
 	}
 	catch(int code)
 	{
-		std::cout << code << std::endl;
+		sockInfo->getStatus().setHttpStatus(code);
 		if (code == 301) {
 			response.createRedirect(curLocation.getReturn());
 		}
-		sockInfo->getStatus().setHttpStatus(code);
-		response.createErrorPage(sockInfo->getStatus(), curLocation);
+		else if (code == 304) {
+			response.createNotModified();
+		}
+		else {
+			response.createErrorPage(sockInfo->getStatus(), curLocation);
+		}
 		kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, sockInfo);
 	}
 	sockInfo->setResponse(response);

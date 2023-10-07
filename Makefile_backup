@@ -7,7 +7,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -rf
 
 # PHILOSOPHERS_SRC
-SRCS =  main3.cpp	\
+SRCS =  main.cpp	\
 		utility/error.cpp	\
 		utility/utils.cpp	\
 		utility/validate.cpp	\

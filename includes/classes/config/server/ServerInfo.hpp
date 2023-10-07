@@ -3,7 +3,7 @@
 
 # include "LocationBlock.hpp"
 # include "ServerBlock.hpp"
-//# include "HttpRequestHeader.hpp"
+# include "SessionStorage.hpp"
 
 class ServerInfo {
 	private :
@@ -18,7 +18,6 @@ class ServerInfo {
 		// getter, setter
 		ServerBlock&							getServerBlock();
 		std::map<std::string, LocationBlock>	getLocationMap();
-		
 		
 		// method
 		LocationBlock		getLocationBlockByURL(const std::string&);
