@@ -69,11 +69,9 @@ void	HttpResponse::createErrorPage(HttpStatus &status, LocationBlock &locationBl
 	std::vector<ErrorPage>	errorPageList = locationBlock.getErrorPage();
 	HttpBody				body;
 
-	std::cout << "여기는 404겠지" << status.getStatusCode() << std::endl;
 	body.setBody(errorPageGenerator(status));
 	try
 	{
-		
 		for (size_t i = 0; i < errorPageList.size(); i++)
 		{
 			if (errorPageList[i].compareCode(status.getStatusCode()))
@@ -86,7 +84,6 @@ void	HttpResponse::createErrorPage(HttpStatus &status, LocationBlock &locationBl
 	}
 	catch(int code)
 	{
-		std::cout << "지금 여기에서 코드는? " << code << std::endl;
 		status.setHttpStatus(code);
 		body.setBody(errorPageGenerator(status));
 	}
@@ -121,6 +118,11 @@ void	HttpResponse::createResponse(HttpStatus &status, PathInfo &pathInfo, std::s
 	this->_httpResponseLine.setHttpStatus(status);
 	this->_httpBody.setBody(body);
 	this->_httpResponseHeader.setHeader(pathInfo, this->_httpBody);
+}
+
+void	HttpResponse::createNotModified()
+{
+	this->_httpResponseLine.setHttpStatus(HttpStatus(304));
 }
 
 void	HttpResponse::printHttpResponse()

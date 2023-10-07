@@ -6,7 +6,7 @@ CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -rf
 
-SRCS =  main3.cpp	\
+SRCS =  main.cpp	\
 		\
 		classes/config/config.cpp		\
 		classes/config/errorPage.cpp	\
@@ -31,6 +31,8 @@ SRCS =  main3.cpp	\
 		classes/http/httpStatus.cpp		\
 		classes/http/cgiMetadata.cpp	\
 		classes/http/cgiInfo.cpp		\
+		classes/http/httpSession.cpp	\
+		classes/http/sessionStorage.cpp \
 		\
 		classes/http/request/httpRequest.cpp		\
 		classes/http/request/httpRequestLine.cpp	\

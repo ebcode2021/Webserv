@@ -40,9 +40,7 @@ void	Server::processReadEvent(SockInfo *sockInfo)
 				int status = sockInfo->getRequest().createRequest(sockInfo->getSockData().getBuf(), sockInfo->getModeInfo().getReadPhase());
 				if (sockInfo->getModeInfo().getReadPhase() == R_END) {
 					sockInfo->getStatus().setHttpStatus(status);
-					// req 만들기전
-					processRequest(sockInfo, this->_serverInfoList, this->kq);
-					// req 만들고난 후
+					processRequest(sockInfo, this->_sessionStorage, this->_serverInfoList, this->kq);
 				}
 			}
 			else 
@@ -88,17 +86,18 @@ void cgiDataSend(SockInfo *sockInfo, KqHandler &kq)
 	}
 }
 
-void	processWriteEvent(SockInfo *sockInfo, KqHandler &kq)
+void	Server::processWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 {
 	SendMode sendMode = sockInfo->getModeInfo().getSendMode();
-
+	//ServerInfo	curServerInfo = this->getServerInfoList().getServerInfoByPortAndHost(sockInfo->getServerPort(), sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("Host"));
+	
 	switch (sendMode)
 	{
 		case S_PROCESS: /// 부모 -> 자식 process 데이터 전송
 			cgiWriteEvent(sockInfo, kq);
 			break ;
 		case S_CLIENT: // 클라이언트로 response 전송
-			clientWriteEvent(sockInfo, kq);
+			clientWriteEvent(sockInfo, kq, this->_sessionStorage);
 			break ;
 		case S_CGI: // 클라이언트로 CGI 전송
 			cgiDataSend(sockInfo, kq);
@@ -148,3 +147,8 @@ void	Server::run()
 		kq.eventListClear();
 	}
 }
+
+// 은비
+ServerInfoList		Server::getServerInfoList() {
+	return (this->_serverInfoList);
+};

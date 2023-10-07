@@ -3,7 +3,6 @@
 
 # include "webserv.hpp"
 # include "HttpSession.hpp"
-# include "ResponseException.hpp"
 
 class	SessionStorage
 {
@@ -17,15 +16,13 @@ class	SessionStorage
 		// method
 		void			addSession(HttpSession&);
 		void			deleteSession(const std::string&);
-		HttpSession		generateSession(const std::string&);
 		bool			isSession(const std::string&);
 		HttpSession		getSession(std::string&);
-		bool			isEqulSessionAndURL(const std::string&, const std::string&);
 		//std::string		getStoragePath() const;
-		//void			createCacheDirectory();
+		void			createCacheDirectory();
 
 		// validate
-		void			validateSession(const std::string&, const std::string&);
+		bool			validateSession(const std::string&, const std::string&);
 
 
 		// print

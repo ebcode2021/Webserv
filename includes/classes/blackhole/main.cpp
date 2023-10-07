@@ -224,10 +224,6 @@ int main(int argc, char *argv[])
 							validate(curSock, sessionStorage, kqHandler);
 							kqHandler.changeEvent(curSock->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, curSock);
 							
-							// response 만들기
-							// 함수 분리 (validate)
-							// curSock->pathInfo
-							// response(errorStatus) + pathInfo.
 							
 						}
 					}
@@ -258,8 +254,9 @@ int main(int argc, char *argv[])
 					response.printHttpResponse();
 					
 					std::string		reqURL = request.getHttpRequestLine().getRequestURI();
-					std::string		sessionId = request.getHttpRequestHeader().getSessionIdByCookie();
+					std::string		sessionId = request.get HttpRequestHeader().getSessionIdByCookie();
 			
+		
 					response.getResponseHeader().handleSession(sessionStorage, reqURL, sessionId);
 					
 					curSock->setResponse(response);

@@ -35,7 +35,6 @@ ServerInfo::ServerInfo(std::ifstream &file)
 }
 
 /* getter, setter */
-
 ServerBlock&	ServerInfo::getServerBlock() {
 	return(this->_serverBlock);
 }

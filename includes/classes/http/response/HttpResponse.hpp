@@ -26,13 +26,12 @@ class	HttpResponse
 		HttpResponseLine	&getResponseLine();
 		HttpResponseHeader	&getResponseHeader();
 
-		// setter
-
 		// method
 		void	createResponse(HttpStatus &, PathInfo &);
 		void	createResponse(HttpStatus &, PathInfo &, std::string &);
 		void	createErrorPage(HttpStatus &, LocationBlock &);
 		void	createRedirect(const std::string &path);
+		void	createNotModified();
 
 		// print
 		void	printHttpResponse();

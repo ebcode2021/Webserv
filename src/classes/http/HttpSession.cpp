@@ -38,7 +38,6 @@ void		HttpSession::setData(const std::string& data) {
 }
 
 void		HttpSession::setPreviousURL(const std::string& url) {
-	std::cout << "저장되는 url : " << url << std::endl;
 	this->_previousURL = url;
 }
 

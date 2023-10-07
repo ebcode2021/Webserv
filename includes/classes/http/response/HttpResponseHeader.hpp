@@ -4,6 +4,7 @@
 # include "webserv.hpp"
 # include "HttpRequest.hpp"
 # include "PathInfo.hpp"
+# include "SessionStorage.hpp"
 
 class	HttpResponseHeader
 {
@@ -13,7 +14,8 @@ class	HttpResponseHeader
 		std::string					_contentType;
 		std::string					_loaction;
 		size_t						_contentLength;
-		//std::vector<std::string>	_setCookie;
+		//std::string					_cookies;
+		std::vector<std::string>	_setCookie;
 
 	public :
 		// constructor
@@ -25,7 +27,7 @@ class	HttpResponseHeader
 		std::string					getContentType() const;
 		std::string					getLocation() const;
 		size_t						getContentLength() const;
-// 		std::vector<std::string>	getSetCookie() const;
+ 		std::vector<std::string>	getSetCookie() const;
 
 		void						setDate(const std::string&);
 		void						setServer(const std::string&);
@@ -34,15 +36,13 @@ class	HttpResponseHeader
 		void						setLocation(const std::string&);
 		void						setHeader(HttpBody	&);
 		void						setHeader(PathInfo &, HttpBody &);
-// 		void						setSetCookie(const std::string&);
+ 		void						setSetCookie(const std::string&);
 
 // 		// method
 		std::string					getResponseHeaderToString();
-// 		std::string					getCookieString();
-// 		//void						handleSession(SessionStorage&, std::string&, const std::string&);
+ 		std::string					getCookieString();
+		void						handleSession(SessionStorage&, std::string, const std::string);
 
-// 		// print
-// 		void						printCookie();
 };
 
 #endif
