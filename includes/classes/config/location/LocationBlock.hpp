@@ -35,6 +35,7 @@ class LocationBlock : public ServerBlock
 
 		/* method */
 		std::string	getFullPath() const;
+		bool		isValidMethod(const std::string&);
 
 		/* print */
 		void	printInfo() const;

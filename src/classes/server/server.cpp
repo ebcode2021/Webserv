@@ -2,11 +2,18 @@
 #include "utils.hpp"
 #include "event.hpp"
 
+/* constructor */
 Server::Server(const Config &config) :
 	_serverInfoList(config.getServerInfoList()),
 	_serverPortList(config.getServerPortList())
 {}
 
+/* getter */
+ServerInfoList		Server::getServerInfoList() {
+	return (this->_serverInfoList);
+};
+
+/* method */
 void	cgiReadEvent(SockInfo *sockInfo, KqHandler &kq)
 {
 	char save[BUFSIZE];
@@ -89,21 +96,19 @@ void cgiDataSend(SockInfo *sockInfo, KqHandler &kq)
 void	Server::processWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 {
 	SendMode sendMode = sockInfo->getModeInfo().getSendMode();
-	//ServerInfo	curServerInfo = this->getServerInfoList().getServerInfoByPortAndHost(sockInfo->getServerPort(), sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("Host"));
 	
 	switch (sendMode)
 	{
-		case S_PROCESS: /// 부모 -> 자식 process 데이터 전송
+		case S_PROCESS:
 			cgiWriteEvent(sockInfo, kq);
 			break ;
-		case S_CLIENT: // 클라이언트로 response 전송
+		case S_CLIENT:
 			clientWriteEvent(sockInfo, kq, this->_sessionStorage);
 			break ;
-		case S_CGI: // 클라이언트로 CGI 전송
+		case S_CGI:
 			cgiDataSend(sockInfo, kq);
 			break ;
 	}
-	//sendToChild();
 }
 
 void	processTerminated(SockInfo *sockInfo, KqHandler &kq)
@@ -147,8 +152,3 @@ void	Server::run()
 		kq.eventListClear();
 	}
 }
-
-// 은비
-ServerInfoList		Server::getServerInfoList() {
-	return (this->_serverInfoList);
-};

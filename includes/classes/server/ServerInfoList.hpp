@@ -16,8 +16,6 @@ class ServerInfoList
 		//	getter
 		ServerInfo	getServerInfoByPortAndHost(int, std::string);
 
-		// setter
-		
 		//	method
 		void	insert(ServerInfo);
 		size_t	size();

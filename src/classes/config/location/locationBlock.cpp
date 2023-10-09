@@ -152,6 +152,20 @@ std::string	LocationBlock::getFullPath() const {
 	return (this->_root);
 }
 
+bool	LocationBlock::isValidMethod(const std::string& method) {
+	std::vector<std::string>::const_iterator it;
+
+	if (this->_limitExcept.size() == 0)
+		return true;
+
+	for (it = _limitExcept.begin(); it != _limitExcept.end(); ++it) {
+		if (*it == method) {
+			return true;
+		}
+	}
+	return false;
+}
+
 /* print */
 void	LocationBlock::printInfo() const {
 	std::cout << "path : " << this->_path << std::endl;

@@ -25,14 +25,6 @@ Validate::Validate()
 	this->_locationMap = this->_originLocationMap;
 	this->_locationIndications = mappingLocationIndications(this->_originLocationMap);
 	locationFile.close();
-
-	limitExceptFile.open(INDICATION_PATH + LIMIT_EXCEPT);
-	if (limitExceptFile.fail())
-		printErrorWithExit(CHECK_INDICATION_FILE);
-	this->_originLimitExceptMap = fileDataToMap(limitExceptFile);
-	this->_limitExceptMap = this->_originLimitExceptMap;
-	this->_limitExceptIndications = mappingLimitExceptIndications(this->_limitExceptMap);
-	limitExceptFile.close();
 }
 
 /* initialize */

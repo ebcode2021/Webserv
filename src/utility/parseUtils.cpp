@@ -51,18 +51,19 @@ std::map<std::string, std::string>	extractHeaderField(std::string &data)
 	{
 		pos = data.find(delim);
 		if (pos == std::string::npos)
+		{
 			throw 400;
+		}
 		line = data.substr(0, pos);
 		data.erase(0, pos + delim.length());
 		if (line == "")
 			break ;
-		
 		std::string::size_type colonPos = line.find(":");
-        if (colonPos != std::string::npos) {
-            std::string key = line.substr(0, colonPos);
-            std::string value = trimString(line.substr(colonPos + 1), " ");
-            headers[key] = value;
-        }
+		if (colonPos != std::string::npos) {
+			std::string key = line.substr(0, colonPos);
+			std::string value = trimString(line.substr(colonPos + 1), " ");
+			headers[key] = value;
+		}
 		else
 			throw 400;
 	}

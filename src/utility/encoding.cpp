@@ -21,11 +21,9 @@ std::string chunkedEncoding(std::string &data, ReadPhase &phase)
 		chunkSize = std::stoi(chunkSizeString, nullptr, 16);
 		std::cout << chunkSize << std::endl;
 		if (chunkSize == 0) {
-			std::cout << "데이터 끝" << std::endl;
 			phase = R_END;
 		}
 		data.erase(0, pos + 2);
-		std::cout << data.substr(0, chunkSize) << std::endl;
 		body += data.substr(0, chunkSize);
 		data.erase(0, chunkSize + 2);
 	}

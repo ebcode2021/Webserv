@@ -19,9 +19,10 @@ class	Server
 		// constructor
 		Server(const Config &);
 
-		// get
+		// getter
 		ServerInfoList		getServerInfoList();
 
+		// method
 		void	run();
 		void	processEvent();
 		void	processWriteEvent(SockInfo *sockInfo, KqHandler&);

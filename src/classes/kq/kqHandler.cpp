@@ -36,15 +36,6 @@ void	KqHandler::eventListClear() {
 	memset(this->_eventList, 0, sizeof(struct kevent) * 256);
 }
 
-// void	KqHandler::eventUpdate() {
-// 	int ret = kevent(this->_kq, &this->_changeList[0], this->_changeList.size(), NULL, 0, NULL);
-// 	if (ret == -1) {
-// 	//	std::cout << "등록 실패" << std::endl;
-// 		printErrorWithExit(strerror(errno));
-// 	}
-// 	this->changeListClear();
-// }
-
 int		KqHandler::getEventCnt() {
 	return this->_eventCnt;
 }

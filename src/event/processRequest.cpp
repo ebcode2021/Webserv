@@ -171,7 +171,7 @@ int	processRequest(SockInfo *sockInfo, SessionStorage& sessionStorage, ServerInf
 			throw sockInfo->getStatus().getStatusCode();
 		else if (isReturn(curLocation))
 			throw 301;
-		else if (curLocation.getLimitExcept().isValidMethod(requestLine.getMethod()) == false)
+		else if (curLocation.isValidMethod(requestLine.getMethod()) == false)
 			throw 403;
 		if (sessionStorage.validateSession(requestHeader.getHeaderByKey("Cookie"), requestLine.getRequestURI()) == true)
 		{
@@ -179,11 +179,9 @@ int	processRequest(SockInfo *sockInfo, SessionStorage& sessionStorage, ServerInf
 			throw 304;
 		}
 		MethodType type = findMethodType(requestLine.getMethod());
-		// 처음에는 무조건 여기서 저장해야되자나
 		switch (type)
 		{
 			case GET:
-			// 여기서 세팅하는 response랑 . 
 				response = processGetRequest(sockInfo, curLocation, kq);
 				break;
 			case POST:

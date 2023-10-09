@@ -7,8 +7,6 @@
 # include "HttpRequest.hpp"
 # include "HttpResponse.hpp"
 # include "CgiInfo.hpp"
-//# include "HttpResponse.hpp"
-//# include "PathInfo.hpp"
 
 class SockInfo
 {
@@ -23,11 +21,6 @@ class SockInfo
 		HttpRequest		_request;
 		HttpResponse	_response;
 		CgiInfo			*_cgiInfo;
-		//PathInfo		_pathInfo;
-		//std::string		_clientAddr;
-		//int				_readMode;
-		//int				_sendMode;
-		
 
 	public :
 		// constructor
@@ -49,7 +42,6 @@ class SockInfo
 		// setter
 		void			setResponse(HttpResponse);
 		void			setCgiInfo(CgiInfo	*cgiInfo);
-
 		void			reset();
 };
 

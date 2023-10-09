@@ -30,8 +30,6 @@ bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq, SessionStorage &session
 		case S_HEADER:
 		{
 			response.getResponseHeader().handleSession(sessionStorage, request.getHttpRequestLine().getRequestURI(), request.getHttpRequestHeader().getHeaderByKey("sessionId"));
-			std::cout << "문제 지점" << std::endl;
-			sessionStorage.printInfo();
 			std::string header = response.getResponseHeader().getResponseHeaderToString();
 			ret = send(clientFd, header.c_str(), header.size(), 0);
 			sockInfo->getModeInfo().setSendPhase(S_BODY);

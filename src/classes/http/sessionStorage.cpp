@@ -29,13 +29,13 @@ HttpSession	SessionStorage::getSession(std::string& id)
  	try
  	{
  		if (mkdir(folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
- 			throw std::runtime_error("Already Exist Cache Folder");
+ 			throw std::runtime_error("Check Cache Folder. Already Exist or Permission");
  	}
  	catch (const std::exception &e)
  	{
  		std::cerr << "Exception occurs : " << e.what() << std::endl;
  	}
- }
+}
 
 static std::string	extractSessionId(const std::string& cookies)
 {
@@ -90,28 +90,3 @@ void	SessionStorage::printInfo()
 		std::cout << "-----------------------------------------" << std::endl;
 	}
 } 		
-// delete cache directory
- 		//if (stat(folder.c_str(), &st) == 0) {
-		//		std::cout << "여긴 들어와?" << std::endl;
- 		//	if (S_ISDIR(st.st_mode)) {
- 		//		if (remove(folder.c_str()) != 0) {
- 		//			system(("rm -rf " + folder).c_str());
-		//		}
- 		//	}
- 		//}
- 		//else
- 		//	throw std::runtime_error("Already Exist Cache Folder");
-		
- 		// create cache directory
-
-		//bool			SessionStorage::isEqulSessionAndURL(const std::string& sessionId, const std::string& url)
-//{
-//	std::map<std::string, HttpSession>::const_iterator	it =  this->_sessionList.find(sessionId);
-
-//	if (it != this->_sessionList.end())
-//	{
-//		if ((*it).second.getPreviousURL() == url && (*it).first == sessionId)
-//			return (true);
-//	}
-//	return (false);
-//}
