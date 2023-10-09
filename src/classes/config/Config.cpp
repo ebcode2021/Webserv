@@ -16,8 +16,9 @@ Config::Config(const std::string &fileName)
 			continue ;
 		if (splitedLine.size() && splitedLine[0].compare("server") == 0)
 			this->_serverInfoList.insert(ServerInfo(confFile));
+
 	}
-	
+
 	for (size_t i = 0; i < this->_serverInfoList.size(); i++)
 	{
 		ServerBlock server = this->_serverInfoList[i].getServerBlock();
@@ -68,7 +69,6 @@ bool	Config::fileCheck(int argc, char *argv[])
 	}
 	else
 		printErrorWithExit(CHECK_CONFIG_FILE);
-
 	if (argc == 2)
 		return (true);
 	else

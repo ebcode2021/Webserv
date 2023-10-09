@@ -55,12 +55,6 @@ int SockHandler::sockRecv() {
 	}
 }
 
-// int SockHandler::sockSend() 
-// {
-// 	int sendByte = send(this->_sockInfo->getSockFd(), this->_sockInfo->getBufToCStr(), this->_sockInfo->getBufSize(), 0);
-// 	return (sendByte);
-// }
-
 int SockHandler::sockBind(int port) {
 	struct sockaddr_in	serverAddr;
 

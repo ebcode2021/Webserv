@@ -19,7 +19,6 @@ std::string chunkedEncoding(std::string &data, ReadPhase &phase)
 			break ;
 		chunkSizeString = data.substr(0, pos);
 		chunkSize = std::stoi(chunkSizeString, nullptr, 16);
-		std::cout << chunkSize << std::endl;
 		if (chunkSize == 0) {
 			phase = R_END;
 		}

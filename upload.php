@@ -10,7 +10,8 @@ $tempFilePath = $uploadedFile['tmp_name'];
 $originalFileName = $uploadedFile['name'];
 
 // 저장할 파일 경로
-$destinationPath = '/Users/minsukan/Desktop/42/webserv/Webserv/resources/uplod/' . $originalFileName;
+$destinationPath = '/Users/eunbison/Desktop/42seoul/webserv/resources/uplod/' . $originalFileName;
+//$destinationPath = '/Users/minsukan/Desktop/42/webserv/Webserv/resources/uplod/' . $originalFileName;
 
 // 파일을 원하는 경로로 이동
 if (move_uploaded_file($tempFilePath, $destinationPath)) {

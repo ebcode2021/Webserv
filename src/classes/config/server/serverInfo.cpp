@@ -68,13 +68,6 @@ static std::vector<std::string> locationBlockBackup(std::ifstream& confFile, std
 			break ;
 		else if (splittedLine[0].compare("limit_except") == 0) {
 			backup += line + "\n";
-			while (std::getline(confFile, line))
-			{
-				splittedLine = split(line, WHITESPACE);
-				if (splittedLine[0] == "}")
-					break;
-				backup += line + "\n";
-			}
 			locationBlock.push_back(backup);
 			backup = "";
 		}

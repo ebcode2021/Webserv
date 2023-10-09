@@ -123,10 +123,7 @@ void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 				for (size_t i = 1; i < splitted.size(); i++)
 				{
 					if (!isNumber(splitted[i]))
-					{
-						std::cout << "123" << std::endl;
 						fileErrorWithExit(I_NUMERIC_ERROR, infile);
-					}
 				}
 				break ;
 			case s_client_max_body_size :

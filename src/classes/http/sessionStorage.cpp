@@ -41,7 +41,6 @@ static std::string	extractSessionId(const std::string& cookies)
 {
 	std::vector<std::string> splittedCookies = split(cookies, ";");
 		for (size_t i = 0; i < splittedCookies.size(); ++i) {
-			std::cout << splittedCookies[i] << std::endl;
 			size_t pos = splittedCookies[i].find("sessionId=");
 			if (pos != std::string::npos) {
 				return splittedCookies[i].substr(pos + 10);
@@ -52,11 +51,11 @@ static std::string	extractSessionId(const std::string& cookies)
 
 bool	SessionStorage::validateSession(const std::string& cookies, const std::string& url)
 {
-	const std::string sessionId = extractSessionId(cookies); // 여기서 세션아이디 추출하고. 아 요기 아니다.
+	const std::string sessionId = extractSessionId(cookies);
 	std::map<std::string, HttpSession>::const_iterator	it =  this->_sessionList.find(sessionId);
 
-	if (url == "/favicon.ico")
-		return true;	
+	//if (url == "/favicon.ico")
+	//	return true;
 	if (it != this->_sessionList.end()) 
 	{
 		if ((*it).second.getExpiration() > std::time(nullptr) && (*it).second.getPreviousURL() == url)
@@ -71,7 +70,6 @@ void	SessionStorage::deleteSession(const std::string& id)
 {
 	std::map<std::string, HttpSession>::const_iterator it = this->_sessionList.find(id);
 	
-	std::cout << "지워지는중" << std::endl;
 	if (it != this->_sessionList.end())
 		this->_sessionList.erase(it);
 }

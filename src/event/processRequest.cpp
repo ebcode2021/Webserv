@@ -175,7 +175,6 @@ int	processRequest(SockInfo *sockInfo, SessionStorage& sessionStorage, ServerInf
 			throw 403;
 		if (sessionStorage.validateSession(requestHeader.getHeaderByKey("Cookie"), requestLine.getRequestURI()) == true)
 		{
-			std::cout << requestLine.getRequestURI() << std::endl;
 			throw 304;
 		}
 		MethodType type = findMethodType(requestLine.getMethod());

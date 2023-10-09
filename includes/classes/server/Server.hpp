@@ -12,7 +12,7 @@ class	Server
 	private :
 		const ServerInfoList		&_serverInfoList;
 		const std::set<int>			&_serverPortList;
-		SessionStorage		_sessionStorage;
+		SessionStorage				_sessionStorage;
 		KqHandler					kq;
 
 	public :

@@ -21,7 +21,6 @@ bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq, SessionStorage &session
 		int ret;
 		case S_LINE: 
 		{
-			std::cout << response.getResponseLine().getHttpStatus().getStatusCode() << std::endl;
 			std::string line = response.getResponseLine().getResponseLineToString();
 			ret = send(clientFd, line.c_str(), line.size(), 0);
 			sockInfo->getModeInfo().setSendPhase(S_HEADER);
@@ -43,7 +42,6 @@ bool	clientWriteEvent(SockInfo *sockInfo, KqHandler &kq, SessionStorage &session
 				body.trimBody(ret);
 			else {
 				if (sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("connection") != KEEPALIVE) {
-					std::cout << "종료" << std::endl;
 					closeSock(sockInfo);
 				}
 				else {
