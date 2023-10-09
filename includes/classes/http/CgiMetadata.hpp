@@ -15,6 +15,7 @@ class CgiMetadata {
 		std::string _httpAcceptCharset;
 		std::string _queryString;
 		std::string _serverProtocol;
+
 	public :
 		/* constructor */
 		CgiMetadata(HttpRequest &, PathInfo &);

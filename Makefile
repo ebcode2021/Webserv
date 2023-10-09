@@ -10,7 +10,6 @@ SRCS =  main.cpp	\
 		\
 		classes/config/config.cpp		\
 		classes/config/errorPage.cpp	\
-		classes/config/limitExcept.cpp	\
 		\
 		classes/config/location/locationBlock.cpp	\
 		\

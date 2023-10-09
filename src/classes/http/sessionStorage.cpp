@@ -25,7 +25,7 @@ HttpSession	SessionStorage::getSession(std::string& id)
  void		SessionStorage::createCacheDirectory()
  {
  	std::string	folder = CACHE_ROOT;
-	std::cout << folder << std::endl;
+
  	try
  	{
  		if (mkdir(folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)

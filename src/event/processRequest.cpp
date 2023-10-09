@@ -1,6 +1,5 @@
 # include "event.hpp"
 # include "CgiMetadata.hpp"
-# include "LimitExcept.hpp"
 
 std::string	createGenericBody(std::string path)
 {
@@ -86,8 +85,6 @@ static HttpResponse	processGetRequest(SockInfo *sockInfo, LocationBlock &locatio
 	PathInfo 		pathInfo(requestLine.getRequestURI(), locationBlock);
 	std::string		body;
 	
-	if (locationBlock.getLimitExcept().isValidMethod(requestLine.getMethod()) == false)
-		throw 403;
 	if (isCgi(locationBlock.getCgiPass()))
 	{
 		processCgi(sockInfo, pathInfo, locationBlock, kq);
@@ -170,12 +167,12 @@ int	processRequest(SockInfo *sockInfo, SessionStorage& sessionStorage, ServerInf
 	
 	try
 	{
-		if (isReturn(curLocation))
-			throw 301;
 		if (sockInfo->getStatus().getStatusCode() != 0)
 			throw sockInfo->getStatus().getStatusCode();
-		//요기! session말고 sessionStorage??
-		
+		else if (isReturn(curLocation))
+			throw 301;
+		else if (curLocation.getLimitExcept().isValidMethod(requestLine.getMethod()) == false)
+			throw 403;
 		if (sessionStorage.validateSession(requestHeader.getHeaderByKey("Cookie"), requestLine.getRequestURI()) == true)
 		{
 			std::cout << requestLine.getRequestURI() << std::endl;

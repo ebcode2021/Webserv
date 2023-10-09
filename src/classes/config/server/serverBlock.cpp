@@ -2,7 +2,6 @@
 #include "ServerBlock.hpp"
 #include "webserv.hpp"
 #include "map"
-//#include "PathInfo.hpp"
 
 /* constructor */
 ServerBlock::ServerBlock() {
@@ -102,28 +101,34 @@ void ServerBlock::blockCheck(std::ifstream& infile, Validate &dataset)
 	// Read Config file
 	while (std::getline(infile, line))
 	{
-		// Check splitted data
+		// Check splitted data 
 		splitted = split(line, WHITESPACE);
 		if (splitted.size() == 0)
 			continue ;
 		else if (Validate::braceCheck(splitted, CLOSE_BRACE) == true)
 			break ;
-		// Validate::propertyCntCheck(infile, splitted); //이게 무슨 기능인지 모르겠어용
-		// Validate Keyword
 		serverIndications indication = dataset.findServerIndication(splitted);
 		switch(indication)
 		{
 			case s_location :
+				if (splitted.size() != 2)
+					fileErrorWithExit(I_PROPERTIES, infile);
 				LocationBlock::blockCheck(infile, dataset);
 				break ;
 			case s_listen :
 				if (splitted.size() < 2)
 					fileErrorWithExit(I_NUMERIC_ERROR, infile);
+				else if (splitted.size() != 2)
+					fileErrorWithExit(I_PROPERTIES, infile);
 				for (size_t i = 1; i < splitted.size(); i++)
 				{
 					if (!isNumber(splitted[i]))
+					{
+						std::cout << "123" << std::endl;
 						fileErrorWithExit(I_NUMERIC_ERROR, infile);
+					}
 				}
+				break ;
 			case s_client_max_body_size :
 				if (isNumeric(splitted) == false)
 					fileErrorWithExit(I_NUMERIC_ERROR, infile);

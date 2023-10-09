@@ -18,7 +18,7 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 			setLocationPath(splittedLine);
 		}
 		else if (splittedLine[0].compare("limit_except") == 0) {
-			setLimitExcept(locationBlock[i]);
+			setLimitExcept(splittedLine);
 		}
 		else if (splittedLine[0].compare("cgi_pass") == 0) {
 			setCgiPass(splittedLine[i]);
@@ -33,7 +33,7 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 }
 
 /* getter */
-LimitExcept	LocationBlock::getLimitExcept() const {
+std::vector<std::string> LocationBlock::getLimitExcept() const {
 	return (this->_limitExcept);
 }
 
@@ -45,10 +45,17 @@ std::string LocationBlock::getReturn() const {
 	return (this->_return);
 }
 
+std::string LocationBlock::getCgiPass() const {
+	return (this->_cgi_pass);
+}
 
 /* setter */
-void	LocationBlock::setLimitExcept(const std::string &line) {
-	this->_limitExcept = LimitExcept(split(line, "\n"));
+void	LocationBlock::setLimitExcept(const std::vector<std::string>& methods) {
+	for (size_t i = 1; i < methods.size(); i++)
+	{
+		this->_limitExcept.push_back(methods[i]);
+	}
+	
 }
 
 void	LocationBlock::setPath(const std::string& path) { 
@@ -61,12 +68,14 @@ void	LocationBlock::setCgiPass(const std::string& cgiPass) {
 
 void	LocationBlock::setReturn(const std::string& value) {
 	this->_return = value;
-} 
-
-std::string LocationBlock::getCgiPass() const {
-	return (this->_cgi_pass);
 }
 
+void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
+	if (value.size() < 2)
+		this->_path = "/";
+	else
+		this->_path = value[1];
+}
 
 /* checker */
 void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
@@ -92,12 +101,12 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 			break ;
 		if (endsWithSemicolon(splitted.back()) == false)
 			fileErrorWithExit(I_SEMICOLON, infile);
-		// Validate Keyword
 		locationIndications indication = dataset.findLocationIndication(splitted);
 		switch (indication)
 		{
 			case l_limit_except :
-				LimitExcept::blockCheck(infile, dataset);
+				if (splitted.size() < 2)
+					fileErrorWithExit(I_PROPERTIES, infile);
 				break ;
 			case l_client_max_body_size :
 				if (isNumeric(splitted) == false)
@@ -125,7 +134,6 @@ void LocationBlock::blockCheck(std::ifstream &infile, Validate& dataset)
 				if (splitted.size() != 2)
 					fileErrorWithExit(I_PROPERTIES, infile);
 			case l_cgi_pass :
-
 			case l_none :
 				break ;
 			default :
@@ -144,15 +152,7 @@ std::string	LocationBlock::getFullPath() const {
 	return (this->_root);
 }
 
-void	LocationBlock::setLocationPath(const std::vector<std::string>& value) {
-	if (value.size() < 2)
-		this->_path = "/";
-	else
-		this->_path = value[1];
-}
-
 /* print */
 void	LocationBlock::printInfo() const {
 	std::cout << "path : " << this->_path << std::endl;
-	this->_limitExcept.printInfo();
 }

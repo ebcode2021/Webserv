@@ -24,7 +24,6 @@ class ServerInfo {
 
 		// print
 		void printServerInfo() const;
-
 };
 
 #endif

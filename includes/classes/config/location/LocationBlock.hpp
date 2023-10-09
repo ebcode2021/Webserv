@@ -2,42 +2,41 @@
 # define LOCATION_HPP
 
 # include "ServerBlock.hpp"
-# include "LimitExcept.hpp"
 
 class LocationBlock : public ServerBlock
 {
 	private :
 		std::string		_path;
-		LimitExcept		_limitExcept;
+		std::vector<std::string>	_limitExcept;
 		std::string		_cgi_pass;
 		std::string		_return;
 
 	public :
-		// constructor
+		/* constructor */
 		LocationBlock();
 		LocationBlock(const ServerBlock &);
 		LocationBlock(const ServerBlock&, const std::vector<std::string>&);
 
-		// getter
-		LimitExcept	getLimitExcept() const;
-		std::string	getPath() const;
-		std::string getCgiPass() const;
-		std::string getReturn() const;
+		/* getter */
+		std::vector<std::string>	getLimitExcept() const;
+		std::string					getPath() const;
+		std::string					getCgiPass() const;
+		std::string 				getReturn() const;
 
-		// setter
+		/* setter */
 		void		setPath(const std::string&);
-		void		setLimitExcept(const std::string&);
+		void		setLimitExcept(const std::vector<std::string>&);
 		void		setCgiPass(const std::string&);
 		void		setReturn(const std::string&);
-		
-		// checker
-		static void blockCheck(std::ifstream&, Validate&);
 		void		setLocationPath(const std::vector<std::string>&);
+		
+		/* checker */
+		static void blockCheck(std::ifstream&, Validate&);
 
-		// method
+		/* method */
 		std::string	getFullPath() const;
 
-		// print
+		/* print */
 		void	printInfo() const;
 };
 

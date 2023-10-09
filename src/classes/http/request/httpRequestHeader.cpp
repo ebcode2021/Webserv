@@ -1,7 +1,6 @@
 #include "HttpRequestHeader.hpp"
 
 /* constructor */
-
 HttpRequestHeader::HttpRequestHeader() {};
 
 // getter

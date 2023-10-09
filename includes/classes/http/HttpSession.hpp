@@ -28,7 +28,6 @@ class	HttpSession
 		void		createSessionFile();
 		std::string	createSessionId();
 		time_t		createExpirationTime();
-
 		bool		isCacheDirectory();
 
 		// print

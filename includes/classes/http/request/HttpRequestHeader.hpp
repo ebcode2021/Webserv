@@ -13,13 +13,9 @@ class	HttpRequestHeader
 
 		// getter
 		std::string getHeaderByKey(std::string) const;
+
 		//setter
 		void	setRequestHeader(std::map<std::string, std::string>);
-		
-		/* method */
-		
-
-		/* exception */
 
 		// test
 		void	print();

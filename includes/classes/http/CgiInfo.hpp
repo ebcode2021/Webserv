@@ -11,6 +11,7 @@ class CgiInfo
 		int 		_readFd;
 		int 		_writeFd;
 		HttpBody	_data;
+
 	public :
 		CgiInfo(int, int, int);
 

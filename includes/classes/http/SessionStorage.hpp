@@ -18,12 +18,10 @@ class	SessionStorage
 		void			deleteSession(const std::string&);
 		bool			isSession(const std::string&);
 		HttpSession		getSession(std::string&);
-		//std::string		getStoragePath() const;
 		void			createCacheDirectory();
 
 		// validate
 		bool			validateSession(const std::string&, const std::string&);
-
 
 		// print
 		void			printInfo();

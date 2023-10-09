@@ -14,14 +14,13 @@ class	HttpResponseHeader
 		std::string					_contentType;
 		std::string					_loaction;
 		size_t						_contentLength;
-		//std::string					_cookies;
 		std::vector<std::string>	_setCookie;
 
 	public :
 		// constructor
 		HttpResponseHeader();
 
-		// getter, setter
+		// getter
 		std::string					getDate() const;
 		std::string					getServer() const;
 		std::string					getContentType() const;
@@ -29,6 +28,7 @@ class	HttpResponseHeader
 		size_t						getContentLength() const;
  		std::vector<std::string>	getSetCookie() const;
 
+		// setter
 		void						setDate(const std::string&);
 		void						setServer(const std::string&);
 		void						setContentType(const std::string&);
@@ -38,7 +38,7 @@ class	HttpResponseHeader
 		void						setHeader(PathInfo &, HttpBody &);
  		void						setSetCookie(const std::string&);
 
-// 		// method
+		// method
 		std::string					getResponseHeaderToString();
  		std::string					getCookieString();
 		void						handleSession(SessionStorage&, std::string, const std::string);

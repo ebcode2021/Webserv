@@ -3,7 +3,6 @@
 
 # include "ServerInfo.hpp"
 # include "ServerInfoList.hpp"
-//# include "HttpRequestHeader.hpp"
 # include "indication.hpp"
 # include "enum.hpp"
 
@@ -19,10 +18,6 @@ class	Config {
 		// getter
 		const ServerInfoList	&getServerInfoList() const;
 		const std::set<int>		&getServerPortList() const;
-
-		// method
-		ServerInfo				findServerInfoByHost(const std::string&);
-		//ServerInfo				findServerInfoByParameter(const std::string&, const size_t);
 		
 		// checker
 		static bool				fileCheck(int, char *[]);

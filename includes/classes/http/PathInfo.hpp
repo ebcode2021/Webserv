@@ -12,9 +12,9 @@ class PathInfo
 	private :
 		std::string		_path;
 		PathType		_pathType;
-		std::string		_fileType;  //*
+		std::string		_fileType;
 		bool			_access;
-		bool			_autoIndex; //*
+		bool			_autoIndex;
 
 	public :
 		// constructor
@@ -32,7 +32,6 @@ class PathInfo
 		// setter
 		void			setAutoIndex(bool);
 		void			setFileType(std::string type);
-
 
 		// print
 		void			print();

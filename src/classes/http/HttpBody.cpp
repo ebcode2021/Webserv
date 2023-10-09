@@ -33,7 +33,7 @@ void	HttpBody::trimBody(int index) {
 	this->_body.erase(0, index);
 }
 
-// test
+/* print */
 void	HttpBody::print()
 {
 	std::cout << this->_body << std::endl;

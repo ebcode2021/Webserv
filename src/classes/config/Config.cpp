@@ -1,6 +1,5 @@
 #include "Config.hpp"
 
-
 /* constructor */
 Config::Config(const std::string &fileName)
 {

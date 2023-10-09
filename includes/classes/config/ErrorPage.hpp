@@ -16,8 +16,6 @@ class ErrorPage {
 		std::vector<int>	getStatusCodeList() const;
 		std::string			getPath() const;
 
-		// setter
-
 		// method
 		bool				compareCode(int);
 

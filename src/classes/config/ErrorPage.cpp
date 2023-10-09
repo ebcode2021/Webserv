@@ -18,8 +18,6 @@ std::string			ErrorPage::getPath() const {
 	return (this->path);
 }
 
-/* setter */
-
 /* method*/
 bool	ErrorPage::compareCode(int code)
 {
