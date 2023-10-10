@@ -14,6 +14,8 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 	for (size_t i = 0; i < locationBlock.size(); i++)
 	{
 		splittedLine = split(locationBlock[i], static_cast<std::string>(WHITESPACE) + ";");
+		if (splittedLine.size() == 0)
+			continue ;
 		if (splittedLine[0].compare("location") == 0) {
 			setLocationPath(splittedLine);
 		}
@@ -21,7 +23,7 @@ LocationBlock::LocationBlock(const ServerBlock& serverBlock, const std::vector<s
 			setLimitExcept(splittedLine);
 		}
 		else if (splittedLine[0].compare("cgi_pass") == 0) {
-			setCgiPass(splittedLine[i]);
+			setCgiPass(splittedLine[1]);
 		}
 		else if (splittedLine[0].compare("return") == 0) {
 			this->_return = splittedLine[1];

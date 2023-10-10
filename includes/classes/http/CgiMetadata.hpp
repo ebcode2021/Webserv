@@ -19,8 +19,13 @@ class CgiMetadata {
 	public :
 		/* constructor */
 		CgiMetadata(HttpRequest &, PathInfo &);
+		
+		void	setPathInfo(std::string);
+
 		char	**createEnvp();
+		
 		void	print();
+
 
 };
 

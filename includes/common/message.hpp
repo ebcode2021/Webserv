@@ -8,6 +8,8 @@
 
 # define CHECK_CONFIG_FILE "Check Config file"
 
+# define SOCKET_ERROR_MSG "Socket Error"
+
 /* config file error */
 # define BLOCK_NAME "Invalid Block Name :: line "
 

@@ -40,6 +40,10 @@ unsigned int				ServerBlock::getClientMaxBodySize() const {
 	return (this->_clientMaxBodySize);
 }
 
+std::string ServerBlock::getClientBodyTempPath() {
+	return this->_clientBodyTempPath;
+}
+
 void	ServerBlock::setListenPort(std::vector<std::string>& value) {
 	for (size_t i = 1; i < value.size(); i++) {
 		this->_listenPortList.push_back(std::atoi(value[i].c_str()));

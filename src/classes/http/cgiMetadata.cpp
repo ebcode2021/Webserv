@@ -12,6 +12,10 @@ CgiMetadata::CgiMetadata(HttpRequest &request, PathInfo &path) {
 	this->_serverProtocol = std::string("SERVER_PROTOCOL=") + "HTTP/1.1";
 }
 
+void	CgiMetadata::setPathInfo(std::string path) {
+	this->_pathInfo = "PATH_INFO=" + path;
+}
+
 char **CgiMetadata::createEnvp() {
 	char **envp = new char*[9];
 	envp[0] = strdup(_pathInfo.c_str());

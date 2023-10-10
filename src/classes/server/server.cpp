@@ -83,13 +83,14 @@ void cgiDataSend(SockInfo *sockInfo, KqHandler &kq)
 	if (ret < (int)body.getBodySize())
 		body.trimBody(ret);
 	else {
-		kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, sockInfo);
 		delete sockInfo->getCgiInfo();
-		if (sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("connection") == KEEPALIVE)
+		if (sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("connection") == KEEPALIVE) {
+			kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, sockInfo);
 			sockInfo->reset();
-		else
+		}
+		else {
 			closeSock(sockInfo);
-
+		}
 	}
 }
 

@@ -44,9 +44,9 @@ void	sockBindAndListen(int fd, int port)
 	serverAddr.sin_port = htons(port);
 
 	if (bind(fd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0)
-		printErrorWithExit(strerror(errno));
+		printErrorWithExit(SOCKET_ERROR_MSG);
 	if (listen(fd, FD_SETSIZE))
-		printErrorWithExit(strerror(errno));
+		printErrorWithExit(SOCKET_ERROR_MSG);
 }
 
 void	closeSock(SockInfo	*sockInfo)

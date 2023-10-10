@@ -43,7 +43,6 @@ std::string	dirType(PathInfo &pathInfo, LocationBlock &location)
 
 void	processCgi(SockInfo *sockInfo, PathInfo &pathInfo, LocationBlock &location, KqHandler &kq)
 {
-	(void)location;
 	(void)kq;
 	CgiMetadata data(sockInfo->getRequest(), pathInfo);
 	if (!pathInfo.getAccess())
@@ -55,8 +54,9 @@ void	processCgi(SockInfo *sockInfo, PathInfo &pathInfo, LocationBlock &location,
 		dup2(pipefd[0], STDIN_FILENO);
 		dup2(pipefd[1], STDOUT_FILENO);
 		std::string path = pathInfo.getPath();
-
-		char *argv[] = {strdup(CGI_PATH.c_str()), strdup(path.c_str()), NULL};
+		
+		data.setPathInfo(location.getClientBodyTempPath());
+		char *argv[] = {strdup(location.getCgiPass().c_str()), strdup(path.c_str()), NULL};
 		execve(argv[0], argv, data.createEnvp());
 		exit(1);
 	}
@@ -111,14 +111,13 @@ void	processPostRequest(SockInfo *sockInfo, LocationBlock &location, KqHandler &
 {
 	PathInfo 	pathInfo(sockInfo->getRequest().getHttpRequestLine().getRequestURI(), location);
 
-	if (!isCgi(location.getCgiPass())) 
+	if (!isCgi(location.getCgiPass())) {
 		throw 403;
+	}
 	if (sockInfo->getRequest().getHttpBody().getBodySize() > location.getClientMaxBodySize())
 		throw 413;
 	if (pathInfo.getPathType() == P_NONE)
-	{
-		throw 404;
-	}
+		throw 204;
 	processCgi(sockInfo, pathInfo, location, kq);
 }
 
@@ -172,11 +171,9 @@ int	processRequest(SockInfo *sockInfo, SessionStorage& sessionStorage, ServerInf
 		else if (isReturn(curLocation))
 			throw 301;
 		else if (curLocation.isValidMethod(requestLine.getMethod()) == false)
-			throw 403;
+			throw 405;
 		if (sessionStorage.validateSession(requestHeader.getHeaderByKey("Cookie"), requestLine.getRequestURI()) == true)
-		{
 			throw 304;
-		}
 		MethodType type = findMethodType(requestLine.getMethod());
 		switch (type)
 		{

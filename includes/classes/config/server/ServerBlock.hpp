@@ -28,6 +28,7 @@ class ServerBlock {
 		std::vector<std::string>	getIndexList() const;
 		bool						getAutoIndex() const;
 		unsigned int				getClientMaxBodySize() const;
+		std::string					getClientBodyTempPath();
 
 		// setter
 		void						setListenPort(std::vector<std::string>&);
