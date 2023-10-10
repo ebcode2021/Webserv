@@ -7,6 +7,7 @@
 ServerBlock::ServerBlock() {
 	this->_clientMaxBodySize = 1000000; //1MB
 	this->_listenPortList.push_back(DEFAULT_PORT);
+	this->_clientBodyTempPath = ROOT_PATH + "/resources/upload/";
 	this->_root = DEFAULT_ROOT;
 	this->_index.push_back(DEFAULT_INDEX);
 }

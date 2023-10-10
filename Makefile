@@ -115,7 +115,6 @@ fclean : clean
 re :
 	make fclean
 	make all
-	make clean
 
 
 .PHONY : all clean fclean re

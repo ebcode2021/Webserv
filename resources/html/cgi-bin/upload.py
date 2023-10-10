@@ -16,6 +16,8 @@ if 'file' in form:
     filename = os.path.basename(fileitem.filename)
     filepath = os.path.join(UPLOAD_DIR, filename)
 
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
     # 파일 저장
     with open(filepath, 'wb') as f:
         f.write(fileitem.file.read())

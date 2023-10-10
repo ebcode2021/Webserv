@@ -15,7 +15,7 @@ void	currentPwd() {
 
 int main(int argc, char **argv)
 {
-	std::cout << ROOT_PATH << std::endl;
+	currentPwd();
 
 	Config::fileCheck(argc, argv);
 	Config	config(argv[1]);
