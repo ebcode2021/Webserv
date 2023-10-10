@@ -92,11 +92,11 @@ OBJS = $(SRCS_PATH:.cpp=.o)
 
 # COMMANDS
 %.o : %.cpp
-	@echo "$(YELLOW) *** Generating push_swap objects... *** $(DEFAULT)"
+	@echo "$(YELLOW) *** Generating webserv objects... *** $(DEFAULT)"
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I, $(INCLUDE_DIRS))
 
 $(NAME) : $(OBJS)
-	@echo "$(GREEN) *** Compiling philo ... *** $(DEFAULT)"
+	@echo "$(GREEN) *** Compiling webserv ... *** $(DEFAULT)"
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 	make clean
 	@echo "$(GREEN) *** Compile Done!! *** $(DEFAULT)"

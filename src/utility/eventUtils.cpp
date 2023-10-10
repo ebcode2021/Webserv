@@ -14,8 +14,6 @@ void	acceptConnection(SockInfo *sockInfo, KqHandler &kq)
 		int		clientPort;	
 		inet_ntop(AF_INET, &clientAddress.sin_addr, clientIp, sizeof(clientIp));
 		clientPort = clientAddress.sin_port;
-		std::cout << "Client Ip: " << clientIp
-				<< "\nClient Port: " << clientPort << std::endl;
 		kq.changeEvent(clientFd, EVFILT_READ, EV_ADD, 0, 0, new SockInfo(clientFd, std::string(clientIp), clientPort, sockInfo->getServerPort(), M_CLIENT));
 	}
 }
