@@ -98,7 +98,6 @@ OBJS = $(SRCS_PATH:.cpp=.o)
 $(NAME) : $(OBJS)
 	@echo "$(GREEN) *** Compiling webserv ... *** $(DEFAULT)"
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
-	make clean
 	@echo "$(GREEN) *** Compile Done!! *** $(DEFAULT)"
 
 

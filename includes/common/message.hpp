@@ -2,6 +2,7 @@
 # define MESSAGE_H
 
 /* error */
+# define FAIL_TO_GET_PWD "Can't get pwd"
 # define CHECK_INDICATION_FILE "Check Indication file"
 
 # define INVALID_ARGC "Invalid Argument :: Only support one parameter which ends \'.conf\' extension"
