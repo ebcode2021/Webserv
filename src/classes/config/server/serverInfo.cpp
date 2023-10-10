@@ -54,16 +54,23 @@ LocationBlock	ServerInfo::getLocationBlockByURL(const std::string& requestURL)
 	return it->second;
 }
 
+#include <iostream>
+
 static std::vector<std::string> locationBlockBackup(std::ifstream& confFile, std::string line)
 {
 	std::vector<std::string>	locationBlock;
-	std::vector<std::string>	splittedLine;
+	// std::vector<std::string>	splittedLine;
 	std::string					backup;
 	
 	locationBlock.push_back(line);
 	while (std::getline(confFile, line))
 	{
-		splittedLine = split(line, WHITESPACE);
+		if (line.empty()) {
+			continue;
+		}
+		
+		std::vector<std::string>	splittedLine = split(line, WHITESPACE);
+		// std::cout << "size = " << splittedLine.size() << ", " << "\"" << line << "\"" << std::endl;
 		if (splittedLine[0].compare("}") == 0)
 			break ;
 		else if (splittedLine[0].compare("limit_except") == 0) {

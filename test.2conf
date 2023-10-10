@@ -1,0 +1,56 @@
+server
+{
+    listen    8090 8090;
+    server_name localhost;
+
+    error_page 404 /index.html;
+
+    location /
+    {
+        limit_except GET;
+        autoindex on;
+        index 40xaa.html;
+    }
+
+    location /post_body
+    {
+        client_max_body_size 10;
+        cgi_pass    /usr/bin/python3;
+    }
+}
+
+server
+{
+    listen      8090;
+    server_name  localhost2;
+
+    location /
+    {
+        error_page 402 /index.html;
+        index  test.html index.html;
+        index  40x.html;
+        error_page 401 /index.html;
+        error_page 403 /index.html;
+        return test.html;
+    }
+
+    location /cgi-bin/profile.py
+    {
+        client_body_temp_path /cgi-bin/profile.py;
+        cgi_pass    /usr/bin/python3;
+    }
+
+    location /cgi-bin/upload.py
+    {
+        client_body_temp_path /goinfre/eunson/eval1/resources/html;
+        cgi_pass /usr/bin/python3;
+    }
+
+    location /asdf
+    {
+        index   40x.html;
+    }
+    listen      8090;
+    error_page  401 /index.html;
+    error_page  402 /index2.html;
+}

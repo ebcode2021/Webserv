@@ -3,7 +3,7 @@ NAME = webserv
 
 # VARIABLE
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g3
 RM = rm -rf
 
 SRCS =  main.cpp	\

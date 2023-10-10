@@ -61,7 +61,7 @@ void	Server::processReadEvent(SockInfo *sockInfo)
 
 void	cgiWriteEvent(SockInfo *sockInfo, KqHandler &kq)
 {
-	CgiInfo *cgiInfo = sockInfo->getCgiInfo();
+	CgiInfo		*cgiInfo = sockInfo->getCgiInfo();
 	HttpBody	&body = sockInfo->getRequest().getHttpBody();
 	(void)kq;
 	int ret = write(cgiInfo->getWriteFd(), body.getBody().c_str(), body.getBodySize());
