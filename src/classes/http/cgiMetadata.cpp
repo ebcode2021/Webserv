@@ -12,8 +12,8 @@ CgiMetadata::CgiMetadata(HttpRequest &request, PathInfo &path) {
 	this->_serverProtocol = std::string("SERVER_PROTOCOL=") + "HTTP/1.1";
 }
 
-void	CgiMetadata::setPathInfo(std::string path) {
-	this->_pathInfo = "PATH_INFO=" + path;
+void	CgiMetadata::setUploadPathInfo(std::string path) {
+	this->_pathInfo = "UPLOAD_DIR=" + path;
 }
 
 char **CgiMetadata::createEnvp() {

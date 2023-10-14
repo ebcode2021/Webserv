@@ -55,7 +55,7 @@ void	processCgi(SockInfo *sockInfo, PathInfo &pathInfo, LocationBlock &location,
 		dup2(pipefd[1], STDOUT_FILENO);
 		std::string path = pathInfo.getPath();
 		
-		data.setPathInfo(location.getClientBodyTempPath());
+		data.setUploadPathInfo(location.getClientBodyTempPath());
 		char *argv[] = {strdup(location.getCgiPass().c_str()), strdup(path.c_str()), NULL};
 		execve(argv[0], argv, data.createEnvp());
 		exit(1);

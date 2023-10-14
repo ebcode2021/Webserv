@@ -3,7 +3,7 @@ import cgi
 import os
 
 # CGI 환경 변수 설정
-UPLOAD_DIR = os.getenv("PATH_INFO")
+UPLOAD_DIR = os.getenv("UPLOAD_DIR")
 
 
 # 폼 데이터 가져오기

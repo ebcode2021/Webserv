@@ -65,12 +65,9 @@ static std::vector<std::string> locationBlockBackup(std::ifstream& confFile, std
 	locationBlock.push_back(line);
 	while (std::getline(confFile, line))
 	{
-		if (line.empty()) {
-			continue;
-		}
-		
 		std::vector<std::string>	splittedLine = split(line, WHITESPACE);
-		// std::cout << "size = " << splittedLine.size() << ", " << "\"" << line << "\"" << std::endl;
+		if (splittedLine.size() == 0)
+			continue;
 		if (splittedLine[0].compare("}") == 0)
 			break ;
 		else if (splittedLine[0].compare("limit_except") == 0) {

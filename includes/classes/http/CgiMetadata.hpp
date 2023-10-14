@@ -15,12 +15,13 @@ class CgiMetadata {
 		std::string _httpAcceptCharset;
 		std::string _queryString;
 		std::string _serverProtocol;
+		std::string _uploadPath;
 
 	public :
 		/* constructor */
 		CgiMetadata(HttpRequest &, PathInfo &);
 		
-		void	setPathInfo(std::string);
+		void	setUploadPathInfo(std::string);
 
 		char	**createEnvp();
 		
