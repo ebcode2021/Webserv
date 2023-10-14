@@ -45,7 +45,6 @@ int	HttpRequest::createRequest(std::string &data, ReadPhase &mode)
 	}
 	catch(const int code)
 	{
-		std::cout << "code: " << code << "에러 발생" << std::endl;
 		return (code);
 	}
 	return (0);

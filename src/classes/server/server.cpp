@@ -86,6 +86,7 @@ void cgiDataSend(SockInfo *sockInfo, KqHandler &kq)
 		delete sockInfo->getCgiInfo();
 		if (sockInfo->getRequest().getHttpRequestHeader().getHeaderByKey("connection") == KEEPALIVE) {
 			kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_DELETE, 0, 0, sockInfo);
+			kq.changeEvent(sockInfo->getSockFd(), EVFILT_READ, EV_ADD, 0, 0, sockInfo);
 			sockInfo->reset();
 		}
 		else {

@@ -166,8 +166,9 @@ int	processRequest(SockInfo *sockInfo, SessionStorage& sessionStorage, ServerInf
 	
 	try
 	{
-		if (sockInfo->getStatus().getStatusCode() != 0)
+		if (sockInfo->getStatus().getStatusCode() != 0) {
 			throw sockInfo->getStatus().getStatusCode();
+		}
 		else if (isReturn(curLocation))
 			throw 301;
 		else if (curLocation.isValidMethod(requestLine.getMethod()) == false)
@@ -202,6 +203,7 @@ int	processRequest(SockInfo *sockInfo, SessionStorage& sessionStorage, ServerInf
 		else {
 			response.createErrorPage(sockInfo->getStatus(), curLocation);
 		}
+		kq.changeEvent(sockInfo->getSockFd(), EVFILT_READ, EV_DELETE, 0, 0, sockInfo);
 		kq.changeEvent(sockInfo->getSockFd(), EVFILT_WRITE, EV_ADD, 0, 0, sockInfo);
 	}
 	sockInfo->setResponse(response);
