@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## Webserv
 
 ### 1. 프로젝트 소개
@@ -34,3 +35,17 @@
 - Nginx HTTP 서버:HTTP 서버를 사용한 고성능 웹 서비스 구축
 - 모두의 네트워크
 - TCP/IP 소켓 프로그래밍
+=======
+#Webserv
+
+// Request-Header
+	// Request-Line (Method SP Request-URI SP HTTP-Version CRLF)
+	// Request-Header-Field (FiledName, FiledValue)
+// Request-Body
+
+// Response-Header
+	// Response-Line
+		// HTTP/1.1 <status code> <reason phrase>
+	// Response-Header-Field
+// Reasponse-Body
+>>>>>>> 7b2071d3839c270ea550300c83932481b9aed0dd

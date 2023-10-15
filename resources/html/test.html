@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>간단한 HTML</title>
+	</head>
+	<script>
+		function checkInputs() {
+		var file = document.getElementsByName('file')[0].value;
+		var submitBtn = document.getElementById('submitBtn');
+		if (file.trim() === '') {
+		submitBtn.disabled = true;
+		} else {
+		submitBtn.disabled = false;
+		}
+		}
+		</script>
+	<body>
+		<h1>파일 업로드</h1>
+		<form action="http://localhost:4242/cgi-bin/upload.py" method="post" enctype="multipart/form-data">
+			<input type="file" name="file" accept=".txt,.pdf,.docx,.jpeg" oninput='checkInputs()'>
+			<br>
+			<input type="submit" value="업로드" id='submitBtn' disabled>
+		</form>
+	</body>
+</html>

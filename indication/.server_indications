@@ -1,0 +1,11 @@
+listen					65535
+server_name				65535
+
+location				65535
+
+error_page				65535
+client_max_body_size	65535
+client_body_temp_path	65535
+autoindex				65535
+index					65535
+root					1
