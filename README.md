@@ -69,6 +69,7 @@ CGI 제외했다고 설명 쓰기
 ## 7. 주요 기능
 
 ### 7-1. Configuration file
+webserv config 파일에서 사용하는 각 지시어 들은 Nginx의 config 파일을 참고하였다.
 
 ### 7-2. HTTP Message
 
