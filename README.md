@@ -17,36 +17,40 @@ C++ 98
 
 <table align="center">
     <tr>
-        <td>
+        <td />
+        <td align="center">
             <a href="https://github.com/ebcode2021">
                 <img src="https://avatars.githubusercontent.com/u/84271971?v=4" width="100" />
             </a>
         </td>
-        <td>
+        <td align="center">
             <a href="https://github.com/minsubro">
                 <img src="https://avatars.githubusercontent.com/u/96279704?v=4" width="100" />
             </a>
         </td>
     </tr>
     <tr>
+        <td />
         <td align="center">
-            <a href="https://github.com/guune">eunbi son</a>
+            <a href="https://github.com/guune">👩🏻‍💻 eunbi son</a>
         </td>
         <td align="center">
-            <a href="https://github.com/minsubro">minsu kang</a>
+            <a href="https://github.com/minsubro">🐼 minsu kang</a>
+        </td>
+    </tr>
+    <tr>
+        <td>역할 분담</td>
+        <td>
+              - 설정 파일 유효성 검사 <br/>
+              - HTTP 요청 파싱 <br />
+              - HTTP 메시지 처리
+        </td>
+        <td>
+              - 설정 파일 파싱 <br />
+              - kqeue() 를 활용한 소켓 이벤트 처리
         </td>
     </tr>
 </table>
-
-### 역할 분담
-
-👩🏻‍💻 **eunbi son** \
-  - parse HTTP request \
-  - HTTP message Processing
-
-🐼 **minsu kang**\
-  - parse configuration file \
-  - handle socket event
 
 ## 5. 사용법
 
@@ -93,8 +97,9 @@ root                    : 정적 파일의 기본 경로를 지정하는데 사�
 
 ### 7-3. CGI
 
-웹 서버에서 동적인 페이지를 보여 주기 위해 임의의 프로그램을 실행할 수 있도록 하는 기술 중 하나이다. \
-webserv는 nginx를 참고하여 만들었으므로 완전 정적 서버이다. 동적인 페이지를 제공하기 위해여 CGI를 지원한다. \
+CGI는 웹 서버에서 동적인 페이지를 보여 주기 위해 임의의 프로그램을 실행할 수 있도록 하는 기술 중 하나이다. \
+webserv는 nginx를 참고하여 만들었으므로 완전 정적 서버이다. \
+동적인 페이지를 제공하기 위해 CGI를 지원한다. \
 요청받은 페이지를 외부 스크립트를 이용해 동적으로 생성하여 보내주는 기능이다. 여러 스크립트를 이용할 수 있지만 webserv에서는 python 스크립트만을 지원한다.
 ![CGI_common_gateway_interface svg](https://github.com/ebcode2021/Webserv/assets/96279704/2695ed23-b1c0-4873-bb42-d270de36bed1)
 
