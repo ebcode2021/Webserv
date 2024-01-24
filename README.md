@@ -2,9 +2,8 @@
 
 ## 1. 프로젝트 소개
 
-> Webserv는 HTTP/1.1 규격을 준수하는 웹 서버다.\
-> 기존 웹 서버와 마찬가지로 클라이언트로부터 HTTP 요청을 받고 응답하는 소프트웨어 프로그램이며, 해당 프로젝트에서는 Nginx를 참고하여 만들었다. \
-> 다중 클라이언트 요청을 단일 스레드에서 처리하기 위해, `kqueue()`를 활용하여 Non-blocking I/O와 Multiplexing 기법을 결합하여 설계하였으며, 동적인 웹 페이지 생성 및 데이터 처리를 위해 CGI(Common Gateway Interface)를 지원한다.
+Webserv는 HTTP/1.1 규격을 준수하는 웹 서버다. 기존 웹 서버와 마찬가지로 클라이언트로부터 HTTP 요청을 받고 응답하는 소프트웨어 프로그램이며, 해당 프로젝트에서는 Nginx를 참고하여 만들었다. \
+다중 클라이언트 요청을 단일 스레드에서 처리하기 위해, `kqueue()`를 활용하여 Non-blocking I/O와 Multiplexing 기법을 결합하여 설계하였으며, 동적인 웹 페이지 생성 및 데이터 처리를 위해 CGI(Common Gateway Interface)를 지원한다.
 
 ## 2. 개발 기간
 
@@ -33,10 +32,10 @@ C++ 98
     <tr>
         <td />
         <td align="center">
-            👩🏻‍💻 eunbi son
+            👩🏻‍💻 <a href="https://github.com/ebcode2021"> eunbi son </a>
         </td>
         <td align="center">
-            🐼 minsu kang
+            🐼 <a href="https://github.com/minsubro"> minsu kang </a>
         </td>
     </tr>
     <tr>
@@ -69,7 +68,7 @@ make
 
 ### 7-1. Configuration file
 
-webserv의 config 파일에서 사용하는 각 지시어 들은 Nginx의 config애서 사용하는 지시어들의 동작을 참고하여 만들었다.<br/>
+webserv의 config 파일에서 사용하는 각 지시어들은 Nginx의 config 파일에서 사용하는 지시어들의 동작을 참고하여 만들었다. \
 
 [프로그램 동작시 필요한 conf파일 예시]
 
@@ -100,6 +99,7 @@ HTTP는 request와 response로 구성되어 있다. \
 클라이언트가 웹 페이지를 통해 HTTP 요청을 서버에 보내며, 서버는 요청 처리 후 HTTP 응답을 다시 보낸다.
 
 **HTTP 메시지 포멧**
+HTTP 메시지 포멧은 아래와 같다.
 
 ```
 start-line CRLF
@@ -115,11 +115,9 @@ HTTP 요청은 request-line, headers, body(선택)로 세 부분으로 이루어
 `request-line : method location HTTP-version`
 
 ```
-
 GET /index.html HTTP/1.1
 Host: localhost:4242
 Cookie: hello=world
-
 ```
 
 **HTTP 응답**
@@ -129,23 +127,21 @@ HTTP 응답은 respone-line, headers, body(선택)로 세 부분으로 이루어
 `response-line : HTTP-version status-code status-reason`
 
 ```
-
 HTTP/1.1 200 OK
 Content-Type: text/html
 Content-Length: 42
 
 hello!
-
 ```
 
 **HTTP 메서드**
-아래는 Webserv에서 지원하는 메서드이다.
 
-|  메서드  |        사용         | Body 여부 |
+아래는 Webserv에서 지원하는 메서드이다.
+| 메서드 | 사용 | Body 여부 |
 | :------: | :-----------------: | :-------: |
-|  `GET`   |     데이터 요청     |     X     |
-|  `POST`  | 데이터를 추가, 작성 |     O     |
-| `DELETE` |     데이터 삭제     |     O     |
+| `GET` | 데이터 요청 | X |
+| `POST` | 데이터를 추가, 작성 | O |
+| `DELETE` | 데이터 삭제 | X |
 
 **HTTP 상태코드**
 
@@ -155,28 +151,29 @@ hello!
 4xx : Client error responses \
 5xx : Server error responses
 
-아래는 webserv에서 지원하는 상태코드 리스트이다.
+아래 표는 webserv에서 지원하는 상태코드다.
 
-| status-code |      status-reason       |
-| :---------: | :----------------------: |
-|     200     |            OK            |
-|     201     |         Created          |
-|     202     |         Accepted         |
-|     204     |        No Content        |
-|     301     |    Moved Permanently     |
-|     302     |          Found           |
-|     304     |       Not Modified       |
-|     400     |       Bad Request        |
-|     401     |       Unauthorized       |
-|     403     |        Forbidden         |
-|     404     |        Not Found         |
-|     405     |    Method Not Allowed    |
-|     413     | Request Entity Too Large |
-|     500     |  Internal Server Error   |
+| status-code |       status-reason        |
+| :---------: | :------------------------: |
+|     200     |             OK             |
+|     201     |          Created           |
+|     202     |          Accepted          |
+|     204     |         No Content         |
+|     301     |     Moved Permanently      |
+|     302     |           Found            |
+|     304     |        Not Modified        |
+|     400     |        Bad Request         |
+|     401     |        Unauthorized        |
+|     403     |         Forbidden          |
+|     404     |         Not Found          |
+|     405     |     Method Not Allowed     |
+|     413     |  Request Entity Too Large  |
+|     500     |   Internal Server Error    |
+|     505     | HTTP Version Not Supported |
 
 ### 7-3. Cookie, Session
 
-### 7-3. CGI
+### 7-4. CGI
 
 CGI는 웹 서버에서 동적인 페이지를 보여 주기 위해 임의의 프로그램을 실행할 수 있도록 하는 기술 중 하나이다. \
 webserv는 nginx를 참고하여 만들었으므로 완전 정적 서버이다. 하지만, 동적인 페이지를 제공하기 위해 CGI를 지원한다. \
