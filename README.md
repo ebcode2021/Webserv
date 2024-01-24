@@ -68,7 +68,7 @@ make
 
 ### 7-1. Configuration file
 
-webserv의 config 파일에서 사용하는 각 지시어들은 Nginx의 config 파일에서 사용하는 지시어들의 동작을 참고하여 만들었다. \
+webserv의 config 파일에서 사용하는 각 지시어들은 Nginx의 config 파일에서 사용하는 지시어들의 동작을 참고하여 만들었다.
 
 **[프로그램 동작시 필요한 config 파일 예시]**
 
@@ -94,10 +94,8 @@ root                    : 정적 파일의 기본 경로를 지정하는데 사�
 
 ### 7-2. HTTP Message
 
-HTTP는 인터넷을 통해 정보를 송수신하기 위한 프로토콜이다. 웹 브라우저와 웹 서버가 통신하는 데 사용된다.
-
-HTTP는 request와 response로 구성되어 있다. \
-클라이언트가 웹 페이지를 통해 HTTP 요청을 서버에 보내며, 서버는 요청 처리 후 HTTP 응답을 다시 보낸다.
+HTTP는 인터넷을 통해 정보를 송수신하기 위한 프로토콜이다. 웹 브라우저와 웹 서버간의 통신에 사용된다. HTTP는 요청(request)과 응답(response)로 구성되어 있다. \
+클라이언트가 웹 페이지를 통해 HTTP 요청을 서버에 보내며, 서버는 요청을 처리한 후 HTTP 응답을 다시 클라이언트에게 전송한다.
 
 **HTTP 메시지 포멧**
 
@@ -173,7 +171,16 @@ hello!
 |     500     |   Internal Server Error    |
 |     505     | HTTP Version Not Supported |
 
-### 7-3. Cookie, Session
+### 7-3. Session
+
+HTTP는 비연결성 프로토콜로, 이전 요청을 저장하지 않는다. \
+그러나 클라이언트 별로 세션을 이용함으로써 이전 요청 상태를 저장하는 방법이 있다.
+
+webserv에서 세션 관리는 서버의 SessionStorage에서 이루어진다. \
+SessionStorage는 Session들을 Map 형태로 갖는데, key는 sessionId, value로는 Session을 포함한다.
+
+특정 URL에 대한 클라이언트의 첫 요청에는, sessionId를 발급받아서 응답 헤더 중 setCookie에 담아 클라이언트에 전송한다. \
+이후, 클라이언트 요청 헤더 중 Cookie의 값으로 sessionId가 담겨있고, SessionStorage의 sessionId와 일치하고 유효하다면, 서버는 304 상태코드를 반환하게 된다.
 
 ### 7-4. CGI
 
@@ -188,6 +195,7 @@ webserv는 nginx를 참고하여 만들었으므로 완전 정적 서버이다. 
 -   Nginx HTTP 서버:HTTP 서버를 사용한 고성능 웹 서비스 구축
 -   모두의 네트워크
 -   TCP/IP 소켓 프로그래밍
--   RFC 문서
+
+-   [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231)
 -   [Nginx docs](https://nginx.org/en/docs/http/configuring_https_servers.html)
 -   [HTTP status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
