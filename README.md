@@ -70,13 +70,14 @@ make
 
 webserv의 config 파일에서 사용하는 각 지시어들은 Nginx의 config 파일에서 사용하는 지시어들의 동작을 참고하여 만들었다. \
 
-[프로그램 동작시 필요한 conf파일 예시]
+**[프로그램 동작시 필요한 config 파일 예시]**
 
 <img width="980" alt="conf example" src="https://github.com/ebcode2021/Webserv/assets/96279704/dd94e5cc-e1b3-4796-83bb-5e530c627d94">
 
 <br />
+<br />
 
-[지시어 목록]
+**[지시어 목록]**
 
 ```
 server                  : 하나의 호스트를 선언하는데 사용
@@ -99,6 +100,7 @@ HTTP는 request와 response로 구성되어 있다. \
 클라이언트가 웹 페이지를 통해 HTTP 요청을 서버에 보내며, 서버는 요청 처리 후 HTTP 응답을 다시 보낸다.
 
 **HTTP 메시지 포멧**
+
 HTTP 메시지 포멧은 아래와 같다.
 
 ```
@@ -186,7 +188,6 @@ webserv는 nginx를 참고하여 만들었으므로 완전 정적 서버이다. 
 -   Nginx HTTP 서버:HTTP 서버를 사용한 고성능 웹 서비스 구축
 -   모두의 네트워크
 -   TCP/IP 소켓 프로그래밍
-
 -   RFC 문서
--   Nginx 공식문서
+-   [Nginx docs](https://nginx.org/en/docs/http/configuring_https_servers.html)
 -   [HTTP status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
