@@ -71,7 +71,24 @@ make
 
 ### 7-1. Configuration file
 
-webserv의 config 파일에서 사용하는 각 지시어들은 Nginx의 config 파일에서 사용하는 지시어들의 동작을 참고하여 만들었다.
+**[지시어]**
+
+webserv의 config 파일에서 사용하는 각 지시어들은 Nginx의 config 파일에서 사용하는 지시어들의 동작을 참고하여 만들었다. \
+서버에서는 config file에서 사용 가능한 지시어와 해당 지시어의 중복 가능 횟수를 key-value로 설정하여 종류에 따라 각기 다른 파일로 분리하여 보관하고 있다. \
+이는 유효성 검사시 해당 지시어가 존재하는지와 중복 가능 여부를 체크하는데 사용된다.
+
+```
+limit_except			1
+
+autoindex				65535
+client_max_body_size	65535
+client_body_temp_path	65535
+error_page				65535
+index					65535
+cgi_pass				1
+return					1
+root					1
+```
 
 **[프로그램 동작시 필요한 config 파일 예시]**
 
