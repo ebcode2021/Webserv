@@ -97,8 +97,10 @@ root                    : 정적 파일의 기본 경로를 지정하는데 사�
 
 ### 7-2. HTTP Message
 
-HTTP는 인터넷을 통해 정보를 송수신하기 위한 프로토콜이다. 웹 브라우저와 웹 서버간의 통신에 사용된다. HTTP는 요청(request)과 응답(response)로 구성되어 있다. \
-클라이언트가 웹 페이지를 통해 HTTP 요청을 서버에 보내며, 서버는 요청을 처리한 후 HTTP 응답을 다시 클라이언트에게 전송한다.
+HTTP는 인터넷을 통해 정보를 송수신하기 위한 프로토콜이다. HTTP는 웹 브라우저와 웹 서버간의 통신에 사용되며 요청(request)과 응답(response)로 구성되어 있다. \
+클라이언트가 웹 페이지를 통해 HTTP 요청을 서버에 보내면 서버는 요청처리 후 HTTP 응답을 다시 클라이언트에게 전송한다.
+
+<br />
 
 **HTTP 메시지 포멧**
 
@@ -137,6 +139,8 @@ Content-Length: 42
 hello!
 ```
 
+<br />
+
 **HTTP 메서드**
 
 아래는 Webserv에서 지원하는 메서드이다.
@@ -145,6 +149,8 @@ hello!
 | `GET` | 데이터 요청 | X |
 | `POST` | 데이터를 추가, 작성 | O |
 | `DELETE` | 데이터 삭제 | X |
+
+<br />
 
 **HTTP 상태코드**
 
@@ -187,17 +193,20 @@ SessionStorage는 Session들을 Map 형태로 갖는데, key는 sessionId, value
 
 ### 7-4. CGI
 
-CGI는 웹 서버에서 동적인 페이지를 보여 주기 위해 임의의 프로그램을 실행할 수 있도록 하는 기술 중 하나이다. \
-webserv는 nginx를 참고하여 만들었으므로 완전 정적 서버이다. 하지만, 동적인 페이지를 제공하기 위해 CGI를 지원한다. \
-요청받은 페이지를 외부 스크립트를 이용해 동적으로 생성하여 보내주는 기능이다. 여러 스크립트를 이용할 수 있지만 webserv에서는 python 스크립트만을 지원한다.
+CGI는 웹 서버에서 동적인 페이지를 보여 주기 위해 임의의 프로그램을 실행할 수 있도록 하는 기술로 요청받은 페이지를 외부 스크립트를 이용해 동적으로 생성하여 보내주는 기능이다. \
+webserv에서 참고한 Nginx는 완전 정적 서버지만, 동적인 페이지를 제공하기 위해 CGI를 지원한다. webserv에서는 python 스크립트만을 지원한다.
 
 ![CGI_common_gateway_interface svg](https://github.com/ebcode2021/Webserv/assets/96279704/2695ed23-b1c0-4873-bb42-d270de36bed1)
 
 ## 8. 참고 자료
 
--   Nginx HTTP 서버:HTTP 서버를 사용한 고성능 웹 서비스 구축
--   모두의 네트워크
--   TCP/IP 소켓 프로그래밍
+**[도서]**
+
+-   [Nginx HTTP 서버:HTTP 서버를 사용한 고성능 웹 서비스 구축](https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=235969450&start=slayer)
+-   [모두의 네트워크](https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=151491282)
+-   [TCP/IP 소켓 프로그래밍](https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=297117238&start=pgooglemc)
+
+**[공식 문서]**
 
 -   [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231)
 -   [Nginx docs](https://nginx.org/en/docs/http/configuring_https_servers.html)
