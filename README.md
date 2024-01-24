@@ -62,7 +62,10 @@ make
 
 **[소켓 프로세스]**
 
-![Blank board](https://github.com/ebcode2021/Webserv/assets/84271971/e14a8f9e-2390-4559-8ef8-6bfcaf0bb8c4)
+![socket-flow](https://github.com/ebcode2021/Webserv/assets/84271971/e14a8f9e-2390-4559-8ef8-6bfcaf0bb8c4)
+
+**[HTTP 프로세스]**
+![http-flow](https://github.com/ebcode2021/Webserv/assets/84271971/140e2642-4c36-4cc7-aeb6-b493418982f3)
 
 ## 7. 주요 기능
 
@@ -179,7 +182,7 @@ HTTP는 비연결성 프로토콜로, 이전 요청을 저장하지 않는다. \
 webserv에서 세션 관리는 서버의 SessionStorage에서 이루어진다. \
 SessionStorage는 Session들을 Map 형태로 갖는데, key는 sessionId, value로는 Session을 포함한다.
 
-특정 URL에 대한 클라이언트의 첫 요청에는, sessionId를 발급받아서 응답 헤더 중 setCookie에 담아 클라이언트에 전송한다. \
+특정 URL에 대한 클라이언트의 첫 요청에는, 새로운 sessionId를 발급받아 응답 헤더 중 setCookie에 담아 클라이언트에 전송한다. \
 이후, 클라이언트 요청 헤더 중 Cookie의 값으로 sessionId가 담겨있고, SessionStorage의 sessionId와 일치하고 유효하다면, 서버는 304 상태코드를 반환하게 된다.
 
 ### 7-4. CGI
